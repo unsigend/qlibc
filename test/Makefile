@@ -13,32 +13,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 
-# Configuration for qlibc
 
-# Config for Tool chain
-# TOOLCHAIN_PREFIX 	:= 	
+# makefile for test qlibc implementation
 
-# Config for architecture
-# Supported architectures: i386, x86_64
-ARCH                :=   	i386
+.DEFAULT_GOAL := test-all
 
-# qlibc version
-QLIBC_VERSION       :=   	0.1.0
+# test-all target
+test-all:
+	@echo "Running all test cases"
 
-# qlibc library name
-QLIBC_NAME          :=   	qlibc
-
-# qlibc ANSI/ISO C standard
-QLIBC_C_STANDARD    :=   	c99
-
-# debug mode
-DEBUG               :=   	0
-
-# Verbose mode
-VERBOSE             :=   	0
-
-# Config for build method
-# Supported build methods: static, shared
-BUILD_METHOD        :=   	static
+# test-module target
+test-%:
+	@echo "Running test case for $*"
