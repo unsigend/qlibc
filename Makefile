@@ -159,6 +159,11 @@ ifeq ($(TOOLCHAIN_PREFIX),)
 else
 	@echo " - Toolchain prefix   : $(TOOLCHAIN_PREFIX)"
 endif
+ifeq ($(DEBUG), 1)
+	@echo " - Debug mode         : ON"
+else
+	@echo " - Debug mode         : OFF"
+endif
 	@echo ""
 
 # help target
