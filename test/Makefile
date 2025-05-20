@@ -13,16 +13,99 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+#
 
 # makefile for test qlibc implementation
 
-.DEFAULT_GOAL := test-all
+# external path variables
+EXTERNAL_PATH  			:= 		./external
+EXTERNAL_INCLUDE_PATH	:= 		$(EXTERNAL_PATH)/include
+EXTERNAL_SRC_PATH		:= 		$(EXTERNAL_PATH)/src
 
-# test-all target
-test-all:
-	@echo "Running all test cases"
+HOST_OS					:= 		$(shell uname -s)
 
-# test-module target
-test-%:
-	@echo "Running test case for $*"
+# qlibc variables
+QLIBC_INCLUDE_PATH		:= 		../include
+QLIBC_LIB_PATH			:= 		../lib
+ifndef QLIBC_NAME
+QLIBC_NAME				:= 		qlibc
+endif
+
+ifeq ($(BUILD_METHOD), static)
+QLIBC_LIB_POSTFIX		:= 		.a
+else
+ifeq ($(HOST_OS), Darwin)
+QLIBC_LIB_POSTFIX		:= 		.dylib
+else
+QLIBC_LIB_POSTFIX		:= 		.so
+endif
+endif
+QLIBC_LIB_DEPS          :=      $(QLIBC_LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)
+
+# Build Path
+BUILD_PATH				:= 		./build
+OBJ_PATH				:= 		$(BUILD_PATH)/obj
+
+# Test variables
+TEST_PATH				:= 		./cases
+
+# source files and objects
+SRCS                    :=      $(shell find $(TEST_PATH) -name "*.c")
+OBJS                    :=      $(patsubst $(TEST_PATH)/%.c, $(BUILD_PATH)/%.o, $(SRCS))
+EXTERNAL_SRCS           :=      $(shell find $(EXTERNAL_SRC_PATH) -name "*.c")
+EXTERNAL_OBJS           :=      $(patsubst $(EXTERNAL_SRC_PATH)/%.c, $(BUILD_PATH)/external/%.o, $(EXTERNAL_SRCS))
+OBJS                    +=      $(EXTERNAL_OBJS)
+
+# Compiler Tools
+CC                      :=      gcc
+AR                      :=      ar
+LD                      :=      $(CC)
+
+# Compiler Flags
+CC_FLAGS                :=      -I$(QLIBC_INCLUDE_PATH) -isystem$(EXTERNAL_INCLUDE_PATH)
+CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
+CC_FLAGS                +=      -Wall -Wextra -Werror
+CC_FLAGS                +=      -g
+CC_FLAGS                +=      -O0
+# CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers
+# CC_FLAGS                +=      -fno-builtin -freestanding
+
+LD_FLAGS                :=      -L$(QLIBC_LIB_PATH) -l$(QLIBC_NAME)
+LD_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
+# LD_FLAGS                +=      -nostdlib
+# LD_FLAGS                +=      -nolibc
+
+# general rules for all objects
+$(BUILD_PATH)/%.o: $(TEST_PATH)/%.c $(QLIBC_LIB_DEPS)
+	@mkdir -p $(dir $@)
+	$(CC) $(CC_FLAGS) -c $< -o $@
+	@echo " + CC\t$@"
+
+$(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CC_FLAGS) -c $< -o $@
+	@echo " + CC\t$@"
+
+
+.DEFAULT_GOAL := test
+.PHONY: test clean all
+
+# build all test cases
+all: $(OBJS)
+	$(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_PATH)/test
+	@echo " + LD\t$(BUILD_PATH)/test"
+
+clean:
+	@rm -rf $(BUILD_PATH)
+
+# run all test cases 
+test: all
+ifeq ($(BUILD_METHOD), static)
+	$(BUILD_PATH)/test
+else
+	@echo "Run ./test/build/test to see qlibc test result"
+endif
+
+# run specific test case
+test-%: all
+	@./$(BUILD_PATH)/test $*

@@ -28,7 +28,7 @@ CONFIG_PATH 	:= 			$(CUR_DIR)/config
 BUILD_PATH 		:= 			$(CUR_DIR)/build
 OBJ_PATH 		:= 			$(BUILD_PATH)/obj
 DEP_PATH 		:= 			$(BUILD_PATH)/dep
-LIB_PATH 		:= 			$(BUILD_PATH)/lib
+LIB_PATH 		:= 			$(CUR_DIR)/lib
 
 # include config
 include $(CONFIG_PATH)/config.mk
@@ -109,6 +109,17 @@ LD_FLAGS        +=          -nolibc
 # variables for GNU C Archive flags
 AR_FLAGS 		:= 		    -rcs
 
+# variables for qlibc library
+ifeq ($(BUILD_METHOD), static)
+QLIBC_LIB_POSTFIX		:= 		.a
+else
+ifeq ($(HOST_OS), Darwin)
+QLIBC_LIB_POSTFIX		:= 		.dylib
+else
+QLIBC_LIB_POSTFIX		:= 		.so
+endif
+endif
+
 # general rules for all objects
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
@@ -133,10 +144,12 @@ create_build_dir:
 	@mkdir -p $(OBJ_PATH)
 	@mkdir -p $(DEP_PATH)
 	@mkdir -p $(LIB_PATH)
-
+	
 # target for cleaning build directory
 clean:
 	@rm -rf $(BUILD_PATH)
+	@rm -rf $(LIB_PATH)
+	@$(MAKE) -C $(TEST_PATH) clean
 
 # all target
 all: welcome create_build_dir lib
@@ -175,18 +188,18 @@ help:
 	@echo "\tmake clean         - Clean the build directory"
 	@echo "\tmake help          - Show this help message"
 	@echo "\tmake test          - Run all the test cases"
+	@echo "\tmake test-[module] - Run the test cases for a specific module"
 	@echo "\tmake gnu           - Build the test cases with GNU glibc"
-	@echo "\tmake test-<module> - Build the test cases for a specific module"
 	@echo ""
 
 # lib target
 lib: $(OBJS) $(OBJS_ARCH)
 ifeq ($(BUILD_METHOD), static)
-	@$(AR) $(AR_FLAGS) $(LIB_PATH)/lib$(QLIBC_NAME).a $(OBJS) $(OBJS_ARCH)
-	@echo " + AR\t$(LIB_PATH)/lib$(QLIBC_NAME).a"
+	@$(AR) $(AR_FLAGS) $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX) $(OBJS) $(OBJS_ARCH)
+	@echo " + AR\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
 else
-	@$(GCC) $(LD_FLAGS) -shared $(OBJS) $(OBJS_ARCH) -o $(LIB_PATH)/lib$(QLIBC_NAME).so
-	@echo " + LD\t$(LIB_PATH)/lib$(QLIBC_NAME).so"
+	@$(GCC) $(LD_FLAGS) -shared $(OBJS) $(OBJS_ARCH) -o $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)
+	@echo " + LD\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
 endif
 
 # export the variables to the sub-make
@@ -196,11 +209,12 @@ export QLIBC_VERSION
 export ARCH
 export BUILD_METHOD
 
-# test target
-# execute test-all command in sub-make
-test: lib
-	@$(MAKE) -C $(TEST_PATH) test-all
 
-# test-module target
-test-%: lib
+# test target
+# execute test command in sub-make
+test: create_build_dir lib
+	@$(MAKE) -C $(TEST_PATH)
+
+# test target for specific module
+test-%:
 	@$(MAKE) -C $(TEST_PATH) test-$*
