@@ -2,3 +2,6 @@
 build/
 # ignore vs code files
 .vscode/
+
+# ignore the lib directory
+lib/
