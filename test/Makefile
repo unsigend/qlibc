@@ -94,6 +94,8 @@ $(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
 all: $(OBJS)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_PATH)/test
 	@echo " + LD\t$(BUILD_PATH)/test"
+	@echo "Build qlibc test cases: $(BUILD_PATH)/test"
+	@echo ""
 
 # run all test cases 
 test: all

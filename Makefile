@@ -85,7 +85,7 @@ endif
 
 # variables for GNU C Include flags
 CC_INCLUDES     :=
-CC_INCLUDES     +=          -nostdinc
+# CC_INCLUDES     +=          -nostdinc
 CC_INCLUDES 	+= 		    -I $(INCLUDE_PATH)
 CC_INCLUDES     +=          -I $(ARCH_PATH)/$(ARCH)/include
 
@@ -201,6 +201,8 @@ else
 	@$(GCC) $(LD_FLAGS) -shared $(OBJS) $(OBJS_ARCH) -o $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)
 	@echo " + LD\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
 endif
+	@echo "Build qlibc library $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
+	@echo ""
 
 # export the variables to the sub-make
 export QLIBC_NAME
@@ -212,9 +214,9 @@ export BUILD_METHOD
 
 # test target
 # execute test command in sub-make
-test: create_build_dir lib
+test: all
 	@$(MAKE) -C $(TEST_PATH)
 
 # test target for specific module
-test-%: create_build_dir lib
+test-%: all
 	@$(MAKE) -C $(TEST_PATH) test-$*

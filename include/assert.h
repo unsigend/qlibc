@@ -18,16 +18,6 @@
 
 #undef assert
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern void _assert_fail(const char* msg, const char* func, const char* file, int line);
-
-#ifdef __cplusplus
-}
-#endif
-
 /**
  * @brief Assert a condition is true.
  * 
@@ -40,3 +30,13 @@ extern void _assert_fail(const char* msg, const char* func, const char* file, in
 #else
 #define assert(expr) (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
 #endif 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern void _assert_fail(const char* msg, const char* func, const char* file, int line);
+
+#ifdef __cplusplus
+}
+#endif

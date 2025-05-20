@@ -12,7 +12,7 @@ extern UTEST_TEST_SUITE(string);
 int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
-    
+
     UTEST_BEGIN();
     UTEST_CLEAR_FLAG(UTEST_FLAG_STYLE_FULL);
 
@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
         }else { }
     }
     
-
     UTEST_END();
 
     return 0;
