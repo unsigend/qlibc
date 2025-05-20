@@ -216,5 +216,5 @@ test: create_build_dir lib
 	@$(MAKE) -C $(TEST_PATH)
 
 # test target for specific module
-test-%:
+test-%: create_build_dir lib
 	@$(MAKE) -C $(TEST_PATH) test-$*

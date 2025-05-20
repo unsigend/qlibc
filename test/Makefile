@@ -76,14 +76,14 @@ LD_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 # LD_FLAGS                +=      -nolibc
 
 # general rules for all objects
-$(BUILD_PATH)/%.o: $(TEST_PATH)/%.c $(QLIBC_LIB_DEPS)
+$(BUILD_PATH)/%.o: $(TEST_PATH)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -c $< -o $@
+	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@echo " + CC\t$@"
 
 $(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -c $< -o $@
+	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@echo " + CC\t$@"
 
 
@@ -92,16 +92,13 @@ $(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
 
 # build all test cases
 all: $(OBJS)
-	$(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_PATH)/test
+	@$(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_PATH)/test
 	@echo " + LD\t$(BUILD_PATH)/test"
-
-clean:
-	@rm -rf $(BUILD_PATH)
 
 # run all test cases 
 test: all
 ifeq ($(BUILD_METHOD), static)
-	$(BUILD_PATH)/test
+	@$(BUILD_PATH)/test
 else
 	@echo "Run ./test/build/test to see qlibc test result"
 endif
@@ -109,3 +106,6 @@ endif
 # run specific test case
 test-%: all
 	@./$(BUILD_PATH)/test $*
+
+clean:
+	@rm -rf $(BUILD_PATH)
