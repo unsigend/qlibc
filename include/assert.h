@@ -15,13 +15,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-void _assert_fail(const char* msg, const char * func, const char* file, int line){
-    fprintf(stderr, "Assertion failed: %s, function %s, file %s, line %d\n", msg, func, file, line);
-    fflush(NULL);
-    abort();
+#undef assert
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern void _assert_fail(const char* msg, const char* func, const char* file, int line);
+
+#ifdef __cplusplus
 }
+#endif
 
+/**
+ * @brief Assert a condition is true.
+ * 
+ * NDEBUG if set true do nothing. 
+ * Otherwise, if expr is false, print a message and abort.
+ */
+
+#ifdef NDEBUG
+#define assert(expr) ((void)0)
+#else
+#define assert(expr) (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
+#endif 
