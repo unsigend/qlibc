@@ -1,5 +1,19 @@
 # qlibc
-A light-weight and portable C standard library. Designed for kernel.
+A light-weight and portable C standard library. Designed for kernel and embedded system.
+
+## Table of Contents
+
+
+- [Introduction](#introduction)
+- [Building](#building)
+    - [Prerequisites](#prerequisites)
+    - [Build Configuration](#build-configuration)
+    - [Build Commands](#build-commands)
+- [Headers](#headers)
+- [Architecture Support](#architecture-support)
+- [License](#license)
+- [Contributing](#contributing)
+
 
 ## Introduction
 
@@ -48,5 +62,35 @@ Basic build commands:
 - `make test-<module>` - Build the test cases for a specific module
 
 
+## Headers
 
+The following standard C headers are supported in qlibc v0.1:
+
+`<assert.h>` `<ctype.h>` `<errno.h>` `<limits.h>` `<setjmp.h>` `<signal.h>` `<stdalign.h>` `<stdarg.h>` `<stdbool.h>` `<stddef.h>` `<stdint.h>` `<stdio.h>` `<stdlib.h>` `<stdnoreturn.h>` `<string.h>` `<time.h>`
+
+
+## Architecture Support
+
+Currently qlibc supports the following hardware architectures:
+- x86 (i386) 32-bit
+- x86-64 (AMD64/Intel 64)
+
+Support for additional architectures may be added in future releases.
+
+
+## License
+
+qlibc is licensed under the GNU General Public License v3.0 (GPLv3). This means you are free to:
+
+- Use the library for any purpose
+- Study how it works and modify it
+- Redistribute copies of the original
+- Distribute modified versions
+
+See the [LICENSE](LICENSE) file for the complete license text.
+
+## Contributing
+
+Contributions to qlibc are welcome! 
+For bug reports and feature requests, please use the GitHub issue tracker.
 
