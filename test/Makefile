@@ -62,18 +62,28 @@ AR                      :=      ar
 LD                      :=      $(CC)
 
 # Compiler Flags
-CC_FLAGS                :=      -I$(QLIBC_INCLUDE_PATH) -isystem$(EXTERNAL_INCLUDE_PATH)
+CC_FLAGS                :=      -isystem$(EXTERNAL_INCLUDE_PATH)
+ifeq ($(USING_GNU), 0)
+CC_FLAGS                +=      -I$(QLIBC_INCLUDE_PATH)
+endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 CC_FLAGS                +=      -Wall -Wextra -Werror
 CC_FLAGS                +=      -g
 CC_FLAGS                +=      -O0
+ifeq ($(USING_GNU), 0)
 # CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers
 # CC_FLAGS                +=      -fno-builtin -freestanding
+endif
 
+# Linker Flags
+ifeq ($(USING_GNU), 0)
 LD_FLAGS                :=      -L$(QLIBC_LIB_PATH) -l$(QLIBC_NAME)
+endif
 LD_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
+ifeq ($(USING_GNU), 0)
 # LD_FLAGS                +=      -nostdlib
 # LD_FLAGS                +=      -nolibc
+endif
 
 # general rules for all objects
 $(BUILD_PATH)/%.o: $(TEST_PATH)/%.c

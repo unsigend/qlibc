@@ -42,3 +42,6 @@ VERBOSE             :=   	0
 # Config for build method
 # Supported build methods: static, shared
 BUILD_METHOD        :=   	static
+
+# Make GNU (Only for test purpose)
+USING_GNU           :=   	0

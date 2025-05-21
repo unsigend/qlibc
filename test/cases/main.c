@@ -8,6 +8,7 @@
 
 extern UTEST_TEST_SUITE(assert);
 extern UTEST_TEST_SUITE(string);
+extern UTEST_TEST_SUITE(ctype);
 
 int main(int argc, char *argv[]) {
     (void)argc;
@@ -20,11 +21,12 @@ int main(int argc, char *argv[]) {
     // Run test suites here
     if (argc <= 1){
         UTEST_RUN_TEST_SUITE(assert);
+        UTEST_RUN_TEST_SUITE(ctype);
     }else{
         if (MATCH(argv[1], "assert")){
             UTEST_RUN_TEST_SUITE(assert);
-        }else if (MATCH(argv[1], "string")){
-            
+        }else if (MATCH(argv[1], "ctype")){
+            UTEST_RUN_TEST_SUITE(ctype);
         }else { }
     }
     

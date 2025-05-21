@@ -189,7 +189,6 @@ help:
 	@echo "\tmake help          - Show this help message"
 	@echo "\tmake test          - Run all the test cases"
 	@echo "\tmake test-[module] - Run the test cases for a specific module"
-	@echo "\tmake gnu           - Build the test cases with GNU glibc"
 	@echo ""
 
 # lib target
@@ -210,7 +209,7 @@ export QLIBC_C_STANDARD
 export QLIBC_VERSION
 export ARCH
 export BUILD_METHOD
-
+export USING_GNU
 
 # test target
 # execute test command in sub-make
