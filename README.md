@@ -66,7 +66,7 @@ Basic build commands:
 
 The following standard C headers are supported in qlibc v0.1.0:
 
-[<assert.h>](https://github.com/unsigend/qlibc/blob/main/include/assert.h) [<ctype.h>](https://github.com/unsigend/qlibc/blob/main/include/ctype.h) <errno.h> [<limits.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h) <setjmp.h> <signal.h> [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) <stdarg.h> [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h) <setjmp.h> <signal.h> [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdbool.h) <stddef.h> <stdint.h> <stdio.h> <stdlib.h> <stdnoreturn.h> <string.h> <time.h>
+[<assert.h>](https://github.com/unsigend/qlibc/blob/main/include/assert.h) [<ctype.h>](https://github.com/unsigend/qlibc/blob/main/include/ctype.h) <errno.h> [<limits.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h) <setjmp.h> <signal.h> [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) <stdarg.h> [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h) <setjmp.h> <signal.h> [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/stdbool.h) <stddef.h> <stdint.h> <stdio.h> <stdlib.h> <stdnoreturn.h> <string.h> <time.h>
 
 
 ## Architecture Support
