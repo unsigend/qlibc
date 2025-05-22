@@ -1,5 +1,7 @@
 #include <utest.h>
+
 #include <ctype.h>
+#include <stdint.h>
 
 UTEST_TEST_CASE(isalpha){
     for (unsigned char c = 0; c != UINT8_MAX; c++){
