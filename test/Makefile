@@ -26,6 +26,7 @@ HOST_OS					:= 		$(shell uname -s)
 
 # qlibc variables
 QLIBC_INCLUDE_PATH		:= 		../include
+QLIBC_INCLUDE_ARCH_PATH	:= 		../arch/$(ARCH)/include
 QLIBC_LIB_PATH			:= 		../lib
 ifndef QLIBC_NAME
 QLIBC_NAME				:= 		qlibc
@@ -65,6 +66,7 @@ LD                      :=      $(CC)
 CC_FLAGS                :=      -isystem$(EXTERNAL_INCLUDE_PATH)
 ifeq ($(USING_GNU), 0)
 CC_FLAGS                +=      -I$(QLIBC_INCLUDE_PATH)
+CC_FLAGS                +=      -I$(QLIBC_INCLUDE_ARCH_PATH)
 endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 CC_FLAGS                +=      -Wall -Wextra -Werror

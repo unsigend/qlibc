@@ -9,6 +9,7 @@
 extern UTEST_TEST_SUITE(assert);
 extern UTEST_TEST_SUITE(string);
 extern UTEST_TEST_SUITE(ctype);
+extern UTEST_TEST_SUITE(limits);
 
 int main(int argc, char *argv[]) {
     (void)argc;
@@ -22,11 +23,14 @@ int main(int argc, char *argv[]) {
     if (argc <= 1){
         UTEST_RUN_TEST_SUITE(assert);
         UTEST_RUN_TEST_SUITE(ctype);
+        UTEST_RUN_TEST_SUITE(limits);
     }else{
         if (MATCH(argv[1], "assert")){
             UTEST_RUN_TEST_SUITE(assert);
         }else if (MATCH(argv[1], "ctype")){
             UTEST_RUN_TEST_SUITE(ctype);
+        }else if (MATCH(argv[1], "limits")){
+            UTEST_RUN_TEST_SUITE(limits);
         }else { }
     }
     
