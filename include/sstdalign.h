@@ -1,0 +1,41 @@
+/* qlibc - A light-weight and portable C standard library
+ * Copyright (C) 2025 Qiu Yixiang
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef _QLIBC_STDALIGN_H_
+#define _QLIBC_STDALIGN_H_
+
+#include <feature.h>
+
+/**
+ * @brief: Macros for alignment
+ */
+
+/* Using ANSI/ISO C 11 or enable GNU extension to use this header */
+#if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11 && defined(__GNUC__)
+
+#define _Alignas(x) __attribute__((aligned(x)))
+#define _Alignof(x) __alignof__(x)
+
+#endif
+
+#define alignas _Alignas
+#define alignof _Alignof
+
+#define __alignas_is_defined 1
+#define __alignof_is_defined 1
+
+#endif
