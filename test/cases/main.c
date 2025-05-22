@@ -11,6 +11,7 @@ extern UTEST_TEST_SUITE(string);
 extern UTEST_TEST_SUITE(ctype);
 extern UTEST_TEST_SUITE(limits);
 extern UTEST_TEST_SUITE(stdalign);
+extern UTEST_TEST_SUITE(stdbool);
 
 int main(int argc, char *argv[]) {
     (void)argc;
@@ -26,6 +27,7 @@ int main(int argc, char *argv[]) {
         UTEST_RUN_TEST_SUITE(ctype);
         UTEST_RUN_TEST_SUITE(limits);
         UTEST_RUN_TEST_SUITE(stdalign);
+        UTEST_RUN_TEST_SUITE(stdbool);
     }else{
         if (MATCH(argv[1], "assert")){
             UTEST_RUN_TEST_SUITE(assert);
@@ -35,6 +37,8 @@ int main(int argc, char *argv[]) {
             UTEST_RUN_TEST_SUITE(limits);
         }else if (MATCH(argv[1], "stdalign")){
             UTEST_RUN_TEST_SUITE(stdalign);
+        }else if (MATCH(argv[1], "stdbool")){
+            UTEST_RUN_TEST_SUITE(stdbool);
         }else{ }
     }
     
