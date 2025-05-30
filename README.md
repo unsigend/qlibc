@@ -49,7 +49,7 @@ The build can be configured through environment variables or the `config/config.
 After finished configuration, to build qlibc, simply run:
 
 ```bash
-make run
+make all
 ```
 
 Basic build commands:
@@ -87,8 +87,8 @@ The following standard C headers are supported in qlibc v0.1.0:
 ## Architecture Support
 
 Currently qlibc supports the following hardware architectures:
-- x86 (i386) 32-bit
-- x86-64 (AMD64/Intel 64)
+- x86: 32-bit
+- x86-64: 64-bit
 
 Support for additional architectures may be added in future releases.
 
