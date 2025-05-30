@@ -63,25 +63,25 @@ Basic build commands:
 
 
 ## Headers
-
-The following standard C headers are supported in qlibc v0.1.0:
-
-- [<assert.h>](https://github.com/unsigend/qlibc/blob/main/include/assert.h) 
-- [<ctype.h>](https://github.com/unsigend/qlibc/blob/main/include/ctype.h) 
-- <errno.h> 
-- [<limits.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h) 
-- <setjmp.h> 
-- <signal.h>
-- [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) 
-- <stdarg.h>
-- [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h)
-- [<stddef.h>](https://github.com/unsigend/qlibc/blob/main/include/stddef.h)
-- [<stdint.h>](https://github.com/unsigend/qlibc/blob/main/include/stdint.h)
-- <stdio.h> 
-- <stdlib.h> 
-- [<stdnoreturn.h>](https://github.com/unsigend/qlibc/blob/main/include/stdnoreturn.h)
-- <string.h> 
-- <time.h>
+ANSI/ISO C Standard Headers Support: 
+| Header         | Description                                              |
+|----------------|---------------------------------------------------------|
+| [<assert.h>](https://github.com/unsigend/qlibc/blob/main/include/assert.h)   | Conditionally compiled macro that compares its argument to zero |
+| [<ctype.h>](https://github.com/unsigend/qlibc/blob/main/include/ctype.h)     | Functions to determine the type contained in character data     |
+| <errno.h>    | Macros reporting error conditions                       |
+| [<limits.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h)   | Ranges of integer types                                    |
+| <setjmp.h>   | Nonlocal jumps                                          |
+| <signal.h>   | Signal handling                                         |
+| [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) | alignas and alignof convenience macros                    |
+| <stdarg.h>   | Variable arguments                                      |
+| [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/stdbool.h) | Macros for boolean type                                    |
+| [<stddef.h>](https://github.com/unsigend/qlibc/blob/main/include/stddef.h)   | Common macro definitions                                   |
+| [<stdint.h>](https://github.com/unsigend/qlibc/blob/main/include/stdint.h)   | Fixed-width integer types                                  |
+| <stdio.h>    | Standard Input/output                                   |
+| <stdlib.h>   | General utilities library                               |
+| [<stdnoreturn.h>](https://github.com/unsigend/qlibc/blob/main/include/stdnoreturn.h) | noreturn convenience macro                        |
+| <string.h>   | String handling                                         |
+| <time.h>     | Time/date utilities                                     |
 
 
 ## Architecture Support
