@@ -75,7 +75,7 @@ The following standard C headers are supported in qlibc v0.1.0:
 - [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) 
 - <stdarg.h>
 - [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h)
-- <stddef.h> 
+- [<stddef.h>](https://github.com/unsigend/qlibc/blob/main/include/stddef.h)
 - <stdint.h> 
 - <stdio.h> 
 - <stdlib.h> 
