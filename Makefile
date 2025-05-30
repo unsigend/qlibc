@@ -63,6 +63,12 @@ CC_FLAGS 		:= 		    -std=$(QLIBC_C_STANDARD)
 CC_FREESTANDING	:= 		    -ffreestanding
 CC_FREESTANDING +=          -fno-builtin
 
+# variables for GNU C Architecture flags
+CC_ARCHITECTURE	:=
+ifeq ($(ARCH), i386)
+	CC_ARCHITECTURE += -m32
+endif
+
 # variables for GNU C Warning flags
 CC_WARNINGS 	:= 		    -Wall -Wextra -Werror
 CC_WARNINGS 	+= 		    -Wno-unused-parameter
@@ -95,6 +101,7 @@ CC_FLAGS        +=          $(CC_FREESTANDING)
 CC_FLAGS        +=          $(CC_OPTIMIZE)
 CC_FLAGS        +=          $(CC_DEBUGGER)
 CC_FLAGS        +=          $(CC_INCLUDES)
+CC_FLAGS        +=          $(CC_ARCHITECTURE)
 
 # variables for GNU C Dependency flags
 CC_DEPS_FLAGS   :=          -MMD -MP -MF

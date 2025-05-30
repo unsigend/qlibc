@@ -76,6 +76,9 @@ ifeq ($(USING_GNU), 0)
 # CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers
 # CC_FLAGS                +=      -fno-builtin -freestanding
 endif
+ifeq ($(ARCH), i386)
+CC_FLAGS                +=      -m32
+endif
 
 # Linker Flags
 ifeq ($(USING_GNU), 0)
@@ -85,6 +88,9 @@ LD_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 ifeq ($(USING_GNU), 0)
 # LD_FLAGS                +=      -nostdlib
 # LD_FLAGS                +=      -nolibc
+endif
+ifeq ($(ARCH), i386)
+LD_FLAGS                +=      -m32
 endif
 
 # general rules for all objects
