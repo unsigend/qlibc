@@ -79,7 +79,7 @@ The following standard C headers are supported in qlibc v0.1.0:
 - [<stdint.h>](https://github.com/unsigend/qlibc/blob/main/include/stdint.h)
 - <stdio.h> 
 - <stdlib.h> 
-- <stdnoreturn.h> 
+- [<stdnoreturn.h>](https://github.com/unsigend/qlibc/blob/main/include/stdnoreturn.h)
 - <string.h> 
 - <time.h>
 
