@@ -24,14 +24,6 @@
  * @brief: Macros for alignment
  */
 
-/* Using ANSI/ISO C 11 or enable GNU extension to use this header */
-#if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11 && defined(__GNUC__)
-
-#define _Alignas(x) __attribute__((aligned(x)))
-#define _Alignof(x) __alignof__(x)
-
-#endif
-
 #define alignas _Alignas
 #define alignof _Alignof
 
