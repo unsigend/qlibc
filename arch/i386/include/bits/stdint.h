@@ -33,7 +33,7 @@ typedef int16_t             int_least16_t;
 typedef int32_t             int_least32_t;
 typedef int64_t             int_least64_t;
 
-typedef signed long         intmax_t;
+typedef signed long long    intmax_t;
 typedef signed long         intptr_t;
 
 typedef unsigned char       uint8_t;
