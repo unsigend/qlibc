@@ -18,13 +18,14 @@ UTEST_TEST_CASE(stdalign_alignof){
 #endif
 
     EXPECT_EQUAL_UINT(alignof(float), 4);
+
 #ifdef __i386__
-    EXPECT_EQUAL_UINT(alignof(double), 4);
     EXPECT_EQUAL_UINT(alignof(void *), 4);
 #else
-    EXPECT_EQUAL_UINT(alignof(double), 8);
     EXPECT_EQUAL_UINT(alignof(void *), 8);
 #endif
+
+    EXPECT_EQUAL_UINT(alignof(double), 8);
 }
 UTEST_TEST_SUITE(stdalign){
     UTEST_RUN_TEST_CASE(stdalign_macro);

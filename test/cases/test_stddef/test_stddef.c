@@ -14,8 +14,18 @@ UTEST_TEST_CASE(stddef_types){
     EXPECT_EQUAL_UINT(sizeof(size_t), 8);
 #endif
 
-#if QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if defined(QLIBC_ISO_C_VERSION) && (QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11)
+#if defined(__arm__) || defined(__i386__)
+    EXPECT_EQUAL_UINT(sizeof(max_align_t), 8);
+#else
     EXPECT_EQUAL_UINT(sizeof(max_align_t), 16);
+#endif
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+#if defined(__arm__) || defined(__i386__)
+    EXPECT_EQUAL_UINT(sizeof(max_align_t), 8);
+#else
+    EXPECT_EQUAL_UINT(sizeof(max_align_t), 16);
+#endif
 #endif
 }
 struct test_struct{
