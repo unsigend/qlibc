@@ -22,7 +22,7 @@
 
 # Config for architecture
 # Supported architectures: i386, x86_64
-ARCH                :=   	aarch64
+ARCH                :=   	i386
 
 # qlibc version
 QLIBC_VERSION       :=   	0.1.0
