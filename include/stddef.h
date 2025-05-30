@@ -30,4 +30,8 @@
 
 #define offsetof(TYPE, MEMBER) ((size_t)&((TYPE *)0) -> MEMBER)
 
+#if defined(__linux__)
+typedef int wchar_t;
+#endif
+
 #endif

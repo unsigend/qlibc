@@ -50,12 +50,12 @@ UTEST_TEST_CASE(fast_least_types){
     EXPECT_EQUAL_UINT(sizeof(uint_fast32_t), 4);
     EXPECT_EQUAL_UINT(sizeof(uint_fast64_t), 8);
 #elif defined(__x86_64__) || defined(__amd64__)
-    EXPECT_EQUAL_UINT(sizeof(int_fast8_t), 8);
+    EXPECT_EQUAL_UINT(sizeof(int_fast8_t), 1);
     EXPECT_EQUAL_UINT(sizeof(int_fast16_t), 8);
     EXPECT_EQUAL_UINT(sizeof(int_fast32_t), 8);
     EXPECT_EQUAL_UINT(sizeof(int_fast64_t), 8);
 
-    EXPECT_EQUAL_UINT(sizeof(uint_fast8_t), 8);
+    EXPECT_EQUAL_UINT(sizeof(uint_fast8_t), 1);
     EXPECT_EQUAL_UINT(sizeof(uint_fast16_t), 8);
     EXPECT_EQUAL_UINT(sizeof(uint_fast32_t), 8);
     EXPECT_EQUAL_UINT(sizeof(uint_fast64_t), 8);
