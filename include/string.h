@@ -20,6 +20,10 @@
 
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // character array examination
 extern void* memchr(const void* ptr, int ch, size_t count);
 extern int memcmp(const void* lhs, const void* rhs, size_t count);
@@ -33,5 +37,8 @@ extern int strcmp(const char* lhs, const char* rhs);
 extern int strncmp(const char* lhs, const char* rhs, size_t count);
 extern int strcoll(const char* lhs, const char* rhs);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _QLIBC_STRING_H_ */
