@@ -17,6 +17,8 @@
 
 #include "test_strcpy.h"
 #include "test_strncpy.h"
+#include "test_strcat.h"
+#include "test_strncat.h"
 #include "test_strxfrm.h"
 
 UTEST_TEST_SUITE(string){
@@ -37,5 +39,7 @@ UTEST_TEST_SUITE(string){
 
     UTEST_RUN_TEST_CASE(strcpy);
     UTEST_RUN_TEST_CASE(strncpy);
+    UTEST_RUN_TEST_CASE(strcat);
+    UTEST_RUN_TEST_CASE(strncat);
     UTEST_RUN_TEST_CASE(strxfrm);
 }
