@@ -46,6 +46,7 @@ QLIBC_LIB_DEPS          :=      $(QLIBC_LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_PO
 # Build Path
 BUILD_PATH				:= 		./build
 OBJ_PATH				:= 		$(BUILD_PATH)/obj
+DEP_PATH				:= 		$(BUILD_PATH)/dep
 
 # Test variables
 TEST_PATH				:= 		./cases
@@ -70,11 +71,12 @@ CC_FLAGS                +=      -I$(QLIBC_INCLUDE_ARCH_PATH)
 endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 CC_FLAGS                +=      -Wall -Wextra -Werror
+CC_FLAGS                +=      -Wno-memset-transposed-args
 CC_FLAGS                +=      -g
 CC_FLAGS                +=      -O0
 ifeq ($(USING_GNU), 0)
 # CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers
-# CC_FLAGS                +=      -fno-builtin -freestanding
+CC_FLAGS                +=      -fno-builtin -ffreestanding
 endif
 ifeq ($(ARCH), i386)
 CC_FLAGS                +=      -m32
@@ -96,7 +98,7 @@ endif
 # general rules for all objects
 $(BUILD_PATH)/%.o: $(TEST_PATH)/%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CC_FLAGS) -c $< -o $@
+	@$(CC) $(CC_FLAGS) -MMD -MP -MF $(DEP_PATH)/$(@F:.o=.d) -c $< -o $@
 	@echo " + CC\t$@"
 
 $(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
@@ -104,12 +106,16 @@ $(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 	@echo " + CC\t$@"
 
+-include $(DEP_PATH)/*.d
 
 .DEFAULT_GOAL := test
-.PHONY: test clean all
+.PHONY: test clean all check-dep
+
+check-dep:
+	@mkdir -p $(DEP_PATH)
 
 # build all test cases
-all: $(OBJS)
+all: check-dep $(OBJS)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_PATH)/test
 	@echo " + LD\t$(BUILD_PATH)/test"
 	@echo "Build qlibc test cases: $(BUILD_PATH)/test"
