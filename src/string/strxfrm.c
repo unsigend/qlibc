@@ -15,8 +15,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-
-int strcoll(const char* lhs, const char* rhs){
-    return strcmp(lhs, rhs);
+#include <stddef.h>
+/**
+ * @brief: just copy the string, don't support locale transformation yet.
+ */
+size_t strxfrm(char *restrict dest, const char *restrict src, size_t count){
+    size_t counter = 0;
+    while (*src && counter < count){
+        *((unsigned char*) dest) = *((unsigned char*) src);
+        ++dest;
+        ++src;
+        ++counter; 
+    }
+    *((unsigned char*) dest) = '\0';
+    return counter;
 }

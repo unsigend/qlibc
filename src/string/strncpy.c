@@ -14,9 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include <string.h>
 
-int strcoll(const char* lhs, const char* rhs){
-    return strcmp(lhs, rhs);
+char* strncpy(char* restrict dest, const char* restrict src, size_t count){
+    size_t len_src = strlen(src);
+    if (len_src < count){
+        memcpy(dest, src, len_src);
+        memset(dest + len_src, '\0', count - len_src);
+    }else{
+        memcpy(dest, src, count);
+    }
+    return dest;
 }

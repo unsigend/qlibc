@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include <string.h>
 
-int strcoll(const char* lhs, const char* rhs){
-    return strcmp(lhs, rhs);
+char* strcpy(char* restrict dest, const char* restrict src){
+    memcpy(dest, src, strlen(src) + 1);
+    return dest;
 }

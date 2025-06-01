@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <stddef.h>
+
 size_t strlen(const char* str){
     size_t len = 0;
     while (*str){

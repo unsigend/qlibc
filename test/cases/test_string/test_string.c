@@ -15,6 +15,10 @@
 #include "test_strspn.h"
 #include "test_strcspn.h"
 
+#include "test_strcpy.h"
+#include "test_strncpy.h"
+#include "test_strxfrm.h"
+
 UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(memchr);
     UTEST_RUN_TEST_CASE(memcmp);
@@ -30,4 +34,8 @@ UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(strrchr);
     UTEST_RUN_TEST_CASE(strspn);
     UTEST_RUN_TEST_CASE(strcspn);
+
+    UTEST_RUN_TEST_CASE(strcpy);
+    UTEST_RUN_TEST_CASE(strncpy);
+    UTEST_RUN_TEST_CASE(strxfrm);
 }
