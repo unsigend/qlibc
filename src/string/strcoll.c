@@ -15,23 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STRING_H_
-#define _QLIBC_STRING_H_
-
-#include <stddef.h>
-
-// character array examination
-extern void* memchr(const void* ptr, int ch, size_t count);
-extern int memcmp(const void* lhs, const void* rhs, size_t count);
-extern void* memset(void* dest, int ch, size_t count);
-extern void* memcpy(void *restrict dest, const void *restrict src, size_t count);
-extern void* memmove(void* dest, const void* src, size_t count);
-
-// string examination
-extern size_t strlen( const char* str);
-extern int strcmp(const char* lhs, const char* rhs);
-extern int strncmp(const char* lhs, const char* rhs, size_t count);
-extern int strcoll(const char* lhs, const char* rhs);
-
-
-#endif /* _QLIBC_STRING_H_ */
+#include <string.h>
+int strcoll(const char* lhs, const char* rhs){
+    return strcmp(lhs, rhs);
+}

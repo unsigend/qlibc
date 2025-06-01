@@ -9,6 +9,7 @@
 #include "test_strlen.h"
 #include "test_strcmp.h"
 #include "test_strncmp.h"
+#include "test_strcoll.h"
 
 UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(memchr);
@@ -20,4 +21,5 @@ UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(strlen);
     UTEST_RUN_TEST_CASE(strcmp);
     UTEST_RUN_TEST_CASE(strncmp);
+    UTEST_RUN_TEST_CASE(strcoll);
 }
