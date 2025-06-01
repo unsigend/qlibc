@@ -12,6 +12,8 @@
 #include "test_strcoll.h"
 #include "test_strchr.h"
 #include "test_strrchr.h"
+#include "test_strspn.h"
+#include "test_strcspn.h"
 
 UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(memchr);
@@ -26,4 +28,6 @@ UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(strcoll);
     UTEST_RUN_TEST_CASE(strchr);
     UTEST_RUN_TEST_CASE(strrchr);
+    UTEST_RUN_TEST_CASE(strspn);
+    UTEST_RUN_TEST_CASE(strcspn);
 }

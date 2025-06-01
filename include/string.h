@@ -38,6 +38,8 @@ extern int strncmp(const char* lhs, const char* rhs, size_t count);
 extern int strcoll(const char* lhs, const char* rhs);
 extern char* strchr(const char* str, int ch);
 extern char* strrchr(const char* str, int ch);
+extern size_t strspn(const char* str, const char* charset);
+extern size_t strcspn(const char* str, const char* charset);
 
 #ifdef __cplusplus
 }
