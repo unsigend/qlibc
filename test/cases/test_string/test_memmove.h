@@ -46,14 +46,14 @@ UTEST_TEST_CASE(memmove) {
     unsigned char data6[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
     void* result6 = memmove(data6 + 2, data6, 4);
     EXPECT_TRUE(result6 == data6 + 2);
-    EXPECT_TRUE(data6[0] == 0x00);
-    EXPECT_TRUE(data6[1] == 0x11);
-    EXPECT_TRUE(data6[2] == 0x00);
-    EXPECT_TRUE(data6[3] == 0x11);
-    EXPECT_TRUE(data6[4] == 0x22);
-    EXPECT_TRUE(data6[5] == 0x33);
-    EXPECT_TRUE(data6[6] == 0x66);
-    EXPECT_TRUE(data6[7] == 0x77);
+    EXPECT_EQUAL_UINT8(data6[0], 0x00);
+    EXPECT_EQUAL_UINT8(data6[1], 0x11);
+    EXPECT_EQUAL_UINT8(data6[2], 0x00);
+    EXPECT_EQUAL_UINT8(data6[3], 0x11);
+    EXPECT_EQUAL_UINT8(data6[4], 0x22);
+    EXPECT_EQUAL_UINT8(data6[5], 0x33);
+    EXPECT_EQUAL_UINT8(data6[6], 0x66);
+    EXPECT_EQUAL_UINT8(data6[7], 0x77);
 
     char str7[] = "Hello\0World";
     void* result7 = memmove(str7 + 2, str7, 7);
