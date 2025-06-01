@@ -32,10 +32,12 @@ extern void* memcpy(void *restrict dest, const void *restrict src, size_t count)
 extern void* memmove(void* dest, const void* src, size_t count);
 
 // string examination
-extern size_t strlen( const char* str);
+extern size_t strlen(const char* str);
 extern int strcmp(const char* lhs, const char* rhs);
 extern int strncmp(const char* lhs, const char* rhs, size_t count);
 extern int strcoll(const char* lhs, const char* rhs);
+extern char* strchr(const char* str, int ch);
+extern char* strrchr(const char* str, int ch);
 
 #ifdef __cplusplus
 }
