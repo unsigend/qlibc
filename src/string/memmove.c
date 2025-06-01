@@ -20,13 +20,12 @@
 void* memmove(void* dest, const void* src, size_t count){
     unsigned char * dest_ptr = (unsigned char*)dest;
     const unsigned char * src_ptr = (const unsigned char *)src;
-    if (dest_ptr == src_ptr){
+    if (dest_ptr == src_ptr || count == 0){
         return dest;
     }
-    if (src_ptr + count <= dest_ptr || dest_ptr + count <= src_ptr){
+    if (dest_ptr < src_ptr || src_ptr + count <= dest_ptr){
         return memcpy(dest, src, count);
-    }
-    if (src_ptr < dest_ptr){
+    }else{
         dest_ptr += count;
         src_ptr += count;
         while (count--){
@@ -34,8 +33,6 @@ void* memmove(void* dest, const void* src, size_t count){
             src_ptr--;
             *dest_ptr = *src_ptr;
         }
-        return dest;
-    }else{
-        return memcpy(dest, src, count);
     }
+    return dest;
 }
