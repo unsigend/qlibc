@@ -14,6 +14,7 @@
 #include "test_strrchr.h"
 #include "test_strspn.h"
 #include "test_strcspn.h"
+#include "test_strstr.h"
 
 #include "test_strcpy.h"
 #include "test_strncpy.h"
@@ -22,12 +23,14 @@
 #include "test_strxfrm.h"
 
 UTEST_TEST_SUITE(string){
+    // character array examination
     UTEST_RUN_TEST_CASE(memchr);
     UTEST_RUN_TEST_CASE(memcmp);
     UTEST_RUN_TEST_CASE(memset);
     UTEST_RUN_TEST_CASE(memcpy);
     UTEST_RUN_TEST_CASE(memmove);
 
+    // string examination
     UTEST_RUN_TEST_CASE(strlen);
     UTEST_RUN_TEST_CASE(strcmp);
     UTEST_RUN_TEST_CASE(strncmp);
@@ -36,7 +39,9 @@ UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(strrchr);
     UTEST_RUN_TEST_CASE(strspn);
     UTEST_RUN_TEST_CASE(strcspn);
+    UTEST_RUN_TEST_CASE(strstr);
 
+    // string manipulation
     UTEST_RUN_TEST_CASE(strcpy);
     UTEST_RUN_TEST_CASE(strncpy);
     UTEST_RUN_TEST_CASE(strcat);
