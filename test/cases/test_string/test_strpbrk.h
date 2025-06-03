@@ -44,18 +44,18 @@ UTEST_TEST_CASE(strpbrk) {
     EXPECT_TRUE(strpbrk(str10, accept10) == str10 + 5);
 
     const char *accept11 = "abc";
-    EXPECT_TRUE(strpbrk(NULL, accept11) == NULL);
+    EXPECT_TRUE(strpbrk("", accept11) == NULL);
 
     const char *str12 = "Hello";
-    EXPECT_TRUE(strpbrk(str12, NULL) == NULL);
+    EXPECT_TRUE(strpbrk(str12, "") == NULL);
 
-    EXPECT_TRUE(strpbrk(NULL, NULL) == NULL);
+    EXPECT_TRUE(strpbrk("", "") == NULL);
 
     const char *str14 = "This is a very long string that contains multiple occurrences of characters "
                         "that we are looking for in a complex pattern that should test the function's "
                         "ability to handle long input strings properly";
     const char *accept14 = "xyz";
-    EXPECT_TRUE(strpbrk(str14, accept14) == NULL);
+    EXPECT_TRUE(strpbrk(str14, accept14) == str14 + 13);
 
     const char *str16 = "Hello";
     const char *accept16 = "lll";
@@ -83,5 +83,5 @@ UTEST_TEST_CASE(strpbrk) {
     
     const char *str22 = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     const char *accept22 = "XYZ";
-    EXPECT_TRUE(strpbrk(str22, accept22) == str22 + 58);
+    EXPECT_TRUE(strpbrk(str22, accept22) == str22 + 55);
 }
