@@ -40,7 +40,7 @@ extern char* strchr(const char* str, int ch);
 extern char* strrchr(const char* str, int ch);
 extern size_t strspn(const char* str, const char* charset);
 extern size_t strcspn(const char* str, const char* charset);
-
+extern char* strpbrk(const char* str, const char* charset);
 extern char* strstr(const char* str, const char* substr);
 
 // string manipulation
