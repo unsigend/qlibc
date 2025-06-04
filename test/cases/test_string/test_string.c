@@ -16,6 +16,7 @@
 #include "test_strcspn.h"
 #include "test_strpbrk.h"
 #include "test_strstr.h"
+#include "test_strtok.h"
 
 #include "test_strcpy.h"
 #include "test_strncpy.h"
@@ -42,7 +43,8 @@ UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(strcspn);
     UTEST_RUN_TEST_CASE(strpbrk);
     UTEST_RUN_TEST_CASE(strstr);
-
+    UTEST_RUN_TEST_CASE(strtok);
+    
     // string manipulation
     UTEST_RUN_TEST_CASE(strcpy);
     UTEST_RUN_TEST_CASE(strncpy);

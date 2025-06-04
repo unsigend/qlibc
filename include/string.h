@@ -42,6 +42,7 @@ extern size_t strspn(const char* str, const char* charset);
 extern size_t strcspn(const char* str, const char* charset);
 extern char* strpbrk(const char* str, const char* charset);
 extern char* strstr(const char* str, const char* substr);
+extern char* strtok(char* restrict str, const char* restrict delim);
 
 // string manipulation
 extern char* strcpy(char* restrict dest, const char* restrict src);

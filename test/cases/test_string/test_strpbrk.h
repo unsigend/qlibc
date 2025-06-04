@@ -1,6 +1,5 @@
 #include <string.h>
 #include <utest.h>
-#include <stdio.h>
 
 UTEST_TEST_CASE(strpbrk) {
     const char *str1 = "Hello World";

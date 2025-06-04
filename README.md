@@ -80,7 +80,7 @@ ANSI/ISO C Standard Headers Support:
 | <stdio.h>    | Standard Input/output                                   |
 | <stdlib.h>   | General utilities library                               |
 | [<stdnoreturn.h>](https://github.com/unsigend/qlibc/blob/main/include/stdnoreturn.h) | noreturn convenience macro                        |
-| <string.h>   | String handling                                         |
+| [<string.h>](https://github.com/unsigend/qlibc/blob/main/include/string.h)   | String handling                                         |
 | <time.h>     | Time/date utilities                                     |
 
 
