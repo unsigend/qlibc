@@ -1,5 +1,4 @@
 #include <utest.h>
-
 #include <errno.h>
 
 UTEST_TEST_CASE(value){
@@ -12,6 +11,7 @@ UTEST_TEST_CASE(value){
     EXPECT_EQUAL_INT(errno, -1);
     errno = 1234567890;
     EXPECT_EQUAL_INT(errno, 1234567890);
+    errno = 0;
 }
 
 #if defined(__aarch64__)

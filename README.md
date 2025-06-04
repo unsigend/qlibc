@@ -68,7 +68,7 @@ ANSI/ISO C Standard Headers Support:
 |----------------|---------------------------------------------------------|
 | [<assert.h>](https://github.com/unsigend/qlibc/blob/main/include/assert.h)   | Conditionally compiled macro that compares its argument to zero |
 | [<ctype.h>](https://github.com/unsigend/qlibc/blob/main/include/ctype.h)     | Functions to determine the type contained in character data     |
-| <errno.h>    | Macros reporting error conditions                       |
+| [<errno.h>](https://github.com/unsigend/qlibc/blob/main/include/errno.h)    | Macros reporting error conditions                       |
 | [<limits.h>](https://github.com/unsigend/qlibc/blob/main/include/limits.h)   | Ranges of integer types                                    |
 | <setjmp.h>   | Nonlocal jumps                                          |
 | <signal.h>   | Signal handling                                         |
