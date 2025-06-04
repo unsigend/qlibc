@@ -116,7 +116,7 @@ check-dep:
 
 # build all test cases
 all: check-dep $(OBJS)
-	@$(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_PATH)/test
+	@$(LD) $(OBJS) $(LD_FLAGS) -o $(BUILD_PATH)/test
 	@echo " + LD\t$(BUILD_PATH)/test"
 	@echo "Build qlibc test cases: $(BUILD_PATH)/test"
 	@echo ""
