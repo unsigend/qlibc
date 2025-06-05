@@ -143,7 +143,7 @@ $(OBJ_PATH)/$(ARCH)/%.o: $(ARCH_PATH)/$(ARCH)/src/%.c
 
 # default goal
 .DEFAULT_GOAL := help
-.PHONY: all clean create_build_dir info help test gnu welcome lib
+.PHONY: all clean create_build_dir info help test welcome lib
 
 # target for creating build directory
 create_build_dir:
