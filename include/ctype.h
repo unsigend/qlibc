@@ -22,75 +22,23 @@
 extern "C" {
 #endif
 
-/**
- * @brief Check if a character is alphanumeric.
- */
-int isalnum(int c);
+// character classification
+extern int isalnum(int c);
+extern int isalpha(int c);
+extern int isblank(int c);
+extern int iscntrl(int c);
+extern int isdigit(int c);
+extern int isgraph(int c);
+extern int islower(int c);
+extern int isprint(int c);
+extern int ispunct(int c);
+extern int isspace(int c);
+extern int isupper(int c);
+extern int isxdigit(int c);
 
-/**
- * @brief Check if a character is alphabetic.
- */
-int isalpha(int c);
-
-/**
- * @brief Check if a character is a blank character.
- */
-int isblank(int c);
-
-/**
- * @brief Check if a character is a control character.
- */
-int iscntrl(int c);
-
-/**
- * @brief Check if a character is a digit.
- */
-int isdigit(int c);
-
-/**
- * @brief Check if a character is a graphical character.
- */
-int isgraph(int c);
-
-/**
- * @brief Check if a character is a lowercase letter.
- */
-int islower(int c);
-
-/**
- * @brief Check if a character is a printable character.
- */
-int isprint(int c);
-
-/**
- * @brief Check if a character is a punctuation character.
- */
-int ispunct(int c);
-
-/**
- * @brief Check if a character is a space character.
- */
-int isspace(int c);
-
-/**
- * @brief Check if a character is an uppercase letter.
- */
-int isupper(int c);
-
-/**
- * @brief Check if a character is a hexadecimal digit.
- */
-int isxdigit(int c);
-
-/**
- * @brief Convert a character to lowercase.
- */
-int tolower(int c);
-
-/**
- * @brief Convert a character to uppercase.
- */
-int toupper(int c);
+// character conversion
+extern int tolower(int c);
+extern int toupper(int c);
 
 #ifdef __cplusplus
 }
