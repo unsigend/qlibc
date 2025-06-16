@@ -24,6 +24,8 @@
 #include "test_strncat.h"
 #include "test_strxfrm.h"
 
+#include "test_strerror.h"
+
 UTEST_TEST_SUITE(string){
     // character array examination
     UTEST_RUN_TEST_CASE(memchr);
@@ -51,4 +53,7 @@ UTEST_TEST_SUITE(string){
     UTEST_RUN_TEST_CASE(strcat);
     UTEST_RUN_TEST_CASE(strncat);
     UTEST_RUN_TEST_CASE(strxfrm);
+
+    // Miscellaneous
+    UTEST_RUN_TEST_CASE(strerror);
 }

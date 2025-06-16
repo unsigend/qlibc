@@ -51,6 +51,8 @@ extern char* strcat(char* restrict dest, const char* restrict src);
 extern char* strncat(char* restrict dest, const char* restrict src, size_t count);
 extern size_t strxfrm(char *restrict dest, const char *restrict src, size_t count);
 
+// Miscellaneous
+extern char* strerror(int errnum);
 
 #ifdef __cplusplus
 }
