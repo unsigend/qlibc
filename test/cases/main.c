@@ -16,6 +16,7 @@ extern UTEST_TEST_SUITE(stddef);
 extern UTEST_TEST_SUITE(stdint);
 extern UTEST_TEST_SUITE(string);
 extern UTEST_TEST_SUITE(errno);
+extern UTEST_TEST_SUITE(stdlib);
 
 int main(int argc, char *argv[]) {
     (void)argc;
@@ -36,6 +37,7 @@ int main(int argc, char *argv[]) {
         UTEST_RUN_TEST_SUITE(stdint);
         UTEST_RUN_TEST_SUITE(string);
         UTEST_RUN_TEST_SUITE(errno);
+        UTEST_RUN_TEST_SUITE(stdlib);
     }else{
         if (MATCH(argv[1], "assert")){
             UTEST_RUN_TEST_SUITE(assert);
@@ -55,6 +57,8 @@ int main(int argc, char *argv[]) {
             UTEST_RUN_TEST_SUITE(string);
         }else if (MATCH(argv[1], "errno")){
             UTEST_RUN_TEST_SUITE(errno);
+        }else if (MATCH(argv[1], "stdlib")){
+            UTEST_RUN_TEST_SUITE(stdlib);
         }
     }
     
