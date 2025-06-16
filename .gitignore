@@ -5,3 +5,7 @@ build/
 
 # ignore the lib directory
 lib/
+
+# ignore all the .DS_Store files
+.DS_Store
+/**/.DS_Store
