@@ -34,7 +34,7 @@ static const char* __strerror_str[] = {
 
 #define _ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 char* strerror(int errnum){
-    if(errnum < 0 || errnum >= (int)_ARRAY_SIZE(__strerror_id)){
+    if (errnum < 0){
         return (char*)"Unknown error";
     }
     unsigned long i;

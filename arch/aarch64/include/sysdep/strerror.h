@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Constants for strerror
+// Constants for strerror for aarch64
 
 ERROR(0, "Undefined error: 0"),
 ERROR(EPERM, "Operation not permitted"),
