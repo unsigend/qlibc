@@ -34,8 +34,12 @@ UTEST_TEST_CASE(atol){
     EXPECT_EQUAL_INT(atol("-000456"), -456);
     EXPECT_EQUAL_INT(atol("0000"), 0);
     
+// overflow on 32-bit platforms will lead to undefined behavior, so we don't test it
+
+#if defined(__x86_64__) || defined(__aarch64__)
     EXPECT_EQUAL_INT(atol("9223372036854775807"), LONG_MAX);
     EXPECT_EQUAL_INT(atol("-9223372036854775808"), LONG_MIN);
+#endif
     
     EXPECT_EQUAL_INT(atol("  +42"), 42);
     EXPECT_EQUAL_INT(atol("  -42"), -42);
