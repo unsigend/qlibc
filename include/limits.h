@@ -32,17 +32,17 @@
 #define SCHAR_MIN      (CHAR_MIN)
 #define SCHAR_MAX      (CHAR_MAX)
 
-#define SHRT_MIN       (0x8000)
 #define SHRT_MAX       (0x7fff)
+#define SHRT_MIN       (-1-SHRT_MAX)
 
-#define INT_MIN        (0x80000000)
 #define INT_MAX        (0x7fffffff)
+#define INT_MIN        (-1-INT_MAX)
 
 #define LONG_MIN       (_LONG_MIN_)
 #define LONG_MAX       (_LONG_MAX_)
 
-#define LLONG_MIN      (0x8000000000000000)
 #define LLONG_MAX      (0x7fffffffffffffff)
+#define LLONG_MIN      (-1-LLONG_MAX)
 
 #define UCHAR_MAX      (0xff)
 #define USHRT_MAX      (0xffff)
