@@ -19,16 +19,31 @@
 #define _QLIBC_STDLIB_H_
 
 #include <feature.h>
-// #include <stddef.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Conversions to and from numeric formats
+extern double atof(const char* str);
+
 extern int atoi(const char *str);
 extern long atol(const char *str);
 extern long long atoll(const char *str);
+
+extern long strtol(const char* restrict str, char** restrict str_end, int base);
+extern long long strtoll(const char* restrict str, char** restrict str_end, int base);
+
+extern unsigned long strtoul(const char* restrict str, char** restrict str_end, int base);
+extern unsigned long long strtoull(const char* restrict str, char** restrict str_end, int base);
+
+extern float strtof(const char* restrict str, char** restrict str_end);
+extern double strtod(const char* restrict str, char** restrict str_end);
+extern long double strtold(const char* restrict str, char** restrict str_end);
+
+extern intmax_t strtoimax(const char* restrict str, char** restrict str_end, int base);
+extern uintmax_t strtoumax(const char* restrict str, char** restrict str_end, int base);
 
 // Program termination
 #if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
