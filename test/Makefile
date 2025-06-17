@@ -72,6 +72,7 @@ endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 CC_FLAGS                +=      -Wall -Wextra -Werror
 CC_FLAGS                +=      -Wno-memset-transposed-args
+CC_FLAGS                +=      -Wno-implicitly-unsigned-literal
 CC_FLAGS                +=      -g
 CC_FLAGS                +=      -O0
 ifeq ($(USING_GNU), 0)
