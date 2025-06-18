@@ -210,7 +210,7 @@ NAMESPACE_BEGIN
     EXPECT_EQUAL_INT(endptr, str4);
     
     const char *str5 = "0xlllll";
-    EXPECT_EQUAL_INT(strtol("0xlllll", &endptr, 16), 0);
+    EXPECT_EQUAL_INT(strtol(str5, &endptr, 16), 0);
     EXPECT_EQUAL_INT(*endptr, 'x');
     EXPECT_EQUAL_STRING(endptr, "xlllll");
     EXPECT_EQUAL_UINT(endptr, str5 + 1);
