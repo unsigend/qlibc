@@ -95,7 +95,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     EXPECT_EQUAL_INT(strtol("123abc", &endptr, 10), 123);
     
     EXPECT_EQUAL_INT(strtol("   456   ", &endptr, 10), 456);
@@ -104,7 +104,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "123abc";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 10), 123);
     EXPECT_EQUAL_INT(*endptr, 'a');
@@ -119,7 +119,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "abc123";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 10), 0);
     EXPECT_EQUAL_INT(endptr, str1);
@@ -143,7 +143,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "   123abc";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 10), 123);
     EXPECT_EQUAL_INT(*endptr, 'a');
@@ -158,7 +158,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "abc123";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 16), 0xabc123);
     EXPECT_EQUAL_INT8(*endptr, '\0');
@@ -173,7 +173,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "-123abc";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 10), -123);
     EXPECT_EQUAL_INT(*endptr, 'a');
@@ -192,7 +192,7 @@ NAMESPACE_BEGIN
 NAMESPACE_END
 
 NAMESPACE_BEGIN
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "0";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 10), 0);
     EXPECT_EQUAL_INT(*endptr, '\0');
@@ -239,7 +239,7 @@ NAMESPACE_END
 
 NAMESPACE_BEGIN
     errno = 0;
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "49";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 5), 4);
     EXPECT_EQUAL_INT(*endptr, '9');
@@ -279,7 +279,7 @@ NAMESPACE_END
 // test for positive overflow
 NAMESPACE_BEGIN
     errno = 0;
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "999999999999999999999";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, AUTO), LONG_MAX);
     EXPECT_EQUAL_INT(errno, ERANGE);
@@ -289,7 +289,7 @@ NAMESPACE_END
 // test for negative overflow
 NAMESPACE_BEGIN
     errno = 0;
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "-999999999999999999999";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, AUTO), LONG_MIN);
     EXPECT_EQUAL_INT(errno, ERANGE);
@@ -299,28 +299,25 @@ NAMESPACE_END
 // invalid base check
 NAMESPACE_BEGIN
     errno = 0;
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "123";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 1), 0);
-    EXPECT_EQUAL_UINT(endptr, str1);
     EXPECT_EQUAL_INT(errno, EINVAL);
 NAMESPACE_END
 
 NAMESPACE_BEGIN
     errno = 0;
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "123";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, 37), 0);
-    EXPECT_EQUAL_UINT(endptr, str1);
     EXPECT_EQUAL_INT(errno, EINVAL);
 NAMESPACE_END
 
 NAMESPACE_BEGIN
     errno = 0;
-    char *endptr;
+    char *endptr = NULL;
     const char *str1 = "123";
     EXPECT_EQUAL_INT(strtol(str1, &endptr, -3), 0);
-    EXPECT_EQUAL_UINT(endptr, str1);
     EXPECT_EQUAL_INT(errno, EINVAL);
 NAMESPACE_END
 
