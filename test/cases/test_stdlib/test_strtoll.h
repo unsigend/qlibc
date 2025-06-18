@@ -258,5 +258,34 @@ NAMESPACE_BEGIN
     EXPECT_EQUAL_UINT(endptr, str1 + strlen(str1));
 NAMESPACE_END
 
+// invalid base check
+NAMESPACE_BEGIN
+    errno = 0;
+    char *endptr;
+    const char *str1 = "123";
+    EXPECT_EQUAL_INT(strtoll(str1, &endptr, 1), 0);
+    EXPECT_EQUAL_UINT(endptr, str1);
+    EXPECT_EQUAL_INT(errno, EINVAL);
+NAMESPACE_END
+
+NAMESPACE_BEGIN
+    errno = 0;
+    char *endptr;
+    const char *str1 = "123";
+    EXPECT_EQUAL_INT(strtoll(str1, &endptr, 37), 0);
+    EXPECT_EQUAL_UINT(endptr, str1);
+    EXPECT_EQUAL_INT(errno, EINVAL);
+NAMESPACE_END
+
+NAMESPACE_BEGIN
+    errno = 0;
+    char *endptr;
+    const char *str1 = "123";
+    EXPECT_EQUAL_INT(strtoll(str1, &endptr, -3), 0);
+    EXPECT_EQUAL_UINT(endptr, str1);
+    EXPECT_EQUAL_INT(errno, EINVAL);
+NAMESPACE_END
+
+    // make sure the errno is cleared
     errno = 0;
 }

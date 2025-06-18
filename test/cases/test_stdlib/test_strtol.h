@@ -131,6 +131,15 @@ NAMESPACE_BEGIN
     const char *str3 = "";
     EXPECT_EQUAL_INT(strtol(str3, &endptr, 10), 0);
     EXPECT_EQUAL_INT(endptr, str3);
+
+    const char *str4 = "0x12l";
+    EXPECT_EQUAL_INT(strtol(str4, &endptr, 16), 0x12);
+    EXPECT_EQUAL_INT(endptr, str4 + 4);
+
+    const char *str5 = "0x1234ll1234";
+    EXPECT_EQUAL_INT(strtol(str5, &endptr, 16), 0x1234);
+    EXPECT_EQUAL_INT(endptr, str5 + 6);
+
 NAMESPACE_END
 
 NAMESPACE_BEGIN
@@ -200,9 +209,25 @@ NAMESPACE_BEGIN
     EXPECT_EQUAL_INT(strtol(str4, &endptr, 10), 0);
     EXPECT_EQUAL_INT(endptr, str4);
     
-    const char *str5 = "0x";
-    EXPECT_EQUAL_INT(strtol(str5, &endptr, 16), 0);
+    const char *str5 = "0xlllll";
+    EXPECT_EQUAL_INT(strtol("0xlllll", &endptr, 16), 0);
     EXPECT_EQUAL_INT(*endptr, 'x');
+    EXPECT_EQUAL_STRING(endptr, "xlllll");
+    EXPECT_EQUAL_UINT(endptr, str5 + 1);
+
+    const char *str6 = "-lll";
+    EXPECT_EQUAL_INT(strtol(str6, &endptr, 10), 0);
+    EXPECT_EQUAL_INT(endptr, str6);
+
+    const char *str7 = "   -lll ";
+    EXPECT_EQUAL_INT(strtol(str7, &endptr, 10), 0);
+    EXPECT_EQUAL_INT(endptr, str7);
+
+    const char *str8 = "09";
+    EXPECT_EQUAL_INT(strtol(str8, &endptr, 8), 0);
+    EXPECT_EQUAL_INT(*endptr, '9');
+    EXPECT_EQUAL_INT(endptr, str8 + 1);
+
 NAMESPACE_END
 
 NAMESPACE_BEGIN
@@ -210,6 +235,16 @@ NAMESPACE_BEGIN
     EXPECT_EQUAL_INT(strtol("zz", NULL, 36), 35*36 + 35);          
     EXPECT_EQUAL_INT(strtol("10", NULL, 3), 1*3 + 0);              
     EXPECT_EQUAL_INT(strtol("77", NULL, 9), 7*9 + 7);              
+NAMESPACE_END
+
+NAMESPACE_BEGIN
+    errno = 0;
+    char *endptr;
+    const char *str1 = "49";
+    EXPECT_EQUAL_INT(strtol(str1, &endptr, 5), 4);
+    EXPECT_EQUAL_INT(*endptr, '9');
+    EXPECT_EQUAL_UINT(endptr, str1 + 1);
+    EXPECT_EQUAL_INT(errno, 0);
 NAMESPACE_END
 
 NAMESPACE_BEGIN
@@ -261,6 +296,34 @@ NAMESPACE_BEGIN
     EXPECT_EQUAL_UINT(endptr, str1 + strlen(str1));
 NAMESPACE_END
  
+// invalid base check
+NAMESPACE_BEGIN
     errno = 0;
+    char *endptr;
+    const char *str1 = "123";
+    EXPECT_EQUAL_INT(strtol(str1, &endptr, 1), 0);
+    EXPECT_EQUAL_UINT(endptr, str1);
+    EXPECT_EQUAL_INT(errno, EINVAL);
+NAMESPACE_END
+
+NAMESPACE_BEGIN
+    errno = 0;
+    char *endptr;
+    const char *str1 = "123";
+    EXPECT_EQUAL_INT(strtol(str1, &endptr, 37), 0);
+    EXPECT_EQUAL_UINT(endptr, str1);
+    EXPECT_EQUAL_INT(errno, EINVAL);
+NAMESPACE_END
+
+NAMESPACE_BEGIN
+    errno = 0;
+    char *endptr;
+    const char *str1 = "123";
+    EXPECT_EQUAL_INT(strtol(str1, &endptr, -3), 0);
+    EXPECT_EQUAL_UINT(endptr, str1);
+    EXPECT_EQUAL_INT(errno, EINVAL);
+NAMESPACE_END
+
     // make sure the errno is cleared
+    errno = 0;
 }

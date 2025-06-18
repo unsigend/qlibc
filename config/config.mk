@@ -22,7 +22,7 @@
 
 # Config for architecture
 # Supported architectures: i386, x86_64
-ARCH                :=   	x86_64
+ARCH                :=   	aarch64
 
 # qlibc version
 QLIBC_VERSION       :=   	0.1.0
@@ -34,7 +34,7 @@ QLIBC_NAME          :=   	qlibc
 QLIBC_C_STANDARD    :=   	c99
 
 # debug mode
-DEBUG               :=   	0
+DEBUG               :=   	1
 
 # Verbose mode
 VERBOSE             :=   	0
