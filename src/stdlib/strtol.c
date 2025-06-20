@@ -15,21 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_ERRNO_H
-#define _QLIBC_ERRNO_H
+#include <ctype.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <limits.h>
 
-// include architecture-specific errno.h
-#include <sysdep/errno.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern int* __errno(void);
-#define errno (*__errno())
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
