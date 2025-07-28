@@ -18,7 +18,9 @@
 #include <string.h>
 
 char* strcat(char* restrict dest, const char* restrict src){
-    size_t len_dest = strlen(dest);
-    memcpy(dest + len_dest, src, strlen(src) + 1);
-    return dest;
+    char * _d = dest;
+    while (*dest) ++dest;
+    while (*src) *dest++ = *src++;
+    *dest = '\0';
+    return _d;
 }
