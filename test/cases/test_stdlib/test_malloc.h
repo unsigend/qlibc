@@ -14,6 +14,7 @@
 
 UTEST_TEST_CASE(malloc){
 NAMESPACE_BEGIN
+    // test malloc return pointer that is aligned to max_align_t
     void * ptr = NULL;
     for (size_t i = 1; i < 1024; i*=2){
         ptr = malloc(i);
