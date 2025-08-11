@@ -53,6 +53,13 @@ extern void abort(void);
 extern noreturn void abort(void);
 #endif
 
+
+// Memory management
+extern void* malloc(size_t size);
+extern void free(void* ptr);
+extern void* calloc(size_t num, size_t size);
+extern void* realloc(void* ptr, size_t new_size);
+
 #ifdef __cplusplus
 }
 #endif
