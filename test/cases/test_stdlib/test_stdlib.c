@@ -10,6 +10,9 @@
 // memory management
 #include "test_malloc.h"
 
+// algorithm
+#include "test_bsearch.h"
+
 UTEST_TEST_SUITE(stdlib){
     UTEST_RUN_TEST_CASE(atoi);
     UTEST_RUN_TEST_CASE(atol);
@@ -18,4 +21,6 @@ UTEST_TEST_SUITE(stdlib){
     // UTEST_RUN_TEST_CASE(strtoll);
 
     UTEST_RUN_TEST_CASE(malloc);
+
+    UTEST_RUN_TEST_CASE(bsearch);
 }

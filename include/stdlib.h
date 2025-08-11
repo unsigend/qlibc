@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-// Conversions to and from numeric formats
+// conversions to and from numeric formats
 extern double atof(const char* str);
 
 extern int atoi(const char *str);
@@ -45,7 +45,7 @@ extern long double strtold(const char* restrict str, char** restrict str_end);
 extern intmax_t strtoimax(const char* restrict str, char** restrict str_end, int base);
 extern uintmax_t strtoumax(const char* restrict str, char** restrict str_end, int base);
 
-// Program termination
+// program termination
 #if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
 extern void abort(void);
 #else
@@ -54,11 +54,15 @@ extern noreturn void abort(void);
 #endif
 
 
-// Memory management
+// memory management
 extern void* malloc(size_t size);
 extern void free(void* ptr);
 extern void* calloc(size_t num, size_t size);
 extern void* realloc(void* ptr, size_t new_size);
+
+// algorithm
+extern void* bsearch(const void *key, const void *ptr, size_t count, size_t size,
+    int (*comp)(const void*, const void*));
 
 #ifdef __cplusplus
 }
