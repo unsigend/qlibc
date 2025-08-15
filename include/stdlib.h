@@ -63,6 +63,8 @@ extern void* realloc(void* ptr, size_t new_size);
 // algorithm
 extern void* bsearch(const void *key, const void *ptr, size_t count, size_t size,
     int (*comp)(const void*, const void*));
+extern void qsort(void *ptr, size_t count, size_t size,
+    int (*comp)(const void*, const void*));
 
 #ifdef __cplusplus
 }

@@ -12,6 +12,7 @@
 
 // algorithm
 #include "test_bsearch.h"
+#include "test_qsort.h"
 
 UTEST_TEST_SUITE(stdlib){
     UTEST_RUN_TEST_CASE(atoi);
@@ -23,4 +24,5 @@ UTEST_TEST_SUITE(stdlib){
     UTEST_RUN_TEST_CASE(malloc);
 
     UTEST_RUN_TEST_CASE(bsearch);
+    UTEST_RUN_TEST_CASE(qsort);
 }
