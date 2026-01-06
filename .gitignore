@@ -9,3 +9,7 @@ lib/
 # ignore all the .DS_Store files
 .DS_Store
 **/.DS_Store
+
+# clang command generated file
+compile_commands.json
+.cache/

@@ -143,7 +143,7 @@ $(OBJ_PATH)/$(ARCH)/%.o: $(ARCH_PATH)/$(ARCH)/src/%.c
 
 # default goal
 .DEFAULT_GOAL := help
-.PHONY: all clean create_build_dir info help test welcome lib
+.PHONY: all clean create_build_dir info help test welcome lib clang
 
 # target for creating build directory
 create_build_dir:
@@ -196,7 +196,12 @@ help:
 	@echo "\tmake help          - Show this help message"
 	@echo "\tmake test          - Run all the test cases"
 	@echo "\tmake test-[module] - Run the test cases for a specific module"
+	@echo "\tmake clang         - Run the clang command to generate compile_commands.json"
 	@echo ""
+
+# clang target
+clang:
+	@bear -- make test -j4
 
 # lib target
 lib: $(OBJS) $(OBJS_ARCH)

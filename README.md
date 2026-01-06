@@ -60,6 +60,7 @@ Basic build commands:
 - `make test`          - Run all the test cases
 - `make gnu`           - Build the test cases with GNU glibc
 - `make test-<module>` - Build the test cases for a specific module
+- `make clang`         - Run the clang command to generate compile_commands.json
 
 
 ## Headers
