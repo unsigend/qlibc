@@ -84,6 +84,10 @@ ANSI/ISO C Standard Headers Support:
 | [<string.h>](https://github.com/unsigend/qlibc/blob/main/include/string.h)   | String handling                                         |
 | <time.h>     | Time/date utilities                                     |
 
+Unix POSIX Support:
+| Header         | Description                                              |
+|----------------|---------------------------------------------------------|
+| [<elf.h>](https://github.com/unsigend/qlibc/blob/main/include/elf.h) | ELF header structures and macros                        |
 
 ## Architecture Support
 
