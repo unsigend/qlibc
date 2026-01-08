@@ -23,5 +23,7 @@
  * This file is part of the ELF specification.
  */
 #include <elf/ehdr.h>
+#include <elf/shdr.h>
+#include <elf/symtab.h>
 
 #endif

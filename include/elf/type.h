@@ -31,6 +31,9 @@ typedef uint16_t Elf32_Half;
 typedef uint32_t Elf32_Off;
 typedef int32_t Elf32_Sword;
 typedef uint32_t Elf32_Word;
+typedef uint16_t Elf32_Section;
+typedef uint64_t Elf32_Xword;
+typedef	int64_t  Elf32_Sxword;
 
 /* 64-bit ELF types */
 typedef uint64_t Elf64_Addr;
@@ -38,5 +41,8 @@ typedef uint16_t Elf64_Half;
 typedef uint64_t Elf64_Off;
 typedef int32_t Elf64_Sword;
 typedef uint32_t Elf64_Word;
+typedef uint16_t Elf64_Section;
+typedef uint64_t Elf64_Xword;
+typedef	int64_t  Elf64_Sxword;
 
 #endif
