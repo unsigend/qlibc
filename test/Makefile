@@ -58,6 +58,9 @@ EXTERNAL_SRCS           :=      $(shell find $(EXTERNAL_SRC_PATH) -name "*.c")
 EXTERNAL_OBJS           :=      $(patsubst $(EXTERNAL_SRC_PATH)/%.c, $(BUILD_PATH)/external/%.o, $(EXTERNAL_SRCS))
 OBJS                    +=      $(EXTERNAL_OBJS)
 
+# dependency files
+DEPS                    :=      $(patsubst $(BUILD_PATH)/%.o, $(DEP_PATH)/%.d, $(OBJS))
+
 # Compiler Tools
 CC                      :=      gcc
 AR                      :=      ar
@@ -75,6 +78,7 @@ CC_FLAGS                +=      -Wno-memset-transposed-args
 CC_FLAGS                +=      -Wno-implicitly-unsigned-literal
 CC_FLAGS                +=      -Wno-builtin-memcpy-chk-size
 CC_FLAGS                +=      -Wno-gnu-alignof-expression
+CC_FLAGS                +=      -Wno-unused-function
 CC_FLAGS                +=      -g
 CC_FLAGS                +=      -O0
 ifeq ($(USING_GNU), 0)
@@ -101,15 +105,19 @@ endif
 # general rules for all objects
 $(BUILD_PATH)/%.o: $(TEST_PATH)/%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CC_FLAGS) -MMD -MP -MF $(DEP_PATH)/$(@F:.o=.d) -c $< -o $@
+	@mkdir -p $(dir $(DEP_PATH)/$*)
+	@$(CC) $(CC_FLAGS) -MMD -MP -MF $(DEP_PATH)/$*.d -MT $@ -c $< -o $@
 	@echo " + CC\t$@"
 
 $(BUILD_PATH)/external/%.o: $(EXTERNAL_SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CC_FLAGS) -c $< -o $@
+	@mkdir -p $(dir $(DEP_PATH)/external/$*)
+	@$(CC) $(CC_FLAGS) -MMD -MP -MF $(DEP_PATH)/external/$*.d -MT $@ -c $< -o $@
 	@echo " + CC\t$@"
 
--include $(DEP_PATH)/*.d
+-include $(DEPS)
+
+.SECONDARY: $(DEPS)
 
 .DEFAULT_GOAL := test
 .PHONY: test clean all check-dep

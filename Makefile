@@ -174,6 +174,11 @@ info:
 	@echo " - Library path       : $(LIB_PATH)"
 	@echo " - Build Method       : $(BUILD_METHOD)"
 	@echo " - C Standard         : $(QLIBC_C_STANDARD)"
+ifeq ($(USING_GNU), 1)
+	@echo " - Testing Library    : glibc"
+else
+	@echo " - Testing Library    : qlibc"
+endif
 ifeq ($(TOOLCHAIN_PREFIX),)
 	@echo " - Toolchain prefix   : NONE"
 else

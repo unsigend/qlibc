@@ -53,15 +53,15 @@ typedef uint64_t            uint_least64_t;
 typedef unsigned long long  uintmax_t;
 typedef unsigned long       uintptr_t;
 
-#define INT8_MIN            (0x80)
-#define INT16_MIN           (0x8000)
-#define INT32_MIN           (0x80000000)
-#define INT64_MIN           (0x8000000000000000)
+#define INT8_MAX            (0x7FL)
+#define INT16_MAX           (0x7FFFL)
+#define INT32_MAX           (0x7FFFFFFFL)
+#define INT64_MAX           (0x7FFFFFFFFFFFFFFFL)
 
-#define INT8_MAX            (0x7F)
-#define INT16_MAX           (0x7FFF)
-#define INT32_MAX           (0x7FFFFFFF)
-#define INT64_MAX           (0x7FFFFFFFFFFFFFFF)
+#define INT8_MIN            (-1 - INT8_MAX)
+#define INT16_MIN           (-1 - INT16_MAX)
+#define INT32_MIN           (-1L - INT32_MAX)
+#define INT64_MIN           (-1LL - INT64_MAX)
 
 #define UINT8_MAX           (0xFF)
 #define UINT16_MAX          (0xFFFF)
@@ -102,12 +102,12 @@ typedef unsigned long       uintptr_t;
 #define INTMAX_MAX          (INT64_MAX)
 #define UINTMAX_MAX         (UINT64_MAX)
 
-#define INTPTR_MIN          (INT64_MIN)
-#define INTPTR_MAX          (INT64_MAX)
+#define INTPTR_MIN          ((intptr_t)(INT64_MIN))
+#define INTPTR_MAX          ((intptr_t)(INT64_MAX))
 #define UINTPTR_MAX         (UINT64_MAX)
 
-#define PTRDIFF_MIN         (INT64_MIN)
-#define PTRDIFF_MAX         (INT64_MAX)
+#define PTRDIFF_MIN         ((ptrdiff_t)(INT64_MIN))
+#define PTRDIFF_MAX         ((ptrdiff_t)(INT64_MAX))
 #define SIZE_MAX            (UINT64_MAX)
 
 #define SIG_ATOMIC_MAX      (INT32_MAX)

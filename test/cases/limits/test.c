@@ -1,13 +1,11 @@
 #include <utest.h>
 #include <limits.h>
 
-UTEST_TEST_CASE(constants){
+UTEST_TEST_CASE(macros){
     EXPECT_EQUAL_INT(CHAR_BIT, 8);
     EXPECT_TRUE(MB_LEN_MAX > 0);
     EXPECT_TRUE(MB_LEN_MAX >= 1);
-}
 
-UTEST_TEST_CASE(signed_char){
     EXPECT_EQUAL_INT(SCHAR_MIN, CHAR_MIN);
     EXPECT_EQUAL_INT(SCHAR_MAX, CHAR_MAX);
     EXPECT_TRUE(SCHAR_MIN < 0);
@@ -15,79 +13,59 @@ UTEST_TEST_CASE(signed_char){
     EXPECT_TRUE(SCHAR_MAX == 127);
     EXPECT_TRUE(SCHAR_MIN == -128);
     EXPECT_TRUE(sizeof(signed char) * CHAR_BIT == 8);
-}
 
-UTEST_TEST_CASE(char_limits){
     EXPECT_TRUE(CHAR_MIN <= 0);
     EXPECT_TRUE(CHAR_MAX >= 0);
     EXPECT_TRUE(CHAR_MAX >= CHAR_MIN);
     EXPECT_TRUE(sizeof(char) * CHAR_BIT == CHAR_BIT);
-}
 
-UTEST_TEST_CASE(short_limits){
     EXPECT_TRUE(SHRT_MIN < 0);
     EXPECT_TRUE(SHRT_MAX > 0);
     EXPECT_TRUE(SHRT_MAX == 0x7fff);
     EXPECT_TRUE(SHRT_MIN == -1 - SHRT_MAX);
     EXPECT_TRUE(sizeof(short) * CHAR_BIT >= 16);
     EXPECT_TRUE(sizeof(short) * CHAR_BIT <= 32);
-}
 
-UTEST_TEST_CASE(int_limits){
     EXPECT_TRUE(INT_MIN < 0);
     EXPECT_TRUE(INT_MAX > 0);
     EXPECT_TRUE(INT_MAX == 0x7fffffff);
     EXPECT_TRUE(INT_MIN == -1 - INT_MAX);
     EXPECT_TRUE(sizeof(int) * CHAR_BIT >= 16);
     EXPECT_TRUE(sizeof(int) * CHAR_BIT <= 64);
-}
 
-UTEST_TEST_CASE(long_limits){
     EXPECT_TRUE(LONG_MIN < 0);
     EXPECT_TRUE(LONG_MAX > 0);
     EXPECT_TRUE(LONG_MIN == -1 - LONG_MAX);
     EXPECT_TRUE(sizeof(long) * CHAR_BIT >= 32);
     EXPECT_TRUE(sizeof(long) * CHAR_BIT <= 64);
-}
 
-UTEST_TEST_CASE(long_long_limits){
     EXPECT_TRUE(LLONG_MIN < 0);
     EXPECT_TRUE(LLONG_MAX > 0);
     EXPECT_TRUE(LLONG_MAX == 0x7fffffffffffffffLL);
     EXPECT_TRUE(LLONG_MIN == -1 - LLONG_MAX);
     EXPECT_TRUE(sizeof(long long) * CHAR_BIT >= 64);
-}
 
-UTEST_TEST_CASE(unsigned_char){
     EXPECT_EQUAL_INT(UCHAR_MAX, 0xff);
     EXPECT_TRUE(UCHAR_MAX > 0);
     EXPECT_TRUE(UCHAR_MAX == 255);
     EXPECT_TRUE(sizeof(unsigned char) * CHAR_BIT == 8);
-}
 
-UTEST_TEST_CASE(unsigned_short){
     EXPECT_EQUAL_INT(USHRT_MAX, 0xffff);
     EXPECT_TRUE(USHRT_MAX > 0);
     EXPECT_TRUE(USHRT_MAX == 65535);
     EXPECT_TRUE(sizeof(unsigned short) * CHAR_BIT >= 16);
     EXPECT_TRUE(sizeof(unsigned short) * CHAR_BIT <= 32);
-}
 
-UTEST_TEST_CASE(unsigned_int){
     EXPECT_EQUAL_INT(UINT_MAX, 0xffffffffU);
     EXPECT_TRUE(UINT_MAX > 0);
     EXPECT_TRUE(UINT_MAX == 4294967295U);
     EXPECT_TRUE(sizeof(unsigned int) * CHAR_BIT >= 16);
     EXPECT_TRUE(sizeof(unsigned int) * CHAR_BIT <= 64);
-}
 
-UTEST_TEST_CASE(unsigned_long){
     EXPECT_TRUE(ULONG_MAX > 0);
     EXPECT_TRUE(sizeof(unsigned long) * CHAR_BIT >= 32);
     EXPECT_TRUE(sizeof(unsigned long) * CHAR_BIT <= 64);
-}
 
-UTEST_TEST_CASE(unsigned_long_long){
     EXPECT_EQUAL_INT(ULLONG_MAX, 0xffffffffffffffffULL);
     EXPECT_TRUE(ULLONG_MAX > 0);
     EXPECT_TRUE(sizeof(unsigned long long) * CHAR_BIT >= 64);
@@ -163,18 +141,7 @@ UTEST_TEST_CASE(size_consistency){
 }
 
 UTEST_TEST_SUITE(limits){
-    UTEST_RUN_TEST_CASE(constants);
-    UTEST_RUN_TEST_CASE(signed_char);
-    UTEST_RUN_TEST_CASE(char_limits);
-    UTEST_RUN_TEST_CASE(short_limits);
-    UTEST_RUN_TEST_CASE(int_limits);
-    UTEST_RUN_TEST_CASE(long_limits);
-    UTEST_RUN_TEST_CASE(long_long_limits);
-    UTEST_RUN_TEST_CASE(unsigned_char);
-    UTEST_RUN_TEST_CASE(unsigned_short);
-    UTEST_RUN_TEST_CASE(unsigned_int);
-    UTEST_RUN_TEST_CASE(unsigned_long);
-    UTEST_RUN_TEST_CASE(unsigned_long_long);
+    UTEST_RUN_TEST_CASE(macros);
     UTEST_RUN_TEST_CASE(relationships);
     UTEST_RUN_TEST_CASE(size_consistency);
 }

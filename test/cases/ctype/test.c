@@ -1,19 +1,19 @@
 #include <utest.h>
 
-#include "func/test_isalnum.h"
-#include "func/test_isalpha.h"
-#include "func/test_isblank.h"
-#include "func/test_iscntrl.h"
-#include "func/test_isdigit.h"
-#include "func/test_isgraph.h"
-#include "func/test_islower.h"
-#include "func/test_isprint.h"
-#include "func/test_ispunct.h"
-#include "func/test_isspace.h"
-#include "func/test_isupper.h"
-#include "func/test_isxdigit.h"
-#include "func/test_tolower.h"
-#include "func/test_toupper.h"
+#include "funcs/test_isalnum.h"
+#include "funcs/test_isalpha.h"
+#include "funcs/test_isblank.h"
+#include "funcs/test_iscntrl.h"
+#include "funcs/test_isdigit.h"
+#include "funcs/test_isgraph.h"
+#include "funcs/test_islower.h"
+#include "funcs/test_isprint.h"
+#include "funcs/test_ispunct.h"
+#include "funcs/test_isspace.h"
+#include "funcs/test_isupper.h"
+#include "funcs/test_isxdigit.h"
+#include "funcs/test_tolower.h"
+#include "funcs/test_toupper.h"
 
 UTEST_TEST_SUITE(ctype){
     UTEST_RUN_TEST_CASE(isalnum);
