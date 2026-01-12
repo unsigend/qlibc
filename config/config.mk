@@ -44,4 +44,4 @@ VERBOSE             :=   	0
 BUILD_METHOD        :=   	static
 
 # Make GNU (Only for test purpose)
-USING_GNU           :=   	0
+USING_GNU           :=   	1
