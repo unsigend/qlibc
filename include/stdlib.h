@@ -20,6 +20,7 @@
 
 #include <feature.h>
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +50,7 @@ extern uintmax_t strtoumax(const char* restrict str, char** restrict str_end, in
 #if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
 extern void abort(void);
 #else
-#include <noreturn.h>
+#include <stdnoreturn.h>
 extern noreturn void abort(void);
 #endif
 

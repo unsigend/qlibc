@@ -20,6 +20,10 @@
 
 #include <feature.h>
 
+#ifdef NULL
+#undef NULL
+#endif
+
 #ifndef __cplusplus
 #define NULL ((void *)0)
 #else
