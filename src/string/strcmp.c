@@ -15,8 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stddef.h>
-
 int strcmp(const char* lhs, const char* rhs){
     while (*lhs && *lhs == *rhs){
         ++lhs;

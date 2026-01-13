@@ -6,6 +6,7 @@
 #include <utest.h>  
 #define MATCH(ARG, CASE)    (strcmp(ARG, CASE) == 0)
 
+// ANSI/ISO C standard library
 extern UTEST_TEST_SUITE(assert);
 extern UTEST_TEST_SUITE(string);
 extern UTEST_TEST_SUITE(ctype);
@@ -16,6 +17,8 @@ extern UTEST_TEST_SUITE(stddef);
 extern UTEST_TEST_SUITE(stdint);
 // extern UTEST_TEST_SUITE(errno);
 extern UTEST_TEST_SUITE(stdlib);
+
+// POSIX Unix
 // extern UTEST_TEST_SUITE(elf);
 
 int main(int argc, char *argv[]) {
