@@ -19,7 +19,7 @@ extern UTEST_TEST_SUITE(stdint);
 extern UTEST_TEST_SUITE(stdlib);
 
 // POSIX Unix
-// extern UTEST_TEST_SUITE(elf);
+extern UTEST_TEST_SUITE(elf);
 
 int main(int argc, char *argv[]) {
     (void)argc;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
         UTEST_RUN_TEST_SUITE(string);
         // UTEST_RUN_TEST_SUITE(errno);
         UTEST_RUN_TEST_SUITE(stdlib);
-        // UTEST_RUN_TEST_SUITE(elf);
+        UTEST_RUN_TEST_SUITE(elf);
     }else{
         if (MATCH(argv[1], "assert")){
             UTEST_RUN_TEST_SUITE(assert);
@@ -64,8 +64,8 @@ int main(int argc, char *argv[]) {
         //     UTEST_RUN_TEST_SUITE(errno);
         }else if (MATCH(argv[1], "stdlib")){
             UTEST_RUN_TEST_SUITE(stdlib);
-        // }else if (MATCH(argv[1], "elf")){
-        //     UTEST_RUN_TEST_SUITE(elf);
+        }else if (MATCH(argv[1], "elf")){
+            UTEST_RUN_TEST_SUITE(elf);
         }
     }
     
