@@ -67,6 +67,12 @@ extern void* bsearch(const void *key, const void *ptr, size_t count, size_t size
 extern void qsort(void *ptr, size_t count, size_t size,
     int (*comp)(const void*, const void*));
 
+// numerics
+extern int abs(int n);
+extern long labs(long n);
+extern long long llabs(long long n);
+extern intmax_t imaxabs(intmax_t n);
+
 #ifdef __cplusplus
 }
 #endif

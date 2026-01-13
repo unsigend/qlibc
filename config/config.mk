@@ -18,7 +18,10 @@
 # Configuration for qlibc
 
 # Config for Tool chain
-# TOOLCHAIN_PREFIX 	:= 	
+TOOLCHAIN_PREFIX 	:= 	
+
+# Config for GCC
+GCC 				:= 			gcc-15
 
 # Config for architecture
 # Supported architectures: i386, x86_64

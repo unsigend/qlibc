@@ -62,25 +62,29 @@ OBJS                    +=      $(EXTERNAL_OBJS)
 DEPS                    :=      $(patsubst $(BUILD_PATH)/%.o, $(DEP_PATH)/%.d, $(OBJS))
 
 # Compiler Tools
-CC                      :=      gcc
+CC                      :=      $(GCC)
 AR                      :=      ar
 LD                      :=      $(CC)
 
 # Compiler Flags
+CC_WARNINGS             :=      -Wall -Wextra -Werror
+CC_WARNINGS             +=      -Wno-memset-transposed-args
+CC_WARNINGS             +=      -Wno-unused-function
+CC_WARNINGS             +=      -Wno-implicitly-unsigned-literal
+CC_WARNINGS             +=      -Wno-builtin-memcpy-chk-size
+CC_WARNINGS             +=      -Wno-gnu-alignof-expression
+
+
 CC_FLAGS                :=      -isystem$(EXTERNAL_INCLUDE_PATH)
 ifeq ($(USING_GNU), 0)
 CC_FLAGS                +=      -I$(QLIBC_INCLUDE_PATH)
 CC_FLAGS                +=      -I$(QLIBC_INCLUDE_ARCH_PATH)
 endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
-CC_FLAGS                +=      -Wall -Wextra -Werror
-CC_FLAGS                +=      -Wno-memset-transposed-args
-CC_FLAGS                +=      -Wno-implicitly-unsigned-literal
-CC_FLAGS                +=      -Wno-builtin-memcpy-chk-size
-CC_FLAGS                +=      -Wno-gnu-alignof-expression
-CC_FLAGS                +=      -Wno-unused-function
+CC_FLAGS                +=      
 CC_FLAGS                +=      -g
 CC_FLAGS                +=      -O0
+
 ifeq ($(USING_GNU), 0)
 # CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers
 CC_FLAGS                +=      -fno-builtin -ffreestanding

@@ -52,7 +52,6 @@ HOST_ARCH       :=          $(shell uname -m)
 
 
 # variables for tools
-GCC 			:= 			$(TOOLCHAIN_PREFIX)gcc
 LD 			    := 			$(GCC)
 AR 			    := 			$(TOOLCHAIN_PREFIX)ar
 
@@ -227,6 +226,7 @@ export QLIBC_VERSION
 export ARCH
 export BUILD_METHOD
 export USING_GNU
+export GCC
 
 # test target
 # execute test command in sub-make
