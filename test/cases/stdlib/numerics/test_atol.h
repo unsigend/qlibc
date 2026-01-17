@@ -48,33 +48,53 @@ UTEST_TEST_CASE(atol){
     EXPECT_TRUE(atol("-abc") == 0);
 
     {
-        char str[] = "2147483647";
-        EXPECT_TRUE(atol(str) == 2147483647L);
-    }
-
-    {
-        char str[] = "-2147483648";
-        EXPECT_TRUE(atol(str) == -2147483648L);
-    }
-
-    {
-        char str[] = "9223372036854775807";
+        long max_val = LONG_MAX;
+        char str[32];
+        int len = 0;
+        long val = max_val;
+        while (val > 0) {
+            str[len++] = '0' + (val % 10);
+            val /= 10;
+        }
+        for (int i = 0; i < len / 2; i++) {
+            char tmp = str[i];
+            str[i] = str[len - 1 - i];
+            str[len - 1 - i] = tmp;
+        }
+        str[len] = '\0';
         EXPECT_TRUE(atol(str) == LONG_MAX);
     }
 
     {
-        char str[] = "-9223372036854775808";
+        long min_val = LONG_MIN;
+        char str[32];
+        int len = 0;
+        str[len++] = '-';
+        unsigned long abs_val;
+        if (min_val == LONG_MIN) {
+            abs_val = (unsigned long)LONG_MAX + 1;
+        } else {
+            abs_val = (unsigned long)(-min_val);
+        }
+        int digits[32];
+        int digit_count = 0;
+        while (abs_val > 0) {
+            digits[digit_count++] = abs_val % 10;
+            abs_val /= 10;
+        }
+        for (int i = digit_count - 1; i >= 0; i--) {
+            str[len++] = '0' + digits[i];
+        }
+        str[len] = '\0';
         EXPECT_TRUE(atol(str) == LONG_MIN);
     }
 
     {
-        char str[] = "9223372036854775806";
-        EXPECT_TRUE(atol(str) == 9223372036854775806L);
+        EXPECT_TRUE(atol("2147483647") == 2147483647L);
     }
 
     {
-        char str[] = "-9223372036854775807";
-        EXPECT_TRUE(atol(str) == -9223372036854775807L);
+        EXPECT_TRUE(atol("-2147483648") == -2147483648L);
     }
 
     EXPECT_TRUE(atol("000") == 0);
@@ -94,8 +114,8 @@ UTEST_TEST_CASE(atol){
     EXPECT_TRUE(atol("-100") == -100);
 
     {
-        char str[] = "123456789012345";
-        long result = atol(str);
-        EXPECT_TRUE(result > 0);
+        if (LONG_MAX >= 123456789012345L) {
+            EXPECT_TRUE(atol("123456789012345") == 123456789012345L);
+        }
     }
 }

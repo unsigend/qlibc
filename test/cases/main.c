@@ -15,8 +15,8 @@ extern UTEST_TEST_SUITE(stdalign);
 extern UTEST_TEST_SUITE(stdbool);
 extern UTEST_TEST_SUITE(stddef);
 extern UTEST_TEST_SUITE(stdint);
-// extern UTEST_TEST_SUITE(errno);
 extern UTEST_TEST_SUITE(stdlib);
+extern UTEST_TEST_SUITE(sys);
 
 // POSIX Unix
 extern UTEST_TEST_SUITE(elf);
@@ -40,9 +40,9 @@ int main(int argc, char *argv[]) {
         UTEST_RUN_TEST_SUITE(stddef);
         UTEST_RUN_TEST_SUITE(stdint);
         UTEST_RUN_TEST_SUITE(string);
-        // UTEST_RUN_TEST_SUITE(errno);
         UTEST_RUN_TEST_SUITE(stdlib);
         UTEST_RUN_TEST_SUITE(elf);
+        UTEST_RUN_TEST_SUITE(sys);
     }else{
         if (MATCH(argv[1], "assert")){
             UTEST_RUN_TEST_SUITE(assert);
@@ -60,12 +60,12 @@ int main(int argc, char *argv[]) {
             UTEST_RUN_TEST_SUITE(stdint);
         }else if (MATCH(argv[1], "string")){
             UTEST_RUN_TEST_SUITE(string);
-        // }else if (MATCH(argv[1], "errno")){
-        //     UTEST_RUN_TEST_SUITE(errno);
         }else if (MATCH(argv[1], "stdlib")){
             UTEST_RUN_TEST_SUITE(stdlib);
         }else if (MATCH(argv[1], "elf")){
             UTEST_RUN_TEST_SUITE(elf);
+        }else if (MATCH(argv[1], "sys")){
+            UTEST_RUN_TEST_SUITE(sys);
         }
     }
     

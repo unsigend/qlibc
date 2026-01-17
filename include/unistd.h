@@ -15,24 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ctype.h>
+#ifndef _QLIBC_UNISTD_H_
+#define _QLIBC_UNISTD_H_
 
-long atol(const char *str){
-    long r = 0;
-    long sign = 1;
-    int i = 0;
 
-    while (isspace(str[i])) { ++i;}
-    if (str[i] == '-'){
-        sign = -1;
-        ++i;
-    }else if (str[i] == '+'){
-        ++i;
-    }
+extern long syscall(long __number, ...);
 
-    while (isdigit(str[i])){
-        r = r * 10 + (str[i] - '0');
-        ++i;
-    }
-    return sign * r;
-}
+#include <sys/syscall.h>
+#endif

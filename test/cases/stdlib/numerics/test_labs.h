@@ -64,8 +64,8 @@ UTEST_TEST_CASE(labs){
         EXPECT_EQUAL_INT(labs(-val), 2000000000L);
     }
     {
-        long val = 9000000000L;
-        EXPECT_EQUAL_INT(labs(val), 9000000000L);
-        EXPECT_EQUAL_INT(labs(-val), 9000000000L);
+        long val = LONG_MAX - 1;
+        EXPECT_EQUAL_INT(labs(val), LONG_MAX - 1);
+        EXPECT_EQUAL_INT(labs(-val), LONG_MAX - 1);
     }
 }
