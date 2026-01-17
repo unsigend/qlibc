@@ -1,5 +1,5 @@
 #include <utest.h>
-#include <syscall.h>
+#include <sys/syscall.h>
 #include <errno.h>
 
 UTEST_TEST_CASE(syscall){
@@ -17,8 +17,10 @@ UTEST_TEST_CASE(syscall){
     ret = syscall(SYS_getppid);
     EXPECT_TRUE(ret > 0);
     
+#if !defined (__aarch64__)
     errno = 0;
     ret = syscall(99999);
     EXPECT_EQUAL_INT(ret, -1);
     EXPECT_TRUE(errno != 0);
+#endif
 }

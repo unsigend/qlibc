@@ -30,97 +30,98 @@
 #undef __syscall6
 
 static inline long __syscall_ret(uint64_t __ret){
-    if (__ret >= -4096UL){
-        errno = -__ret;
+    if (__ret > (uint64_t)-4096UL){
+        errno = (int)__ret;
         return -1;
     }
-    return __ret;
+    return (long)__ret;
 }
 
 static inline long __syscall0(uint64_t __num){
-    register uint64_t x8 __asm__("x8") = __num;
-    register uint64_t x0 __asm__("x0");
+    long ret;
     __asm__ volatile (
-        "svc #0"
-        : "=r" (x0)
-        : "r" (x8)
-        : "memory"
+        "mov x16, %1\n\t"
+        "svc #0x80\n\t"
+        "mov %0, x0"
+        : "=r" (ret)
+        : "r" (__num)
+        : "x16", "x0", "memory", "cc"
     );
-    return __syscall_ret(x0);
+    return __syscall_ret((uint64_t)ret);
 }
 
 static inline long __syscall1(uint64_t __num, uint64_t __arg1){
-    register uint64_t x8 __asm__("x8") = __num;
+    register uint64_t x16 __asm__("x16") = __num;
     register uint64_t x0 __asm__("x0") = __arg1;
     __asm__ volatile (
-        "svc #0"
+        "svc #0x80"
         : "+r" (x0)
-        : "r" (x8)
-        : "memory"
+        : "r" (x16)
+        : "memory", "cc"
     );
     return __syscall_ret(x0);
 }
 
 static inline long __syscall2(uint64_t __num, uint64_t __arg1, uint64_t __arg2){
-    register uint64_t x8 __asm__("x8") = __num;
+    register uint64_t x16 __asm__("x16") = __num;
     register uint64_t x0 __asm__("x0") = __arg1;
     register uint64_t x1 __asm__("x1") = __arg2;
     __asm__ volatile (
-        "svc #0"
+        "svc #0x80"
         : "+r" (x0)
-        : "r" (x8), "r" (x1)
-        : "memory"
+        : "r" (x16), "r" (x1)
+        : "memory", "cc"
     );
     return __syscall_ret(x0);
 }
 
 static inline long __syscall3(uint64_t __num, uint64_t __arg1, uint64_t __arg2, uint64_t __arg3){
-    register uint64_t x8 __asm__("x8") = __num;
+    register uint64_t x16 __asm__("x16") = __num;
     register uint64_t x0 __asm__("x0") = __arg1;
     register uint64_t x1 __asm__("x1") = __arg2;
     register uint64_t x2 __asm__("x2") = __arg3;
     __asm__ volatile (
-        "svc #0"
+        "svc #0x80"
         : "+r" (x0)
-        : "r" (x8), "r" (x1), "r" (x2)
-        : "memory"
+        : "r" (x16), "r" (x1), "r" (x2)
+        : "memory", "cc"
     );
     return __syscall_ret(x0);
 }
 
 static inline long __syscall4(uint64_t __num, uint64_t __arg1, uint64_t __arg2, uint64_t __arg3, uint64_t __arg4){
-    register uint64_t x8 __asm__("x8") = __num;
+    register uint64_t x16 __asm__("x16") = __num;
     register uint64_t x0 __asm__("x0") = __arg1;
     register uint64_t x1 __asm__("x1") = __arg2;
     register uint64_t x2 __asm__("x2") = __arg3;
     register uint64_t x3 __asm__("x3") = __arg4;
     __asm__ volatile (
-        "svc #0"
+        "svc #0x80"
         : "+r" (x0)
-        : "r" (x8), "r" (x1), "r" (x2), "r" (x3)
-        : "memory"
+        : "r" (x16), "r" (x1), "r" (x2), "r" (x3)
+        : "memory", "cc"
     );
     return __syscall_ret(x0);
 }
 
 static inline long __syscall5(uint64_t __num, uint64_t __arg1, uint64_t __arg2, uint64_t __arg3, uint64_t __arg4, uint64_t __arg5){
-    register uint64_t x8 __asm__("x8") = __num;
+    register uint64_t x16 __asm__("x16") = __num;
     register uint64_t x0 __asm__("x0") = __arg1;
     register uint64_t x1 __asm__("x1") = __arg2;
     register uint64_t x2 __asm__("x2") = __arg3;
     register uint64_t x3 __asm__("x3") = __arg4;
     register uint64_t x4 __asm__("x4") = __arg5;
     __asm__ volatile (
-        "svc #0"
+        "svc #0x80"
         : "+r" (x0)
-        : "r" (x8), "r" (x1), "r" (x2), "r" (x3), "r" (x4)
-        : "memory"
+        : "r" (x16), "r" (x1), "r" (x2), "r" (x3), "r" (x4)
+        : "memory", "cc"
     );
     return __syscall_ret(x0);
 }
 
 static inline long __syscall6(uint64_t __num, uint64_t __arg1, uint64_t __arg2, uint64_t __arg3, uint64_t __arg4, uint64_t __arg5, uint64_t __arg6){
-    register uint64_t x8 __asm__("x8") = __num;
+    register uint64_t x16 __asm__("x16") = __num;
     register uint64_t x0 __asm__("x0") = __arg1;
     register uint64_t x1 __asm__("x1") = __arg2;
     register uint64_t x2 __asm__("x2") = __arg3;
@@ -128,10 +129,10 @@ static inline long __syscall6(uint64_t __num, uint64_t __arg1, uint64_t __arg2, 
     register uint64_t x4 __asm__("x4") = __arg5;
     register uint64_t x5 __asm__("x5") = __arg6;
     __asm__ volatile (
-        "svc #0"
+        "svc #0x80"
         : "+r" (x0)
-        : "r" (x8), "r" (x1), "r" (x2), "r" (x3), "r" (x4), "r" (x5)
-        : "memory"
+        : "r" (x16), "r" (x1), "r" (x2), "r" (x3), "r" (x4), "r" (x5)
+        : "memory", "cc"
     );
     return __syscall_ret(x0);
 }

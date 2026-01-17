@@ -21,11 +21,11 @@
 TOOLCHAIN_PREFIX 	:= 	
 
 # Config for GCC
-GCC 				:= 			gcc-13
+GCC 				:= 			gcc-15
 
 # Config for architecture
 # Supported architectures: i386, x86_64
-ARCH                :=   	x86_64
+ARCH                :=   	aarch64
 
 # qlibc version
 QLIBC_VERSION       :=   	0.1.0
