@@ -13,6 +13,7 @@ extern UTEST_TEST_SUITE(ctype);
 extern UTEST_TEST_SUITE(limits);
 extern UTEST_TEST_SUITE(stdalign);
 extern UTEST_TEST_SUITE(stdbool);
+extern UTEST_TEST_SUITE(stdarg);
 extern UTEST_TEST_SUITE(stddef);
 extern UTEST_TEST_SUITE(stdint);
 extern UTEST_TEST_SUITE(stdlib);
@@ -37,6 +38,7 @@ int main(int argc, char *argv[]) {
         UTEST_RUN_TEST_SUITE(limits);
         UTEST_RUN_TEST_SUITE(stdalign);
         UTEST_RUN_TEST_SUITE(stdbool);
+        UTEST_RUN_TEST_SUITE(stdarg);
         UTEST_RUN_TEST_SUITE(stddef);
         UTEST_RUN_TEST_SUITE(stdint);
         UTEST_RUN_TEST_SUITE(string);
@@ -56,6 +58,8 @@ int main(int argc, char *argv[]) {
             UTEST_RUN_TEST_SUITE(stdbool);
         }else if (MATCH(argv[1], "stddef")){
             UTEST_RUN_TEST_SUITE(stddef);
+        }else if (MATCH(argv[1], "stdarg")){
+            UTEST_RUN_TEST_SUITE(stdarg);
         }else if (MATCH(argv[1], "stdint")){
             UTEST_RUN_TEST_SUITE(stdint);
         }else if (MATCH(argv[1], "string")){
