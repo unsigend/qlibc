@@ -15,6 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int isblank(int c){
-    return c == ' ' || c == '\t';
+int
+isblank (int c)
+{
+  return c == ' ' || c == '\t';
 }

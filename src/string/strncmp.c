@@ -17,16 +17,21 @@
 
 #include <stddef.h>
 
-int strncmp(const char* lhs, const char* rhs, size_t count){
-    while (count--){
-        if (*lhs != *rhs){
-            return (int)((unsigned char)*lhs - (unsigned char)*rhs);
+int
+strncmp (const char *lhs, const char *rhs, size_t count)
+{
+  while (count--)
+    {
+      if (*lhs != *rhs)
+        {
+          return (int)((unsigned char)*lhs - (unsigned char)*rhs);
         }
-        if (*lhs == '\0'){
-            return 0;
+      if (*lhs == '\0')
+        {
+          return 0;
         }
-        ++lhs;
-        ++rhs;
+      ++lhs;
+      ++rhs;
     }
-    return 0;
+  return 0;
 }

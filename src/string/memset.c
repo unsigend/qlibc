@@ -17,10 +17,13 @@
 
 #include <stddef.h>
 
-void* memset(void* dest, int ch, size_t count){
-    unsigned char * dest_ptr = (unsigned char *)dest;
-    for (size_t i = 0; i < count; i++){
-        dest_ptr[i] = (unsigned char)ch;
+void *
+memset (void *dest, int ch, size_t count)
+{
+  unsigned char *dest_ptr = (unsigned char *)dest;
+  for (size_t i = 0; i < count; i++)
+    {
+      dest_ptr[i] = (unsigned char)ch;
     }
-    return dest;
+  return dest;
 }

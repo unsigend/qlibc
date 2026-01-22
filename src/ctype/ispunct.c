@@ -16,6 +16,8 @@
  */
 #include <ctype.h>
 
-int ispunct(int c){
-    return isgraph(c) && !isalnum(c);
+int
+ispunct (int c)
+{
+  return isgraph (c) && !isalnum (c);
 }

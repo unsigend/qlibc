@@ -15,6 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int isupper(int c){
-    return (unsigned)c - 'A' < 26;
+int
+isupper (int c)
+{
+  return (unsigned)c - 'A' < 26;
 }

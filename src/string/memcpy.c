@@ -17,11 +17,14 @@
 
 #include <stddef.h>
 
-void* memcpy(void *restrict dest, const void *restrict src, size_t count){
-    unsigned char * dest_ptr = (unsigned char*)dest;
-    const unsigned char * src_ptr = (const unsigned char*)src;
-    while (count--){
-        *dest_ptr++ = *src_ptr++;
+void *
+memcpy (void *restrict dest, const void *restrict src, size_t count)
+{
+  unsigned char *dest_ptr = (unsigned char *)dest;
+  const unsigned char *src_ptr = (const unsigned char *)src;
+  while (count--)
+    {
+      *dest_ptr++ = *src_ptr++;
     }
-    return dest;
+  return dest;
 }

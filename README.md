@@ -74,7 +74,7 @@ ANSI/ISO C Standard Headers Support:
 | <setjmp.h>   | Nonlocal jumps                                          |
 | <signal.h>   | Signal handling                                         |
 | [<stdalign.h>](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) | alignas and alignof convenience macros                    |
-| <stdarg.h>   | Variable arguments                                      |
+| [<stdarg.h>](https://github.com/unsigend/qlibc/blob/main/include/stdarg.h)   | Variable arguments                                      |
 | [<stdbool.h>](https://github.com/unsigend/qlibc/blob/main/include/stdbool.h) | Macros for boolean type                                    |
 | [<stddef.h>](https://github.com/unsigend/qlibc/blob/main/include/stddef.h)   | Common macro definitions                                   |
 | [<stdint.h>](https://github.com/unsigend/qlibc/blob/main/include/stdint.h)   | Fixed-width integer types                                  |

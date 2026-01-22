@@ -19,6 +19,8 @@
 
 static int __errno_value = 0;
 
-int* __errno(void){
-    return &__errno_value;
+int *
+__errno (void)
+{
+  return &__errno_value;
 }

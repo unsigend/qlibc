@@ -16,8 +16,10 @@
  */
 #include <ctype.h>
 
-int toupper(int c){
-    if (islower(c))
-        return c & ~32;
-    return c;
+int
+toupper (int c)
+{
+  if (islower (c))
+    return c & ~32;
+  return c;
 }

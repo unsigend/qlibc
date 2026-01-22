@@ -17,10 +17,14 @@
 
 #include <string.h>
 
-char* strcat(char* restrict dest, const char* restrict src){
-    char * _d = dest;
-    while (*dest) ++dest;
-    while (*src) *dest++ = *src++;
-    *dest = '\0';
-    return _d;
+char *
+strcat (char *restrict dest, const char *restrict src)
+{
+  char *_d = dest;
+  while (*dest)
+    ++dest;
+  while (*src)
+    *dest++ = *src++;
+  *dest = '\0';
+  return _d;
 }
