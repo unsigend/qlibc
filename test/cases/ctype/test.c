@@ -15,19 +15,19 @@
 #include "funcs/test_tolower.h"
 #include "funcs/test_toupper.h"
 
-UTEST_TEST_SUITE(ctype){
-    UTEST_RUN_TEST_CASE(isalnum);
-    UTEST_RUN_TEST_CASE(isalpha);
-    UTEST_RUN_TEST_CASE(isblank);
-    UTEST_RUN_TEST_CASE(iscntrl);
-    UTEST_RUN_TEST_CASE(isdigit);
-    UTEST_RUN_TEST_CASE(isgraph);
-    UTEST_RUN_TEST_CASE(islower);
-    UTEST_RUN_TEST_CASE(isprint);
-    UTEST_RUN_TEST_CASE(ispunct);
-    UTEST_RUN_TEST_CASE(isspace);
-    UTEST_RUN_TEST_CASE(isupper);
-    UTEST_RUN_TEST_CASE(isxdigit);
-    UTEST_RUN_TEST_CASE(tolower);
-    UTEST_RUN_TEST_CASE(toupper);
+UTEST_TEST_SUITE(ctype) {
+  UTEST_RUN_TEST_CASE(isalnum);
+  UTEST_RUN_TEST_CASE(isalpha);
+  UTEST_RUN_TEST_CASE(isblank);
+  UTEST_RUN_TEST_CASE(iscntrl);
+  UTEST_RUN_TEST_CASE(isdigit);
+  UTEST_RUN_TEST_CASE(isgraph);
+  UTEST_RUN_TEST_CASE(islower);
+  UTEST_RUN_TEST_CASE(isprint);
+  UTEST_RUN_TEST_CASE(ispunct);
+  UTEST_RUN_TEST_CASE(isspace);
+  UTEST_RUN_TEST_CASE(isupper);
+  UTEST_RUN_TEST_CASE(isxdigit);
+  UTEST_RUN_TEST_CASE(tolower);
+  UTEST_RUN_TEST_CASE(toupper);
 }

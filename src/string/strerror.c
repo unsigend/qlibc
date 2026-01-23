@@ -32,21 +32,16 @@ static const char *__strerror_str[] = {
 #include <sysdep/strerror.h>
 };
 
-#define _ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
-char *
-strerror (int errnum)
-{
-  if (errnum < 0)
-    {
-      return (char *)"Unknown error";
-    }
+#define _ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+char *strerror(int errnum) {
+  if (errnum < 0) {
+    return (char *)"Unknown error";
+  }
   unsigned long i;
-  for (i = 0; i < _ARRAY_SIZE (__strerror_id); i++)
-    {
-      if (__strerror_id[i] == errnum)
-        {
-          return (char *)__strerror_str[i];
-        }
+  for (i = 0; i < _ARRAY_SIZE(__strerror_id); i++) {
+    if (__strerror_id[i] == errnum) {
+      return (char *)__strerror_str[i];
     }
+  }
   return (char *)"Unknown error";
 }

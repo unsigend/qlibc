@@ -18,25 +18,22 @@
 #include <stddef.h>
 #include <stdint.h>
 
-void *
-bsearch (const void *key, const void *ptr, size_t count, size_t size,
-         int (*comp) (const void *, const void *))
-{
+void *bsearch(const void *key, const void *ptr, size_t count, size_t size,
+              int (*comp)(const void *, const void *)) {
   uint64_t _index_max = (uint64_t)count - 1;
   const char *_left = (const char *)ptr;
   const char *_right = (const char *)ptr + _index_max * size;
 
-  while (_left <= _right)
-    {
-      uint64_t _ele_offset = ((uintptr_t)_right - (uintptr_t)_left) / size;
-      const char *_middle = _left + (_ele_offset / 2) * size;
-      if (!comp (key, _middle))
-        return (void *)_middle;
-      else if (comp (key, _middle) < 0)
-        _right = _middle - size;
-      else
-        _left = _middle + size;
-    }
+  while (_left <= _right) {
+    uint64_t _ele_offset = ((uintptr_t)_right - (uintptr_t)_left) / size;
+    const char *_middle = _left + (_ele_offset / 2) * size;
+    if (!comp(key, _middle))
+      return (void *)_middle;
+    else if (comp(key, _middle) < 0)
+      _right = _middle - size;
+    else
+      _left = _middle + size;
+  }
 
   return NULL;
 }

@@ -15,8 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-isalpha (int c)
-{
-  return ((unsigned)c | 32) - 'a' < 26;
-}
+int isalpha(int c) { return ((unsigned)c | 32) - 'a' < 26; }

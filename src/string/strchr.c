@@ -16,20 +16,15 @@
  */
 #include <stddef.h>
 
-char *
-strchr (const char *str, int ch)
-{
-  while (*str != '\0')
-    {
-      if (*str == (unsigned char)ch)
-        {
-          return (char *)str;
-        }
-      ++str;
-    }
-  if (ch == '\0')
-    {
+char *strchr(const char *str, int ch) {
+  while (*str != '\0') {
+    if (*str == (unsigned char)ch) {
       return (char *)str;
     }
+    ++str;
+  }
+  if (ch == '\0') {
+    return (char *)str;
+  }
   return NULL;
 }

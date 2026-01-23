@@ -17,30 +17,25 @@
 
 #include <stddef.h>
 
-char *
-strstr (const char *str, const char *substr)
-{
+char *strstr(const char *str, const char *substr) {
   if (*substr == '\0')
     return (char *)str;
 
   const char *search = str;
   const char *pattern = substr;
 
-  while (*search)
-    {
-      if (*search == *pattern)
-        {
-          const char *match = search;
-          while (*match && *match == *pattern)
-            {
-              ++match;
-              ++pattern;
-            }
-          if (*pattern == '\0')
-            return (char *)search;
-          pattern = substr;
-        }
-      ++search;
+  while (*search) {
+    if (*search == *pattern) {
+      const char *match = search;
+      while (*match && *match == *pattern) {
+        ++match;
+        ++pattern;
+      }
+      if (*pattern == '\0')
+        return (char *)search;
+      pattern = substr;
     }
+    ++search;
+  }
   return NULL;
 }

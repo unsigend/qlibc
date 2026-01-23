@@ -15,8 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-isdigit (int c)
-{
-  return (unsigned)c - '0' < 10;
-}
+int isdigit(int c) { return (unsigned)c - '0' < 10; }

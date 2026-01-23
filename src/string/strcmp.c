@@ -15,13 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-strcmp (const char *lhs, const char *rhs)
-{
-  while (*lhs && *lhs == *rhs)
-    {
-      ++lhs;
-      ++rhs;
-    }
+int strcmp(const char *lhs, const char *rhs) {
+  while (*lhs && *lhs == *rhs) {
+    ++lhs;
+    ++rhs;
+  }
   return (int)((unsigned char)*lhs - (unsigned char)*rhs);
 }

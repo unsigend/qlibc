@@ -15,8 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-isprint (int c)
-{
-  return (unsigned)c <= 0x7e && (unsigned)c >= 0x20;
-}
+int isprint(int c) { return (unsigned)c <= 0x7e && (unsigned)c >= 0x20; }

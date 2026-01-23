@@ -15,8 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-iscntrl (int c)
-{
-  return (unsigned)c <= 0x1f || c == 0x7f;
-}
+int iscntrl(int c) { return (unsigned)c <= 0x1f || c == 0x7f; }

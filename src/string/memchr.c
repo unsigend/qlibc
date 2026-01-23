@@ -17,16 +17,12 @@
 
 #include <stddef.h>
 
-void *
-memchr (const void *ptr, int ch, size_t count)
-{
+void *memchr(const void *ptr, int ch, size_t count) {
   const unsigned char *char_ptr = (const unsigned char *)ptr;
-  for (size_t i = 0; i < count; i++)
-    {
-      if (char_ptr[i] == (unsigned char)ch)
-        {
-          return (void *)(char_ptr + i);
-        }
+  for (size_t i = 0; i < count; i++) {
+    if (char_ptr[i] == (unsigned char)ch) {
+      return (void *)(char_ptr + i);
     }
+  }
   return NULL;
 }

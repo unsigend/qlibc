@@ -16,18 +16,13 @@
  */
 #include <string.h>
 
-char *
-strncpy (char *restrict dest, const char *restrict src, size_t count)
-{
-  size_t len_src = strlen (src);
-  if (len_src < count)
-    {
-      memcpy (dest, src, len_src);
-      memset (dest + len_src, '\0', count - len_src);
-    }
-  else
-    {
-      memcpy (dest, src, count);
-    }
+char *strncpy(char *restrict dest, const char *restrict src, size_t count) {
+  size_t len_src = strlen(src);
+  if (len_src < count) {
+    memcpy(dest, src, len_src);
+    memset(dest + len_src, '\0', count - len_src);
+  } else {
+    memcpy(dest, src, count);
+  }
   return dest;
 }

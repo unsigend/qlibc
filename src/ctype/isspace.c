@@ -15,8 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-isspace (int c)
-{
-  return c == ' ' || (unsigned)c - '\t' < 5;
-}
+int isspace(int c) { return c == ' ' || (unsigned)c - '\t' < 5; }

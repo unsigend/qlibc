@@ -17,9 +17,7 @@
 
 #include <string.h>
 
-char *
-strcat (char *restrict dest, const char *restrict src)
-{
+char *strcat(char *restrict dest, const char *restrict src) {
   char *_d = dest;
   while (*dest)
     ++dest;

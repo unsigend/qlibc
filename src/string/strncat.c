@@ -17,19 +17,14 @@
 
 #include <string.h>
 
-char *
-strncat (char *restrict dest, const char *restrict src, size_t count)
-{
-  size_t len_dest = strlen (dest);
-  size_t len_src = strlen (src);
-  if (len_src < count)
-    {
-      memcpy (dest + len_dest, src, len_src + 1);
-    }
-  else
-    {
-      memcpy (dest + len_dest, src, count);
-      dest[len_dest + count] = '\0';
-    }
+char *strncat(char *restrict dest, const char *restrict src, size_t count) {
+  size_t len_dest = strlen(dest);
+  size_t len_src = strlen(src);
+  if (len_src < count) {
+    memcpy(dest + len_dest, src, len_src + 1);
+  } else {
+    memcpy(dest + len_dest, src, count);
+    dest[len_dest + count] = '\0';
+  }
   return dest;
 }

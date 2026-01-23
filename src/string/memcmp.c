@@ -16,17 +16,13 @@
  */
 #include <stddef.h>
 
-int
-memcmp (const void *lhs, const void *rhs, size_t count)
-{
+int memcmp(const void *lhs, const void *rhs, size_t count) {
   const unsigned char *lhs_ptr = (const unsigned char *)lhs;
   const unsigned char *rhs_ptr = (const unsigned char *)rhs;
-  for (size_t i = 0; i < count; i++)
-    {
-      if (lhs_ptr[i] != rhs_ptr[i])
-        {
-          return lhs_ptr[i] - rhs_ptr[i];
-        }
+  for (size_t i = 0; i < count; i++) {
+    if (lhs_ptr[i] != rhs_ptr[i]) {
+      return lhs_ptr[i] - rhs_ptr[i];
     }
+  }
   return 0;
 }
