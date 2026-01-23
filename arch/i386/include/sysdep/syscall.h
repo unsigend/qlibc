@@ -100,11 +100,13 @@ static inline long __syscall5(uint32_t __num, uint32_t __arg1, uint32_t __arg2, 
 }
 static inline long __syscall6(uint32_t __num, uint32_t __arg1, uint32_t __arg2, uint32_t __arg3, uint32_t __arg4, uint32_t __arg5, uint32_t __arg6){
     uint32_t ret;
-    register uint32_t ebp __asm__("ebp") = __arg6;
     __asm__ volatile (
-        "int $0x80"
+        "pushl %%ebp\n\t"
+        "movl %7, %%ebp\n\t"
+        "int $0x80\n\t"
+        "popl %%ebp"
         : "=a" (ret)
-        : "a" (__num), "b" (__arg1), "c" (__arg2), "d" (__arg3), "S" (__arg4), "D" (__arg5), "r" (ebp)
+        : "a" (__num), "b" (__arg1), "c" (__arg2), "d" (__arg3), "S" (__arg4), "D" (__arg5), "g" (__arg6)
         : "memory"
     );
     return __syscall_ret(ret);

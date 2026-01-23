@@ -24,7 +24,7 @@ TOOLCHAIN_PREFIX 	:=
 GCC 				:= 			gcc-13
 
 # Config for architecture
-# Supported architectures: i386, x86_64
+# Supported architectures: i386, x86_64, aarch64
 ARCH                :=   	x86_64
 
 # qlibc version
@@ -47,4 +47,4 @@ VERBOSE             :=   	0
 BUILD_METHOD        :=   	static
 
 # Make GNU (Only for test purpose)
-USING_GNU           :=   	1
+USING_GNU           :=   	0

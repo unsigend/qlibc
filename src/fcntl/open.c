@@ -15,27 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_UNISTD_H_
-#define _QLIBC_UNISTD_H_
+#include <fcntl.h>
+#include <stdarg.h>
+#include <sys/stat.h>
+#include <syscall.h>
 
-#include <sys/types.h>
-#include <stddef.h>
+int open(const char *pathname, int flags, ...) {
+  va_list args;
+  va_start(args, flags);
 
-/* standard file descriptors */
-#define STDIN_FILENO 0
-#define STDOUT_FILENO 1
-#define STDERR_FILENO 2
+  mode_t mode = va_arg(args, mode_t);
+  va_end(args);
 
-/* seek flags */
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-
-extern int close(int fd);
-extern off_t lseek(int fd, off_t offset, int whence);
-extern ssize_t read(int fd, void *buf, size_t count);
-extern ssize_t write(int fd, const void *buf, size_t count);
-extern long syscall(long __number, ...);
-
-
-#endif
+  return __syscall(SYS_open, (long)pathname, flags | O_LARGEFILE, (long)mode);
+}

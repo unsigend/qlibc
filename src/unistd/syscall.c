@@ -15,27 +15,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_UNISTD_H_
-#define _QLIBC_UNISTD_H_
+#include <stdarg.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 
-#include <sys/types.h>
-#include <stddef.h>
+long syscall(long __number, ...) {
+  va_list args;
+  va_start(args, __number);
 
-/* standard file descriptors */
-#define STDIN_FILENO 0
-#define STDOUT_FILENO 1
-#define STDERR_FILENO 2
+  long arg1 = va_arg(args, long);
+  long arg2 = va_arg(args, long);
+  long arg3 = va_arg(args, long);
+  long arg4 = va_arg(args, long);
+  long arg5 = va_arg(args, long);
+  long arg6 = va_arg(args, long);
 
-/* seek flags */
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
+  va_end(args);
 
-extern int close(int fd);
-extern off_t lseek(int fd, off_t offset, int whence);
-extern ssize_t read(int fd, void *buf, size_t count);
-extern ssize_t write(int fd, const void *buf, size_t count);
-extern long syscall(long __number, ...);
-
-
-#endif
+  return __syscall6(__number, arg1, arg2, arg3, arg4, arg5, arg6);
+}

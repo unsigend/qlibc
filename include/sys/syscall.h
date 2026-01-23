@@ -41,6 +41,6 @@
 #define _SYSCALL_CONCAT(A, B) __SYSCALL_CONCAT(A, B)
 #define __SYSCALL_CONCAT_N(N) _SYSCALL_CONCAT(__syscall, N)
 
-#define syscall(...) __SYSCALL_CONCAT_N(_NARG(__VA_ARGS__))(__VA_ARGS__)
+#define __syscall(...) __SYSCALL_CONCAT_N(_NARG(__VA_ARGS__))(__VA_ARGS__)
 
 #endif

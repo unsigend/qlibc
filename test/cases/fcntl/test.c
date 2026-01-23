@@ -1,0 +1,77 @@
+#include <fcntl.h>
+#include <unistd.h>
+#include <utest.h>
+
+#ifndef O_CLOEXEC
+#define O_CLOEXEC __O_CLOEXEC
+#endif
+
+#ifndef O_DIRECTORY
+#define O_DIRECTORY __O_DIRECTORY
+#endif
+
+#ifndef O_LARGEFILE
+#define O_LARGEFILE __O_LARGEFILE
+#endif
+
+#ifndef O_NOFOLLOW
+#define O_NOFOLLOW __O_NOFOLLOW
+#endif
+
+#ifndef O_DIRECT
+#define O_DIRECT __O_DIRECT
+#endif
+
+#ifndef O_DSYNC
+#define O_DSYNC __O_DSYNC
+#endif
+
+#ifndef O_NOATIME
+#define O_NOATIME __O_NOATIME
+#endif
+
+UTEST_TEST_CASE(macro) {
+  EXPECT_EQUAL_INT(O_RDONLY, 0);
+  EXPECT_EQUAL_INT(O_WRONLY, 1);
+  EXPECT_EQUAL_INT(O_RDWR, 2);
+
+  EXPECT_EQUAL_INT(O_CLOEXEC, 02000000);
+  EXPECT_EQUAL_INT(O_CREAT, 0100);
+  EXPECT_EQUAL_INT(O_DIRECTORY, 0200000);
+  EXPECT_EQUAL_INT(O_EXCL, 0200);
+#ifdef __x86_64__
+  EXPECT_EQUAL_INT(O_LARGEFILE, 0);
+#endif
+#ifdef __i386__
+  EXPECT_EQUAL_INT(O_LARGEFILE, 0100000);
+#endif
+  EXPECT_EQUAL_INT(O_NOCTTY, 0400);
+  EXPECT_EQUAL_INT(O_NOFOLLOW, 0400000);
+  EXPECT_EQUAL_INT(O_TRUNC, 01000);
+
+  EXPECT_EQUAL_INT(O_APPEND, 02000);
+  EXPECT_EQUAL_INT(O_ASYNC, 020000);
+  EXPECT_EQUAL_INT(O_DIRECT, 040000);
+  EXPECT_EQUAL_INT(O_DSYNC, 010000);
+  EXPECT_EQUAL_INT(O_NOATIME, 01000000);
+  EXPECT_EQUAL_INT(O_NONBLOCK, 04000);
+  EXPECT_EQUAL_INT(O_SYNC, 04010000);
+}
+
+UTEST_TEST_CASE(open) {
+  int fd = open(__FILE__, O_RDONLY);
+  EXPECT_TRUE(fd >= 0);
+
+  int ret = close(fd);
+  EXPECT_EQUAL_INT(ret, 0);
+}
+
+UTEST_TEST_CASE(types) {}
+
+UTEST_TEST_SUITE(fcntl) {
+  // test general macros and types
+  UTEST_RUN_TEST_CASE(types);
+  UTEST_RUN_TEST_CASE(macro);
+  // test functions
+  UTEST_RUN_TEST_CASE(open);
+}
