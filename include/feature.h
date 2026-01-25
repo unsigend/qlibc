@@ -21,7 +21,6 @@
 /**
  * @brief: Macros for feature
  */
-
 #define QLIBC_VERSION_MAJOR 0
 #define QLIBC_VERSION_MINOR 1
 #define QLIBC_VERSION_PATCH 0
@@ -34,7 +33,8 @@
 #define ISO_C_STANDARD_C23   202311L
 
 #define QLIBC_ISO_C_VERSION         __STDC_VERSION__
-#define QLIBC_SUPPORT_MB_STRING     0
+#define QLIBC_SUPPORT_MB_STRING      0
+#define QLIBC_SUPPORT_FLOATING_POINT 0
 
 
 #endif

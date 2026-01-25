@@ -31,10 +31,9 @@
 #define O_DIRECTORY 0200000
 #define O_EXCL      0200
 
-#ifdef __x86_64__
 #define O_LARGEFILE 0
-#endif
 #ifdef __i386__
+#undef O_LARGEFILE
 #define O_LARGEFILE 0100000
 #endif
 

@@ -27,24 +27,24 @@ extern "C" {
 #endif
 
 // conversions to and from numeric formats
-extern double atof(const char* str);
-
 extern int atoi(const char *str);
 extern long atol(const char *str);
 extern long long atoll(const char *str);
 
 extern long strtol(const char* restrict str, char** restrict str_end, int base);
 extern long long strtoll(const char* restrict str, char** restrict str_end, int base);
-
 extern unsigned long strtoul(const char* restrict str, char** restrict str_end, int base);
 extern unsigned long long strtoull(const char* restrict str, char** restrict str_end, int base);
+extern intmax_t strtoimax(const char* restrict str, char** restrict str_end, int base);
+extern uintmax_t strtoumax(const char* restrict str, char** restrict str_end, int base);
+
+#if defined(QLIBC_SUPPORT_FLOATING_POINT) && QLIBC_SUPPORT_FLOATING_POINT == 1
+extern double atof(const char* str);
 
 extern float strtof(const char* restrict str, char** restrict str_end);
 extern double strtod(const char* restrict str, char** restrict str_end);
 extern long double strtold(const char* restrict str, char** restrict str_end);
-
-extern intmax_t strtoimax(const char* restrict str, char** restrict str_end, int base);
-extern uintmax_t strtoumax(const char* restrict str, char** restrict str_end, int base);
+#endif
 
 // program termination
 #if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
@@ -53,7 +53,6 @@ extern void abort(void);
 #include <stdnoreturn.h>
 extern noreturn void abort(void);
 #endif
-
 
 // memory management
 extern void* malloc(size_t size);
