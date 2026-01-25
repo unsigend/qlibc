@@ -82,8 +82,13 @@ CC_FLAGS                +=      -I$(QLIBC_INCLUDE_ARCH_PATH)
 endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 CC_FLAGS                +=      
+
+ifeq ($(DEBUG), 1)
 CC_FLAGS                +=      -g
 CC_FLAGS                +=      -O0
+else
+CC_FLAGS                +=      -O2
+endif
 
 ifeq ($(USING_GNU), 0)
 # CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers

@@ -227,6 +227,7 @@ export ARCH
 export BUILD_METHOD
 export USING_GNU
 export GCC
+export DEBUG
 
 # test target
 # execute test command in sub-make
