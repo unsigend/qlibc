@@ -7,9 +7,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define _STDIO_SEEKABLE 1
+#define _STDIO_SEEKABLE 0x01
+#define _STDIO_QLIB_BUF 0x02
+#define _STDIO_READ_BUF 0x04
+#define _STDIO_WRITE_BUF 0x08
 
-/* For initilize will be done in CRT */
+#define CREATE_FILE_DEF_MODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+
 FILE *__STDIN_SP = NULL;
 FILE *__STDOUT_SP = NULL;
 FILE *__STDERR_SP = NULL;
@@ -33,7 +37,7 @@ __attribute__((constructor)) static void __stdio_init__(void) {
                                  .error = 0,
                                  .eof = 0,
                                  .offset = 0};
-  // check whether the streams are seekable
+  // check whether the streams are seekable or through redirection
   struct stat st;
   if (fstat(STDIN_FILENO, &st) == 0 &&
       (S_ISREG((st.st_mode)) || S_ISBLK((st.st_mode)))) {
@@ -54,6 +58,8 @@ __attribute__((constructor)) static void __stdio_init__(void) {
 
 FILE *fopen(const char *restrict filename, const char *restrict mode) {
   int flags = 0;
+  struct stat st;
+  int fd;
   // basic mode
   switch (mode[0]) {
   case 'r':
@@ -77,23 +83,27 @@ FILE *fopen(const char *restrict filename, const char *restrict mode) {
     if (mode[i] != 'b')
       return NULL;
   }
-  const mode_t def_mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-  int fd = open(filename, flags, def_mode);
+  fd = open(filename, flags, CREATE_FILE_DEF_MODE);
   if (fd == -1) {
     return NULL;
   }
-  struct stat st;
   FILE *stream = (FILE *)malloc(sizeof(FILE));
   if (!stream) {
     close(fd);
     return NULL;
   }
+  memset(stream, 0, sizeof(FILE));
+  stream->buf = (unsigned char *)malloc(BUFSIZ);
+  if (!stream->buf) {
+    close(fd);
+    free(stream);
+    return NULL;
+  }
+  stream->bufsz = BUFSIZ;
+  stream->bufmode = _IOFBF;
+  stream->flags |= _STDIO_QLIB_BUF;
   stream->fd = fd;
   stream->oflags = flags;
-  stream->flags = 0;
-  stream->error = 0;
-  stream->eof = 0;
-  stream->offset = 0;
   if (fstat(fd, &st) == 0 && (S_ISREG((st.st_mode)) || S_ISBLK((st.st_mode)))) {
     stream->flags |= _STDIO_SEEKABLE;
   }
@@ -101,13 +111,16 @@ FILE *fopen(const char *restrict filename, const char *restrict mode) {
 }
 
 int fclose(FILE *stream) {
+  if (stream && stream->flags & _STDIO_QLIB_BUF) {
+    free(stream->buf);
+  }
   int fd = stream->fd;
   free(stream);
   return close(fd);
 }
 
 /*
- * @brief: based on ANSI C standard:fread does not distinguish between
+ * @brief: based on ANSI C standard: fread does not distinguish between
  * end-of-file and error, and callers must use feof and ferror to determine
  * which occurred.
  *

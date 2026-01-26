@@ -27,25 +27,32 @@
 #define SEEK_END 2
 
 /* buffer mode */
-#define _IOFBF
-#define _IOLBF
-#define _IONBF
+#define _IOFBF 0
+#define _IOLBF 1
+#define _IONBF 2
 
 #define EOF (-1)
 
 /* file IO structure */
 typedef struct _FILE_IO {
-  int fd;      /* file descriptor */
-  int oflags;  /* file open flags */
-  int flags;   /* file flags */
-  int error;   /* error indicator */
-  int eof;     /*EOF indicator*/
-  long offset; /* file offset */
+  int fd;             /* file descriptor */
+  int oflags;         /* file open flags */
+  int flags;          /* file flags */
+  int error;          /* error indicator */
+  int eof;            /*EOF indicator*/
+  long offset;        /* file offset */
+  unsigned char *buf; /* buffer */
+  size_t bufsz;       /* buffer size */
+  size_t bufp;        /* buffer position */
+  size_t bufe;        /* buffer end */
+  int bufmode;        /* buffer mode */
 } FILE;
 
 #define stdin __STDIN_SP
 #define stdout __STDOUT_SP
 #define stderr __STDERR_SP
+
+#define BUFSIZ 4096
 
 /* file access */
 extern FILE *fopen(const char *restrict filename, const char *restrict mode);
