@@ -20,7 +20,8 @@
 
 /**
  * @brief: Macros for syscall
- * Generic syscall macros provide a common interface for different architectures.
+ * Generic syscall macros provide a common interface for different
+ * architectures.
  */
 #define __syscall0(NUM)
 #define __syscall1(NUM, ARG1)
@@ -34,8 +35,8 @@
 
 #define _NARG(...) __NARG(__VA_ARGS__, _RSEQ_N())
 #define __NARG(...) __ARG_N(__VA_ARGS__)
-#define __ARG_N(_1, _2, _3, _4, _5, _6, _7, N, ...) N 
-#define _RSEQ_N() 6,5,4,3,2,1,0
+#define __ARG_N(_1, _2, _3, _4, _5, _6, _7, N, ...) N
+#define _RSEQ_N() 6, 5, 4, 3, 2, 1, 0
 
 #define __SYSCALL_CONCAT(A, B) A##B
 #define _SYSCALL_CONCAT(A, B) __SYSCALL_CONCAT(A, B)

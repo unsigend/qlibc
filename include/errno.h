@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-extern int* __errno(void);
+extern int *__errno(void);
 #define errno (*__errno())
 
 #ifdef __cplusplus

@@ -24,7 +24,7 @@
 typedef long double max_align_t;
 #endif
 
-typedef signed long         ptrdiff_t;
-typedef unsigned long       size_t;
+typedef signed long ptrdiff_t;
+typedef unsigned long size_t;
 
 #endif

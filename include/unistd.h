@@ -18,8 +18,8 @@
 #ifndef _QLIBC_UNISTD_H_
 #define _QLIBC_UNISTD_H_
 
-#include <sys/types.h>
 #include <stddef.h>
+#include <sys/types.h>
 
 /* standard file descriptors */
 #define STDIN_FILENO 0
@@ -37,6 +37,5 @@ extern off_t tell(int fd);
 extern ssize_t read(int fd, void *buf, size_t count);
 extern ssize_t write(int fd, const void *buf, size_t count);
 extern long syscall(long __number, ...);
-
 
 #endif

@@ -29,87 +29,80 @@
 #undef __syscall5
 #undef __syscall6
 
-static inline long __syscall_ret(uint32_t __ret){
-    if (__ret >= -4096U){
-        errno = -__ret;
-        return -1;
-    }
-    return __ret;
+static inline long __syscall_ret(uint32_t __ret) {
+  if (__ret >= -4096U) {
+    errno = -__ret;
+    return -1;
+  }
+  return __ret;
 }
 
-static inline long __syscall0(uint32_t __num){
-    uint32_t ret;
-    __asm__ volatile (
-        "int $0x80"
-        : "=a" (ret)
-        : "a" (__num)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall0(uint32_t __num) {
+  uint32_t ret;
+  __asm__ volatile("int $0x80" : "=a"(ret) : "a"(__num) : "memory");
+  return __syscall_ret(ret);
 }
 
-static inline long __syscall1(uint32_t __num, uint32_t __arg1){
-    uint32_t ret;
-    __asm__ volatile (
-        "int $0x80"
-        : "=a" (ret)
-        : "a" (__num), "b" (__arg1)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall1(uint32_t __num, uint32_t __arg1) {
+  uint32_t ret;
+  __asm__ volatile("int $0x80"
+                   : "=a"(ret)
+                   : "a"(__num), "b"(__arg1)
+                   : "memory");
+  return __syscall_ret(ret);
 }
-static inline long __syscall2(uint32_t __num, uint32_t __arg1, uint32_t __arg2){
-    uint32_t ret;
-    __asm__ volatile (
-        "int $0x80"
-        : "=a" (ret)
-        : "a" (__num), "b" (__arg1), "c" (__arg2)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall2(uint32_t __num, uint32_t __arg1,
+                              uint32_t __arg2) {
+  uint32_t ret;
+  __asm__ volatile("int $0x80"
+                   : "=a"(ret)
+                   : "a"(__num), "b"(__arg1), "c"(__arg2)
+                   : "memory");
+  return __syscall_ret(ret);
 }
-static inline long __syscall3(uint32_t __num, uint32_t __arg1, uint32_t __arg2, uint32_t __arg3){
-    uint32_t ret;
-    __asm__ volatile (
-        "int $0x80"
-        : "=a" (ret)
-        : "a" (__num), "b" (__arg1), "c" (__arg2), "d" (__arg3)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall3(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+                              uint32_t __arg3) {
+  uint32_t ret;
+  __asm__ volatile("int $0x80"
+                   : "=a"(ret)
+                   : "a"(__num), "b"(__arg1), "c"(__arg2), "d"(__arg3)
+                   : "memory");
+  return __syscall_ret(ret);
 }
-static inline long __syscall4(uint32_t __num, uint32_t __arg1, uint32_t __arg2, uint32_t __arg3, uint32_t __arg4){
-    uint32_t ret;
-    __asm__ volatile (
-        "int $0x80"
-        : "=a" (ret)
-        : "a" (__num), "b" (__arg1), "c" (__arg2), "d" (__arg3), "S" (__arg4)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall4(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+                              uint32_t __arg3, uint32_t __arg4) {
+  uint32_t ret;
+  __asm__ volatile("int $0x80"
+                   : "=a"(ret)
+                   : "a"(__num), "b"(__arg1), "c"(__arg2), "d"(__arg3),
+                     "S"(__arg4)
+                   : "memory");
+  return __syscall_ret(ret);
 }
-static inline long __syscall5(uint32_t __num, uint32_t __arg1, uint32_t __arg2, uint32_t __arg3, uint32_t __arg4, uint32_t __arg5){
-    uint32_t ret;
-    __asm__ volatile (
-        "int $0x80"
-        : "=a" (ret)
-        : "a" (__num), "b" (__arg1), "c" (__arg2), "d" (__arg3), "S" (__arg4), "D" (__arg5)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall5(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+                              uint32_t __arg3, uint32_t __arg4,
+                              uint32_t __arg5) {
+  uint32_t ret;
+  __asm__ volatile("int $0x80"
+                   : "=a"(ret)
+                   : "a"(__num), "b"(__arg1), "c"(__arg2), "d"(__arg3),
+                     "S"(__arg4), "D"(__arg5)
+                   : "memory");
+  return __syscall_ret(ret);
 }
-static inline long __syscall6(uint32_t __num, uint32_t __arg1, uint32_t __arg2, uint32_t __arg3, uint32_t __arg4, uint32_t __arg5, uint32_t __arg6){
-    uint32_t ret;
-    __asm__ volatile (
-        "pushl %%ebp\n\t"
-        "movl %7, %%ebp\n\t"
-        "int $0x80\n\t"
-        "popl %%ebp"
-        : "=a" (ret)
-        : "a" (__num), "b" (__arg1), "c" (__arg2), "d" (__arg3), "S" (__arg4), "D" (__arg5), "g" (__arg6)
-        : "memory"
-    );
-    return __syscall_ret(ret);
+static inline long __syscall6(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+                              uint32_t __arg3, uint32_t __arg4, uint32_t __arg5,
+                              uint32_t __arg6) {
+  uint32_t ret;
+  __asm__ volatile("pushl %%ebp\n\t"
+                   "movl %7, %%ebp\n\t"
+                   "int $0x80\n\t"
+                   "popl %%ebp"
+                   : "=a"(ret)
+                   : "a"(__num), "b"(__arg1), "c"(__arg2), "d"(__arg3),
+                     "S"(__arg4), "D"(__arg5), "g"(__arg6)
+                   : "memory");
+  return __syscall_ret(ret);
 }
 
 #include <sysdep/NR.h>

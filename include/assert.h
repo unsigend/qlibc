@@ -15,27 +15,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 #undef assert
 
 /**
  * @brief Assert a condition is true.
- * 
- * NDEBUG if set true do nothing. 
+ *
+ * NDEBUG if set true do nothing.
  * Otherwise, if expr is false, print a message and abort.
  */
 
 #ifdef NDEBUG
 #define assert(expr) ((void)0)
 #else
-#define assert(expr) (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
-#endif 
+#define assert(expr)                                                           \
+  (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern void _assert_fail(const char* msg, const char* func, const char* file, int line);
+extern void _assert_fail(const char *msg, const char *func, const char *file,
+                         int line);
 
 #ifdef __cplusplus
 }

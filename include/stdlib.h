@@ -19,8 +19,8 @@
 #define _QLIBC_STDLIB_H_
 
 #include <feature.h>
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,19 +31,24 @@ extern int atoi(const char *str);
 extern long atol(const char *str);
 extern long long atoll(const char *str);
 
-extern long strtol(const char* restrict str, char** restrict str_end, int base);
-extern long long strtoll(const char* restrict str, char** restrict str_end, int base);
-extern unsigned long strtoul(const char* restrict str, char** restrict str_end, int base);
-extern unsigned long long strtoull(const char* restrict str, char** restrict str_end, int base);
-extern intmax_t strtoimax(const char* restrict str, char** restrict str_end, int base);
-extern uintmax_t strtoumax(const char* restrict str, char** restrict str_end, int base);
+extern long strtol(const char *restrict str, char **restrict str_end, int base);
+extern long long strtoll(const char *restrict str, char **restrict str_end,
+                         int base);
+extern unsigned long strtoul(const char *restrict str, char **restrict str_end,
+                             int base);
+extern unsigned long long strtoull(const char *restrict str,
+                                   char **restrict str_end, int base);
+extern intmax_t strtoimax(const char *restrict str, char **restrict str_end,
+                          int base);
+extern uintmax_t strtoumax(const char *restrict str, char **restrict str_end,
+                           int base);
 
 #if defined(QLIBC_SUPPORT_FLOATING_POINT) && QLIBC_SUPPORT_FLOATING_POINT == 1
-extern double atof(const char* str);
+extern double atof(const char *str);
 
-extern float strtof(const char* restrict str, char** restrict str_end);
-extern double strtod(const char* restrict str, char** restrict str_end);
-extern long double strtold(const char* restrict str, char** restrict str_end);
+extern float strtof(const char *restrict str, char **restrict str_end);
+extern double strtod(const char *restrict str, char **restrict str_end);
+extern long double strtold(const char *restrict str, char **restrict str_end);
 #endif
 
 // program termination
@@ -55,16 +60,16 @@ extern noreturn void abort(void);
 #endif
 
 // memory management
-extern void* malloc(size_t size);
-extern void free(void* ptr);
-extern void* calloc(size_t num, size_t size);
-extern void* realloc(void* ptr, size_t new_size);
+extern void *malloc(size_t size);
+extern void free(void *ptr);
+extern void *calloc(size_t num, size_t size);
+extern void *realloc(void *ptr, size_t new_size);
 
 // algorithm
-extern void* bsearch(const void *key, const void *ptr, size_t count, size_t size,
-    int (*comp)(const void*, const void*));
+extern void *bsearch(const void *key, const void *ptr, size_t count,
+                     size_t size, int (*comp)(const void *, const void *));
 extern void qsort(void *ptr, size_t count, size_t size,
-    int (*comp)(const void*, const void*));
+                  int (*comp)(const void *, const void *));
 
 // numerics
 extern int abs(int n);

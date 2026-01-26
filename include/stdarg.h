@@ -18,22 +18,23 @@
 #ifndef _QLIBC_STDARG_H_
 #define _QLIBC_STDARG_H_
 
-#if defined (__GNUC__) || defined (__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 
 #define __NEED_va_list
 
-#if defined (__GNUC__)
+#if defined(__GNUC__)
 typedef __builtin_va_list __gnuc_va_list;
 typedef __gnuc_va_list va_list;
 #endif
 
-#define va_start(v,l)   __builtin_va_start(v,l)
-#define va_end(v)       __builtin_va_end(v)
-#define va_arg(v,l)     __builtin_va_arg(v,l)
-#define va_copy(d,s)    __builtin_va_copy(d,s)
+#define va_start(v, l) __builtin_va_start(v, l)
+#define va_end(v) __builtin_va_end(v)
+#define va_arg(v, l) __builtin_va_arg(v, l)
+#define va_copy(d, s) __builtin_va_copy(d, s)
 
 #else
-#error "Error: buildin support for varying arguments is not supported by this compiler"
+#error                                                                         \
+    "Error: buildin support for varying arguments is not supported by this compiler"
 #endif
 
 #endif

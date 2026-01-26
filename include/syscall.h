@@ -18,13 +18,14 @@
 #ifndef _QLIBC_SYSCALL_H_
 #define _QLIBC_SYSCALL_H_
 
-/* 
+/*
  * @brief: Architecture-independent syscall interface
- * 
- * This file provides a common interface for system calls across different architectures.
- * It defines the syscall numbers and the corresponding function prototypes.
  *
-*/
+ * This file provides a common interface for system calls across different
+ * architectures. It defines the syscall numbers and the corresponding function
+ * prototypes.
+ *
+ */
 #include <sys/syscall.h>
 
 #endif

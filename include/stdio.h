@@ -15,14 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDDEF_H_
-#define _QLIBC_STDDEF_H_
+#ifndef _QLIBC_STDIO_H_
+#define _QLIBC_STDIO_H_
 
-#include <feature.h>
-
-#ifdef NULL
-#undef NULL
-#endif
+/* seek flags */
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
 
 #ifndef __cplusplus
 #define NULL ((void *)0)
@@ -30,12 +29,17 @@
 #define NULL nullptr
 #endif
 
-#include <bits/stddef.h>
+typedef struct _FILE_IO {
 
-#define offsetof(TYPE, MEMBER) ((size_t)&((TYPE *)0)->MEMBER)
+} FILE;
 
-#if defined(__linux__)
-typedef int wchar_t;
-#endif
+extern FILE *stdin;
+extern FILE *stdout;
+extern FILE *stderr;
+
+/* file access */
+extern FILE *fopen(const char *restrict filename, const char *restrict mode);
+extern FILE *freopen(const char *restrict filename, const char *restrict mode,
+                     FILE *restrict stream);
 
 #endif

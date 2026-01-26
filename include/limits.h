@@ -24,33 +24,33 @@
 
 #include <bits/limits.h>
 
-#define CHAR_BIT        8
+#define CHAR_BIT 8
 
-#define CHAR_MIN        (-128)
-#define CHAR_MAX        127
+#define CHAR_MIN (-128)
+#define CHAR_MAX 127
 
-#define SCHAR_MIN      (CHAR_MIN)
-#define SCHAR_MAX      (CHAR_MAX)
+#define SCHAR_MIN (CHAR_MIN)
+#define SCHAR_MAX (CHAR_MAX)
 
-#define SHRT_MAX       (0x7fff)
-#define SHRT_MIN       (-1-SHRT_MAX)
+#define SHRT_MAX (0x7fff)
+#define SHRT_MIN (-1 - SHRT_MAX)
 
-#define INT_MAX        (0x7fffffff)
-#define INT_MIN        (-1-INT_MAX)
+#define INT_MAX (0x7fffffff)
+#define INT_MIN (-1 - INT_MAX)
 
-#define LONG_MIN       (_LONG_MIN_)
-#define LONG_MAX       (_LONG_MAX_)
+#define LONG_MIN (_LONG_MIN_)
+#define LONG_MAX (_LONG_MAX_)
 
-#define LLONG_MAX      (0x7fffffffffffffff)
-#define LLONG_MIN      (-1-LLONG_MAX)
+#define LLONG_MAX (0x7fffffffffffffff)
+#define LLONG_MIN (-1 - LLONG_MAX)
 
-#define UCHAR_MAX      (0xff)
-#define USHRT_MAX      (0xffff)
-#define UINT_MAX       (0xffffffff)
-#define ULONG_MAX      (_ULONG_MAX_)
-#define ULLONG_MAX     (0xffffffffffffffff)
+#define UCHAR_MAX (0xff)
+#define USHRT_MAX (0xffff)
+#define UINT_MAX (0xffffffff)
+#define ULONG_MAX (_ULONG_MAX_)
+#define ULLONG_MAX (0xffffffffffffffff)
 
 // for future support for multibyte character set
-#define MB_LEN_MAX     4
+#define MB_LEN_MAX 4
 
 #endif

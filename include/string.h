@@ -25,35 +25,39 @@ extern "C" {
 #endif
 
 // character array examination
-extern void* memchr(const void* ptr, int ch, size_t count);
-extern int memcmp(const void* lhs, const void* rhs, size_t count);
-extern void* memset(void* dest, int ch, size_t count);
-extern void* memcpy(void *restrict dest, const void *restrict src, size_t count);
-extern void* memmove(void* dest, const void* src, size_t count);
+extern void *memchr(const void *ptr, int ch, size_t count);
+extern int memcmp(const void *lhs, const void *rhs, size_t count);
+extern void *memset(void *dest, int ch, size_t count);
+extern void *memcpy(void *restrict dest, const void *restrict src,
+                    size_t count);
+extern void *memmove(void *dest, const void *src, size_t count);
 
 // string examination
-extern size_t strlen(const char* str);
-extern int strcmp(const char* lhs, const char* rhs);
-extern int strncmp(const char* lhs, const char* rhs, size_t count);
-extern int strcoll(const char* lhs, const char* rhs);
-extern char* strchr(const char* str, int ch);
-extern char* strrchr(const char* str, int ch);
-extern size_t strspn(const char* str, const char* charset);
-extern size_t strcspn(const char* str, const char* charset);
-extern char* strpbrk(const char* str, const char* charset);
-extern char* strstr(const char* str, const char* substr);
-extern char* strtok(char* restrict str, const char* restrict delim);
+extern size_t strlen(const char *str);
+extern int strcmp(const char *lhs, const char *rhs);
+extern int strncmp(const char *lhs, const char *rhs, size_t count);
+extern int strcoll(const char *lhs, const char *rhs);
+extern char *strchr(const char *str, int ch);
+extern char *strrchr(const char *str, int ch);
+extern size_t strspn(const char *str, const char *charset);
+extern size_t strcspn(const char *str, const char *charset);
+extern char *strpbrk(const char *str, const char *charset);
+extern char *strstr(const char *str, const char *substr);
+extern char *strtok(char *restrict str, const char *restrict delim);
 
 // string manipulation
-extern char* strcpy(char* restrict dest, const char* restrict src);
-extern char* strncpy(char* restrict dest, const char* restrict src, size_t count);
-extern char* strcat(char* restrict dest, const char* restrict src);
-extern char* strncat(char* restrict dest, const char* restrict src, size_t count);
-extern size_t strxfrm(char *restrict dest, const char *restrict src, size_t count);
-extern char* strdup(const char *src);
+extern char *strcpy(char *restrict dest, const char *restrict src);
+extern char *strncpy(char *restrict dest, const char *restrict src,
+                     size_t count);
+extern char *strcat(char *restrict dest, const char *restrict src);
+extern char *strncat(char *restrict dest, const char *restrict src,
+                     size_t count);
+extern size_t strxfrm(char *restrict dest, const char *restrict src,
+                      size_t count);
+extern char *strdup(const char *src);
 
 // Miscellaneous
-extern char* strerror(int errnum);
+extern char *strerror(int errnum);
 
 #ifdef __cplusplus
 }

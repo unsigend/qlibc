@@ -18,8 +18,8 @@
 #ifndef _QLIBC_I386_BITS_LIMITS_H_
 #define _QLIBC_I386_BITS_LIMITS_H_
 
-#define _LONG_MAX_  (0x7fffffff)
-#define _LONG_MIN_  (-1-_LONG_MAX_)
+#define _LONG_MAX_ (0x7fffffff)
+#define _LONG_MIN_ (-1 - _LONG_MAX_)
 
-#define _ULONG_MAX_  (0xffffffff)
+#define _ULONG_MAX_ (0xffffffff)
 #endif
