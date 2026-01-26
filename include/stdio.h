@@ -18,28 +18,101 @@
 #ifndef _QLIBC_STDIO_H_
 #define _QLIBC_STDIO_H_
 
+#include <stdarg.h>
+#include <stddef.h>
+
 /* seek flags */
 #define SEEK_SET 0
 #define SEEK_CUR 1
 #define SEEK_END 2
 
-#ifndef __cplusplus
-#define NULL ((void *)0)
-#else
-#define NULL nullptr
-#endif
+/* buffer mode */
+#define _IOFBF
+#define _IOLBF
+#define _IONBF
 
+#define EOF (-1)
+
+/* file IO structure */
 typedef struct _FILE_IO {
-
+  int fd;      /* file descriptor */
+  int oflags;  /* file open flags */
+  int flags;   /* file flags */
+  int error;   /* error indicator */
+  int eof;     /*EOF indicator*/
+  long offset; /* file offset */
 } FILE;
 
-extern FILE *stdin;
-extern FILE *stdout;
-extern FILE *stderr;
+#define stdin __STDIN_SP
+#define stdout __STDOUT_SP
+#define stderr __STDERR_SP
 
 /* file access */
 extern FILE *fopen(const char *restrict filename, const char *restrict mode);
 extern FILE *freopen(const char *restrict filename, const char *restrict mode,
                      FILE *restrict stream);
+extern int fclose(FILE *stream);
+extern int fflush(FILE *stream);
+extern void setbuf(FILE *restrict stream, char *restrict buffer);
+extern int setvbuf(FILE *restrict stream, char *restrict buffer, int mode,
+                   size_t size);
 
+/* direct I/O */
+extern size_t fread(void *restrict buffer, size_t size, size_t count,
+                    FILE *restrict stream);
+extern size_t fwrite(const void *restrict buffer, size_t size, size_t count,
+                     FILE *restrict stream);
+
+/* unformatted I/O */
+extern int fgetc(FILE *stream);
+extern int getc(FILE *stream);
+extern char *fgets(char *restrict str, int count, FILE *restrict stream);
+extern int fputc(int ch, FILE *stream);
+extern int putc(int ch, FILE *stream);
+extern int fputs(const char *restrict str, FILE *restrict stream);
+extern int getchar(void);
+extern char *gets(char *str);
+extern int putchar(int ch);
+extern int puts(const char *str);
+extern int ungetc(int ch, FILE *stream);
+
+/* formatted I/O */
+extern int scanf(const char *restrict format, ...);
+extern int fscanf(FILE *restrict stream, const char *restrict format, ...);
+extern int sscanf(const char *restrict buffer, const char *restrict format,
+                  ...);
+extern int vscanf(const char *restrict format, va_list vlist);
+extern int vfscanf(FILE *restrict stream, const char *restrict format,
+                   va_list vlist);
+extern int vsscanf(const char *restrict buffer, const char *restrict format,
+                   va_list vlist);
+extern int printf(const char *restrict format, ...);
+extern int fprintf(FILE *restrict stream, const char *restrict format, ...);
+extern int sprintf(char *restrict buffer, const char *restrict format, ...);
+extern int snprintf(char *restrict buffer, size_t bufsz,
+                    const char *restrict format, ...);
+extern int vprintf(const char *restrict format, va_list vlist);
+extern int vfprintf(FILE *restrict stream, const char *restrict format,
+                    va_list vlist);
+extern int vsprintf(char *restrict buffer, const char *restrict format,
+                    va_list vlist);
+extern int vsnprintf(char *restrict buffer, size_t bufsz,
+                     const char *restrict format, va_list vlist);
+
+/* file positioning */
+extern long ftell(FILE *stream);
+extern int fseek(FILE *stream, long offset, int origin);
+extern void rewind(FILE *stream);
+
+/* error handling */
+extern void clearerr(FILE *stream);
+extern int feof(FILE *stream);
+extern int ferror(FILE *stream);
+extern void perror(const char *s);
+
+/* file operations */
+extern int remove(const char *pathname);
+extern int rename(const char *oldpath, const char *newpath);
+extern FILE *tmpfile(void);
+extern char *tmpnam(char *str);
 #endif
