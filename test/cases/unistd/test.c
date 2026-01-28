@@ -1,8 +1,6 @@
 #include <errno.h>
 #include <fcntl.h>
-#ifdef __GNUC__
 #include <sys/types.h>
-#endif
 #include <syscall.h>
 #include <unistd.h>
 #include <utest.h>
@@ -15,11 +13,6 @@ UTEST_TEST_CASE(macro) {
   EXPECT_EQUAL_INT(SEEK_SET, 0);
   EXPECT_EQUAL_INT(SEEK_CUR, 1);
   EXPECT_EQUAL_INT(SEEK_END, 2);
-}
-
-UTEST_TEST_CASE(types) {
-  EXPECT_EQUAL_UINT(sizeof(off_t), sizeof(long));
-  EXPECT_EQUAL_UINT(sizeof(ssize_t), sizeof(long));
 }
 
 UTEST_TEST_CASE(syscall) {
@@ -37,12 +30,10 @@ UTEST_TEST_CASE(syscall) {
   ret = syscall(SYS_getppid);
   EXPECT_TRUE(ret > 0);
 
-#if !defined(__aarch64__)
   errno = 0;
   ret = syscall(99999);
   EXPECT_EQUAL_INT(ret, -1);
   EXPECT_TRUE(errno != 0);
-#endif
 }
 
 UTEST_TEST_CASE(close) {
@@ -104,11 +95,10 @@ UTEST_TEST_CASE(write) {
 }
 
 UTEST_TEST_SUITE(unistd) {
-  // general macros and types
-  UTEST_RUN_TEST_CASE(types);
+  /* macros */
   UTEST_RUN_TEST_CASE(macro);
 
-  // unistd functions
+  /* functions */
   UTEST_RUN_TEST_CASE(syscall);
   UTEST_RUN_TEST_CASE(close);
   UTEST_RUN_TEST_CASE(lseek);

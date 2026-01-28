@@ -83,8 +83,6 @@ UTEST_TEST_CASE(open) {
   EXPECT_EQUAL_INT(ret, 0);
 }
 
-UTEST_TEST_CASE(types) {}
-
 UTEST_TEST_CASE(fcntl) {
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
@@ -113,8 +111,9 @@ UTEST_TEST_CASE(fcntl) {
 }
 
 UTEST_TEST_SUITE(fcntl) {
-  UTEST_RUN_TEST_CASE(types);
+  /* macros */
   UTEST_RUN_TEST_CASE(macro);
+  /* functions */
   UTEST_RUN_TEST_CASE(open);
   UTEST_RUN_TEST_CASE(fcntl);
 }

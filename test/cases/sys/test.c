@@ -3,6 +3,12 @@
 #include <unistd.h>
 #include <utest.h>
 
+UTEST_TEST_CASE(types) {
+  EXPECT_EQUAL_UINT(sizeof(mode_t), sizeof(unsigned int));
+  EXPECT_EQUAL_UINT(sizeof(off_t), sizeof(long));
+  EXPECT_EQUAL_UINT(sizeof(ssize_t), sizeof(long));
+}
+
 UTEST_TEST_CASE(readv) {
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
@@ -18,4 +24,9 @@ UTEST_TEST_CASE(readv) {
   EXPECT_EQUAL_INT(close_ret, 0);
 }
 
-UTEST_TEST_SUITE(sys) { UTEST_RUN_TEST_CASE(readv); }
+UTEST_TEST_SUITE(sys) {
+  /* types */
+  UTEST_RUN_TEST_CASE(types);
+  /* functions */
+  UTEST_RUN_TEST_CASE(readv);
+}

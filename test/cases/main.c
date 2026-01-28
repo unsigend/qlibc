@@ -23,7 +23,7 @@ extern UTEST_TEST_SUITE(elf);
 extern UTEST_TEST_SUITE(sys);
 extern UTEST_TEST_SUITE(unistd);
 extern UTEST_TEST_SUITE(fcntl);
-extern UTEST_TEST_SUITE(sys_stat);
+extern UTEST_TEST_SUITE(stat);
 
 int main(int argc, char *argv[]) {
   (void)argc;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     UTEST_RUN_TEST_SUITE(sys);
     UTEST_RUN_TEST_SUITE(unistd);
     UTEST_RUN_TEST_SUITE(fcntl);
-    UTEST_RUN_TEST_SUITE(sys_stat);
+    UTEST_RUN_TEST_SUITE(stat);
   } else {
     if (MATCH(argv[1], "assert")) {
       UTEST_RUN_TEST_SUITE(assert);
@@ -79,8 +79,8 @@ int main(int argc, char *argv[]) {
       UTEST_RUN_TEST_SUITE(unistd);
     } else if (MATCH(argv[1], "fcntl")) {
       UTEST_RUN_TEST_SUITE(fcntl);
-    } else if (MATCH(argv[1], "sys_stat")) {
-      UTEST_RUN_TEST_SUITE(sys_stat);
+    } else if (MATCH(argv[1], "stat")) {
+      UTEST_RUN_TEST_SUITE(stat);
     }
   }
 
