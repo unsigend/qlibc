@@ -18,7 +18,12 @@
 #ifndef _QLIBC_FNCNTL_H_
 #define _QLIBC_FNCNTL_H_
 
-#include <sys/stat.h>
+#include <sys/types.h>
+
+/*
+ * Based on the Unix conversion, the macros here are kernel open file table
+ * related
+ */
 
 /* file access mode flags */
 #define O_RDONLY 0
@@ -51,21 +56,20 @@
 #define O_SYNC 04010000
 #define O_ACCMODE 0x03
 
-/* file mode flags */
-#define S_IRUSR 00400
-#define S_IWUSR 00200
-#define S_IXUSR 00100
-#define S_IRWXU (S_IRUSR | S_IWUSR | S_IXUSR)
-#define S_IRGRP 00040
-#define S_IWGRP 00020
-#define S_IXGRP 00010
-#define S_IRWXG (S_IRGRP | S_IWGRP | S_IXGRP)
-#define S_IROTH 00004
-#define S_IWOTH 00002
-#define S_IXOTH 00001
-#define S_IRWXO (S_IROTH | S_IWOTH | S_IXOTH)
+/* fcntl flags */
+#define F_GETFL 3
+#define F_SETFL 4
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern int open(const char *pathname, int flags, ...);
 extern int creat(const char *pathname, mode_t mode);
+extern int fcntl(int fd, int cmd, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

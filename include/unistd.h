@@ -31,11 +31,26 @@
 #define SEEK_CUR 1
 #define SEEK_END 2
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int close(int fd);
 extern off_t lseek(int fd, off_t offset, int whence);
 extern off_t tell(int fd);
 extern ssize_t read(int fd, void *buf, size_t count);
 extern ssize_t write(int fd, const void *buf, size_t count);
+extern int dup(int fd);
+extern int dup2(int fd, int fd2);
+extern int dup3(int fd, int fd2, int flags);
+extern ssize_t pread(int fd, void *buf, size_t count, off_t offset);
+extern ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+extern int truncate(const char *path, off_t length);
+extern int ftruncate(int fd, off_t length);
 extern long syscall(long __number, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

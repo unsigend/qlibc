@@ -15,11 +15,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#ifndef _QLIBC_SYS_UIO_H_
+#define _QLIBC_SYS_UIO_H_
 
-typedef long off_t;
-typedef long ssize_t;
-typedef int mode_t;
+#include <stddef.h>
+#include <sys/types.h>
+
+struct iovec {
+  void *iov_base;
+  size_t iov_len;
+};
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern ssize_t readv(int fd, const struct iovec *iov, int iovcnt);
+extern ssize_t writev(int fd, const struct iovec *iov, int iovcnt);
+
+#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+ssize_t preadv(int fd, const struct iovec *iov, int iovcnt, off_t offset);
+ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt, off_t offset);
+#endif
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -15,11 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#include <syscall.h>
+#include <unistd.h>
 
-typedef long off_t;
-typedef long ssize_t;
-typedef int mode_t;
-
-#endif
+ssize_t pread(int fd, void *buf, size_t count, off_t offset) {
+  return __syscall(SYS_pread64, (long)fd, (long)buf, (long)count, (long)offset);
+}

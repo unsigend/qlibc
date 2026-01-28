@@ -15,11 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#include <syscall.h>
+#include <unistd.h>
 
-typedef long off_t;
-typedef long ssize_t;
-typedef int mode_t;
-
-#endif
+int dup(int fd) { return __syscall(SYS_dup, (long)fd); }
+int dup2(int fd, int fd2) { return __syscall(SYS_dup2, (long)fd, (long)fd2); }
+int dup3(int fd, int fd2, int flags) {
+  return __syscall(SYS_dup3, (long)fd, (long)fd2, (long)flags);
+}

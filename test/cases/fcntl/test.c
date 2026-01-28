@@ -1,7 +1,9 @@
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <utest.h>
 
+/* compatibility macros for different systems */
 #ifndef O_CLOEXEC
 #define O_CLOEXEC __O_CLOEXEC
 #endif
@@ -31,6 +33,7 @@
 #endif
 
 UTEST_TEST_CASE(macro) {
+  /* file access mode flags */
   EXPECT_EQUAL_INT(O_RDONLY, 0);
   EXPECT_EQUAL_INT(O_WRONLY, 1);
   EXPECT_EQUAL_INT(O_RDWR, 2);
@@ -57,6 +60,7 @@ UTEST_TEST_CASE(macro) {
   EXPECT_EQUAL_INT(O_NONBLOCK, 04000);
   EXPECT_EQUAL_INT(O_SYNC, 04010000);
 
+  /* file permission flags */
   EXPECT_EQUAL_INT(S_IRUSR, 00400);
   EXPECT_EQUAL_INT(S_IWUSR, 00200);
   EXPECT_EQUAL_INT(S_IXUSR, 00100);
@@ -81,10 +85,36 @@ UTEST_TEST_CASE(open) {
 
 UTEST_TEST_CASE(types) {}
 
+UTEST_TEST_CASE(fcntl) {
+  int fd = open(__FILE__, O_RDONLY);
+  EXPECT_TRUE(fd >= 0);
+
+  int flags = fcntl(fd, F_GETFL);
+  EXPECT_TRUE(flags >= 0);
+  EXPECT_EQUAL_INT(flags & O_ACCMODE, O_RDONLY);
+
+  int ret = fcntl(fd, F_SETFL, flags | O_APPEND);
+  EXPECT_EQUAL_INT(ret, 0);
+
+  flags = fcntl(fd, F_GETFL);
+  EXPECT_TRUE(flags >= 0);
+  EXPECT_TRUE((flags & O_APPEND) != 0);
+  EXPECT_EQUAL_INT(flags & O_ACCMODE, O_RDONLY);
+
+  ret = fcntl(fd, F_SETFL, flags & ~O_APPEND);
+  EXPECT_EQUAL_INT(ret, 0);
+
+  flags = fcntl(fd, F_GETFL);
+  EXPECT_TRUE(flags >= 0);
+  EXPECT_EQUAL_INT(flags & O_ACCMODE, O_RDONLY);
+
+  ret = close(fd);
+  EXPECT_EQUAL_INT(ret, 0);
+}
+
 UTEST_TEST_SUITE(fcntl) {
-  // test general macros and types
   UTEST_RUN_TEST_CASE(types);
   UTEST_RUN_TEST_CASE(macro);
-  // test functions
   UTEST_RUN_TEST_CASE(open);
+  UTEST_RUN_TEST_CASE(fcntl);
 }

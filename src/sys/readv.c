@@ -15,11 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#include <sys/uio.h>
+#include <syscall.h>
 
-typedef long off_t;
-typedef long ssize_t;
-typedef int mode_t;
-
-#endif
+ssize_t readv(int fd, const struct iovec *iov, int iovcnt) {
+  return __syscall(SYS_readv, (long)fd, (long)iov, (long)iovcnt);
+}

@@ -15,11 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#include <fcntl.h>
+#include <stdarg.h>
+#include <syscall.h>
 
-typedef long off_t;
-typedef long ssize_t;
-typedef int mode_t;
+int fcntl(int fd, int cmd, ...) {
+  va_list ap;
+  unsigned long arg;
 
-#endif
+  va_start(ap, cmd);
+  arg = va_arg(ap, unsigned long);
+  va_end(ap);
+
+  return __syscall(SYS_fcntl, (long)fd, (long)cmd, arg);
+}
