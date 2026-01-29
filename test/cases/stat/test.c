@@ -1,7 +1,8 @@
+#include <fcntl.h>
 #include <stddef.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <time.h>
+#include <unistd.h>
 #include <utest.h>
 
 UTEST_TEST_CASE(type) {
@@ -41,4 +42,54 @@ UTEST_TEST_CASE(type) {
   EXPECT_EQUAL_UINT(sizeof(struct stat), 88);
 #endif
 }
-UTEST_TEST_SUITE(stat) { UTEST_RUN_TEST_CASE(type); }
+
+UTEST_TEST_CASE(stat) {
+  struct stat st;
+  int ret = stat(__FILE__, &st);
+  EXPECT_EQUAL_INT(ret, 0);
+  EXPECT_TRUE(st.st_dev > 0);
+  EXPECT_TRUE(st.st_ino > 0);
+  EXPECT_TRUE(st.st_nlink > 0);
+  EXPECT_TRUE(S_ISREG(st.st_mode));
+  EXPECT_TRUE(st.st_size > 0);
+  EXPECT_TRUE(st.st_blksize > 0);
+  EXPECT_TRUE(st.st_blocks > 0);
+  EXPECT_TRUE(st.st_atime >= 0);
+  EXPECT_TRUE(st.st_mtime >= 0);
+  EXPECT_TRUE(st.st_ctime >= 0);
+
+  int fd = open(__FILE__, O_RDONLY);
+  EXPECT_TRUE(fd >= 0);
+  off_t size = lseek(fd, 0, SEEK_END);
+  EXPECT_TRUE(size > 0);
+  EXPECT_EQUAL_INT(st.st_size, size);
+  EXPECT_EQUAL_INT(close(fd), 0);
+}
+
+UTEST_TEST_CASE(fstat) {
+  int fd = open(__FILE__, O_RDONLY);
+  EXPECT_TRUE(fd >= 0);
+
+  struct stat st;
+  int ret = fstat(fd, &st);
+  EXPECT_EQUAL_INT(ret, 0);
+  EXPECT_TRUE(st.st_dev > 0);
+  EXPECT_TRUE(st.st_ino > 0);
+  EXPECT_TRUE(st.st_nlink > 0);
+  EXPECT_TRUE(S_ISREG(st.st_mode));
+  EXPECT_TRUE(st.st_size > 0);
+  EXPECT_TRUE(st.st_blksize > 0);
+  EXPECT_TRUE(st.st_blocks > 0);
+
+  off_t size = lseek(fd, 0, SEEK_END);
+  EXPECT_TRUE(size > 0);
+  EXPECT_EQUAL_INT(st.st_size, size);
+
+  EXPECT_EQUAL_INT(close(fd), 0);
+}
+
+UTEST_TEST_SUITE(stat) {
+  UTEST_RUN_TEST_CASE(type);
+  UTEST_RUN_TEST_CASE(stat);
+  UTEST_RUN_TEST_CASE(fstat);
+}

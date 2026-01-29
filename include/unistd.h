@@ -18,6 +18,7 @@
 #ifndef _QLIBC_UNISTD_H_
 #define _QLIBC_UNISTD_H_
 
+#include <feature.h>
 #include <stddef.h>
 #include <sys/types.h>
 

@@ -18,6 +18,7 @@
 #ifndef _QLIBC_ELF_H_
 #define _QLIBC_ELF_H_
 
+#include <feature.h>
 #include <stdint.h>
 
 /**

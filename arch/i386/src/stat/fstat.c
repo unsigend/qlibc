@@ -15,23 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_ERRNO_H
-#define _QLIBC_ERRNO_H
+#include "_stat.h"
+#include <bits/stat.h>
+#include <sysdep/NR.h>
+#include <sysdep/syscall.h>
 
-#include <feature.h>
-
-// include architecture-specific errno.h
-#include <sysdep/errno.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern int *__errno(void);
-#define errno (*__errno())
-
-#ifdef __cplusplus
+int fstat(int fd, struct stat *restrict buf) {
+  struct __stat64 st64buf;
+  int ret = __syscall2(__NR_fstat64, (long)fd, (long)&st64buf);
+  if (ret < 0) {
+    return ret;
+  }
+  _stat64_to_stat(&st64buf, buf);
+  return 0;
 }
-#endif
-
-#endif

@@ -23,6 +23,7 @@
 #define _QLIBC_LIMITS_H_
 
 #include <bits/limits.h>
+#include <feature.h>
 
 #define CHAR_BIT 8
 

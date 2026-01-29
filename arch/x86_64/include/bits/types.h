@@ -15,23 +15,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_ERRNO_H
-#define _QLIBC_ERRNO_H
+#ifndef _QLIBC_X86_64_BITS_TYPES_H_
+#define _QLIBC_X86_64_BITS_TYPES_H_
 
-#include <feature.h>
+typedef unsigned long __dev_t;
+typedef __dev_t __dev64_t;
 
-// include architecture-specific errno.h
-#include <sysdep/errno.h>
+typedef long __off_t;
+typedef __off_t __off64_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+typedef long __ssize_t;
+typedef __ssize_t __ssize64_t;
 
-extern int *__errno(void);
-#define errno (*__errno())
+typedef long __blksize_t;
+typedef __blksize_t __blksize64_t;
 
-#ifdef __cplusplus
-}
-#endif
+typedef long __blkcnt_t;
+typedef __blkcnt_t __blkcnt64_t;
+
+typedef long __time_t;
+typedef __time_t __time64_t;
+
+typedef unsigned long __ino_t;
+typedef __ino_t __ino64_t;
+
+typedef unsigned long __nlink_t;
+typedef __nlink_t __nlink64_t;
+
+typedef unsigned int __mode_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned int __pid_t;
 
 #endif

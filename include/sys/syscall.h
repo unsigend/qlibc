@@ -18,6 +18,8 @@
 #ifndef _QLIBC_SYS_SYSCALL_H_
 #define _QLIBC_SYS_SYSCALL_H_
 
+#include <feature.h>
+
 /**
  * @brief: Macros for syscall
  * Generic syscall macros provide a common interface for different

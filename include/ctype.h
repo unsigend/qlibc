@@ -18,6 +18,8 @@
 #ifndef _QLIBC_CTYPE_H_
 #define _QLIBC_CTYPE_H_
 
+#include <feature.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

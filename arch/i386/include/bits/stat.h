@@ -18,28 +18,57 @@
 #ifndef _QLIBC_I386_BITS_STAT_H_
 #define _QLIBC_I386_BITS_STAT_H_
 
-#include <sys/types.h>
+#include <bits/types.h>
 #include <time.h>
 
 /*
  * The stat structure for i386 architecture is based on GNU glibc.
  */
 struct stat {
-  dev_t st_dev;             /* ID of device containing file */
+  __dev_t st_dev;           /* ID of device containing file */
   int __pad0;               /* padding */
-  ino_t st_ino;             /* inode number */
-  mode_t st_mode;           /* file type and mode */
-  nlink_t st_nlink;         /* number of hard links */
-  uid_t st_uid;             /* user ID of owner */
-  gid_t st_gid;             /* group ID of owner */
-  dev_t st_rdev;            /* device ID (if special file) */
+  __ino_t st_ino;           /* inode number */
+  __mode_t st_mode;         /* file type and mode */
+  __nlink_t st_nlink;       /* number of hard links */
+  __uid_t st_uid;           /* user ID of owner */
+  __gid_t st_gid;           /* group ID of owner */
+  __dev_t st_rdev;          /* device ID (if special file) */
   int __pad1;               /* padding */
-  off_t st_size;            /* total size, in bytes */
-  blksize_t st_blksize;     /* block size for filesystem I/O */
-  blkcnt_t st_blocks;       /* number of 512B blocks allocated */
+  __off_t st_size;          /* total size, in bytes */
+  __blksize_t st_blksize;   /* block size for filesystem I/O */
+  __blkcnt_t st_blocks;     /* number of 512B blocks allocated */
   struct timespec st_atime; /* time of last access */
   struct timespec st_mtime; /* time of last modification */
   struct timespec st_ctime; /* time of last status change */
   long __unused[2];         /* backwards compatibility */
 };
+
+/*
+ * @Note: The __stat64 structure is used for 64-bit file system operations.
+ * The use space use stat old structure under i386, but the system call wrapper
+ * map the stat to __stat64.
+ */
+struct __stat64 {
+  __dev64_t st_dev;         /* ID of device containing file */
+  int __pad0;               /* padding */
+  __ino_t __st_ino;         /* inode number truncated */
+  __mode_t st_mode;         /* file type and mode */
+  __nlink_t st_nlink;       /* number of hard links */
+  __uid_t st_uid;           /* user ID of owner */
+  __gid_t st_gid;           /* group ID of owner */
+  __dev64_t st_rdev;        /* device ID (if special file) */
+  int __pad1;               /* padding */
+  __off64_t st_size;        /* total size, in bytes */
+  __blksize_t st_blksize;   /* block size for filesystem I/O */
+  __blkcnt64_t st_blocks;   /* number of 512B blocks allocated */
+  struct timespec st_atime; /* time of last access */
+  struct timespec st_mtime; /* time of last modification */
+  struct timespec st_ctime; /* time of last status change */
+  __ino64_t st_ino;         /* inode number */
+};
+
+#define st_atime st_atime.tv_sec
+#define st_mtime st_mtime.tv_sec
+#define st_ctime st_ctime.tv_sec
+
 #endif

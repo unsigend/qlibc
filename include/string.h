@@ -18,6 +18,7 @@
 #ifndef _QLIBC_STRING_H_
 #define _QLIBC_STRING_H_
 
+#include <feature.h>
 #include <stddef.h>
 
 #ifdef __cplusplus

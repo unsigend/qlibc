@@ -18,6 +18,8 @@
 #ifndef _QLIBC_I386_BITS_STDINT_H_
 #define _QLIBC_I386_BITS_STDINT_H_
 
+#include <feature.h>
+
 typedef signed char int8_t;
 typedef signed short int16_t;
 typedef signed int int32_t;

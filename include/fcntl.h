@@ -18,6 +18,7 @@
 #ifndef _QLIBC_FNCNTL_H_
 #define _QLIBC_FNCNTL_H_
 
+#include <feature.h>
 #include <sys/types.h>
 
 /*

@@ -18,20 +18,36 @@
 #ifndef _QLIBC_SYS_TYPES_H_
 #define _QLIBC_SYS_TYPES_H_
 
-typedef unsigned long long dev_t;
+#include <bits/types.h>
+#include <feature.h>
 
-typedef long off_t;
-typedef long ssize_t;
-typedef long blksize_t;
-typedef long blkcnt_t;
-typedef long time_t;
+typedef __dev_t dev_t;
+typedef __dev64_t dev64_t;
 
-typedef unsigned long ino_t;
-typedef unsigned long nlink_t;
+typedef __off_t off_t;
+typedef __off64_t off64_t;
 
-typedef unsigned int mode_t;
-typedef unsigned int uid_t;
-typedef unsigned int gid_t;
-typedef unsigned int pid_t;
+typedef __ssize_t ssize_t;
+typedef __ssize64_t ssize64_t;
+
+typedef __blksize_t blksize_t;
+typedef __blksize64_t blksize64_t;
+
+typedef __blkcnt_t blkcnt_t;
+typedef __blkcnt64_t blkcnt64_t;
+
+typedef __time_t time_t;
+typedef __time64_t time64_t;
+
+typedef __ino_t ino_t;
+typedef __ino64_t ino64_t;
+
+typedef __nlink_t nlink_t;
+typedef __nlink64_t nlink64_t;
+
+typedef __mode_t mode_t;
+typedef __uid_t uid_t;
+typedef __gid_t gid_t;
+typedef __pid_t pid_t;
 
 #endif

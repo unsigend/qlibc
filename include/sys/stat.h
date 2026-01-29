@@ -19,6 +19,7 @@
 #define _QLIBC_SYS_STAT_H_
 
 #include <bits/stat.h>
+#include <feature.h>
 #include <sys/types.h>
 
 /*

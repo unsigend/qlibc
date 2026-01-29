@@ -18,6 +18,8 @@
 #ifndef _QLIBC_STDARG_H_
 #define _QLIBC_STDARG_H_
 
+#include <feature.h>
+
 #if defined(__GNUC__)
 typedef __builtin_va_list __gnuc_va_list;
 #endif

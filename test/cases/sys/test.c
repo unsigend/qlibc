@@ -20,6 +20,16 @@ UTEST_TEST_CASE(types) {
   EXPECT_EQUAL_UINT(sizeof(pid_t), sizeof(unsigned int));
   EXPECT_EQUAL_UINT(sizeof(uid_t), sizeof(unsigned int));
   EXPECT_EQUAL_UINT(sizeof(gid_t), sizeof(unsigned int));
+
+#if defined(_QLIBC_SOURCE) || defined(_QLIBC)
+  EXPECT_EQUAL_UINT(sizeof(off64_t), 8);
+  EXPECT_EQUAL_UINT(sizeof(time64_t), 8);
+  EXPECT_EQUAL_UINT(sizeof(ino64_t), 8);
+  EXPECT_EQUAL_UINT(sizeof(nlink64_t), 8);
+  EXPECT_EQUAL_UINT(sizeof(dev64_t), 8);
+  EXPECT_EQUAL_UINT(sizeof(blkcnt64_t), 8);
+  EXPECT_EQUAL_UINT(sizeof(blksize64_t), 8);
+#endif
 }
 
 UTEST_TEST_CASE(readv) {

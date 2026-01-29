@@ -18,6 +18,7 @@
 #ifndef _QLIBC_SYS_UIO_H_
 #define _QLIBC_SYS_UIO_H_
 
+#include <feature.h>
 #include <stddef.h>
 #include <sys/types.h>
 

@@ -17,6 +17,8 @@
 #ifndef _QLIBC_STDNORETURN_H_
 #define _QLIBC_STDNORETURN_H_
 
+#include <feature.h>
+
 #define noreturn _Noreturn
 
 #endif

@@ -18,6 +18,8 @@
 #ifndef _QLIBC_TIME_H_
 #define _QLIBC_TIME_H_
 
+#include <feature.h>
+
 typedef long time_t;
 
 struct timespec {
