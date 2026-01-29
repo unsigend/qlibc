@@ -18,6 +18,7 @@
 #ifndef _QLIBC_SYS_STAT_H_
 #define _QLIBC_SYS_STAT_H_
 
+#include <bits/stat.h>
 #include <sys/types.h>
 
 /*
@@ -60,9 +61,9 @@
 extern "C" {
 #endif
 
-// extern int stat(const char *restrict path, struct stat *restrict buf);
-// extern int fstat(int fd, struct stat *restrict buf);
-// extern int lstat(const char *restrict path, struct stat *restrict buf);
+extern int stat(const char *restrict path, struct stat *restrict buf);
+extern int fstat(int fd, struct stat *restrict buf);
+extern int lstat(const char *restrict path, struct stat *restrict buf);
 
 #ifdef __cplusplus
 }

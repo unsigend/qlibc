@@ -15,6 +15,7 @@ UTEST_TEST_CASE(types) {
   EXPECT_EQUAL_UINT(sizeof(dev_t), sizeof(unsigned long long));
   EXPECT_EQUAL_UINT(sizeof(blkcnt_t), sizeof(long));
   EXPECT_EQUAL_UINT(sizeof(blksize_t), sizeof(long));
+  EXPECT_EQUAL_UINT(sizeof(nlink_t), sizeof(unsigned long));
   EXPECT_EQUAL_UINT(sizeof(mode_t), sizeof(unsigned int));
   EXPECT_EQUAL_UINT(sizeof(pid_t), sizeof(unsigned int));
   EXPECT_EQUAL_UINT(sizeof(uid_t), sizeof(unsigned int));

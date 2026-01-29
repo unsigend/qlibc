@@ -15,23 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#ifndef _QLIBC_TIME_H_
+#define _QLIBC_TIME_H_
 
-typedef unsigned long long dev_t;
-
-typedef long off_t;
-typedef long ssize_t;
-typedef long blksize_t;
-typedef long blkcnt_t;
 typedef long time_t;
 
-typedef unsigned long ino_t;
-typedef unsigned long nlink_t;
-
-typedef unsigned int mode_t;
-typedef unsigned int uid_t;
-typedef unsigned int gid_t;
-typedef unsigned int pid_t;
+struct timespec {
+  time_t tv_sec; /* seconds */
+  long tv_nsec;  /* nanoseconds */
+};
 
 #endif
