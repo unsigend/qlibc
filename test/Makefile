@@ -150,6 +150,9 @@ else
 endif
 
 # run specific test case
+test-stdio:
+	@$(MAKE) -C cases/stdio
+
 test-%: all
 	@./$(BUILD_PATH)/test $*
 
