@@ -49,6 +49,9 @@ extern ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
 extern int truncate(const char *path, off_t length);
 extern int ftruncate(int fd, off_t length);
 extern long syscall(long __number, ...);
+extern int fsync(int fd);
+extern int fdatasync(int fd);
+extern int sync(void);
 
 #ifdef __cplusplus
 }
