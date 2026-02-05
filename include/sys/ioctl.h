@@ -18,6 +18,7 @@
 #ifndef _QLIBC_SYS_IOCTL_H_
 #define _QLIBC_SYS_IOCTL_H_
 
+#include <bits/ioctl.h>
 #include <feature.h>
 
 #ifdef __cplusplus

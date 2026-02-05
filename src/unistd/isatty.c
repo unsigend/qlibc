@@ -15,17 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "_stat.h"
-#include <bits/NR.h>
-#include <bits/stat.h>
-#include <bits/syscall.h>
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <unistd.h>
 
-int fstat(int fd, struct stat *restrict buf) {
-  struct __stat64 st64buf;
-  int ret = __syscall2(__NR_fstat64, (long)fd, (long)&st64buf);
-  if (ret < 0) {
-    return ret;
-  }
-  _stat64_to_stat(&st64buf, buf);
-  return 0;
+int isatty(int fd) {
+  struct termios ts;
+  return ioctl(fd, TCGETS, &ts) == 0;
 }

@@ -18,8 +18,11 @@
 #ifndef _QLIBC_STDIO__STDIO_H_
 #define _QLIBC_STDIO__STDIO_H_
 
-#include <stdio.h>
+#include <fcntl.h>
+#include <stdioo.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #define UNGET 8
 

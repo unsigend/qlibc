@@ -105,5 +105,5 @@ static inline long __syscall6(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
   return __syscall_ret(ret);
 }
 
-#include <sysdep/NR.h>
+#include <bits/NR.h>
 #endif

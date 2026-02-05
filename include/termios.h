@@ -15,17 +15,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "_stat.h"
-#include <bits/NR.h>
-#include <bits/stat.h>
-#include <bits/syscall.h>
+#ifndef _QLIBC_TERMIOS_H_
+#define _QLIBC_TERMIOS_H_
 
-int fstat(int fd, struct stat *restrict buf) {
-  struct __stat64 st64buf;
-  int ret = __syscall2(__NR_fstat64, (long)fd, (long)&st64buf);
-  if (ret < 0) {
-    return ret;
-  }
-  _stat64_to_stat(&st64buf, buf);
-  return 0;
+#include <bits/termios.h>
+#include <feature.h>
+
+typedef __speed_t speed_t;
+typedef __cc_t cc_t;
+typedef __tcflag_t tcflag_t;
+
+#define NCCS __NCCS
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif

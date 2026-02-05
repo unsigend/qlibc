@@ -2,6 +2,9 @@
 #include <stddef.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifdef __GNUC__
+#include <time.h>
+#endif
 #include <unistd.h>
 #include <utest.h>
 

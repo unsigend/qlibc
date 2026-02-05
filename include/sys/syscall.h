@@ -33,7 +33,7 @@
 #define __syscall5(NUM, ARG1, ARG2, ARG3, ARG4, ARG5)
 #define __syscall6(NUM, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6)
 
-#include <sysdep/syscall.h>
+#include <bits/syscall.h>
 
 #define _NARG(...) __NARG(__VA_ARGS__, _RSEQ_N())
 #define __NARG(...) __ARG_N(__VA_ARGS__)

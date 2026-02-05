@@ -52,6 +52,7 @@ extern long syscall(long __number, ...);
 extern int fsync(int fd);
 extern int fdatasync(int fd);
 extern int sync(void);
+extern int isatty(int fd);
 
 #ifdef __cplusplus
 }

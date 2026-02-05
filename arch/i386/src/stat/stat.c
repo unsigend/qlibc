@@ -16,9 +16,9 @@
  */
 
 #include "_stat.h"
+#include <bits/NR.h>
 #include <bits/stat.h>
-#include <sysdep/NR.h>
-#include <sysdep/syscall.h>
+#include <bits/syscall.h>
 
 int stat(const char *restrict path, struct stat *restrict buf) {
   struct __stat64 st64buf;

@@ -94,6 +94,17 @@ UTEST_TEST_CASE(write) {
   EXPECT_EQUAL_INT(close(fd), 0);
 }
 
+UTEST_TEST_CASE(isatty) {
+  EXPECT_TRUE(isatty(STDIN_FILENO));
+  EXPECT_TRUE(isatty(STDOUT_FILENO));
+  EXPECT_TRUE(isatty(STDERR_FILENO));
+
+  int fd = open(__FILE__, O_RDONLY);
+  EXPECT_TRUE(fd >= 0);
+  EXPECT_FALSE(isatty(fd));
+  EXPECT_EQUAL_INT(close(fd), 0);
+}
+
 UTEST_TEST_SUITE(unistd) {
   /* macros */
   UTEST_RUN_TEST_CASE(macro);
@@ -104,4 +115,5 @@ UTEST_TEST_SUITE(unistd) {
   UTEST_RUN_TEST_CASE(lseek);
   UTEST_RUN_TEST_CASE(read);
   UTEST_RUN_TEST_CASE(write);
+  UTEST_RUN_TEST_CASE(isatty);
 }

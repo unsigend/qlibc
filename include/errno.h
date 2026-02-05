@@ -21,7 +21,7 @@
 #include <feature.h>
 
 // include architecture-specific errno.h
-#include <sysdep/errno.h>
+#include <bits/errno.h>
 
 #ifdef __cplusplus
 extern "C" {

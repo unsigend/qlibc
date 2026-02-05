@@ -25,6 +25,7 @@ extern UTEST_TEST_SUITE(sys);
 extern UTEST_TEST_SUITE(unistd);
 extern UTEST_TEST_SUITE(fcntl);
 extern UTEST_TEST_SUITE(stat);
+extern UTEST_TEST_SUITE(termios);
 
 int main(int argc, char *argv[]) {
   (void)argc;
@@ -52,6 +53,7 @@ int main(int argc, char *argv[]) {
     UTEST_RUN_TEST_SUITE(fcntl);
     UTEST_RUN_TEST_SUITE(stat);
     UTEST_RUN_TEST_SUITE(time);
+    UTEST_RUN_TEST_SUITE(termios);
   } else {
     if (MATCH(argv[1], "assert")) {
       UTEST_RUN_TEST_SUITE(assert);
@@ -85,6 +87,8 @@ int main(int argc, char *argv[]) {
       UTEST_RUN_TEST_SUITE(stat);
     } else if (MATCH(argv[1], "time")) {
       UTEST_RUN_TEST_SUITE(time);
+    } else if (MATCH(argv[1], "termios")) {
+      UTEST_RUN_TEST_SUITE(termios);
     }
   }
 

@@ -23,13 +23,13 @@
  */
 #define ERROR(errnum, errstr) errnum
 static unsigned char __strerror_id[] = {
-#include <sysdep/strerror.h>
+#include <bits/strerror.h>
 };
 
 #undef ERROR
 #define ERROR(errnum, errstr) errstr
 static const char *__strerror_str[] = {
-#include <sysdep/strerror.h>
+#include <bits/strerror.h>
 };
 
 #define _ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
