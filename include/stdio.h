@@ -20,6 +20,7 @@
 
 #include <stdarg.h>
 #include <stddef.h>
+#include <sys/types.h>
 
 /* seek flags */
 #define SEEK_SET 0
@@ -32,22 +33,39 @@
 #define _IONBF 2
 
 #define EOF (-1)
-#define BUFSIZ 4096
+#define BUFSIZ 8192
+#define FILENAME_MAX 4096
+#define FOPEN_MAX 1000
+#define TMP_MAX 10000
+#define L_tmpnam 20
 
 /* file IO structure */
 typedef struct _FILE_IO {
-  int fd;             /* file descriptor */
-  int oflags;         /* file open flags */
-  int flags;          /* file flags */
-  int error;          /* error indicator */
-  int eof;            /* EOF indicator*/
-  long offset;        /* file offset */
-  unsigned char *buf; /* buffer */
-  size_t bufsz;       /* buffer size */
-  size_t bufpos;      /* buffer position */
-  size_t bufend;      /* buffer end */
-  int bufmode;        /* buffer mode */
+  int fd;                /* file descriptor */
+  int flags;             /* file flags */
+  int mode;              /* file mode */
+  size_t bufsz;          /* buffer size */
+  int bufmode;           /* buffer mode */
+  unsigned char *buf;    /* buffer */
+  unsigned char *rpos;   /* read position */
+  unsigned char *rend;   /* read end */
+  unsigned char *wpos;   /* write position */
+  unsigned char *wbase;  /* write base */
+  unsigned char *wend;   /* write end */
+  int error;             /* error indicator */
+  int eof;               /* EOF indicator */
+  off_t offset;          /* file offset */
+  struct _FILE_IO *next; /* next file */
+  struct _FILE_IO *prev; /* previous file */
+  unsigned char *shbuf;  /* pushback buffer */
+  size_t shlim;          /* pushback buffer limit */
+  size_t shcnt;          /* pushback buffer count */
 } FILE;
+
+/* file position structure */
+typedef struct _fpos_t {
+  off_t pos; /* file position */
+} fpos_t;
 
 /* file access */
 extern FILE *fopen(const char *restrict filename, const char *restrict mode);
@@ -103,7 +121,9 @@ extern int vsnprintf(char *restrict buffer, size_t bufsz,
 
 /* file positioning */
 extern long ftell(FILE *stream);
+extern fpos_t fgetpos(FILE *restrict stream, fpos_t *restrict pos);
 extern int fseek(FILE *stream, long offset, int origin);
+extern int fsetpos(FILE *stream, const fpos_t *pos);
 extern void rewind(FILE *stream);
 
 /* error handling */
