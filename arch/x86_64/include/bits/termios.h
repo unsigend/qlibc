@@ -25,14 +25,14 @@ typedef unsigned int __speed_t;
 #define __NCCS 32
 
 struct termios {
-  __tcflag_t c_iflag;
-  __tcflag_t c_oflag;
-  __tcflag_t c_cflag;
-  __tcflag_t c_lflag;
-  __cc_t c_line;
-  __cc_t c_cc[__NCCS];
-  __speed_t c_ispeed;
-  __speed_t c_ospeed;
+  __tcflag_t c_iflag;  /* input mode flags */
+  __tcflag_t c_oflag;  /* output mode flags */
+  __tcflag_t c_cflag;  /* control mode flags */
+  __tcflag_t c_lflag;  /* local mode flags */
+  __cc_t c_line;       /* line discipline */
+  __cc_t c_cc[__NCCS]; /* character class */
+  __speed_t c_ispeed;  /* input speed */
+  __speed_t c_ospeed;  /* output speed */
 };
 
 #endif

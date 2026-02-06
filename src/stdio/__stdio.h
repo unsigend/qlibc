@@ -19,7 +19,7 @@
 #define _QLIBC_STDIO__STDIO_H_
 
 #include <fcntl.h>
-#include <stdioo.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -62,8 +62,19 @@
 #define __FILE_CLEAR_MYBUF(__F) (((__FILE_FLAGS(__F)) &= ~F_MYBUF))
 #define __FILE_CLEAR_LINEBUF(__F) (((__FILE_FLAGS(__F)) &= ~F_LINEBUF))
 
+#define __IO_RBUF_FULL(__F) ((__F)->rpos == (__F)->rend)
+#define __IO_RBUF_EMPTY(__F) ((__F)->rpos == (__F)->buf)
+#define __IO_RBUF_DROP(__F) ((__F)->rpos = (__F)->rend = (__F)->buf)
+
+#define __IO_WBUF_FULL(__F) ((__F)->wpos == (__F)->wend)
+#define __IO_WBUF_EMPTY(__F) ((__F)->wpos == (__F)->wbase)
+#define __IO_WBUF_DROP(__F) ((__F)->wpos = (__F)->wbase)
+
 extern FILE *__stdio_head;
 extern FILE *__finit(FILE *__stream, int __fd, int __mode, int __bufmode);
 extern int __allocbuf(FILE *__stream);
+extern int __refillbuf(FILE *__stream);
+extern int __flushbuf(FILE *__stream);
+extern int __writeall(int __fd, const unsigned char *__buf, ssize_t __n);
 
 #endif

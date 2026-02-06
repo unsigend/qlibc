@@ -67,6 +67,15 @@ typedef struct _fpos_t {
   off_t pos; /* file position */
 } fpos_t;
 
+/* standard file streams */
+extern FILE *__stdin;
+extern FILE *__stdout;
+extern FILE *__stderr;
+
+#define stdin __stdin
+#define stdout __stdout
+#define stderr __stderr
+
 /* file access */
 extern FILE *fopen(const char *restrict filename, const char *restrict mode);
 extern FILE *freopen(const char *restrict filename, const char *restrict mode,

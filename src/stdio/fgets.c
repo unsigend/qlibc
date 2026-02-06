@@ -15,24 +15,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_SYSDEP_TERMIOS_H_
-#define _QLIBC_I386_SYSDEP_TERMIOS_H_
+#include <stdio.h>
 
-typedef unsigned char __cc_t;
-typedef unsigned int __tcflag_t;
-typedef unsigned int __speed_t;
+char *fgets(char *restrict str, int count, FILE *stream) {
+  if (!str || count <= 0 || !stream)
+    return NULL;
 
-#define __NCCS 32
+  size_t nreq = count - 1;
+  size_t rn = 0;
 
-struct termios {
-  __tcflag_t c_iflag;  /* input mode flags */
-  __tcflag_t c_oflag;  /* output mode flags */
-  __tcflag_t c_cflag;  /* control mode flags */
-  __tcflag_t c_lflag;  /* local mode flags */
-  __cc_t c_line;       /* line discipline */
-  __cc_t c_cc[__NCCS]; /* character class */
-  __speed_t c_ispeed;  /* input speed */
-  __speed_t c_ospeed;  /* output speed */
-};
+  while (rn < nreq) {
+    int ch = fgetc(stream);
+    if (ch == EOF)
+      break;
+    str[rn++] = ch;
+    if (ch == '\n')
+      break;
+  }
 
-#endif
+  str[rn] = '\0';
+  return rn ? str : NULL;
+}

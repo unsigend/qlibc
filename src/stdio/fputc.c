@@ -15,24 +15,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_SYSDEP_TERMIOS_H_
-#define _QLIBC_I386_SYSDEP_TERMIOS_H_
+#include "__stdio.h"
 
-typedef unsigned char __cc_t;
-typedef unsigned int __tcflag_t;
-typedef unsigned int __speed_t;
+int fputc(int ch, FILE *stream) {
+  if (!stream)
+    return EOF;
+  if (__FILE_IS_ERR(stream) || __FILE_IS_EOF(stream))
+    return EOF;
 
-#define __NCCS 32
+  if (!stream->buf)
+    if (__allocbuf(stream) == EOF)
+      return EOF;
 
-struct termios {
-  __tcflag_t c_iflag;  /* input mode flags */
-  __tcflag_t c_oflag;  /* output mode flags */
-  __tcflag_t c_cflag;  /* control mode flags */
-  __tcflag_t c_lflag;  /* local mode flags */
-  __cc_t c_line;       /* line discipline */
-  __cc_t c_cc[__NCCS]; /* character class */
-  __speed_t c_ispeed;  /* input speed */
-  __speed_t c_ospeed;  /* output speed */
-};
+  *stream->wpos++ = (unsigned char)ch;
 
-#endif
+  if (__IO_WBUF_FULL(stream) || (__FILE_IS_LINEBUF(stream) && ch == '\n'))
+    if (__flushbuf(stream) == EOF)
+      return EOF;
+
+  return ch;
+}

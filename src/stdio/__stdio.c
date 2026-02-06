@@ -16,7 +16,10 @@
  */
 
 #include "__stdio.h"
+#include "sys/types.h"
+#include <errno.h>
 #include <fcntl.h>
+#include <stddef.h>
 #include <stdlib.h>
 
 // global pointer to the head of the file stream list
@@ -85,6 +88,7 @@ FILE *__finit(FILE *__stream, int __fd, int __mode, int __bufmode) {
 //    Allocate a buffer for the file stream.
 //    Return 0 on success, -1 on failure.
 //
+//    This function will only be called when the buffer is managed by qlibc.
 
 int __allocbuf(FILE *__stream) {
   size_t sz;
@@ -100,8 +104,8 @@ int __allocbuf(FILE *__stream) {
 
   __stream->buf = malloc(sz);
   if (!__stream->buf) {
-    __stream->flags |= F_ERR;
-    return -1;
+    __FILE_SET_ERR(__stream);
+    return EOF;
   }
 
   __stream->bufsz = sz;
@@ -115,5 +119,67 @@ int __allocbuf(FILE *__stream) {
     __stream->rpos = __stream->rend = __stream->buf;
   }
 
+  return 0;
+}
+
+// __refillbuf(__stream)
+//    Refill the buffer.
+//    Return 0 on success, -1 on failure.
+//
+//    Note: this function will set flags if error or EOF occurs.
+
+int __refillbuf(FILE *__stream) {
+  ssize_t rn = read(__stream->fd, __stream->buf, __stream->bufsz);
+  if (rn == -1) {
+    __FILE_SET_ERR(__stream);
+    return EOF;
+  }
+  if (rn == 0) {
+    __FILE_SET_EOF(__stream);
+    return EOF;
+  }
+
+  __stream->rpos = __stream->buf;
+  __stream->rend = __stream->buf + rn;
+  return rn;
+}
+
+// __writeall(__stream, __buf, __n)
+//    write all the data to the file descriptor.
+//    this function will be done in uninterruptible way. if the errno is set to
+//    EINTR or EAGAIN, the function will be called again. Return the number of
+//    bytes written on success, -1 on failure.
+//
+int __writeall(int __fd, const unsigned char *__buf, ssize_t __n) {
+  ssize_t rn = 0;
+  errno = 0;
+  while (rn < __n) {
+    ssize_t __w = write(__fd, __buf + rn, __n - rn);
+    if (__w == -1) {
+      if (errno == EINTR || errno == EAGAIN)
+        continue;
+      return -1;
+    }
+    rn += __w;
+  }
+  return rn;
+}
+
+// __flushbuf(__stream)
+//    Flush the buffer.
+//    Return 0 on success, -1 on failure.
+//
+//    Note: this function is used to flush the write buffer and invalidate the
+//    buffer state. It will only flush the buffer if the buffer is not empty.
+
+int __flushbuf(FILE *__stream) {
+  if (__FILE_IS_WRITE(__stream) && !__IO_WBUF_EMPTY(__stream)) {
+    ssize_t __n = __stream->wpos - __stream->wbase;
+    if (__writeall(__stream->fd, __stream->wbase, __n) == -1) {
+      __FILE_SET_ERR(__stream);
+      return EOF;
+    }
+    __IO_WBUF_DROP(__stream);
+  }
   return 0;
 }

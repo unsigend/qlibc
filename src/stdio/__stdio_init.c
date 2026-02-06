@@ -15,24 +15,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_SYSDEP_TERMIOS_H_
-#define _QLIBC_I386_SYSDEP_TERMIOS_H_
+#include "__stdio.h"
+#include <stdio.h>
 
-typedef unsigned char __cc_t;
-typedef unsigned int __tcflag_t;
-typedef unsigned int __speed_t;
+static FILE __stdin_stream;
+static FILE __stdout_stream;
+static FILE __stderr_stream;
 
-#define __NCCS 32
+FILE *__stdin = NULL;
+FILE *__stdout = NULL;
+FILE *__stderr = NULL;
 
-struct termios {
-  __tcflag_t c_iflag;  /* input mode flags */
-  __tcflag_t c_oflag;  /* output mode flags */
-  __tcflag_t c_cflag;  /* control mode flags */
-  __tcflag_t c_lflag;  /* local mode flags */
-  __cc_t c_line;       /* line discipline */
-  __cc_t c_cc[__NCCS]; /* character class */
-  __speed_t c_ispeed;  /* input speed */
-  __speed_t c_ospeed;  /* output speed */
-};
+// __stdio_init(void)
+//    stdio module initialization function.
 
-#endif
+__attribute__((constructor)) void __stdio_init(void) {
+  __stdin = __finit(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
+  __stdout = __finit(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
+  __stderr = __finit(&__stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
+}
