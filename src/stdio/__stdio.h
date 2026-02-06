@@ -78,5 +78,6 @@ extern int __flushbuf(FILE *__stream);
 extern int __writeall(int __fd, const unsigned char *__buf, ssize_t __n);
 extern void __init_buf_pointers(FILE *__stream, unsigned char *__buf,
                                 size_t __sz);
+extern int __mode_to_flags(int __mode);
 
 #endif

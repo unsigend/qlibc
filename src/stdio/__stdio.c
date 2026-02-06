@@ -30,7 +30,7 @@ FILE *__stdio_head = NULL;
 //
 //    This function will always succeed.
 
-static int __mode_to_flags(int __mode) {
+int __mode_to_flags(int __mode) {
   int flags = 0;
   int access = __mode & O_ACCMODE;
 

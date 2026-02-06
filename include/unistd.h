@@ -53,6 +53,7 @@ extern int fsync(int fd);
 extern int fdatasync(int fd);
 extern int sync(void);
 extern int isatty(int fd);
+extern int unlink(const char *pathname);
 
 #ifdef __cplusplus
 }

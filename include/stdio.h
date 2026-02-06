@@ -130,7 +130,7 @@ extern int vsnprintf(char *restrict buffer, size_t bufsz,
 
 /* file positioning */
 extern long ftell(FILE *stream);
-extern fpos_t fgetpos(FILE *restrict stream, fpos_t *restrict pos);
+extern int fgetpos(FILE *restrict stream, fpos_t *restrict pos);
 extern int fseek(FILE *stream, long offset, int origin);
 extern int fsetpos(FILE *stream, const fpos_t *pos);
 extern void rewind(FILE *stream);
