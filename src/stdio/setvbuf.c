@@ -17,25 +17,26 @@
 
 #include "__stdio.h"
 
-int fgetc(FILE *stream) {
-  if (!stream)
+int setvbuf(FILE *restrict stream, char *restrict buffer, int mode,
+            size_t size) {
+  if (!stream || (mode != _IONBF && mode != _IOLBF && mode != _IOFBF))
     return EOF;
 
-  if (__FILE_IS_ERR(stream) || __FILE_IS_EOF(stream))
+  if (stream->buf)
     return EOF;
 
-  if (stream->shcnt > 0) {
-    return stream->shbuf[--stream->shcnt];
-  }
+  // user provided buffer
+  if (buffer) {
+    stream->buf = (unsigned char *)buffer;
+    stream->bufmode = mode;
+    stream->bufsz = size;
 
-  if (__IO_RBUF_FULL(stream)) {
-    if (!stream->buf) {
-      if (__allocbuf(stream) == EOF)
-        return EOF;
-    }
-    if (__refillbuf(stream) == EOF)
+    __init_buf_pointers(stream, stream->buf, size);
+  } else {
+    // allocate buffer
+    stream->bufmode = mode;
+    if (__allocbuf(stream) == EOF)
       return EOF;
   }
-
-  return *stream->rpos++;
+  return 0;
 }

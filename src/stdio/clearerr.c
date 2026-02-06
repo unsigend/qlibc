@@ -17,25 +17,10 @@
 
 #include "__stdio.h"
 
-int fgetc(FILE *stream) {
+void clearerr(FILE *stream) {
   if (!stream)
-    return EOF;
+    return;
 
-  if (__FILE_IS_ERR(stream) || __FILE_IS_EOF(stream))
-    return EOF;
-
-  if (stream->shcnt > 0) {
-    return stream->shbuf[--stream->shcnt];
-  }
-
-  if (__IO_RBUF_FULL(stream)) {
-    if (!stream->buf) {
-      if (__allocbuf(stream) == EOF)
-        return EOF;
-    }
-    if (__refillbuf(stream) == EOF)
-      return EOF;
-  }
-
-  return *stream->rpos++;
+  __FILE_CLEAR_EOF(stream);
+  __FILE_CLEAR_ERR(stream);
 }

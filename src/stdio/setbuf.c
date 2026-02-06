@@ -15,27 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include <stdio.h>
 
-int fgetc(FILE *stream) {
-  if (!stream)
-    return EOF;
-
-  if (__FILE_IS_ERR(stream) || __FILE_IS_EOF(stream))
-    return EOF;
-
-  if (stream->shcnt > 0) {
-    return stream->shbuf[--stream->shcnt];
-  }
-
-  if (__IO_RBUF_FULL(stream)) {
-    if (!stream->buf) {
-      if (__allocbuf(stream) == EOF)
-        return EOF;
-    }
-    if (__refillbuf(stream) == EOF)
-      return EOF;
-  }
-
-  return *stream->rpos++;
+void setbuf(FILE *restrict stream, char *restrict buffer) {
+  setvbuf(stream, buffer, buffer ? _IOFBF : _IONBF, BUFSIZ);
 }

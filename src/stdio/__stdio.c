@@ -84,17 +84,32 @@ FILE *__finit(FILE *__stream, int __fd, int __mode, int __bufmode) {
   return __stream;
 }
 
+// __init_buf_pointers(__stream, __sz)
+//    Initialize the buffer pointers.
+//    Return nothing.
+
+void __init_buf_pointers(FILE *__stream, unsigned char *__buf, size_t __sz) {
+  if (__FILE_IS_WRITE(__stream)) {
+    __stream->wbase = __stream->wpos = __buf;
+    __stream->wend = __buf + __sz;
+  }
+  if (__FILE_IS_READ(__stream)) {
+    __stream->rpos = __stream->rend = __buf;
+  }
+}
+
 // __allocbuf(__stream)
 //    Allocate a buffer for the file stream.
 //    Return 0 on success, -1 on failure.
 //
-//    This function will only be called when the buffer is managed by qlibc.
 
 int __allocbuf(FILE *__stream) {
   size_t sz;
 
-  if (__stream->buf)
+  if (__stream->buf) {
+    __init_buf_pointers(__stream, __stream->buf, __stream->bufsz);
     return 0;
+  }
 
   // even the buffer mode is _IONBF, the buffer size is still 1
   if (__stream->bufmode == _IONBF)
@@ -110,14 +125,7 @@ int __allocbuf(FILE *__stream) {
 
   __stream->bufsz = sz;
   __stream->flags |= F_MYBUF;
-
-  if (__FILE_IS_WRITE(__stream)) {
-    __stream->wbase = __stream->wpos = __stream->buf;
-    __stream->wend = __stream->buf + sz;
-  }
-  if (__FILE_IS_READ(__stream)) {
-    __stream->rpos = __stream->rend = __stream->buf;
-  }
+  __init_buf_pointers(__stream, __stream->buf, sz);
 
   return 0;
 }

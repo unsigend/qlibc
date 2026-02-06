@@ -16,26 +16,28 @@
  */
 
 #include "__stdio.h"
+#include <stdlib.h>
 
-int fgetc(FILE *stream) {
-  if (!stream)
+int ungetc(int ch, FILE *stream) {
+  if (!stream || ch == EOF || __FILE_IS_ERR(stream))
     return EOF;
 
-  if (__FILE_IS_ERR(stream) || __FILE_IS_EOF(stream))
-    return EOF;
-
-  if (stream->shcnt > 0) {
-    return stream->shbuf[--stream->shcnt];
-  }
-
-  if (__IO_RBUF_FULL(stream)) {
-    if (!stream->buf) {
-      if (__allocbuf(stream) == EOF)
-        return EOF;
-    }
-    if (__refillbuf(stream) == EOF)
+  if (!stream->shbuf) {
+    stream->shbuf = malloc(UNGET);
+    if (!stream->shbuf) {
+      __FILE_SET_ERR(stream);
       return EOF;
+    }
+    stream->shlim = UNGET;
+    stream->shcnt = 0;
   }
 
-  return *stream->rpos++;
+  if (stream->shcnt >= stream->shlim) {
+    __FILE_SET_ERR(stream);
+    return EOF;
+  }
+
+  stream->shbuf[stream->shcnt++] = (unsigned char)ch;
+  __FILE_CLEAR_EOF(stream);
+  return ch;
 }
