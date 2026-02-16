@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(type) {
+UTEST_TEST_CASE(stat_types) {
 #if defined(__x86_64__)
   EXPECT_EQUAL_UINT(offsetof(struct stat, st_dev), 0);
   EXPECT_EQUAL_UINT(offsetof(struct stat, st_ino), 8);
@@ -89,10 +89,4 @@ UTEST_TEST_CASE(fstat) {
   EXPECT_EQUAL_INT(st.st_size, size);
 
   EXPECT_EQUAL_INT(close(fd), 0);
-}
-
-UTEST_TEST_SUITE(stat) {
-  UTEST_RUN_TEST_CASE(type);
-  UTEST_RUN_TEST_CASE(stat);
-  UTEST_RUN_TEST_CASE(fstat);
 }

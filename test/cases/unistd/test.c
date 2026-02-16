@@ -104,6 +104,31 @@ UTEST_TEST_CASE(isatty) {
   EXPECT_FALSE(isatty(fd));
   EXPECT_EQUAL_INT(close(fd), 0);
 }
+UTEST_TEST_CASE(sbrk) {
+  void *addr = sbrk(0);
+  EXPECT_TRUE(addr != (void *)-1);
+
+  void *new_addr = sbrk(1024);
+  EXPECT_TRUE(new_addr != (void *)-1);
+  EXPECT_TRUE(new_addr == addr);
+
+  new_addr = sbrk(0);
+  EXPECT_TRUE(new_addr != (void *)-1);
+  EXPECT_TRUE((unsigned char *)new_addr - (unsigned char *)addr == 1024);
+
+  new_addr = sbrk(-1024);
+  EXPECT_TRUE(new_addr != (void *)-1);
+  EXPECT_TRUE((unsigned char *)new_addr - (unsigned char *)addr == 1024);
+
+  new_addr = sbrk(0);
+  EXPECT_TRUE(new_addr != (void *)-1);
+  EXPECT_TRUE(new_addr == addr);
+}
+UTEST_TEST_CASE(brk) {
+  void *addr = sbrk(0);
+  EXPECT_TRUE(addr != (void *)-1);
+  EXPECT_TRUE(brk(addr) == 0);
+}
 
 UTEST_TEST_SUITE(unistd) {
   /* macros */
@@ -116,4 +141,6 @@ UTEST_TEST_SUITE(unistd) {
   UTEST_RUN_TEST_CASE(read);
   UTEST_RUN_TEST_CASE(write);
   UTEST_RUN_TEST_CASE(isatty);
+  UTEST_RUN_TEST_CASE(brk);
+  UTEST_RUN_TEST_CASE(sbrk);
 }

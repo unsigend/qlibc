@@ -20,6 +20,7 @@
 
 #include <feature.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <sys/types.h>
 
 /* standard file descriptors */
@@ -54,6 +55,8 @@ extern int fdatasync(int fd);
 extern int sync(void);
 extern int isatty(int fd);
 extern int unlink(const char *pathname);
+extern int brk(void *addr);
+extern void *sbrk(intptr_t increment);
 
 #ifdef __cplusplus
 }

@@ -1,0 +1,44 @@
+#include <stddef.h>
+#include <sys/mman.h>
+#include <utest.h>
+
+#ifndef PAGE_SIZE
+#define PAGE_SIZE 4096
+#endif
+
+#define MAGIC 0xec
+
+UTEST_TEST_CASE(mman) {
+  EXPECT_EQUAL_UINT(PROT_NONE, 0x00);
+  EXPECT_EQUAL_UINT(PROT_READ, 0x01);
+  EXPECT_EQUAL_UINT(PROT_WRITE, 0x02);
+  EXPECT_EQUAL_UINT(PROT_EXEC, 0x04);
+  EXPECT_EQUAL_UINT(PROT_GROWSDOWN, 0x01000000);
+  EXPECT_EQUAL_UINT(PROT_GROWSUP, 0x02000000);
+
+  EXPECT_EQUAL_UINT(MAP_SHARED, 0x01);
+  EXPECT_EQUAL_UINT(MAP_PRIVATE, 0x02);
+  EXPECT_EQUAL_UINT(MAP_SHARED_VALIDATE, 0x03);
+  EXPECT_EQUAL_UINT(MAP_TYPE, 0x0f);
+  EXPECT_EQUAL_UINT(MAP_FIXED, 0x10);
+  EXPECT_EQUAL_UINT(MAP_FILE, 0);
+  EXPECT_EQUAL_UINT(MAP_ANONYMOUS, 0x20);
+  EXPECT_EQUAL_UINT(MAP_ANON, 0x20);
+  EXPECT_EQUAL_UINT(MAP_HUGE_SHIFT, 26);
+  EXPECT_EQUAL_UINT(MAP_HUGE_MASK, 0x3f);
+}
+
+UTEST_TEST_CASE(mmap) {
+  void *addr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
+                    MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+  EXPECT_TRUE(addr != MAP_FAILED);
+
+  // check the access permissions in the 4KiB page
+  unsigned char *ptr = (unsigned char *)addr;
+  for (size_t i = 0; i < PAGE_SIZE; i++) {
+    ptr[i] = MAGIC;
+    EXPECT_EQUAL_UINT(ptr[i], MAGIC);
+  }
+
+  EXPECT_TRUE(munmap(addr, PAGE_SIZE) == 0);
+}
