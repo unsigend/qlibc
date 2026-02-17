@@ -27,20 +27,29 @@ struct iovec {
   size_t iov_len; /* Length of the memory area */
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+__BEGIN_DECLS
+/* Read data from the file referred to by the file descriptor fd into the
+   memory areas specified by the iovec array. */
 extern ssize_t readv(int fd, const struct iovec *iov, int iovcnt);
+
+/* Write data to the file referred to by the file descriptor fd from the
+   memory areas specified by the iovec array. */
 extern ssize_t writev(int fd, const struct iovec *iov, int iovcnt);
 
 #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
-ssize_t preadv(int fd, const struct iovec *iov, int iovcnt, off_t offset);
-ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt, off_t offset);
+/* Read data from the file referred to by the file descriptor fd into the
+   memory areas specified by the iovec array at the specified offset. The file
+   position is not changed. */
+extern ssize_t preadv(int fd, const struct iovec *iov, int iovcnt,
+                      off_t offset);
+
+/* Write data to the file referred to by the file descriptor fd from the
+   memory areas specified by the iovec array at the specified offset. The file
+   position is not changed. */
+extern ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt,
+                       off_t offset);
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif

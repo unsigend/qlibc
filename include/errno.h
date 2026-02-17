@@ -20,18 +20,19 @@
 
 #include <feature.h>
 
-// include architecture-specific errno.h
+/* Include architecture-specific errno.h */
 #include <bits/errno.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_DECLS
 
+/* Get the current errno value. This is the actual function that returns the
+   errno value. It is implemented-defined in the architecture-specific errno.h
+   file. */
 extern int *__errno(void);
+
+/* Define the errno macro to the value returned by __errno. */
 #define errno (*__errno())
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif

@@ -15,27 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDARG_H_
-#define _QLIBC_STDARG_H_
+#include <errno.h>
+#include <unistd.h>
 
-#include <feature.h>
+/* The current implementation of sbrk is not thread-safe, it has no lock
+   protection and it is not recommend for user to call this function to break
+   the heap state that malloc will use. */
 
-/* GNU C compatible macros */
-#if defined(__GNUC__)
-typedef __builtin_va_list __gnuc_va_list;
-#endif
-
-/* QLIBC specific macros */
-typedef __builtin_va_list __qlibc_va_list;
-typedef __qlibc_va_list va_list;
-
-/* Variable argument macros, the implementation is based on the GNU GCC built-in
-   support. The va_start, va_end, va_arg, va_copy macros are defined as the GNU
-   GCC built-in macros. */
-
-#define va_start(v, l) __builtin_va_start(v, l)
-#define va_end(v) __builtin_va_end(v)
-#define va_arg(v, l) __builtin_va_arg(v, l)
-#define va_copy(d, s) __builtin_va_copy(d, s)
-
-#endif
+void *sbrk(intptr_t increment) {
+  static void *__addr;
+  if (!__addr) {
+    __addr = __brk(0);
+  }
+  void *oldaddr = __addr;
+  if (increment) {
+    void *retaddr = __brk((unsigned char *)__addr + increment);
+    if ((increment > 0 && retaddr < __addr) ||
+        (increment < 0 && retaddr >= __addr)) {
+      errno = ENOMEM;
+      return (void *)-1;
+    }
+    __addr = retaddr;
+  }
+  return oldaddr;
+}

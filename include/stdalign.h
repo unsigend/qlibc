@@ -20,9 +20,7 @@
 
 #include <feature.h>
 
-/**
- * @brief: Macros for alignment
- */
+/* Macros for alignment */
 
 #define alignas _Alignas
 #define alignof _Alignof

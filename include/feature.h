@@ -18,24 +18,33 @@
 #ifndef _QLIBC_FEATURE_H_
 #define _QLIBC_FEATURE_H_
 
-/**
- * @brief: Macros for feature
- */
+/* Version macros */
 #define QLIBC_VERSION_MAJOR 0
 #define QLIBC_VERSION_MINOR 1
 #define QLIBC_VERSION_PATCH 0
 
 #define QLIBC_VERSION_STRING "0.1.0"
 
+/* ISO C Standard macros */
 #define ISO_C_STANDARD_C99 199901L
 #define ISO_C_STANDARD_C11 201112L
 #define ISO_C_STANDARD_C17 201710L
 #define ISO_C_STANDARD_C23 202311L
 
-#define QLIBC_ISO_C_VERSION __STDC_VERSION__
-#define QLIBC_SUPPORT_MB_STRING 0
-#define QLIBC_SUPPORT_FLOATING_POINT 0
-#define _QLIBC_SOURCE 1
-#define _QLIBC 1
+/* QLIBC specific macros */
+#define QLIBC_ISO_C_VERSION __STDC_VERSION__ /* ISO C Standard version */
+#define QLIBC_SUPPORT_MB_STRING 0            /* Multi-byte string support */
+#define QLIBC_SUPPORT_FLOATING_POINT 0       /* Floating-point support */
+#define _QLIBC_SOURCE 1                      /* QLIBC source */
+#define _QLIBC 1                             /* QLIBC */
+
+/* C++ specific macros */
+#ifdef __cplusplus
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+#else
+#define __BEGIN_DECLS
+#define __END_DECLS
+#endif
 
 #endif

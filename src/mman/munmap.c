@@ -15,27 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDARG_H_
-#define _QLIBC_STDARG_H_
+#include <sys/mman.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 
-#include <feature.h>
-
-/* GNU C compatible macros */
-#if defined(__GNUC__)
-typedef __builtin_va_list __gnuc_va_list;
-#endif
-
-/* QLIBC specific macros */
-typedef __builtin_va_list __qlibc_va_list;
-typedef __qlibc_va_list va_list;
-
-/* Variable argument macros, the implementation is based on the GNU GCC built-in
-   support. The va_start, va_end, va_arg, va_copy macros are defined as the GNU
-   GCC built-in macros. */
-
-#define va_start(v, l) __builtin_va_start(v, l)
-#define va_end(v) __builtin_va_end(v)
-#define va_arg(v, l) __builtin_va_arg(v, l)
-#define va_copy(d, s) __builtin_va_copy(d, s)
-
-#endif
+int munmap(void *addr, size_t length) {
+  return syscall(SYS_munmap, (long)addr, length);
+}

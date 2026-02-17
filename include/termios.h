@@ -27,12 +27,4 @@ typedef __tcflag_t tcflag_t;
 
 #define NCCS __NCCS
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
 #endif

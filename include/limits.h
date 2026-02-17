@@ -15,9 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @brief: This file is part of C numeric limits.
- */
+/* This file is part of C numeric limits. */
 
 #ifndef _QLIBC_LIMITS_H_
 #define _QLIBC_LIMITS_H_

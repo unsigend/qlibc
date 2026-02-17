@@ -20,11 +20,9 @@
 
 #include <feature.h>
 
-/**
- * @brief: Macros for syscall
- * Generic syscall macros provide a common interface for different
- * architectures.
- */
+/* Generic syscall macros provide a common interface for different
+   architectures. */
+
 #define __syscall0(NUM)
 #define __syscall1(NUM, ARG1)
 #define __syscall2(NUM, ARG1, ARG2)
@@ -44,6 +42,9 @@
 #define _SYSCALL_CONCAT(A, B) __SYSCALL_CONCAT(A, B)
 #define __SYSCALL_CONCAT_N(N) _SYSCALL_CONCAT(__syscall, N)
 
+/* Make a syscall with the given arguments, the arguments are passed to the
+   syscall function, and the number of arguments is determined by the
+   _NARG macro. */
 #define __syscall(...) __SYSCALL_CONCAT_N(_NARG(__VA_ARGS__))(__VA_ARGS__)
 
 #endif

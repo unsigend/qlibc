@@ -128,6 +128,14 @@ UTEST_TEST_CASE(sbrk) {
   EXPECT_TRUE(new_addr == addr);
 }
 
+UTEST_TEST_CASE(brk) {
+#ifdef _QLIBC_SOURCE
+  void *addr = __brk(0);
+  EXPECT_TRUE(addr != (void *)-1);
+  EXPECT_TRUE(addr);
+#endif
+}
+
 UTEST_TEST_SUITE(unistd) {
   /* macros */
   UTEST_RUN_TEST_CASE(macro);
@@ -140,4 +148,5 @@ UTEST_TEST_SUITE(unistd) {
   UTEST_RUN_TEST_CASE(write);
   UTEST_RUN_TEST_CASE(isatty);
   UTEST_RUN_TEST_CASE(sbrk);
+  UTEST_RUN_TEST_CASE(brk);
 }

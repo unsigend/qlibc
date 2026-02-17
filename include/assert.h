@@ -18,13 +18,8 @@
 #include <feature.h>
 
 #undef assert
-
-/**
- * @brief Assert a condition is true.
- *
- * NDEBUG if set true do nothing.
- * Otherwise, if expr is false, print a message and abort.
- */
+/* If NDEBUG is defined, assert is a no-op. Otherwise, if expr is false, print
+   a message and abort. */
 
 #ifdef NDEBUG
 #define assert(expr) ((void)0)
@@ -33,13 +28,10 @@
   (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_DECLS
 
+/* Internal function to print the assert message and abort. */
 extern void _assert_fail(const char *msg, const char *func, const char *file,
                          int line);
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS

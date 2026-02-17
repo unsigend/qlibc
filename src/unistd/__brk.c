@@ -15,27 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDARG_H_
-#define _QLIBC_STDARG_H_
+#include <stdint.h>
+#include <sys/syscall.h>
 
-#include <feature.h>
+/* __brk is a wrapper for the Linux kernel brk system call, this function is
+   used to get the heap top address, and this function implementation is not
+   part of POSIX standard. It will always return the previous heap address and
+   ignore the errno. */
 
-/* GNU C compatible macros */
-#if defined(__GNUC__)
-typedef __builtin_va_list __gnuc_va_list;
-#endif
-
-/* QLIBC specific macros */
-typedef __builtin_va_list __qlibc_va_list;
-typedef __qlibc_va_list va_list;
-
-/* Variable argument macros, the implementation is based on the GNU GCC built-in
-   support. The va_start, va_end, va_arg, va_copy macros are defined as the GNU
-   GCC built-in macros. */
-
-#define va_start(v, l) __builtin_va_start(v, l)
-#define va_end(v) __builtin_va_end(v)
-#define va_arg(v, l) __builtin_va_arg(v, l)
-#define va_copy(d, s) __builtin_va_copy(d, s)
-
-#endif
+void *__brk(void *addr) {
+  return (void *)__syscall1_raw(SYS_brk, (uintptr_t)addr);
+}
