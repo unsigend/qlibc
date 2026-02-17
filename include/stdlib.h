@@ -81,6 +81,11 @@ extern void *calloc(size_t num, size_t size);
 /* Reallocate memory and invalidate the old memory */
 extern void *realloc(void *ptr, size_t new_size);
 
+#if QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+/* Allocate memory with a specific alignment */
+extern void *aligned_alloc(size_t alignment, size_t size);
+#endif
+
 /* Search the array for an element that matches the key, the underlying search
    algorithm is implementation-defined. */
 extern void *bsearch(const void *key, const void *ptr, size_t count,

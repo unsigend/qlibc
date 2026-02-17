@@ -41,6 +41,10 @@
 #define MAP_HUGE_MASK 0x3f       /* Huge mask */
 #define MAP_FAILED ((void *)-1)  /* Failed mapping */
 
+#define MREMAP_MAYMOVE 0x01   /* May move the mapping */
+#define MREMAP_FIXED 0x02     /* Fixed mapping */
+#define MREMAP_DONTUNMAP 0x04 /* Don't unmap the mapping */
+
 __BEGIN_DECLS
 
 /* Map a new mapping in the virtual address space of the calling process. The
@@ -51,6 +55,10 @@ extern void *mmap(void *addr, size_t length, int prot, int flags, int fd,
 
 /* Unmap a mapping from the virtual address space of the calling process. */
 extern int munmap(void *addr, size_t length);
+
+/* Remap a mapping in the virtual address space of the calling process. */
+extern void *mremap(void *old_addr, size_t old_len, size_t new_len, int flags,
+                    ...);
 
 __END_DECLS
 

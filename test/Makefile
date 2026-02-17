@@ -73,6 +73,7 @@ CC_WARNINGS             +=      -Wno-unused-function
 CC_WARNINGS             +=      -Wno-implicitly-unsigned-literal
 CC_WARNINGS             +=      -Wno-builtin-memcpy-chk-size
 CC_WARNINGS             +=      -Wno-gnu-alignof-expression
+CC_WARNINGS             +=      -Wno-stringop-overflow=
 
 
 CC_FLAGS                :=      -isystem$(EXTERNAL_INCLUDE_PATH)

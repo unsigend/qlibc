@@ -17,6 +17,9 @@ UTEST_TEST_CASE(macro) {
   EXPECT_EQUAL_INT(SEEK_END, 2);
 }
 
+#ifdef _QLIBC_SOURCE
+extern long syscall(long __number, ...);
+#endif
 UTEST_TEST_CASE(syscall) {
   long ret;
 
@@ -106,7 +109,9 @@ UTEST_TEST_CASE(isatty) {
   EXPECT_FALSE(isatty(fd));
   EXPECT_EQUAL_INT(close(fd), 0);
 }
-
+#ifdef _GNU_SOURCE
+extern void *sbrk(intptr_t increment);
+#endif
 UTEST_TEST_CASE(sbrk) {
   void *addr = sbrk(0);
   EXPECT_TRUE(addr != (void *)-1);

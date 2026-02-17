@@ -14,11 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+#include "mm/coalescing.h"
 #include <sys/mman.h>
-#include <sys/syscall.h>
-#include <unistd.h>
 
-int munmap(void *addr, size_t length) {
-  return __syscall(SYS_munmap, (long)addr, length);
+/* Free memory allocated by malloc */
+void free(void *ptr) {
+  if (!ptr)
+    return;
+
+  block_t *block = (block_t *)((unsigned char *)ptr - sizeof(header_t));
+  if (IS_MMAP(block)) {
+    munmap((void *)block, block->header.sz);
+    return;
+  }
+  if (!__heap.init)
+    return;
+
+  coalescing((free_block_t *)block);
 }
