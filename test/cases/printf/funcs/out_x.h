@@ -395,4 +395,99 @@ UTEST_TEST_CASE(out_x) {
     EXPECT_EQUAL_INT(n, 4);
     EXPECT_EQUAL_STRING((char *)buf, "0xff");
   }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*x", 0, 16);
+    EXPECT_EQUAL_INT(n, 2);
+    EXPECT_EQUAL_STRING((char *)buf, "10");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*x", -5, 16);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "10   ");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%.*x", 0, 0);
+    EXPECT_EQUAL_INT(n, 0);
+    EXPECT_EQUAL_STRING((char *)buf, "");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%.*x", 0, 1);
+    EXPECT_EQUAL_INT(n, 1);
+    EXPECT_EQUAL_STRING((char *)buf, "1");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*.*x", 8, 0, 0);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "        ");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#.0x", 0);
+    EXPECT_EQUAL_INT(n, 0);
+    EXPECT_EQUAL_STRING((char *)buf, "");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#.0x", 1);
+    EXPECT_EQUAL_INT(n, 3);
+    EXPECT_EQUAL_STRING((char *)buf, "0x1");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#.0X", 1);
+    EXPECT_EQUAL_INT(n, 3);
+    EXPECT_EQUAL_STRING((char *)buf, "0X1");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#8x", 16);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "    0x10");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#-8x", 16);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "0x10    ");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#8X", 255);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "    0XFF");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#*x", 5, 16);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, " 0x10");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#*.*x", 8, 4, 0xff);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "  0x00ff");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%0.5x", 1);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "00001");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%0.5x", 0);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "00000");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*.*x", 6, -1, 0xff);
+    EXPECT_EQUAL_INT(n, 6);
+    EXPECT_EQUAL_STRING((char *)buf, "    ff");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%1x", 0x123);
+    EXPECT_EQUAL_INT(n, 3);
+    EXPECT_EQUAL_STRING((char *)buf, "123");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%-1x", 0x123);
+    EXPECT_EQUAL_INT(n, 3);
+    EXPECT_EQUAL_STRING((char *)buf, "123");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%zx", (size_t)0);
+    EXPECT_EQUAL_INT(n, 1);
+    EXPECT_EQUAL_STRING((char *)buf, "0");
+  }
 }

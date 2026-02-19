@@ -207,4 +207,39 @@ UTEST_TEST_CASE(out_p) {
       EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);
     }
   }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*p", 0, (void *)&var);
+    EXPECT_GREATER_EQUAL_INT(n, 2);
+    {
+      unsigned long long parsed = strtoull((char *)buf, NULL, 0);
+      EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);
+    }
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%-*p", -20, (void *)&var);
+    EXPECT_GREATER_EQUAL_INT(n, 10);
+    {
+      unsigned long long parsed = strtoull((char *)buf, NULL, 0);
+      EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);
+    }
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%5p", (void *)&var);
+    EXPECT_GREATER_EQUAL_INT(n, 5);
+    {
+      char *p = (char *)buf;
+      while (*p == ' ')
+        p++;
+      unsigned long long parsed = strtoull(p, NULL, 0);
+      EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);
+    }
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%-5p", (void *)&var);
+    EXPECT_GREATER_EQUAL_INT(n, 5);
+    {
+      unsigned long long parsed = strtoull((char *)buf, NULL, 0);
+      EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);
+    }
+  }
 }

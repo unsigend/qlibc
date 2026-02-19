@@ -330,4 +330,74 @@ UTEST_TEST_CASE(out_o) {
     EXPECT_EQUAL_INT(n, 3);
     EXPECT_EQUAL_STRING((char *)buf, "010");
   }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*o", 0, 8);
+    EXPECT_EQUAL_INT(n, 2);
+    EXPECT_EQUAL_STRING((char *)buf, "10");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*o", -5, 8);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "10   ");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%.*o", 0, 0);
+    EXPECT_EQUAL_INT(n, 0);
+    EXPECT_EQUAL_STRING((char *)buf, "");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%.*o", 0, 1);
+    EXPECT_EQUAL_INT(n, 1);
+    EXPECT_EQUAL_STRING((char *)buf, "1");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*.*o", 8, 0, 0);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "        ");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#.0o", 0);
+    EXPECT_EQUAL_INT(n, 1);
+    EXPECT_EQUAL_STRING((char *)buf, "0");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#.0o", 1);
+    EXPECT_EQUAL_INT(n, 2);
+    EXPECT_EQUAL_STRING((char *)buf, "01");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#8o", 8);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "     010");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#-8o", 8);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "010     ");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#*o", 5, 8);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "  010");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%#*.*o", 8, 4, 64);
+    EXPECT_EQUAL_INT(n, 8);
+    EXPECT_EQUAL_STRING((char *)buf, "    0100");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%0.5o", 1);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "00001");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%0.5o", 0);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "00000");
+  }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%*.*o", 6, -1, 64);
+    EXPECT_EQUAL_INT(n, 6);
+    EXPECT_EQUAL_STRING((char *)buf, "   100");
+  }
 }
