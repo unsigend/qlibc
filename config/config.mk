@@ -25,7 +25,7 @@ GCC 				:= 			gcc-13
 
 # Config for architecture
 # Supported architectures: i386, x86_64
-ARCH                :=   	i386
+ARCH                :=   	x86_64
 
 # qlibc version
 QLIBC_VERSION       :=   	0.1.0
@@ -47,4 +47,4 @@ VERBOSE             :=   	0
 BUILD_METHOD        :=   	static
 
 # Make GNU (Only for test purpose)
-USING_GNU           :=   	0
+USING_GNU           :=   	1

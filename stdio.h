@@ -106,25 +106,54 @@ extern int puts(const char *str);
 extern int ungetc(int ch, FILE *stream);
 
 /* formatted I/O */
+
+/* Read formatted data from stdin */
 extern int scanf(const char *restrict format, ...);
+
+/* Read formatted data from a file stream */
 extern int fscanf(FILE *restrict stream, const char *restrict format, ...);
+
+/* Read formatted data from a buffer */
 extern int sscanf(const char *restrict buffer, const char *restrict format,
                   ...);
+
+/* Read formatted data from stdin using a variable argument list */
 extern int vscanf(const char *restrict format, va_list vlist);
+
+/* Read formatted data from a file stream using a variable argument list */
 extern int vfscanf(FILE *restrict stream, const char *restrict format,
                    va_list vlist);
+
+/* Read formatted data from a buffer using a variable argument list */
 extern int vsscanf(const char *restrict buffer, const char *restrict format,
                    va_list vlist);
+
+/* Print formatted data to stdout */
 extern int printf(const char *restrict format, ...);
+
+/* Print formatted data to a file stream */
 extern int fprintf(FILE *restrict stream, const char *restrict format, ...);
+
+/* Format and store data in a buffer */
 extern int sprintf(char *restrict buffer, const char *restrict format, ...);
+
+/* Format and store data in a buffer with a maximum length */
 extern int snprintf(char *restrict buffer, size_t bufsz,
                     const char *restrict format, ...);
+
+/* Print formatted data to stdout using a variable argument list */
 extern int vprintf(const char *restrict format, va_list vlist);
+
+/* Print formatted data to a file stream using a variable argument list */
 extern int vfprintf(FILE *restrict stream, const char *restrict format,
                     va_list vlist);
+
+/* Format and store data in a buffer using a variable argument list */
 extern int vsprintf(char *restrict buffer, const char *restrict format,
                     va_list vlist);
+
+/* Format and store data in a buffer with a maximum length using a variable
+   argument list */
 extern int vsnprintf(char *restrict buffer, size_t bufsz,
                      const char *restrict format, va_list vlist);
 
