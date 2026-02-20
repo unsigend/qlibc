@@ -277,4 +277,9 @@ UTEST_TEST_CASE(out_s) {
     EXPECT_EQUAL_INT(n, 1);
     EXPECT_EQUAL_STRING((char *)buf, "a");
   }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%s", NULL);
+    EXPECT_EQUAL_INT(n, 6);
+    EXPECT_EQUAL_STRING((char *)buf, "(null)");
+  }
 }

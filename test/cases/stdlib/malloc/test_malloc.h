@@ -47,6 +47,7 @@ UTEST_TEST_CASE(calloc) {
 
   {
     void *p = calloc(0, sizeof(int));
+    (void)p;
 #ifdef _QLIBC_SOURCE
     EXPECT_NULL(p);
 #endif
@@ -54,6 +55,7 @@ UTEST_TEST_CASE(calloc) {
 
   {
     void *p = calloc(16, 0);
+    (void)p;
 #ifdef _QLIBC_SOURCE
     EXPECT_NULL(p);
 #endif

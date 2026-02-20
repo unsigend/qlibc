@@ -17,7 +17,7 @@ UTEST_TEST_CASE(macro) {
   EXPECT_EQUAL_INT(SEEK_END, 2);
 }
 
-#ifdef _QLIBC_SOURCE
+#ifndef _QLIBC_SOURCE
 extern long syscall(long __number, ...);
 #endif
 UTEST_TEST_CASE(syscall) {
@@ -109,7 +109,8 @@ UTEST_TEST_CASE(isatty) {
   EXPECT_FALSE(isatty(fd));
   EXPECT_EQUAL_INT(close(fd), 0);
 }
-#ifdef _GNU_SOURCE
+#ifndef _QLIBC_SOURCE
+#include <stdint.h>
 extern void *sbrk(intptr_t increment);
 #endif
 UTEST_TEST_CASE(sbrk) {

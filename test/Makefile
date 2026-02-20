@@ -69,11 +69,11 @@ LD                      :=      $(CC)
 # Compiler Flags
 CC_WARNINGS             :=      -Wall -Wextra -Werror
 CC_WARNINGS             +=      -Wno-memset-transposed-args
+CC_WARNINGS             +=      -Wno-format
+CC_WARNINGS             +=      -Wno-format-truncation
+CC_WARNINGS             +=      -Wno-stringop-truncation
+CC_WARNINGS             +=      -Wno-stringop-overflow
 CC_WARNINGS             +=      -Wno-unused-function
-CC_WARNINGS             +=      -Wno-implicitly-unsigned-literal
-CC_WARNINGS             +=      -Wno-builtin-memcpy-chk-size
-CC_WARNINGS             +=      -Wno-gnu-alignof-expression
-CC_WARNINGS             +=      -Wno-stringop-overflow=
 
 
 CC_FLAGS                :=      -isystem$(EXTERNAL_INCLUDE_PATH)
@@ -82,7 +82,7 @@ CC_FLAGS                +=      -I$(QLIBC_INCLUDE_PATH)
 CC_FLAGS                +=      -I$(QLIBC_INCLUDE_ARCH_PATH)
 endif
 CC_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
-CC_FLAGS                +=      
+CC_FLAGS                +=      $(CC_WARNINGS)
 
 ifeq ($(DEBUG), 1)
 CC_FLAGS                +=      -g

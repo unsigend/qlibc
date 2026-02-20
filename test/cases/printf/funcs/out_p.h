@@ -242,4 +242,9 @@ UTEST_TEST_CASE(out_p) {
       EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);
     }
   }
+  {
+    int n = snprintf((char *)buf, BUFSZ, "%p", NULL);
+    EXPECT_GREATER_EQUAL_INT(n, 0);
+    EXPECT_EQUAL_INT(buf[n], '\0');
+  }
 }

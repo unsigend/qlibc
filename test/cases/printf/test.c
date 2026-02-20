@@ -1,6 +1,7 @@
 #include "funcs/out.h"
 #include "funcs/out_c.h"
 #include "funcs/out_di.h"
+#include "funcs/out_integration.h"
 #include "funcs/out_o.h"
 #include "funcs/out_p.h"
 #include "funcs/out_s.h"
@@ -20,4 +21,5 @@ UTEST_TEST_SUITE(printf) {
   UTEST_RUN_TEST_CASE(out_x);
   UTEST_RUN_TEST_CASE(out_u);
   UTEST_RUN_TEST_CASE(out_p);
+  UTEST_RUN_TEST_CASE(out_integration);
 }
