@@ -19,6 +19,7 @@
    should be a freestanding implementation of the core printf, which is
    independent of the standard library and no buffer related manipulation. */
 
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -88,6 +89,12 @@ struct _OUT_CTX {
   int __total;           /* total bytes written */
 };
 
+#define BUFF_IS_FULL(CTX)                                                      \
+  (((CTX)->__pos >= (CTX)->__bufsz)) /* buffer is full */
+#define BUFF_LEFT(CTX)                                                         \
+  (((CTX)->__bufsz - (CTX)->__pos)) /* buffer left size                        \
+                                     */
+
 /* Argument pack used for pop arguments from stack */
 union __arg_pack {
   long double __f; /* float */
@@ -95,60 +102,61 @@ union __arg_pack {
   void *__p;       /* pointer */
 };
 
-/* forward declarations */
-static void __fmt_uint(struct _OUT_CTX *__ctx, uintmax_t __u, int __base,
-                       bool __upper);
-/* %c specifier */
-static void __out_c(struct _OUT_CTX *__ctx, unsigned char __ch);
-/* %s specifier */
-static void __out_s(struct _OUT_CTX *__ctx, const unsigned char *__str,
-                    size_t __len);
-/* %u specifier */
-static void __out_u(struct _OUT_CTX *__ctx, uintmax_t __u);
-/* %p specifier */
-static void __out_p(struct _OUT_CTX *__ctx, void *__p);
+/* Format specification */
+struct __fmt_spec {
+  int __width;     /* width specifier */
+  int __precision; /* precision specifier */
+  int __flags;     /* flags */
+};
 
-/* %d specifier */
-static void __out_i(struct _OUT_CTX *__ctx, intmax_t __i);
-/* %o specifier */
-static void __out_o(struct _OUT_CTX *__ctx, uintmax_t __o);
-/* %x specifier */
-static void __out_x(struct _OUT_CTX *__ctx, uintmax_t __x);
-/* %X specifier */
-static void __out_xx(struct _OUT_CTX *__ctx, uintmax_t __xx);
+#define FLAG_SET(F, FLAG) ((F) |= (FLAG))    /* set flag */
+#define FLAG_CLEAR(F, FLAG) ((F) &= ~(FLAG)) /* clear flag */
 
-#define BUFF_IS_FULL(CTX)                                                      \
-  (((CTX)->__pos >= (CTX)->__bufsz)) /* buffer is full */
-#define BUFF_LEFT(CTX)                                                         \
-  (((CTX)->__bufsz - (CTX)->__pos)) /* buffer left size                        \
-                                     */
+#define FLAG_PADDING_ZERO 0x01 /* zero padding flag */
+#define FLAG_LEFT_ALIGN 0x02   /* left align flag */
+#define FLAG_PREFIX 0x04       /* prefix flag */
 
-/* Format an unsigned integer to a string in the given base and write to the
-   buffer */
-static void __fmt_uint(struct _OUT_CTX *__ctx, uintmax_t __u, int __base,
-                       bool __upper) {
+#define FLAG_IS_PADDING_ZERO(F)                                                \
+  ((F) & FLAG_PADDING_ZERO) /* check if padding zero flag is set */
+#define FLAG_IS_LEFT_ALIGN(F)                                                  \
+  ((F) & FLAG_LEFT_ALIGN) /* check if left align flag is set */
+#define FLAG_IS_PREFIX(F)                                                      \
+  ((F) & FLAG_PREFIX)    /* check if prefix flag is set                        \
+                          */
+#define SPEC_RESET(SPEC) /* reset the format specification */                  \
+  do {                                                                         \
+    memset(SPEC, 0, sizeof(struct __fmt_spec));                                \
+    (SPEC)->__precision = -1;                                                  \
+  } while (0)
+
+/* Write an unsigned integer to the buffer, without sign handling and NULL
+   terminator. Return the number of characters written. */
+static size_t __write_num(unsigned char *buff, uintmax_t val, int base,
+                          bool upper) {
   unsigned char __buff[INT_BUFFSZ];
   size_t __len = 0;
   do {
-    int __digit = __u % __base;
+    int __digit = val % base;
     unsigned char __cw = __digit < 10 ? '0' + __digit
-                         : __upper    ? 'A' + __digit - 10
+                         : upper      ? 'A' + __digit - 10
                                       : 'a' + __digit - 10;
     __buff[__len++] = __cw;
-    __u /= __base;
-  } while (__u);
+    val /= base;
+  } while (val);
 
-  // reverse the buffer
+  /* reverse the buffer in place */
   for (size_t __i = 0, __j = __len - 1; __i < __j; __i++, __j--) {
     unsigned char __tmp = __buff[__i];
     __buff[__i] = __buff[__j];
     __buff[__j] = __tmp;
   }
-  __out_s(__ctx, __buff, __len);
+  /* copy the buffer to the output buffer */
+  memcpy(buff, __buff, __len);
+  return __len;
 }
 
 /* Write a single character to the buffer and update the context */
-static void __out_c(struct _OUT_CTX *__ctx, unsigned char __ch) {
+static void __ctx_outc(struct _OUT_CTX *__ctx, unsigned char __ch) {
   __ctx->__total++;
   if (!BUFF_IS_FULL(__ctx))
     __ctx->__buff[__ctx->__pos++] = __ch;
@@ -156,8 +164,8 @@ static void __out_c(struct _OUT_CTX *__ctx, unsigned char __ch) {
 
 /* Write a string to the buffer and update the context, truncate if the string
    is longer than the buffer */
-static void __out_s(struct _OUT_CTX *__ctx, const unsigned char *__str,
-                    size_t __len) {
+static void __ctx_outs(struct _OUT_CTX *__ctx, const unsigned char *__str,
+                       size_t __len) {
   size_t __n = MIN(__len, BUFF_LEFT(__ctx));
   __ctx->__total += __len;
   if (__n) {
@@ -166,49 +174,76 @@ static void __out_s(struct _OUT_CTX *__ctx, const unsigned char *__str,
   }
 }
 
-/* Write an signed integer to the buffer and update the context */
-static void __out_i(struct _OUT_CTX *__ctx, intmax_t __i) {
-  if (__i < 0) {
-    __out_c(__ctx, '-');
-    __fmt_uint(__ctx, -((uintmax_t)__i), 10, false);
-  } else {
-    __fmt_uint(__ctx, (uintmax_t)__i, 10, false);
+/* Write padding to the buffer and update the context */
+static void __ctx_outpad(struct _OUT_CTX *__ctx, int __len,
+                         unsigned char __padding) {
+  while (__len-- > 0) {
+    __ctx_outc(__ctx, __padding);
   }
 }
 
-/* Write an unsigned integer to the buffer and update the context */
-static void __out_u(struct _OUT_CTX *__ctx, uintmax_t __u) {
-  __fmt_uint(__ctx, __u, 10, false);
+/* Emit the prefix, body and padding to the context */
+static void __ctx_emit(struct _OUT_CTX *__ctx, struct __fmt_spec *__spec,
+                       const unsigned char *__prefix, size_t __prefixlen,
+                       const unsigned char *__body, size_t __bodylen) {
+  size_t __total_len = __prefixlen + __bodylen;
+  int __padding_len =
+      __total_len > (size_t)__spec->__width ? 0 : __spec->__width - __total_len;
+  /* if left align, ignore the padding flag and use space*/
+  unsigned char __padding = FLAG_IS_LEFT_ALIGN(__spec->__flags)     ? ' '
+                            : FLAG_IS_PADDING_ZERO(__spec->__flags) ? '0'
+                                                                    : ' ';
+  if (FLAG_IS_LEFT_ALIGN(__spec->__flags)) {
+    /* Format: [prefix][body][padding] */
+    __ctx_outs(__ctx, __prefix, __prefixlen);
+    __ctx_outs(__ctx, __body, __bodylen);
+    __ctx_outpad(__ctx, __padding_len, __padding);
+  } else {
+    if (FLAG_IS_PADDING_ZERO(__spec->__flags)) {
+      /* Format: [prefix][padding][body] */
+      __ctx_outs(__ctx, __prefix, __prefixlen);
+      __ctx_outpad(__ctx, __padding_len, __padding);
+      __ctx_outs(__ctx, __body, __bodylen);
+    } else {
+      /* Format: [padding][prefix][body] */
+      __ctx_outpad(__ctx, __padding_len, __padding);
+      __ctx_outs(__ctx, __prefix, __prefixlen);
+      __ctx_outs(__ctx, __body, __bodylen);
+    }
+  }
 }
 
-/* Write a pointer to the buffer and update the context */
-static void __out_p(struct _OUT_CTX *__ctx, void *__p) {
-  __out_c(__ctx, '0');
-  __out_c(__ctx, 'x');
-  __fmt_uint(__ctx, (uintmax_t)__p, 16, false);
+/* Write a number to the context */
+static void ctx_outnum(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
+                       uintmax_t val, int base, bool upper,
+                       const unsigned char *prefix, size_t prefixlen) {
+  unsigned char buff[INT_BUFFSZ];
+  size_t len = __write_num(buff, val, base, upper);
+  __ctx_emit(ctx, spec, prefix, prefixlen, buff, len);
 }
 
-/* Write a hexadecimal integer to the buffer and update the context, in lower
-   case */
-static void __out_x(struct _OUT_CTX *__ctx, uintmax_t __x) {
-  __fmt_uint(__ctx, __x, 16, false);
+/* Write a string to the context */
+static void ctx_outs(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
+                     const unsigned char *str, size_t len) {
+  if (spec->__precision >= 0) {
+    size_t __min_len = MIN((size_t)spec->__precision, len);
+    FLAG_CLEAR(spec->__flags, FLAG_PADDING_ZERO);
+    __ctx_emit(ctx, spec, NULL, 0, str, __min_len);
+  } else
+    __ctx_emit(ctx, spec, NULL, 0, str, len);
 }
 
-/* Write a hexadecimal integer to the buffer and update the context, in upper
-   case */
-static void __out_xx(struct _OUT_CTX *__ctx, uintmax_t __xx) {
-  __fmt_uint(__ctx, __xx, 16, true);
-}
-
-/* Write an octal integer to the buffer and update the context */
-static void __out_o(struct _OUT_CTX *__ctx, uintmax_t __o) {
-  __fmt_uint(__ctx, __o, 8, false);
+/* Write a single character to the context, just a thin wrapper of __ctx_outc
+   for consistency */
+static inline __attribute__((always_inline)) void ctx_outc(struct _OUT_CTX *ctx,
+                                                           unsigned char ch) {
+  __ctx_outc(ctx, ch); /* inline the __ctx_outc function */
 }
 
 /* Pop arguments from the argument list based on promotion rules, the
    implementation is based on the reference implementation of the musl C
    library 1.2.5 */
-static void __pop_arg(union __arg_pack *__arg, int __type, va_list *__ap) {
+static void pop_arg(union __arg_pack *__arg, int __type, va_list *__ap) {
   switch (__type) {
   case ARG_PTR:
     __arg->__p = va_arg(*__ap, void *);
@@ -261,12 +296,15 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       .__pos = 0,
       .__total = 0,
   };
+  struct __fmt_spec __spec = {
+      .__width = 0,
+      .__precision = -1, /* -1 means precision is not set */
+      .__flags = 0,
+  };
   int __stat = STATE_NORMAL;
   union __arg_pack __arg;
+  bool __reach_precision = false;
   va_list __ap;
-  size_t __w = 0, __p = 0;
-  (void)__w;
-  (void)__p;
 
   /* the copy allows passing va_list* even if va_list is an array */
   va_copy(__ap, __vlist);
@@ -279,58 +317,149 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
   while (__format && *__format) {
     switch (__stat) {
     case STATE_NORMAL: {
-      if (*__format == '%')
+      if (*__format == '%') {
+        SPEC_RESET(&__spec);
+        __reach_precision = false;
         __stat = STATE_FORMAT;
-      else
-        __out_c(&__ctx, *__format);
+      } else
+        ctx_outc(&__ctx, *__format);
       break;
     }
     case STATE_FORMAT: {
       switch (*__format) {
       case '%':
-        __out_c(&__ctx, '%');
+        ctx_outc(&__ctx, '%');
         __stat = STATE_NORMAL;
         break;
+      /* specifiers */
       case SPEC_C:
-        __pop_arg(&__arg, ARG_CHAR, &__ap);
-        __out_c(&__ctx, (unsigned char)__arg.__i);
+        pop_arg(&__arg, ARG_CHAR, &__ap);
+        ctx_outc(&__ctx, (unsigned char)__arg.__i);
         __stat = STATE_NORMAL;
         break;
       case SPEC_S:
-        __pop_arg(&__arg, ARG_PTR, &__ap);
+        pop_arg(&__arg, ARG_PTR, &__ap);
         if (!__arg.__p)
-          __out_s(&__ctx, (unsigned char *)"(null)", 6);
+          ctx_outs(&__ctx, &__spec, (unsigned char *)"(null)", 6);
         else
-          __out_s(&__ctx, (unsigned char *)__arg.__p,
-                  strlen((char *)__arg.__p));
+          ctx_outs(&__ctx, &__spec, (unsigned char *)__arg.__p,
+                   strlen((char *)__arg.__p));
         __stat = STATE_NORMAL;
         break;
       case SPEC_I:
       case SPEC_D:
-        __pop_arg(&__arg, ARG_INT, &__ap);
-        __out_i(&__ctx, (intmax_t)__arg.__i);
+        pop_arg(&__arg, ARG_INT, &__ap);
+        if ((intmax_t)__arg.__i < 0) {
+          ctx_outnum(&__ctx, &__spec, -(uintmax_t)(intmax_t)__arg.__i, 10,
+                     false, (unsigned char *)"-", 1);
+        } else {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 10, false, NULL, 0);
+        }
         __stat = STATE_NORMAL;
         break;
       case SPEC_O:
-        // TODO: implement %o specifier
+        pop_arg(&__arg, ARG_UINT, &__ap);
+        if (FLAG_IS_PREFIX(__spec.__flags)) {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, (unsigned char *)"0",
+                     1);
+        } else {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, NULL, 0);
+        }
+        __stat = STATE_NORMAL;
         break;
       case SPEC_X:
-        // TODO: implement %x specifier
+        pop_arg(&__arg, ARG_UINT, &__ap);
+        if (FLAG_IS_PREFIX(__spec.__flags)) {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, false,
+                     (unsigned char *)"0x", 2);
+        } else {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, false, NULL, 0);
+        }
+        __stat = STATE_NORMAL;
         break;
       case SPEC_XX:
-        // TODO: implement %X specifier
+        pop_arg(&__arg, ARG_UINT, &__ap);
+        if (FLAG_IS_PREFIX(__spec.__flags)) {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, true,
+                     (unsigned char *)"0X", 2);
+        } else {
+          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, true, NULL, 0);
+        }
+        __stat = STATE_NORMAL;
         break;
       case SPEC_U:
-        // TODO: implement %u specifier
+        pop_arg(&__arg, ARG_UINT, &__ap);
+        ctx_outnum(&__ctx, &__spec, __arg.__i, 10, false, NULL, 0);
+        __stat = STATE_NORMAL;
         break;
       case SPEC_P:
-        // TODO: implement %p specifier
+        pop_arg(&__arg, ARG_PTR, &__ap);
+        if (__arg.__p) {
+          /* for %p specifier the prefix is always 0x */
+          ctx_outnum(&__ctx, &__spec, (uintmax_t)(uintptr_t)__arg.__p, 16,
+                     false, (unsigned char *)"0x", 2);
+        }
+        __stat = STATE_NORMAL;
+        break;
+      /* flags */
+      case '-':
+        FLAG_SET(__spec.__flags, FLAG_LEFT_ALIGN);
+        break;
+      case '0':
+        FLAG_SET(__spec.__flags, FLAG_PADDING_ZERO);
+        break;
+      case '#':
+        FLAG_SET(__spec.__flags, FLAG_PREFIX);
+        break;
+      /* width or precision */
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9': {
+        while (isdigit(*__format)) {
+          if (__reach_precision) {
+            __spec.__precision = __spec.__precision * 10 + (*__format++ - '0');
+          } else {
+            __spec.__width = __spec.__width * 10 + (*__format++ - '0');
+          }
+        }
+        __format--;
         break;
       }
-      break;
+      case '.':
+        __reach_precision = true;
+        break;
+      case '*': {
+        pop_arg(&__arg, ARG_INT, &__ap);
+        int __wp = (int)(__arg.__i);
+        if (__reach_precision) {
+          if (__wp > 0) {
+            __spec.__precision = __wp;
+          }
+          /* If the * yields a negative value in precision, ignore it */
+          __reach_precision = false;
+
+        } else {
+          if (__wp < 0) {
+            /* If * yields a negative value in width, treats it as - flag with a
+             width of the absolute value */
+            FLAG_SET(__spec.__flags, FLAG_LEFT_ALIGN);
+            __spec.__width = -__wp;
+          } else {
+            __spec.__width = __wp;
+          }
+        }
+        break;
+      }
+      }
     }
+      __format++;
     }
-    __format++;
   }
 
   if (__buffer && __bufsz)

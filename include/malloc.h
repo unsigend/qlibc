@@ -26,7 +26,7 @@
 #include <stddef.h>
 
 /* Malloc extension support */
-#if __QLIBC_MALLOC_EXTENSION__ == 1
+#if defined(__USE_QLIBC_EXTENDED)
 struct mallinfo {
   size_t arena;    /* Non-mmapped space allocated (bytes) */
   size_t ordblks;  /* Number of free chunks */
@@ -57,9 +57,9 @@ extern void *aligned_alloc(size_t alignment, size_t size);
 #endif
 
 /* Malloc extension support */
-#if __QLIBC_MALLOC_EXTENSION__ == 1
+#if defined(__USE_QLIBC_EXTENDED)
 /* Get memory allocation information, return 0 on success, -1 on failure, note
-   that this is not GNU glibc compatiable API */
+   that this is not GNU glibc compatible API */
 
 extern int mallinfo(struct mallinfo *info);
 #endif

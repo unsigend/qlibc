@@ -113,4 +113,8 @@ extern intmax_t imaxabs(intmax_t n);
 
 __END_DECLS
 
+#if defined(__USE_QLIBC_EXTENDED)
+#include <ext/itoa.h>
+#endif
+
 #endif // _QLIBC_STDLIB_H_

@@ -42,9 +42,9 @@ typedef __ino_t __ino64_t;
 typedef unsigned long __nlink_t;
 typedef __nlink_t __nlink64_t;
 
-typedef int __mode_t;
-typedef int __uid_t;
-typedef int __gid_t;
-typedef int __pid_t;
+typedef unsigned int __mode_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned int __pid_t;
 
 #endif

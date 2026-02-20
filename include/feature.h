@@ -49,6 +49,5 @@
 
 /* Implementation-defined features */
 #define __QLIBC_CALLOC_CHECK_OVERFLOW__ 1 /* Check for overflow in calloc */
-#define __QLIBC_MALLOC_EXTENSION__ 1      /* Malloc extension support */
 
 #endif
