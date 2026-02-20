@@ -1,9 +1,10 @@
 #define _GNU_SOURCE
 
 // cases
-#include "cases/mman.h"
-#include "cases/stat.h"
-#include "cases/uio.h"
+#include "cases/test_mman.h"
+#include "cases/test_stat.h"
+#include "cases/test_uio.h"
+#include "cases/test_wait.h"
 
 UTEST_TEST_CASE(types) {
   EXPECT_EQUAL_UINT(sizeof(off_t), sizeof(long));
@@ -43,6 +44,9 @@ UTEST_TEST_SUITE(sys) {
   UTEST_RUN_TEST_CASE(fstat);
 
   /* mman */
-  UTEST_RUN_TEST_CASE(mman);
+  UTEST_RUN_TEST_CASE(mman_macros);
   UTEST_RUN_TEST_CASE(mmap);
+
+  /* wait */
+  UTEST_RUN_TEST_CASE(wait_macros);
 }

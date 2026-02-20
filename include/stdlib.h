@@ -64,12 +64,20 @@ extern long double strtold(const char *restrict str, char **restrict str_end);
 
 // program termination
 #if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
-/* Abort the program */
+/* Causes abnormal program termination without cleaning up */
 extern void abort(void);
+/* Causes normal program termination with cleaning up */
+extern void exit(int status);
+/* Causes normal program termination without cleaning up */
+extern void _Exit(int status);
 #else
 #include <stdnoreturn.h>
-/* Abort the program */
+/* Causes abnormal program termination without cleaning up */
 extern noreturn void abort(void);
+/* Causes normal program termination with cleaning up */
+extern noreturn void exit(int status);
+/* Causes normal program termination without cleaning up */
+extern noreturn void _Exit(int status);
 #endif
 
 /* Allocate size bytes of uninitialized memory */

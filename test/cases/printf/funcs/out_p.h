@@ -179,10 +179,10 @@ UTEST_TEST_CASE(out_p) {
     }
   }
   {
-    int n = snprintf((char *)buf, BUFSZ, "%020p", (void *)&var);
+    int n = snprintf((char *)buf, BUFSZ, "%20p", (void *)&var);
     EXPECT_GREATER_EQUAL_INT(n, 10);
-    EXPECT_EQUAL_INT(buf[0], '0');
-    EXPECT_EQUAL_INT(buf[1], 'x');
+    EXPECT_EQUAL_INT(buf[0], ' ');
+    EXPECT_EQUAL_INT(buf[1], ' ');
     {
       unsigned long long parsed = strtoull((char *)buf, NULL, 0);
       EXPECT_EQUAL_UINT64((uintptr_t)&var, (uintptr_t)parsed);

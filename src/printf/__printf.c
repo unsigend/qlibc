@@ -100,13 +100,14 @@ static void __fmt_uint(struct _OUT_CTX *__ctx, uintmax_t __u, int __base,
                        bool __upper);
 /* %c specifier */
 static void __out_c(struct _OUT_CTX *__ctx, unsigned char __ch);
+/* %s specifier */
+static void __out_s(struct _OUT_CTX *__ctx, const unsigned char *__str,
+                    size_t __len);
 /* %u specifier */
 static void __out_u(struct _OUT_CTX *__ctx, uintmax_t __u);
 /* %p specifier */
 static void __out_p(struct _OUT_CTX *__ctx, void *__p);
-/* %s specifier */
-static void __out_s(struct _OUT_CTX *__ctx, const unsigned char *__str,
-                    size_t __len);
+
 /* %d specifier */
 static void __out_i(struct _OUT_CTX *__ctx, intmax_t __i);
 /* %o specifier */

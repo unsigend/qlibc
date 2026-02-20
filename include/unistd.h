@@ -110,6 +110,16 @@ extern void *__brk(void *addr);
    program break.*/
 extern void *sbrk(intptr_t increment);
 
+/* Returns the process ID of the calling process.*/
+extern pid_t getpid(void);
+/* Returns the process ID of the parent of the calling process.*/
+extern pid_t getppid(void);
+
+/* Creates a new process by duplicating the calling process. The new process is
+   referred to as the child process. The calling process is referred to as the
+   parent process. */
+extern pid_t fork(void);
+
 __END_DECLS
 
 #endif
