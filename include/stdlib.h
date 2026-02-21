@@ -111,6 +111,19 @@ extern long long llabs(long long n);
 /* Compute the absolute value of an intmax_t integer */
 extern intmax_t imaxabs(intmax_t n);
 
+/* Returns the value of the environment variable specified by name. */
+extern char *getenv(const char *name);
+
+/* Sets the value of the environment variable specified by name to value. If
+ * name does exist in the environment, then its value is changed to value if
+ * overwrite is nonzero. */
+extern int setenv(const char *name, const char *value, int overwrite);
+
+/* Removes the environment variable specified by name. If name does not exist in
+   the environment, then the function succeeds, and the environment is
+   unchanged. */
+extern int unsetenv(const char *name);
+
 __END_DECLS
 
 #if defined(__USE_QLIBC_EXTENDED)

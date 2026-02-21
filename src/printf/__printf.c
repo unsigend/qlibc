@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <sys/types.h>
 
 /* Features supported:
    Specifiers: %c, %s, %d, %i, %o, %x, %X, %u, %p
@@ -79,6 +80,18 @@ enum {
   ARG_ULLONG,
   ARG_IMAX,
   ARG_UMAX,
+  ARG_SIZE_T,
+  ARG_SSIZE_T,
+};
+
+/* Length modifiers */
+enum {
+  LEN_NONE,
+  LEN_H,
+  LEN_HH,
+  LEN_L,
+  LEN_LL,
+  LEN_Z,
 };
 
 /* Output context */
@@ -106,6 +119,7 @@ union __arg_pack {
 struct __fmt_spec {
   int __width;     /* width specifier */
   int __precision; /* precision specifier */
+  int __length;    /* length modifier */
   int __flags;     /* flags */
 };
 
@@ -121,12 +135,13 @@ struct __fmt_spec {
 #define FLAG_IS_LEFT_ALIGN(F)                                                  \
   ((F) & FLAG_LEFT_ALIGN) /* check if left align flag is set */
 #define FLAG_IS_PREFIX(F)                                                      \
-  ((F) & FLAG_PREFIX)    /* check if prefix flag is set                        \
-                          */
-#define SPEC_RESET(SPEC) /* reset the format specification */                  \
+  ((F) & FLAG_PREFIX) /* check if prefix flag is set                           \
+                       */
+#define SPEC_RESET(SPEC)                                                       \
   do {                                                                         \
     memset(SPEC, 0, sizeof(struct __fmt_spec));                                \
     (SPEC)->__precision = -1;                                                  \
+    (SPEC)->__length = LEN_NONE;                                               \
   } while (0)
 
 /* Write an unsigned integer to the buffer, without sign handling and NULL
@@ -182,33 +197,44 @@ static void __ctx_outpad(struct _OUT_CTX *__ctx, int __len,
   }
 }
 
-/* Emit the prefix, body and padding to the context */
+/* Emit the prefix, body, fillings (zeros) and padding (spaces or zeros) to the
+ * context */
 static void __ctx_emit(struct _OUT_CTX *__ctx, struct __fmt_spec *__spec,
                        const unsigned char *__prefix, size_t __prefixlen,
-                       const unsigned char *__body, size_t __bodylen) {
-  size_t __total_len = __prefixlen + __bodylen;
-  int __padding_len =
-      __total_len > (size_t)__spec->__width ? 0 : __spec->__width - __total_len;
-  /* if left align, ignore the padding flag and use space*/
-  unsigned char __padding = FLAG_IS_LEFT_ALIGN(__spec->__flags)     ? ' '
-                            : FLAG_IS_PADDING_ZERO(__spec->__flags) ? '0'
-                                                                    : ' ';
+                       const unsigned char *__body, size_t __bodylen,
+                       size_t __fillinglen) {
+  size_t total = __prefixlen + __fillinglen + __bodylen;
+  size_t padlen = (size_t)(MAX(0, (int)(__spec->__width - total)));
+
+  /* left align */
   if (FLAG_IS_LEFT_ALIGN(__spec->__flags)) {
-    /* Format: [prefix][body][padding] */
+    /* Format: [prefix][fillings][body][padding(spaces)] */
     __ctx_outs(__ctx, __prefix, __prefixlen);
+    __ctx_outpad(__ctx, __fillinglen, '0');
     __ctx_outs(__ctx, __body, __bodylen);
-    __ctx_outpad(__ctx, __padding_len, __padding);
-  } else {
-    if (FLAG_IS_PADDING_ZERO(__spec->__flags)) {
-      /* Format: [prefix][padding][body] */
+    __ctx_outpad(__ctx, padlen, ' ');
+  }
+  /* right align */
+  else {
+    if (__spec->__precision >= 0) {
+      /* Format: [padding(spaces)][prefix][fillings][body] */
+      __ctx_outpad(__ctx, padlen, ' ');
       __ctx_outs(__ctx, __prefix, __prefixlen);
-      __ctx_outpad(__ctx, __padding_len, __padding);
+      __ctx_outpad(__ctx, __fillinglen, '0');
       __ctx_outs(__ctx, __body, __bodylen);
+
     } else {
-      /* Format: [padding][prefix][body] */
-      __ctx_outpad(__ctx, __padding_len, __padding);
-      __ctx_outs(__ctx, __prefix, __prefixlen);
-      __ctx_outs(__ctx, __body, __bodylen);
+      if (FLAG_IS_PADDING_ZERO(__spec->__flags)) {
+        /* Format: [prefix][padding(zeros)][body] */
+        __ctx_outs(__ctx, __prefix, __prefixlen);
+        __ctx_outpad(__ctx, padlen, '0');
+        __ctx_outs(__ctx, __body, __bodylen);
+      } else {
+        /* Format: [padding(spaces)][prefix][body] */
+        __ctx_outpad(__ctx, padlen, ' ');
+        __ctx_outs(__ctx, __prefix, __prefixlen);
+        __ctx_outs(__ctx, __body, __bodylen);
+      }
     }
   }
 }
@@ -218,8 +244,13 @@ static void ctx_outnum(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
                        uintmax_t val, int base, bool upper,
                        const unsigned char *prefix, size_t prefixlen) {
   unsigned char buff[INT_BUFFSZ];
-  size_t len = __write_num(buff, val, base, upper);
-  __ctx_emit(ctx, spec, prefix, prefixlen, buff, len);
+  size_t len;
+  if (!spec->__precision && !val)
+    len = 0;
+  else
+    len = __write_num(buff, val, base, upper);
+  size_t fillinglen = (size_t)(MAX(0, (int)(spec->__precision - len)));
+  __ctx_emit(ctx, spec, prefix, prefixlen, buff, len, fillinglen);
 }
 
 /* Write a string to the context */
@@ -228,9 +259,9 @@ static void ctx_outs(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
   if (spec->__precision >= 0) {
     size_t __min_len = MIN((size_t)spec->__precision, len);
     FLAG_CLEAR(spec->__flags, FLAG_PADDING_ZERO);
-    __ctx_emit(ctx, spec, NULL, 0, str, __min_len);
+    __ctx_emit(ctx, spec, NULL, 0, str, __min_len, 0);
   } else
-    __ctx_emit(ctx, spec, NULL, 0, str, len);
+    __ctx_emit(ctx, spec, NULL, 0, str, len, 0);
 }
 
 /* Write a single character to the context, just a thin wrapper of __ctx_outc
@@ -238,6 +269,42 @@ static void ctx_outs(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
 static inline __attribute__((always_inline)) void ctx_outc(struct _OUT_CTX *ctx,
                                                            unsigned char ch) {
   __ctx_outc(ctx, ch); /* inline the __ctx_outc function */
+}
+
+/* Get the signed argument type based on the length modifier */
+static int signed_arg_type(int len) {
+  switch (len) {
+  case LEN_HH:
+    return ARG_CHAR;
+  case LEN_H:
+    return ARG_SHORT;
+  case LEN_L:
+    return ARG_LONG;
+  case LEN_LL:
+    return ARG_LLONG;
+  case LEN_Z:
+    return ARG_SSIZE_T;
+  default:
+    return ARG_INT;
+  }
+}
+
+/* Get the unsigned argument type based on the length modifier */
+static int unsigned_arg_type(int len) {
+  switch (len) {
+  case LEN_HH:
+    return ARG_UCHAR;
+  case LEN_H:
+    return ARG_USHORT;
+  case LEN_L:
+    return ARG_ULONG;
+  case LEN_LL:
+    return ARG_ULLONG;
+  case LEN_Z:
+    return ARG_SIZE_T;
+  default:
+    return ARG_UINT;
+  }
 }
 
 /* Pop arguments from the argument list based on promotion rules, the
@@ -283,6 +350,12 @@ static void pop_arg(union __arg_pack *__arg, int __type, va_list *__ap) {
     break;
   case ARG_UMAX:
     __arg->__i = va_arg(*__ap, uintmax_t);
+    break;
+  case ARG_SIZE_T:
+    __arg->__i = va_arg(*__ap, size_t);
+    break;
+  case ARG_SSIZE_T:
+    __arg->__i = va_arg(*__ap, ssize_t);
     break;
   }
 }
@@ -334,7 +407,7 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       /* specifiers */
       case SPEC_C:
         pop_arg(&__arg, ARG_CHAR, &__ap);
-        ctx_outc(&__ctx, (unsigned char)__arg.__i);
+        ctx_outs(&__ctx, &__spec, (unsigned char *)&__arg.__i, 1);
         __stat = STATE_NORMAL;
         break;
       case SPEC_S:
@@ -348,7 +421,7 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
         break;
       case SPEC_I:
       case SPEC_D:
-        pop_arg(&__arg, ARG_INT, &__ap);
+        pop_arg(&__arg, signed_arg_type(__spec.__length), &__ap);
         if ((intmax_t)__arg.__i < 0) {
           ctx_outnum(&__ctx, &__spec, -(uintmax_t)(intmax_t)__arg.__i, 10,
                      false, (unsigned char *)"-", 1);
@@ -358,8 +431,8 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
         __stat = STATE_NORMAL;
         break;
       case SPEC_O:
-        pop_arg(&__arg, ARG_UINT, &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags)) {
+        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
+        if (FLAG_IS_PREFIX(__spec.__flags) && __arg.__i != 0) {
           ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, (unsigned char *)"0",
                      1);
         } else {
@@ -368,8 +441,8 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
         __stat = STATE_NORMAL;
         break;
       case SPEC_X:
-        pop_arg(&__arg, ARG_UINT, &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags)) {
+        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
+        if (FLAG_IS_PREFIX(__spec.__flags) && __arg.__i != 0) {
           ctx_outnum(&__ctx, &__spec, __arg.__i, 16, false,
                      (unsigned char *)"0x", 2);
         } else {
@@ -378,8 +451,8 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
         __stat = STATE_NORMAL;
         break;
       case SPEC_XX:
-        pop_arg(&__arg, ARG_UINT, &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags)) {
+        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
+        if (FLAG_IS_PREFIX(__spec.__flags) && __arg.__i != 0) {
           ctx_outnum(&__ctx, &__spec, __arg.__i, 16, true,
                      (unsigned char *)"0X", 2);
         } else {
@@ -388,7 +461,7 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
         __stat = STATE_NORMAL;
         break;
       case SPEC_U:
-        pop_arg(&__arg, ARG_UINT, &__ap);
+        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
         ctx_outnum(&__ctx, &__spec, __arg.__i, 10, false, NULL, 0);
         __stat = STATE_NORMAL;
         break;
@@ -398,6 +471,8 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
           /* for %p specifier the prefix is always 0x */
           ctx_outnum(&__ctx, &__spec, (uintmax_t)(uintptr_t)__arg.__p, 16,
                      false, (unsigned char *)"0x", 2);
+        } else {
+          ctx_outs(&__ctx, &__spec, (unsigned char *)"(nil)", 5);
         }
         __stat = STATE_NORMAL;
         break;
@@ -411,6 +486,29 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       case '#':
         FLAG_SET(__spec.__flags, FLAG_PREFIX);
         break;
+      /* length modifiers */
+      case 'h': {
+        if (*(__format + 1) == 'h') {
+          __spec.__length = LEN_HH;
+          __format++;
+        } else {
+          __spec.__length = LEN_H;
+        }
+        break;
+      }
+      case 'l': {
+        if (*(__format + 1) == 'l') {
+          __spec.__length = LEN_LL;
+          __format++;
+        } else {
+          __spec.__length = LEN_L;
+        }
+        break;
+      }
+      case 'z': {
+        __spec.__length = LEN_Z;
+        break;
+      }
       /* width or precision */
       case '1':
       case '2':
@@ -433,12 +531,13 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       }
       case '.':
         __reach_precision = true;
+        __spec.__precision = 0;
         break;
       case '*': {
         pop_arg(&__arg, ARG_INT, &__ap);
         int __wp = (int)(__arg.__i);
         if (__reach_precision) {
-          if (__wp > 0) {
+          if (__wp >= 0) {
             __spec.__precision = __wp;
           }
           /* If the * yields a negative value in precision, ignore it */
@@ -458,8 +557,8 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       }
       }
     }
-      __format++;
     }
+    __format++;
   }
 
   if (__buffer && __bufsz)

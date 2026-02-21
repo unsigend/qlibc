@@ -15,36 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_TYPES_H_
-#define _QLIBC_X86_64_BITS_TYPES_H_
+#ifndef _QLIBC_SYS_WAIT_H_
+#define _QLIBC_SYS_WAIT_H_
 
-typedef unsigned long __dev_t;
-typedef __dev_t __dev64_t;
+#include "sys/types.h"
+#include <feature.h>
 
-typedef long __off_t;
-typedef __off_t __off64_t;
+#define WNOHANG 1    /* Don't block waiting. */
+#define WUNTRACED 2  /* Report status of stopped children. */
+#define WCONTINUED 8 /* Report continued child. */
 
-typedef long __ssize_t;
-typedef __ssize_t __ssize64_t;
+__BEGIN_DECLS
 
-typedef long __blksize_t;
-typedef __blksize_t __blksize64_t;
+/* Waits for a child process to exit or stop. If pid > 0, wait for the child
+   with the given process ID. If pid == -1, wait for any child. If the process
+   has no child, return -1 and set errno to ECHILD.*/
+extern pid_t waitpid(pid_t pid, int *status, int options);
 
-typedef long __blkcnt_t;
-typedef __blkcnt_t __blkcnt64_t;
+/* Waits for any child process to exit or stop. If the process has no child,
+   return -1 and set errno to ECHILD. Equivalent to waitpid(-1, status, 0).*/
+extern pid_t wait(int *status);
 
-typedef long __time_t;
-typedef __time_t __time64_t;
-
-typedef unsigned long __ino_t;
-typedef __ino_t __ino64_t;
-
-typedef unsigned long __nlink_t;
-typedef __nlink_t __nlink64_t;
-
-typedef int __mode_t;
-typedef int __uid_t;
-typedef int __gid_t;
-typedef int __pid_t;
+__END_DECLS
 
 #endif

@@ -15,36 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_TYPES_H_
-#define _QLIBC_X86_64_BITS_TYPES_H_
+#ifndef _QLIBC_SIGNAL_H_
+#define _QLIBC_SIGNAL_H_
 
-typedef unsigned long __dev_t;
-typedef __dev_t __dev64_t;
+#include <feature.h>
 
-typedef long __off_t;
-typedef __off_t __off64_t;
+__BEGIN_DECLS
 
-typedef long __ssize_t;
-typedef __ssize_t __ssize64_t;
-
-typedef long __blksize_t;
-typedef __blksize_t __blksize64_t;
-
-typedef long __blkcnt_t;
-typedef __blkcnt_t __blkcnt64_t;
-
-typedef long __time_t;
-typedef __time_t __time64_t;
-
-typedef unsigned long __ino_t;
-typedef __ino_t __ino64_t;
-
-typedef unsigned long __nlink_t;
-typedef __nlink_t __nlink64_t;
-
-typedef int __mode_t;
-typedef int __uid_t;
-typedef int __gid_t;
-typedef int __pid_t;
+__END_DECLS
 
 #endif

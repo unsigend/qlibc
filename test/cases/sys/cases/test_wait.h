@@ -1,4 +1,3 @@
-#define __USE_XOPEN_EXTENDED 1
 #include <sys/wait.h>
 #include <unistd.h>
 #include <utest.h>

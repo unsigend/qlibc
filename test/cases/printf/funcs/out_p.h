@@ -1,6 +1,7 @@
 #include "common.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include <utest.h>
 
 /* Test snprintf standard output, with %p specifier with 0x prefix. */
 UTEST_TEST_CASE(out_p) {
@@ -41,7 +42,8 @@ UTEST_TEST_CASE(out_p) {
   }
   {
     int n = snprintf((char *)buf, BUFSZ, "%p", NULL);
-    EXPECT_GREATER_INT(n, 0);
+    EXPECT_EQUAL_INT(n, 5);
+    EXPECT_EQUAL_STRING((char *)buf, "(nil)");
     EXPECT_EQUAL_INT(buf[n], '\0');
   }
   {
