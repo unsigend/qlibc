@@ -166,7 +166,8 @@ static size_t __write_num(unsigned char *buff, uintmax_t val, int base,
     __buff[__j] = __tmp;
   }
   /* copy the buffer to the output buffer */
-  memcpy(buff, __buff, __len);
+  if (buff)
+    memcpy(buff, __buff, __len);
   return __len;
 }
 
@@ -432,9 +433,19 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
         break;
       case SPEC_O:
         pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags) && __arg.__i != 0) {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, (unsigned char *)"0",
-                     1);
+        if (FLAG_IS_PREFIX(__spec.__flags)) {
+          if (__arg.__i != 0) {
+            size_t len = __write_num(NULL, __arg.__i, 8, false);
+            if (__spec.__precision >= (int)(len + 1)) {
+              ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, NULL, 0);
+            } else {
+              ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false,
+                         (unsigned char *)"0", 1);
+            }
+          } else {
+            __ctx_emit(&__ctx, &__spec, NULL, 0, (unsigned char *)"0", 1, 0);
+          }
+
         } else {
           ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, NULL, 0);
         }
