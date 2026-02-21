@@ -60,7 +60,7 @@ void *realloc(void *ptr, size_t new_size) {
     return (void *)((unsigned char *)new_ptr + sizeof(header_t));
   }
 
-  /* Optimize with in-place explansion */
+  /* Optimize with in-place expansion */
   size_t required_sz = calc_block_sz(new_size);
   block_t *next_block = (block_t *)((unsigned char *)block + block->header.sz);
   bool is_last_block = ((unsigned char *)next_block >= __heap.heap_end);
