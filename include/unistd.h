@@ -115,6 +115,13 @@ extern pid_t getpid(void);
 /* Returns the process ID of the parent of the calling process.*/
 extern pid_t getppid(void);
 
+/* Returns the process group ID of the calling process.*/
+extern pid_t getpgrp(void);
+/* Sets the process group ID of the process specified by pid to pgid. if pid=0,
+   then sets to current process's process group ID, if pgid=0 then use pid as
+   pgid. */
+extern int setpgid(pid_t pid, pid_t pgid);
+
 /* Creates a new process by duplicating the calling process. The new process is
    referred to as the child process. The calling process is referred to as the
    parent process. */
@@ -128,6 +135,11 @@ extern unsigned int sleep(unsigned int seconds);
 /* Suspends the execution of the calling process until a signal arrives.
    Returns -1 and sets errno to EINTR if the call is interrupted by a signal.*/
 extern int pause(void);
+
+/* Sets an alarm timer that will generate a SIGALRM signal after the specified
+   number of seconds. Returns the number of seconds left to the previous alarm
+   if any. */
+extern unsigned int alarm(unsigned int seconds);
 
 /* Executes the file specified by filename. The file must be a regular file
    and executable. The argv array is the argument vector for the new program.

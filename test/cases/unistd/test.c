@@ -152,6 +152,24 @@ UTEST_TEST_CASE(getppid) {
   EXPECT_TRUE(ppid > 0);
 }
 
+UTEST_TEST_CASE(getpgrp) {
+  pid_t pgrp = getpgrp();
+  EXPECT_TRUE(pgrp > 0);
+}
+
+UTEST_TEST_CASE(setpgid) {
+  pid_t pgrp = getpgrp();
+  EXPECT_TRUE(pgrp > 0);
+
+  int ret = setpgid(0, pgrp);
+  EXPECT_EQUAL_INT(ret, 0);
+}
+
+UTEST_TEST_CASE(alarm) {
+  unsigned int ret = alarm(0);
+  EXPECT_EQUAL_INT(ret, 0);
+}
+
 UTEST_TEST_SUITE(unistd) {
   /* macros */
   UTEST_RUN_TEST_CASE(macro);
@@ -167,4 +185,7 @@ UTEST_TEST_SUITE(unistd) {
   UTEST_RUN_TEST_CASE(brk);
   UTEST_RUN_TEST_CASE(getpid);
   UTEST_RUN_TEST_CASE(getppid);
+  UTEST_RUN_TEST_CASE(getpgrp);
+  UTEST_RUN_TEST_CASE(setpgid);
+  UTEST_RUN_TEST_CASE(alarm);
 }

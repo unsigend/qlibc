@@ -19,8 +19,25 @@
 #define _QLIBC_SIGNAL_H_
 
 #include <feature.h>
+#include <sys/types.h>
+
+/* Type of a signal handler. */
+typedef void (*sighandler_t)(int);
 
 __BEGIN_DECLS
+
+/* Sends a signal to the process specified by pid. If pid>0, then sends to
+   the process with the given process ID. If pid=0, then sends to the current
+   process group. If pid=-1, then sends to all processes in the current process
+   group. */
+extern int kill(pid_t pid, int sig);
+
+/* Sets the signal handler for the signal specified by signum to the function
+   specified by handler. Returns the previous signal handler for the signal.
+
+   NOTE: This function has compatibility issues with different UNIX
+   implementations. Use sigaction instead. */
+extern sighandler_t signal(int signum, sighandler_t handler);
 
 __END_DECLS
 

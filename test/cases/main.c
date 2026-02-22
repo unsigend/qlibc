@@ -19,6 +19,7 @@ extern UTEST_TEST_SUITE(stdint);
 extern UTEST_TEST_SUITE(stdlib);
 extern UTEST_TEST_SUITE(time);
 extern UTEST_TEST_SUITE(printf);
+extern UTEST_TEST_SUITE(signal);
 
 // POSIX Unix
 extern UTEST_TEST_SUITE(elf);
@@ -54,6 +55,7 @@ int main(int argc, char *argv[]) {
     UTEST_RUN_TEST_SUITE(time);
     UTEST_RUN_TEST_SUITE(termios);
     UTEST_RUN_TEST_SUITE(printf);
+    UTEST_RUN_TEST_SUITE(signal);
   } else {
     if (MATCH(argv[1], "assert")) {
       UTEST_RUN_TEST_SUITE(assert);
@@ -89,6 +91,8 @@ int main(int argc, char *argv[]) {
       UTEST_RUN_TEST_SUITE(termios);
     } else if (MATCH(argv[1], "printf")) {
       UTEST_RUN_TEST_SUITE(printf);
+    } else if (MATCH(argv[1], "signal")) {
+      UTEST_RUN_TEST_SUITE(signal);
     }
   }
 
