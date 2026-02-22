@@ -18,11 +18,11 @@
 #include <stdarg.h>
 #include <stddef.h>
 
-extern int __printf_core(char *restrict __buffer, size_t __bufsz,
-                         const char *restrict __format, va_list __vlist);
+extern int printf_core(char *restrict __buffer, size_t __bufsz,
+                       const char *restrict __format, va_list __vlist);
 
 /* vsnprintf just a wrapper of __printf_core */
 int vsnprintf(char *restrict __buffer, size_t __bufsz,
               const char *restrict __format, va_list __vlist) {
-  return __printf_core(__buffer, __bufsz, __format, __vlist);
+  return printf_core(__buffer, __bufsz, __format, __vlist);
 }

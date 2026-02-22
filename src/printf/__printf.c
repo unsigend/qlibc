@@ -55,7 +55,6 @@ enum {
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-#define OUT_ERROR -1
 #define INT_BUFFSZ                                                             \
   32 /* buffer size for integer conversion, enough for 64-bit integer */
 
@@ -86,7 +85,7 @@ enum {
 
 /* Length modifiers */
 enum {
-  LEN_NONE,
+  LEN_NONE = 0,
   LEN_H,
   LEN_HH,
   LEN_L,
@@ -95,181 +94,200 @@ enum {
 };
 
 /* Output context */
-struct _OUT_CTX {
-  unsigned char *__buff; /* destination buffer */
-  size_t __bufsz;        /* destination buffer size */
-  size_t __pos;          /* current write position in __buff */
-  int __total;           /* total bytes written */
+struct ctx {
+  unsigned char *buff; /* destination buffer */
+  size_t bufsz;        /* destination buffer size */
+  size_t pos;          /* current write position in buff */
+  int total;           /* total bytes written */
 };
 
-#define BUFF_IS_FULL(CTX)                                                      \
-  (((CTX)->__pos >= (CTX)->__bufsz)) /* buffer is full */
-#define BUFF_LEFT(CTX)                                                         \
-  (((CTX)->__bufsz - (CTX)->__pos)) /* buffer left size                        \
-                                     */
+#define BUFF_IS_FULL(ctx) (((ctx)->pos >= (ctx)->bufsz)) /* buffer is full */
+#define BUFF_LEFT(ctx) (((ctx)->bufsz - (ctx)->pos))     /* buffer left size */
 
 /* Argument pack used for pop arguments from stack */
-union __arg_pack {
-  long double __f; /* float */
-  uintmax_t __i;   /* integer */
-  void *__p;       /* pointer */
+union arg {
+  uintmax_t i; /* integer */
+  void *p;     /* pointer */
 };
 
-/* Format specification */
-struct __fmt_spec {
-  int __width;     /* width specifier */
-  int __precision; /* precision specifier */
-  int __length;    /* length modifier */
-  int __flags;     /* flags */
+/* Finite state machine */
+struct fsm_t {
+  int state;        /* current state */
+  int flags;        /* flags */
+  int length;       /* length */
+  size_t width;     /* width */
+  size_t precision; /* precision */
 };
-
-#define FLAG_SET(F, FLAG) ((F) |= (FLAG))    /* set flag */
-#define FLAG_CLEAR(F, FLAG) ((F) &= ~(FLAG)) /* clear flag */
-
-#define FLAG_PADDING_ZERO 0x01 /* zero padding flag */
-#define FLAG_LEFT_ALIGN 0x02   /* left align flag */
-#define FLAG_PREFIX 0x04       /* prefix flag */
-
-#define FLAG_IS_PADDING_ZERO(F)                                                \
-  ((F) & FLAG_PADDING_ZERO) /* check if padding zero flag is set */
-#define FLAG_IS_LEFT_ALIGN(F)                                                  \
-  ((F) & FLAG_LEFT_ALIGN) /* check if left align flag is set */
-#define FLAG_IS_PREFIX(F)                                                      \
-  ((F) & FLAG_PREFIX) /* check if prefix flag is set                           \
-                       */
-#define SPEC_RESET(SPEC)                                                       \
-  do {                                                                         \
-    memset(SPEC, 0, sizeof(struct __fmt_spec));                                \
-    (SPEC)->__precision = -1;                                                  \
-    (SPEC)->__length = LEN_NONE;                                               \
-  } while (0)
 
 /* Write an unsigned integer to the buffer, without sign handling and NULL
-   terminator. Return the number of characters written. */
-static size_t __write_num(unsigned char *buff, uintmax_t val, int base,
-                          bool upper) {
-  unsigned char __buff[INT_BUFFSZ];
-  size_t __len = 0;
+   terminator. Return the number of characters written. If the buff is NULL,
+   no write will be performed just return the number of characters that would
+   be written. */
+
+static size_t itoa(unsigned char *buff, uintmax_t val, int base, bool upper);
+
+/* Raw output functions, no padding, formatting or sign handling, just write to
+   the context buffer and update the context */
+static void rawoutc(struct ctx *ctx, unsigned char ch);
+static void rawouts(struct ctx *ctx, const unsigned char *str, size_t len);
+static inline void rawpad(struct ctx *ctx, int len, unsigned char pad);
+
+/* Formatting functions, apply padding, formatting, prefix, width, precision
+   etc. This function is used as a middle abstraction layer. */
+static void emit(struct ctx *ctx, struct fsm_t *fsm,
+                 const unsigned char *prefix, size_t prefixlen,
+                 const unsigned char *body, size_t bodylen, size_t fillinglen);
+
+/* Write a number or string to the context based on the finite state machine */
+static void outnum(struct ctx *ctx, struct fsm_t *fsm, uintmax_t val, int base,
+                   bool upper, const unsigned char *prefix, size_t prefixlen);
+static void outs(struct ctx *ctx, struct fsm_t *fsm, const unsigned char *str,
+                 size_t len);
+
+#define PAD_ZERO 0x01   /* zero padding flag */
+#define LEFT_ALIGN 0x02 /* left align flag */
+#define PREFIX 0x04     /* prefix flag */
+#define PRECISION 0x08  /* precision flag */
+
+#define IS_PAD_ZERO(flag)                                                      \
+  ((flag) & PAD_ZERO) /* check if padding zero flag is set */
+#define IS_LEFT_ALIGN(flag)                                                    \
+  ((flag) & LEFT_ALIGN) /* check if left align flag is set */
+#define HAS_PREFIX(flag)                                                       \
+  ((flag) & PREFIX) /* check if prefix flag is set                             \
+                     */
+#define HAS_PRECISION(flag)                                                    \
+  ((flag) & PRECISION) /* check if precision flag is set                       \
+                        */
+/* Reset the finite state machine */
+#define FSM_RESET(fsm)                                                         \
+  do {                                                                         \
+    memset(fsm, 0, sizeof(struct fsm_t));                                      \
+    (fsm)->state = STATE_NORMAL;                                               \
+  } while (0)
+#define FSM_SWITCH(fsm, newstate)                                              \
+  ((fsm)->state = (newstate)) /* switch to new state */
+#define FSM_SET_FLAG(fsm, flag) ((fsm)->flags |= (flag))    /* set flag */
+#define FSM_CLEAR_FLAG(fsm, flag) ((fsm)->flags &= ~(flag)) /* clear flag */
+
+static size_t itoa(unsigned char *buff, uintmax_t val, int base, bool upper) {
+  size_t len = 0;
   do {
-    int __digit = val % base;
-    unsigned char __cw = __digit < 10 ? '0' + __digit
-                         : upper      ? 'A' + __digit - 10
-                                      : 'a' + __digit - 10;
-    __buff[__len++] = __cw;
+    int digit = val % base;
+    unsigned char cw = digit < 10 ? '0' + digit
+                       : upper    ? 'A' + digit - 10
+                                  : 'a' + digit - 10;
+    if (buff)
+      buff[len] = cw;
+    len++;
     val /= base;
   } while (val);
 
-  /* reverse the buffer in place */
-  for (size_t __i = 0, __j = __len - 1; __i < __j; __i++, __j--) {
-    unsigned char __tmp = __buff[__i];
-    __buff[__i] = __buff[__j];
-    __buff[__j] = __tmp;
+  if (buff) {
+    /* reverse the buffer in place */
+    for (size_t i = 0, j = len - 1; i < j; i++, j--) {
+      unsigned char tmp = buff[i];
+      buff[i] = buff[j];
+      buff[j] = tmp;
+    }
   }
-  /* copy the buffer to the output buffer */
-  if (buff)
-    memcpy(buff, __buff, __len);
-  return __len;
+
+  return len;
 }
 
 /* Write a single character to the buffer and update the context */
-static void __ctx_outc(struct _OUT_CTX *__ctx, unsigned char __ch) {
-  __ctx->__total++;
-  if (!BUFF_IS_FULL(__ctx))
-    __ctx->__buff[__ctx->__pos++] = __ch;
+static void rawoutc(struct ctx *ctx, unsigned char ch) {
+  ctx->total++;
+  if (!BUFF_IS_FULL(ctx))
+    ctx->buff[ctx->pos++] = ch;
 }
 
 /* Write a string to the buffer and update the context, truncate if the string
    is longer than the buffer */
-static void __ctx_outs(struct _OUT_CTX *__ctx, const unsigned char *__str,
-                       size_t __len) {
-  size_t __n = MIN(__len, BUFF_LEFT(__ctx));
-  __ctx->__total += __len;
-  if (__n) {
-    memcpy(__ctx->__buff + __ctx->__pos, __str, __n);
-    __ctx->__pos += __n;
+static void rawouts(struct ctx *ctx, const unsigned char *str, size_t len) {
+  size_t nw = MIN(len, BUFF_LEFT(ctx));
+  ctx->total += len;
+  if (nw) {
+    memcpy(ctx->buff + ctx->pos, str, nw);
+    ctx->pos += nw;
   }
 }
 
 /* Write padding to the buffer and update the context */
-static void __ctx_outpad(struct _OUT_CTX *__ctx, int __len,
-                         unsigned char __padding) {
-  while (__len-- > 0) {
-    __ctx_outc(__ctx, __padding);
+static inline void rawpad(struct ctx *ctx, int len, unsigned char pad) {
+  while (len-- > 0) {
+    rawoutc(ctx, pad);
   }
 }
 
 /* Emit the prefix, body, fillings (zeros) and padding (spaces or zeros) to the
  * context */
-static void __ctx_emit(struct _OUT_CTX *__ctx, struct __fmt_spec *__spec,
-                       const unsigned char *__prefix, size_t __prefixlen,
-                       const unsigned char *__body, size_t __bodylen,
-                       size_t __fillinglen) {
-  size_t total = __prefixlen + __fillinglen + __bodylen;
-  size_t padlen = (size_t)(MAX(0, (int)(__spec->__width - total)));
+static void emit(struct ctx *ctx, struct fsm_t *fsm,
+                 const unsigned char *prefix, size_t prefixlen,
+                 const unsigned char *body, size_t bodylen, size_t fillinglen) {
+  size_t total = prefixlen + fillinglen + bodylen;
+  size_t padlen = fsm->width > total ? fsm->width - total : 0;
 
   /* left align */
-  if (FLAG_IS_LEFT_ALIGN(__spec->__flags)) {
+  if (IS_LEFT_ALIGN(fsm->flags)) {
     /* Format: [prefix][fillings][body][padding(spaces)] */
-    __ctx_outs(__ctx, __prefix, __prefixlen);
-    __ctx_outpad(__ctx, __fillinglen, '0');
-    __ctx_outs(__ctx, __body, __bodylen);
-    __ctx_outpad(__ctx, padlen, ' ');
+    rawouts(ctx, prefix, prefixlen);
+    rawpad(ctx, fillinglen, '0');
+    rawouts(ctx, body, bodylen);
+    rawpad(ctx, padlen, ' ');
   }
   /* right align */
   else {
-    if (__spec->__precision >= 0) {
+    if (HAS_PRECISION(fsm->flags)) {
       /* Format: [padding(spaces)][prefix][fillings][body] */
-      __ctx_outpad(__ctx, padlen, ' ');
-      __ctx_outs(__ctx, __prefix, __prefixlen);
-      __ctx_outpad(__ctx, __fillinglen, '0');
-      __ctx_outs(__ctx, __body, __bodylen);
+      rawpad(ctx, padlen, ' ');
+      rawouts(ctx, prefix, prefixlen);
+      rawpad(ctx, fillinglen, '0');
+      rawouts(ctx, body, bodylen);
 
     } else {
-      if (FLAG_IS_PADDING_ZERO(__spec->__flags)) {
+      if (IS_PAD_ZERO(fsm->flags)) {
         /* Format: [prefix][padding(zeros)][body] */
-        __ctx_outs(__ctx, __prefix, __prefixlen);
-        __ctx_outpad(__ctx, padlen, '0');
-        __ctx_outs(__ctx, __body, __bodylen);
+        rawouts(ctx, prefix, prefixlen);
+        rawpad(ctx, padlen, '0');
+        rawouts(ctx, body, bodylen);
       } else {
         /* Format: [padding(spaces)][prefix][body] */
-        __ctx_outpad(__ctx, padlen, ' ');
-        __ctx_outs(__ctx, __prefix, __prefixlen);
-        __ctx_outs(__ctx, __body, __bodylen);
+        rawpad(ctx, padlen, ' ');
+        rawouts(ctx, prefix, prefixlen);
+        rawouts(ctx, body, bodylen);
       }
     }
   }
 }
 
-/* Write a number to the context */
-static void ctx_outnum(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
-                       uintmax_t val, int base, bool upper,
-                       const unsigned char *prefix, size_t prefixlen) {
+/* Write a number to the context, both the width and precision are minimum
+   bounds, the actual length might be exceeded. */
+static void outnum(struct ctx *ctx, struct fsm_t *fsm, uintmax_t val, int base,
+                   bool upper, const unsigned char *prefix, size_t prefixlen) {
   unsigned char buff[INT_BUFFSZ];
   size_t len;
-  if (!spec->__precision && !val)
+  if (HAS_PRECISION(fsm->flags) && !fsm->precision && !val)
     len = 0;
   else
-    len = __write_num(buff, val, base, upper);
-  size_t fillinglen = (size_t)(MAX(0, (int)(spec->__precision - len)));
-  __ctx_emit(ctx, spec, prefix, prefixlen, buff, len, fillinglen);
+    len = itoa(buff, val, base, upper);
+  size_t fillinglen = HAS_PRECISION(fsm->flags)
+                          ? fsm->precision > len ? fsm->precision - len : 0
+                          : 0;
+  emit(ctx, fsm, prefix, prefixlen, buff, len, fillinglen);
 }
 
-/* Write a string to the context */
-static void ctx_outs(struct _OUT_CTX *ctx, struct __fmt_spec *spec,
-                     const unsigned char *str, size_t len) {
-  if (spec->__precision >= 0) {
-    size_t __min_len = MIN((size_t)spec->__precision, len);
-    FLAG_CLEAR(spec->__flags, FLAG_PADDING_ZERO);
-    __ctx_emit(ctx, spec, NULL, 0, str, __min_len, 0);
+/* Write a string to the context, width is the minimum, precision is the maximum
+   length. */
+static void outs(struct ctx *ctx, struct fsm_t *fsm, const unsigned char *str,
+                 size_t len) {
+  if (HAS_PRECISION(fsm->flags)) {
+    /* Truncate the string if necessary */
+    size_t minlen = MIN(fsm->precision, len);
+    FSM_CLEAR_FLAG(fsm, PAD_ZERO);
+    emit(ctx, fsm, NULL, 0, str, minlen, 0);
   } else
-    __ctx_emit(ctx, spec, NULL, 0, str, len, 0);
-}
-
-/* Write a single character to the context, just a thin wrapper of __ctx_outc
-   for consistency */
-static inline __attribute__((always_inline)) void ctx_outc(struct _OUT_CTX *ctx,
-                                                           unsigned char ch) {
-  __ctx_outc(ctx, ch); /* inline the __ctx_outc function */
+    emit(ctx, fsm, NULL, 0, str, len, 0);
 }
 
 /* Get the signed argument type based on the length modifier */
@@ -311,213 +329,204 @@ static int unsigned_arg_type(int len) {
 /* Pop arguments from the argument list based on promotion rules, the
    implementation is based on the reference implementation of the musl C
    library 1.2.5 */
-static void pop_arg(union __arg_pack *__arg, int __type, va_list *__ap) {
+static void pop_arg(union arg *__arg, int __type, va_list *__ap) {
   switch (__type) {
   case ARG_PTR:
-    __arg->__p = va_arg(*__ap, void *);
+    __arg->p = va_arg(*__ap, void *);
     break;
   case ARG_SHORT:
-    __arg->__i = va_arg(*__ap, int);
+    __arg->i = va_arg(*__ap, int);
     break;
   case ARG_USHORT:
-    __arg->__i = va_arg(*__ap, unsigned int);
+    __arg->i = va_arg(*__ap, unsigned int);
     break;
   case ARG_CHAR:
-    __arg->__i = va_arg(*__ap, int);
+    __arg->i = va_arg(*__ap, int);
     break;
   case ARG_UCHAR:
-    __arg->__i = va_arg(*__ap, unsigned int);
+    __arg->i = va_arg(*__ap, unsigned int);
     break;
   case ARG_INT:
-    __arg->__i = va_arg(*__ap, int);
+    __arg->i = va_arg(*__ap, int);
     break;
   case ARG_UINT:
-    __arg->__i = va_arg(*__ap, unsigned int);
+    __arg->i = va_arg(*__ap, unsigned int);
     break;
   case ARG_LONG:
-    __arg->__i = va_arg(*__ap, long);
+    __arg->i = va_arg(*__ap, long);
     break;
   case ARG_ULONG:
-    __arg->__i = va_arg(*__ap, unsigned long);
+    __arg->i = va_arg(*__ap, unsigned long);
     break;
   case ARG_LLONG:
-    __arg->__i = va_arg(*__ap, long long);
+    __arg->i = va_arg(*__ap, long long);
     break;
   case ARG_ULLONG:
-    __arg->__i = va_arg(*__ap, unsigned long long);
+    __arg->i = va_arg(*__ap, unsigned long long);
     break;
   case ARG_IMAX:
-    __arg->__i = va_arg(*__ap, intmax_t);
+    __arg->i = va_arg(*__ap, intmax_t);
     break;
   case ARG_UMAX:
-    __arg->__i = va_arg(*__ap, uintmax_t);
+    __arg->i = va_arg(*__ap, uintmax_t);
     break;
   case ARG_SIZE_T:
-    __arg->__i = va_arg(*__ap, size_t);
+    __arg->i = va_arg(*__ap, size_t);
     break;
   case ARG_SSIZE_T:
-    __arg->__i = va_arg(*__ap, ssize_t);
+    __arg->i = va_arg(*__ap, ssize_t);
     break;
   }
 }
 
 /* Internal core implementation of formatted output. With parser and
    formatter support. */
-int __printf_core(char *restrict __buffer, size_t __bufsz,
-                  const char *restrict __format, va_list __vlist) {
-  struct _OUT_CTX __ctx = {
-      .__buff = (unsigned char *)__buffer,
-      .__pos = 0,
-      .__total = 0,
+int printf_core(char *restrict buff, size_t bufsz, const char *restrict fmt,
+                va_list vlist) {
+  struct ctx ctx = {
+      .buff = (unsigned char *)buff,
+      .pos = 0,
+      .total = 0,
   };
-  struct __fmt_spec __spec = {
-      .__width = 0,
-      .__precision = -1, /* -1 means precision is not set */
-      .__flags = 0,
-  };
-  int __stat = STATE_NORMAL;
-  union __arg_pack __arg;
-  bool __reach_precision = false;
-  va_list __ap;
+  struct fsm_t fsm;
+  union arg arg;
+  va_list ap;
 
   /* the copy allows passing va_list* even if va_list is an array */
-  va_copy(__ap, __vlist);
+  va_copy(ap, vlist);
 
-  if (!__ctx.__buff || !__bufsz)
-    __ctx.__bufsz = 0;
+  FSM_RESET(&fsm);
+
+  if (!ctx.buff || !bufsz)
+    ctx.bufsz = 0;
   else
-    __ctx.__bufsz = __bufsz - 1;
+    ctx.bufsz = bufsz - 1;
 
-  while (__format && *__format) {
-    switch (__stat) {
+  while (fmt && *fmt) {
+    switch (fsm.state) {
     case STATE_NORMAL: {
-      if (*__format == '%') {
-        SPEC_RESET(&__spec);
-        __reach_precision = false;
-        __stat = STATE_FORMAT;
+      if (*fmt == '%') {
+        FSM_RESET(&fsm);
+        FSM_SWITCH(&fsm, STATE_FORMAT);
       } else
-        ctx_outc(&__ctx, *__format);
+        rawoutc(&ctx, *fmt);
       break;
     }
     case STATE_FORMAT: {
-      switch (*__format) {
+      switch (*fmt) {
       case '%':
-        ctx_outc(&__ctx, '%');
-        __stat = STATE_NORMAL;
+        rawoutc(&ctx, '%');
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       /* specifiers */
       case SPEC_C:
-        pop_arg(&__arg, ARG_CHAR, &__ap);
-        ctx_outs(&__ctx, &__spec, (unsigned char *)&__arg.__i, 1);
-        __stat = STATE_NORMAL;
+        pop_arg(&arg, ARG_CHAR, &ap);
+        outs(&ctx, &fsm, (unsigned char *)&arg.i, 1);
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_S:
-        pop_arg(&__arg, ARG_PTR, &__ap);
-        if (!__arg.__p)
-          ctx_outs(&__ctx, &__spec, (unsigned char *)"(null)", 6);
+        pop_arg(&arg, ARG_PTR, &ap);
+        if (!arg.p)
+          outs(&ctx, &fsm, (unsigned char *)"(null)", 6);
         else
-          ctx_outs(&__ctx, &__spec, (unsigned char *)__arg.__p,
-                   strlen((char *)__arg.__p));
-        __stat = STATE_NORMAL;
+          outs(&ctx, &fsm, (unsigned char *)arg.p, strlen((char *)arg.p));
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_I:
       case SPEC_D:
-        pop_arg(&__arg, signed_arg_type(__spec.__length), &__ap);
-        if ((intmax_t)__arg.__i < 0) {
-          ctx_outnum(&__ctx, &__spec, -(uintmax_t)(intmax_t)__arg.__i, 10,
-                     false, (unsigned char *)"-", 1);
+        pop_arg(&arg, signed_arg_type(fsm.length), &ap);
+        if ((intmax_t)arg.i < 0) {
+          outnum(&ctx, &fsm, -(uintmax_t)(intmax_t)arg.i, 10, false,
+                 (unsigned char *)"-", 1);
         } else {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 10, false, NULL, 0);
+          outnum(&ctx, &fsm, arg.i, 10, false, NULL, 0);
         }
-        __stat = STATE_NORMAL;
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_O:
-        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags)) {
-          if (__arg.__i != 0) {
-            size_t len = __write_num(NULL, __arg.__i, 8, false);
-            if (__spec.__precision >= (int)(len + 1)) {
-              ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, NULL, 0);
+        pop_arg(&arg, unsigned_arg_type(fsm.length), &ap);
+        if (HAS_PREFIX(fsm.flags)) {
+          if (arg.i != 0) {
+            size_t len = itoa(NULL, arg.i, 8, false);
+            if (HAS_PRECISION(fsm.flags) && fsm.precision >= len + 1) {
+              outnum(&ctx, &fsm, arg.i, 8, false, NULL, 0);
             } else {
-              ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false,
-                         (unsigned char *)"0", 1);
+              outnum(&ctx, &fsm, arg.i, 8, false, (unsigned char *)"0", 1);
             }
           } else {
-            __ctx_emit(&__ctx, &__spec, NULL, 0, (unsigned char *)"0", 1, 0);
+            emit(&ctx, &fsm, NULL, 0, (unsigned char *)"0", 1, 0);
           }
 
         } else {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 8, false, NULL, 0);
+          outnum(&ctx, &fsm, arg.i, 8, false, NULL, 0);
         }
-        __stat = STATE_NORMAL;
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_X:
-        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags) && __arg.__i != 0) {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, false,
-                     (unsigned char *)"0x", 2);
+        pop_arg(&arg, unsigned_arg_type(fsm.length), &ap);
+        if (HAS_PREFIX(fsm.flags) && arg.i != 0) {
+          outnum(&ctx, &fsm, arg.i, 16, false, (unsigned char *)"0x", 2);
         } else {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, false, NULL, 0);
+          outnum(&ctx, &fsm, arg.i, 16, false, NULL, 0);
         }
-        __stat = STATE_NORMAL;
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_XX:
-        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
-        if (FLAG_IS_PREFIX(__spec.__flags) && __arg.__i != 0) {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, true,
-                     (unsigned char *)"0X", 2);
+        pop_arg(&arg, unsigned_arg_type(fsm.length), &ap);
+        if (HAS_PREFIX(fsm.flags) && arg.i != 0) {
+          outnum(&ctx, &fsm, arg.i, 16, true, (unsigned char *)"0X", 2);
         } else {
-          ctx_outnum(&__ctx, &__spec, __arg.__i, 16, true, NULL, 0);
+          outnum(&ctx, &fsm, arg.i, 16, true, NULL, 0);
         }
-        __stat = STATE_NORMAL;
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_U:
-        pop_arg(&__arg, unsigned_arg_type(__spec.__length), &__ap);
-        ctx_outnum(&__ctx, &__spec, __arg.__i, 10, false, NULL, 0);
-        __stat = STATE_NORMAL;
+        pop_arg(&arg, unsigned_arg_type(fsm.length), &ap);
+        outnum(&ctx, &fsm, arg.i, 10, false, NULL, 0);
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       case SPEC_P:
-        pop_arg(&__arg, ARG_PTR, &__ap);
-        if (__arg.__p) {
+        pop_arg(&arg, ARG_PTR, &ap);
+        if (arg.p) {
           /* for %p specifier the prefix is always 0x */
-          ctx_outnum(&__ctx, &__spec, (uintmax_t)(uintptr_t)__arg.__p, 16,
-                     false, (unsigned char *)"0x", 2);
+          outnum(&ctx, &fsm, (uintmax_t)(uintptr_t)arg.p, 16, false,
+                 (unsigned char *)"0x", 2);
         } else {
-          ctx_outs(&__ctx, &__spec, (unsigned char *)"(nil)", 5);
+          outs(&ctx, &fsm, (unsigned char *)"(nil)", 5);
         }
-        __stat = STATE_NORMAL;
+        FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       /* flags */
       case '-':
-        FLAG_SET(__spec.__flags, FLAG_LEFT_ALIGN);
+        FSM_SET_FLAG(&fsm, LEFT_ALIGN);
         break;
       case '0':
-        FLAG_SET(__spec.__flags, FLAG_PADDING_ZERO);
+        FSM_SET_FLAG(&fsm, PAD_ZERO);
         break;
       case '#':
-        FLAG_SET(__spec.__flags, FLAG_PREFIX);
+        FSM_SET_FLAG(&fsm, PREFIX);
         break;
       /* length modifiers */
       case 'h': {
-        if (*(__format + 1) == 'h') {
-          __spec.__length = LEN_HH;
-          __format++;
+        if (*(fmt + 1) == 'h') {
+          fsm.length = LEN_HH;
+          fmt++;
         } else {
-          __spec.__length = LEN_H;
+          fsm.length = LEN_H;
         }
         break;
       }
       case 'l': {
-        if (*(__format + 1) == 'l') {
-          __spec.__length = LEN_LL;
-          __format++;
+        if (*(fmt + 1) == 'l') {
+          fsm.length = LEN_LL;
+          fmt++;
         } else {
-          __spec.__length = LEN_L;
+          fsm.length = LEN_L;
         }
         break;
       }
       case 'z': {
-        __spec.__length = LEN_Z;
+        fsm.length = LEN_Z;
         break;
       }
       /* width or precision */
@@ -530,38 +539,36 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       case '7':
       case '8':
       case '9': {
-        while (isdigit(*__format)) {
-          if (__reach_precision) {
-            __spec.__precision = __spec.__precision * 10 + (*__format++ - '0');
+        while (isdigit(*fmt)) {
+          if (HAS_PRECISION(fsm.flags)) {
+            fsm.precision = fsm.precision * 10 + (*fmt++ - '0');
           } else {
-            __spec.__width = __spec.__width * 10 + (*__format++ - '0');
+            fsm.width = fsm.width * 10 + (*fmt++ - '0');
           }
         }
-        __format--;
+        fmt--;
         break;
       }
       case '.':
-        __reach_precision = true;
-        __spec.__precision = 0;
+        FSM_SET_FLAG(&fsm, PRECISION);
+        fsm.precision = 0;
         break;
       case '*': {
-        pop_arg(&__arg, ARG_INT, &__ap);
-        int __wp = (int)(__arg.__i);
-        if (__reach_precision) {
-          if (__wp >= 0) {
-            __spec.__precision = __wp;
-          }
+        pop_arg(&arg, ARG_INT, &ap);
+        int wp = (int)(arg.i);
+        if (HAS_PRECISION(fsm.flags)) {
           /* If the * yields a negative value in precision, ignore it */
-          __reach_precision = false;
-
+          if (wp >= 0) {
+            fsm.precision = wp;
+          }
         } else {
-          if (__wp < 0) {
-            /* If * yields a negative value in width, treats it as - flag with a
-             width of the absolute value */
-            FLAG_SET(__spec.__flags, FLAG_LEFT_ALIGN);
-            __spec.__width = -__wp;
+          if (wp < 0) {
+            /* If (*) yields a negative value in width, treats it as (-) flag
+             with a width of the absolute value */
+            FSM_SET_FLAG(&fsm, LEFT_ALIGN);
+            fsm.width = -wp;
           } else {
-            __spec.__width = __wp;
+            fsm.width = wp;
           }
         }
         break;
@@ -569,12 +576,12 @@ int __printf_core(char *restrict __buffer, size_t __bufsz,
       }
     }
     }
-    __format++;
+    fmt++;
   }
 
-  if (__buffer && __bufsz)
-    __ctx.__buff[MIN(__ctx.__pos, __ctx.__bufsz)] = '\0';
+  if (buff && bufsz)
+    ctx.buff[MIN(ctx.pos, ctx.bufsz)] = '\0';
 
-  va_end(__ap);
-  return __ctx.__total;
+  va_end(ap);
+  return ctx.total;
 }
