@@ -31,7 +31,6 @@ long long atoll(const char *str) {
     ++str;
   }
 
-  /* The -LLONG_MIN is UB, so the function doesn't check here */
   while (isdigit(*str))
     n = n * 10 + (*str++ - '0');
 

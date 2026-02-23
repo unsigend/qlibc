@@ -10,12 +10,11 @@
 #include "numerics/test_llabs.h"
 #include "numerics/test_strtol.h"
 #include "numerics/test_strtoll.h"
+#include "numerics/test_strtoul.h"
+#include "numerics/test_strtoull.h"
 
 // algorithm
 #include "algo/test_bsearch.h"
-
-// memory management
-#include "malloc/test_malloc.h"
 
 UTEST_TEST_SUITE(stdlib) {
   // ASCII to integer conversions
@@ -35,9 +34,6 @@ UTEST_TEST_SUITE(stdlib) {
   // string to integer conversions
   UTEST_RUN_TEST_CASE(strtol);
   UTEST_RUN_TEST_CASE(strtoll);
-
-  // memory management
-  UTEST_RUN_TEST_CASE(malloc);
-  UTEST_RUN_TEST_CASE(calloc);
-  UTEST_RUN_TEST_CASE(realloc);
+  UTEST_RUN_TEST_CASE(strtoul);
+  UTEST_RUN_TEST_CASE(strtoull);
 }

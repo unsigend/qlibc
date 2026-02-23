@@ -14,20 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "strtox.h"
-#include <errno.h>
-#include <limits.h>
-#include <stddef.h>
 
-long strtol(const char *restrict str, char **restrict str_end, int base) {
-  int neg = 0;
-  errno = 0;
-  unsigned long long r = strtox(str, str_end, base, (ULL)LONG_MAX + 1, &neg);
-  if (errno == ERANGE) {
-    if (neg)
-      return LONG_MIN;
-    else
-      return LONG_MAX;
-  }
-  return neg ? (long)(-r) : (long)r;
+#include <stdlib.h>
+
+uintmax_t strtoumax(const char *restrict str, char **restrict str_end,
+                    int base) {
+  return strtoull(str, str_end, base);
 }
