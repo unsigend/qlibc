@@ -18,9 +18,11 @@
 #ifndef _QLIBC_STRTOX_H_
 #define _QLIBC_STRTOX_H_
 
+/* Core parser function for converting a string to a number. The lim is positive
+   boundary, if the sequence contains negative sign, set the neg to 1. */
 extern unsigned long long strtox(const char *restrict str,
                                  char **restrict str_end, int base,
-                                 unsigned long long lim, int *sign);
+                                 unsigned long long lim, int *neg);
 
 #define ULL unsigned long long
 #define LL long long

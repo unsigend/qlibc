@@ -19,14 +19,14 @@
 
 long long atoll(const char *str) {
   long long n = 0;
-  int neg = 1;
+  int neg = 0;
 
   while (isspace(*str))
     ++str;
 
   switch (*str) {
   case '-':
-    neg = -1;
+    neg = 1;
   case '+':
     ++str;
   }
@@ -34,5 +34,5 @@ long long atoll(const char *str) {
   while (isdigit(*str))
     n = n * 10 + (*str++ - '0');
 
-  return neg * n;
+  return neg ? -n : n;
 }

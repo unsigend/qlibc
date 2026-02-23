@@ -1,3 +1,19 @@
+/* qlibc - A light-weight and portable C standard library
+ * Copyright (C) 2025 Qiu Yixiang
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <ctype.h>
 #include <errno.h>
 
@@ -7,9 +23,8 @@
 #define CHARTODIGIT(c) (isalpha((c)) ? (c) - 'a' + 10 : (c) - '0')
 #define VALID_DIGIT(c, base) (CHARTODIGIT(c) < base)
 
-/* Core parser function for convert a string to a number. */
 unsigned long long strtox(const char *restrict str, char **restrict str_end,
-                          int base, unsigned long long lim, int *sign) {
+                          int base, unsigned long long lim, int *neg) {
   unsigned long long n = 0;
   char *p = (char *)str;
   /* A sentinel pointer to the start of the first digit number. */
@@ -28,7 +43,7 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
 
   switch (*p) {
   case '-':
-    *sign = 1;
+    *neg = 1;
   case '+':
     ++p;
   }
@@ -54,8 +69,8 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
     unsigned char ch = tolower(*p);
     if (!isalnum(ch) || !VALID_DIGIT(ch, base))
       break;
-    /* Based on ANSI/ISO C standard, even the overflow it should still consuming
-       digits. */
+    /* Based on ANSI/ISO C standard, even the overflow occurs, it should still
+       consuming digits. */
     if (n > (lim - CHARTODIGIT(ch)) / base) {
       errno = ERANGE;
       overflow = 1;

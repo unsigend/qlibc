@@ -20,7 +20,7 @@
 
 unsigned long strtoul(const char *restrict str, char **restrict str_end,
                       int base) {
-  int sign = 0;
-  unsigned long long r = strtox(str, str_end, base, (ULL)ULONG_MAX, &sign);
-  return sign ? (UL)-r : (UL)r;
+  int neg = 0;
+  unsigned long long r = strtox(str, str_end, base, (ULL)ULONG_MAX, &neg);
+  return neg ? (UL)-r : (UL)r;
 }
