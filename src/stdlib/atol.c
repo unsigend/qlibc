@@ -17,24 +17,6 @@
 
 #include <ctype.h>
 
-long atol(const char *str) {
-  long r = 0;
-  long sign = 1;
-  int i = 0;
+extern long long atoll(const char *str);
 
-  while (isspace(str[i])) {
-    ++i;
-  }
-  if (str[i] == '-') {
-    sign = -1;
-    ++i;
-  } else if (str[i] == '+') {
-    ++i;
-  }
-
-  while (isdigit(str[i])) {
-    r = r * 10 + (str[i] - '0');
-    ++i;
-  }
-  return sign * r;
-}
+long atol(const char *str) { return (long)atoll(str); }

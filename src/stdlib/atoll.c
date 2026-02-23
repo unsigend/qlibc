@@ -18,23 +18,22 @@
 #include <ctype.h>
 
 long long atoll(const char *str) {
-  long long r = 0;
-  long long sign = 1;
-  int i = 0;
+  long long n = 0;
+  int neg = 1;
 
-  while (isspace(str[i])) {
-    ++i;
-  }
-  if (str[i] == '-') {
-    sign = -1;
-    ++i;
-  } else if (str[i] == '+') {
-    ++i;
+  while (isspace(*str))
+    ++str;
+
+  switch (*str) {
+  case '-':
+    neg = -1;
+  case '+':
+    ++str;
   }
 
-  while (isdigit(str[i])) {
-    r = r * 10 + (str[i] - '0');
-    ++i;
-  }
-  return sign * r;
+  /* The -LLONG_MIN is UB, so the function doesn't check here */
+  while (isdigit(*str))
+    n = n * 10 + (*str++ - '0');
+
+  return neg * n;
 }
