@@ -71,6 +71,7 @@ endif
 # variables for GNU C Warning flags
 CC_WARNINGS 	:= 		    -Wall -Wextra -Werror
 CC_WARNINGS 	+= 		    -Wno-unused-parameter
+CC_WARNINGS     +=          -Wno-implicit-fallthrough
 
 CC_OPTIMIZE     :=
 
@@ -159,6 +160,10 @@ clean:
 
 # all target
 all: welcome create_build_dir lib
+TEST_DEP := welcome create_build_dir
+ifeq ($(USING_GNU), 0)
+TEST_DEP += lib
+endif
 
 # welcome target
 welcome:
@@ -231,9 +236,9 @@ export DEBUG
 
 # test target
 # execute test command in sub-make
-test: all
+test: $(TEST_DEP)
 	@$(MAKE) -C $(TEST_PATH)
 
 # test target for specific module
-test-%: all
+test-%: $(TEST_DEP)
 	@$(MAKE) -C $(TEST_PATH) test-$*

@@ -47,4 +47,7 @@ typedef int __uid_t;
 typedef int __gid_t;
 typedef int __pid_t;
 
+/* An integer type that can be accessed as an atomic entity */
+typedef int __sig_atomic_t;
+
 #endif

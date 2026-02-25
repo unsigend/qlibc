@@ -24,6 +24,10 @@
 /* Type of a signal handler. */
 typedef void (*sighandler_t)(int);
 
+/* An integral type that can be modified atomically, without the
+   possibility of a signal arriving in the middle of the operation.  */
+typedef __sig_atomic_t sig_atomic_t;
+
 __BEGIN_DECLS
 
 /* Sends a signal to the process specified by pid. If pid>0, then sends to
