@@ -22,92 +22,106 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Returned by div */
+typedef struct {
+  int quot;
+  int rem;
+} div_t;
+
+/* Returned by ldiv */
+typedef struct {
+  long quot;
+  long rem;
+} ldiv_t;
+
+/* Returned by lldiv */
+typedef struct {
+  long long quot;
+  long long rem;
+} lldiv_t;
+
 __BEGIN_DECLS
-/* Convert a string to an integer */
+
+/* Convert a ASCII to an integer */
 extern int atoi(const char *str);
-/* Convert a string to a long integer */
 extern long atol(const char *str);
-/* Convert a string to a long long integer */
 extern long long atoll(const char *str);
 
-/* Convert a string to a long integer */
+/* Convert a string to an integer with a specified base, and move forward the
+   pointer str_end to the last converted character */
 extern long strtol(const char *restrict str, char **restrict str_end, int base);
-/* Convert a string to a long long integer */
 extern long long strtoll(const char *restrict str, char **restrict str_end,
                          int base);
-/* Convert a string to an unsigned long integer */
 extern unsigned long strtoul(const char *restrict str, char **restrict str_end,
                              int base);
-/* Convert a string to an unsigned long long integer */
 extern unsigned long long strtoull(const char *restrict str,
                                    char **restrict str_end, int base);
-/* Convert a string to an intmax_t integer */
-extern intmax_t strtoimax(const char *restrict str, char **restrict str_end,
-                          int base);
-/* Convert a string to an uintmax_t integer */
-extern uintmax_t strtoumax(const char *restrict str, char **restrict str_end,
-                           int base);
 
-// program termination
-#if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
+#if defined(QLIBC_ISO_C_VERSION) && QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
 /* Causes abnormal program termination without cleaning up */
 extern void abort(void);
-/* Causes normal program termination with cleaning up */
+
+/* Program termination with status code, exit terminates the program with
+   cleanup, _Exit terminates the program without cleanup */
 extern void exit(int status);
-/* Causes normal program termination without cleaning up */
 extern void _Exit(int status);
 #else
 #include <stdnoreturn.h>
 /* Causes abnormal program termination without cleaning up */
 extern noreturn void abort(void);
-/* Causes normal program termination with cleaning up */
+
+/* Program termination with status code, exit terminates the program with
+   cleanup, _Exit terminates the program without cleanup */
 extern noreturn void exit(int status);
-/* Causes normal program termination without cleaning up */
 extern noreturn void _Exit(int status);
 #endif
 
-/* Allocate size bytes of uninitialized memory */
+/* Allocate SIZE bytes of uninitialized memory, the allocated memory is
+  always aligned with the max_align_t. */
 extern void *malloc(size_t size);
-/* Free memory allocated by malloc */
+/* Free memory allocated by malloc, recalloc and calloc */
 extern void free(void *ptr);
-/* Allocate memory for an array of num elements, each of which is size bytes */
+/* Allocate memory for an array of NUM elements, each of which is SIZE
+   bytes, the memory is always initialized to 0 */
 extern void *calloc(size_t num, size_t size);
 /* Reallocate memory and invalidate the old memory */
 extern void *realloc(void *ptr, size_t new_size);
 
-#if QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
-/* Allocate memory with a specific alignment */
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= ISO_C_STANDARD_C11
+/* Allocate memory with a specific ALIGNMENT bytes */
 extern void *aligned_alloc(size_t alignment, size_t size);
 #endif
 
-/* Search the array for an element that matches the key, the underlying search
-   algorithm is implementation-defined. */
+/* Search the array for an element that matches the key, the underlying
+   search algorithm is implementation-defined. */
 extern void *bsearch(const void *key, const void *ptr, size_t count,
                      size_t size, int (*comp)(const void *, const void *));
-/* Sort the array, the underlying sort algorithm is implementation-defined.*/
+/* Sort the array, the underlying sort algorithm is
+ * implementation-defined.*/
 extern void qsort(void *ptr, size_t count, size_t size,
                   int (*comp)(const void *, const void *));
 
-/* Compute the absolute value of an integer */
+/* Compute the absolute value of an integer N */
 extern int abs(int n);
-/* Compute the absolute value of a long integer */
 extern long labs(long n);
-/* Compute the absolute value of a long long integer */
 extern long long llabs(long long n);
-/* Compute the absolute value of an intmax_t integer */
-extern intmax_t imaxabs(intmax_t n);
+
+/* Compute the division of two integers */
+extern div_t div(int x, int y);
+extern ldiv_t ldiv(long x, long y);
+extern lldiv_t lldiv(long long x, long long y);
 
 /* Returns the value of the environment variable specified by name. */
 extern char *getenv(const char *name);
 
-/* Sets the value of the environment variable specified by name to value. If
- * name does exist in the environment, then its value is changed to value if
- * overwrite is nonzero. */
+/* Sets the value of the environment variable specified by name to value.
+ * If name does exist in the environment, then its value is changed to
+ * value if overwrite is nonzero. */
 extern int setenv(const char *name, const char *value, int overwrite);
 
-/* Removes the environment variable specified by name. If name does not exist in
-   the environment, then the function succeeds, and the environment is
-   unchanged. */
+/* Removes the environment variable specified by name. If name does not
+   exist in the environment, then the function succeeds, and the
+   environment is unchanged. */
 extern int unsetenv(const char *name);
 
 __END_DECLS
