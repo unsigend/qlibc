@@ -48,20 +48,6 @@ extern intmax_t strtoimax(const char *restrict str, char **restrict str_end,
 extern uintmax_t strtoumax(const char *restrict str, char **restrict str_end,
                            int base);
 
-#if defined(QLIBC_SUPPORT_FLOATING_POINT) && QLIBC_SUPPORT_FLOATING_POINT == 1
-/* Convert a string to a double precision floating point number */
-extern double atof(const char *str);
-
-/* Convert a string to a float precision floating point number */
-extern float strtof(const char *restrict str, char **restrict str_end);
-
-/* Convert a string to a double precision floating point number */
-extern double strtod(const char *restrict str, char **restrict str_end);
-
-/* Convert a string to a long double precision floating point number */
-extern long double strtold(const char *restrict str, char **restrict str_end);
-#endif
-
 // program termination
 #if QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
 /* Causes abnormal program termination without cleaning up */

@@ -1,4 +1,5 @@
 #include <utest.h>
+#include <utest/core.h>
 
 // ANSI/ISO C standard library
 extern UTEST_TEST_SUITE(assert);

@@ -23,9 +23,6 @@
    functions. */
 #include <feature.h>
 
-#define INT_BUFFSZ                                                             \
-  32 /* buffer size for integer conversion, enough for 64-bit integer */
-
 __BEGIN_DECLS
 
 /* Convert an integer to a string. If base is 10 and value is negative, the
