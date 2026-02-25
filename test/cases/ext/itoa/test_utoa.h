@@ -1,6 +1,6 @@
 #include <errno.h>
+#include <ext/itoa.h>
 #include <limits.h>
-#include <stdlib.h>
 #include <utest.h>
 
 #ifndef ITOA_BUFSZ
@@ -56,7 +56,8 @@ UTEST_TEST_CASE(utoa) {
   EXPECT_TRUE(ulltoa(1023ULL, buf, 2) == buf);
   EXPECT_EQUAL_STRING(buf, "1111111111");
   EXPECT_TRUE(ulltoa(ULLONG_MAX, buf, 2) == buf);
-  EXPECT_EQUAL_STRING(buf, "1111111111111111111111111111111111111111111111111111111111111111");
+  EXPECT_EQUAL_STRING(
+      buf, "1111111111111111111111111111111111111111111111111111111111111111");
 
   EXPECT_TRUE(ulltoa(0ULL, buf, 3) == buf);
   EXPECT_EQUAL_STRING(buf, "0");
@@ -166,6 +167,12 @@ UTEST_TEST_CASE(utoa) {
   EXPECT_EQUAL_STRING(buf, "4294967294");
   EXPECT_TRUE(utoa(255u, buf, 16) == buf);
   EXPECT_EQUAL_STRING(buf, "ff");
+#if UINT_MAX == 0xffffffffu
+  EXPECT_TRUE(utoa(UINT_MAX, buf, 2) == buf);
+  EXPECT_EQUAL_STRING(buf, "11111111111111111111111111111111");
+  EXPECT_TRUE(utoa(UINT_MAX, buf, 8) == buf);
+  EXPECT_EQUAL_STRING(buf, "37777777777");
+#endif
 
   EXPECT_TRUE(ultoa(0UL, buf, 10) == buf);
   EXPECT_EQUAL_STRING(buf, "0");
@@ -185,9 +192,30 @@ UTEST_TEST_CASE(utoa) {
 #endif
   EXPECT_TRUE(ultoa(255UL, buf, 16) == buf);
   EXPECT_EQUAL_STRING(buf, "ff");
+#if ULONG_MAX == 0xffffffffUL
+  EXPECT_TRUE(ultoa(ULONG_MAX, buf, 2) == buf);
+  EXPECT_EQUAL_STRING(buf, "11111111111111111111111111111111");
+  EXPECT_TRUE(ultoa(ULONG_MAX, buf, 8) == buf);
+  EXPECT_EQUAL_STRING(buf, "37777777777");
+#else
+  EXPECT_TRUE(ultoa(ULONG_MAX, buf, 2) == buf);
+  EXPECT_EQUAL_STRING(
+      buf, "1111111111111111111111111111111111111111111111111111111111111111");
+  EXPECT_TRUE(ultoa(ULONG_MAX, buf, 8) == buf);
+  EXPECT_EQUAL_STRING(buf, "1777777777777777777777");
+#endif
 
   buf[0] = 'x';
   buf[1] = '\0';
+  errno = 0;
+  EXPECT_TRUE(utoa(1u, buf, 0) == buf);
+  EXPECT_TRUE(errno == EINVAL);
+  errno = 0;
+  EXPECT_TRUE(utoa(1u, buf, 37) == buf);
+  EXPECT_TRUE(errno == EINVAL);
+  errno = 0;
+  EXPECT_TRUE(ultoa(1UL, buf, 0) == buf);
+  EXPECT_TRUE(errno == EINVAL);
   errno = 0;
   EXPECT_TRUE(ulltoa(1ULL, buf, 0) == buf);
   EXPECT_TRUE(errno == EINVAL);

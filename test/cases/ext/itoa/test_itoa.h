@@ -171,6 +171,18 @@ UTEST_TEST_CASE(itoa) {
   EXPECT_EQUAL_STRING(buf, "-2147483648");
   EXPECT_TRUE(itoa(255, buf, 16) == buf);
   EXPECT_EQUAL_STRING(buf, "ff");
+  EXPECT_TRUE(itoa(-1, buf, 16) == buf);
+#if INT_MAX == 0x7fffffff
+  EXPECT_EQUAL_STRING(buf, "ffffffff");
+#else
+  EXPECT_EQUAL_STRING(buf, "ffffffffffffffff");
+#endif
+  EXPECT_TRUE(itoa(INT_MAX, buf, 2) == buf);
+  EXPECT_EQUAL_STRING(buf, "1111111111111111111111111111111");
+  EXPECT_TRUE(itoa(INT_MAX, buf, 8) == buf);
+  EXPECT_EQUAL_STRING(buf, "17777777777");
+  EXPECT_TRUE(itoa(INT_MIN, buf, 16) == buf);
+  EXPECT_EQUAL_STRING(buf, "80000000");
 
   EXPECT_TRUE(ltoa(0L, buf, 10) == buf);
   EXPECT_EQUAL_STRING(buf, "0");
@@ -190,9 +202,35 @@ UTEST_TEST_CASE(itoa) {
 #endif
   EXPECT_TRUE(ltoa(255L, buf, 16) == buf);
   EXPECT_EQUAL_STRING(buf, "ff");
-
+  EXPECT_TRUE(ltoa(-1L, buf, 16) == buf);
+#if LONG_MAX == 0x7fffffffL
+  EXPECT_EQUAL_STRING(buf, "ffffffff");
+#else
+  EXPECT_EQUAL_STRING(buf, "ffffffffffffffff");
+#endif
+#if LONG_MAX == 0x7fffffffL
+  EXPECT_TRUE(ltoa(LONG_MAX, buf, 2) == buf);
+  EXPECT_EQUAL_STRING(buf, "1111111111111111111111111111111");
+  EXPECT_TRUE(ltoa(LONG_MIN, buf, 16) == buf);
+  EXPECT_EQUAL_STRING(buf, "80000000");
+#else
+  EXPECT_TRUE(ltoa(LONG_MAX, buf, 2) == buf);
+  EXPECT_EQUAL_STRING(
+      buf, "111111111111111111111111111111111111111111111111111111111111111");
+  EXPECT_TRUE(ltoa(LONG_MIN, buf, 16) == buf);
+  EXPECT_EQUAL_STRING(buf, "8000000000000000");
+#endif
   buf[0] = 'x';
   buf[1] = '\0';
+  errno = 0;
+  EXPECT_TRUE(itoa(1, buf, 0) == buf);
+  EXPECT_TRUE(errno == EINVAL);
+  errno = 0;
+  EXPECT_TRUE(itoa(1, buf, 37) == buf);
+  EXPECT_TRUE(errno == EINVAL);
+  errno = 0;
+  EXPECT_TRUE(ltoa(1L, buf, 0) == buf);
+  EXPECT_TRUE(errno == EINVAL);
   errno = 0;
   EXPECT_TRUE(lltoa(1LL, buf, 0) == buf);
   EXPECT_TRUE(errno == EINVAL);
