@@ -15,8 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ctype.h>
+#include <stdint.h>
 
-extern long long atoll(const char *str);
-
-long atol(const char *str) { return (long)atoll(str); }
+long long llabs(long long n) { return n < 0 ? -n : n; }

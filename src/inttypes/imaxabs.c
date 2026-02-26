@@ -15,8 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ctype.h>
+#include <inttypes.h>
 
-extern long long atoll(const char *str);
-
-int atoi(const char *str) { return (int)atoll(str); }
+intmax_t imaxabs(intmax_t n) { return n < 0 ? -n : n; }
