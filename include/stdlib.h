@@ -114,15 +114,30 @@ extern lldiv_t lldiv(long long x, long long y);
 /* Returns the value of the environment variable specified by name. */
 extern char *getenv(const char *name);
 
+/* Adds or changes the value of environment variables. The argument string is of
+   the form name=value. */
+extern int putenv(char *string);
+
+#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) ||                      \
+    defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE) ||  \
+    defined(_QLIBC_SOURCE)
 /* Sets the value of the environment variable specified by name to value.
- * If name does exist in the environment, then its value is changed to
- * value if overwrite is nonzero. */
+   If name does exist in the environment, then its value is changed to
+   value if overwrite is nonzero. */
 extern int setenv(const char *name, const char *value, int overwrite);
 
 /* Removes the environment variable specified by name. If name does not
    exist in the environment, then the function succeeds, and the
    environment is unchanged. */
 extern int unsetenv(const char *name);
+
+#endif
+
+#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE) || defined(_QLIBC_SOURCE)
+/* Clears the environment of all name-value pairs and sets the value of the
+   external variable environ to NULL. */
+extern void clearenv(void);
+#endif
 
 __END_DECLS
 

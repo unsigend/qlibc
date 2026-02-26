@@ -5,6 +5,7 @@
 
 #include "cases.h"
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
   const char *name;

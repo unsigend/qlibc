@@ -1,3 +1,7 @@
+#ifndef _QLIBC_SOURCE
+#define _GNU_SOURCE
+#endif
+
 #include <utest.h>
 
 // numerics
@@ -13,6 +17,8 @@
 
 // algorithm
 #include "algo/test_bsearch.h"
+
+#include "program/test_env.h"
 
 UTEST_TEST_SUITE(stdlib) {
   // ASCII to integer conversions
@@ -31,4 +37,11 @@ UTEST_TEST_SUITE(stdlib) {
   UTEST_RUN_TEST_CASE(strtoll);
   UTEST_RUN_TEST_CASE(strtoul);
   UTEST_RUN_TEST_CASE(strtoull);
+
+  // environment variables
+  UTEST_RUN_TEST_CASE(getenv);
+  UTEST_RUN_TEST_CASE(putenv);
+  UTEST_RUN_TEST_CASE(setenv);
+  UTEST_RUN_TEST_CASE(unsetenv);
+  UTEST_RUN_TEST_CASE(clearenv);
 }
