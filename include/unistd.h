@@ -73,7 +73,7 @@ extern int truncate(const char *path, off_t length);
 extern int ftruncate(int fd, off_t length);
 
 /* Makes a system call with the given number and arguments. */
-extern long syscall(long __number, ...);
+extern long syscall(long number, ...);
 
 /* Flushes all modified data of the file referred to by the file descriptor fd
    to the disk device. */
@@ -145,6 +145,9 @@ extern unsigned int alarm(unsigned int seconds);
    and executable. The argv array is the argument vector for the new program.
    The envp array is the environment for the new program. */
 extern int execve(const char *filename, const char *argv[], const char *envp[]);
+
+/* Exits the current process with the specified status. */
+extern void _exit(int status);
 
 __END_DECLS
 

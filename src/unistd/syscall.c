@@ -19,9 +19,9 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
-long syscall(long __number, ...) {
+long syscall(long number, ...) {
   va_list args;
-  va_start(args, __number);
+  va_start(args, number);
 
   long arg1 = va_arg(args, long);
   long arg2 = va_arg(args, long);
@@ -32,5 +32,5 @@ long syscall(long __number, ...) {
 
   va_end(args);
 
-  return __syscall6(__number, arg1, arg2, arg3, arg4, arg5, arg6);
+  return __syscall6(number, arg1, arg2, arg3, arg4, arg5, arg6);
 }

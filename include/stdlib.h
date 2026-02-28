@@ -76,6 +76,9 @@ extern noreturn void exit(int status);
 extern noreturn void _Exit(int status);
 #endif
 
+/* Registers a function to be called at program exit. */
+extern int atexit(void (*func)(void));
+
 /* Allocate SIZE bytes of uninitialized memory, the allocated memory is
   always aligned with the max_align_t. */
 extern void *malloc(size_t size);
