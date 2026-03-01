@@ -71,6 +71,9 @@ extern int kill(pid_t pid, int sig);
    So it is compatible with different UNIX implementations. */
 extern sighandler_t signal(int signum, sighandler_t handler);
 
+/* Raises a signal to the current process or thread. */
+extern int raise(int sig);
+
 __END_DECLS
 
 #endif

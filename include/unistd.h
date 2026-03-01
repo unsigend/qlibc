@@ -147,7 +147,7 @@ extern unsigned int alarm(unsigned int seconds);
 extern int execve(const char *filename, const char *argv[], const char *envp[]);
 
 /* Exits the current process with the specified status. */
-extern void _exit(int status);
+extern _Noreturn void _exit(int status);
 
 __END_DECLS
 
