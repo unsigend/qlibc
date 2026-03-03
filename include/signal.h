@@ -63,6 +63,16 @@ typedef __sigset_t sigset_t;
 #define SIG_UNBLOCK 1 /* Unblock signals.  */
 #define SIG_SETMASK 2 /* Set the set of blocked signals.  */
 
+#define SA_NOCLDSTOP 1 /* Don't send SIGCHLD when children stop.  */
+#define SA_NOCLDWAIT 2 /* Don't create zombie on child death.  */
+#define SA_SIGINFO                                                             \
+  4 /* Invoke signal-catching function with three arguments instead of one. */
+#define SA_RESETHAND 0x80000000 /* Reset to SIG_DFL when entry to handler. */
+#define SA_RESTART 0x10000000   /* Restart system calls on signal return. */
+#define SA_NODEFER                                                             \
+  0x40000000 /* Don't automatically block the signal when it's handler is      \
+                being executed. */
+
 __BEGIN_DECLS
 
 /* Sends a signal to the process specified by pid. If pid>0, then sends to
@@ -116,6 +126,10 @@ extern int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
 
 /* Get the set of pending signals for the calling thread or process. */
 extern int sigpending(sigset_t *set);
+
+/* Set the action for a signal. */
+extern int sigaction(int signum, const struct sigaction *act,
+                     struct sigaction *oldact);
 
 __END_DECLS
 

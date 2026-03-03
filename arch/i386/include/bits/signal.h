@@ -18,10 +18,8 @@
 #ifndef _QLIBC_I386_BITS_SIGNAL_H_
 #define _QLIBC_I386_BITS_SIGNAL_H_
 
-/* A set of signals to be blocked, unblocked, or waited for. */
-typedef struct {
-  unsigned long int __val[1];
-} __sigset_t;
+/* A set of signals to be blocked, unblocked, or waited for.*/
+typedef unsigned long long __sigset_t;
 
 /* Structure describing the action to be taken when a signal arrives. */
 struct sigaction {

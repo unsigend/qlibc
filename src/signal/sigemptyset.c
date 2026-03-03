@@ -15,19 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_SIGNAL_H_
-#define _QLIBC_X86_64_BITS_SIGNAL_H_
+#include <signal.h>
 
-#define _SIGSET_NWORDS (1024 / (8 * sizeof(unsigned long int)))
-/* A set of signals to be blocked, unblocked, or waited for. */
-typedef unsigned long long __sigset_t;
-
-/* Structure describing the action to be taken when a signal arrives. */
-struct sigaction {
-  void (*sa_handler)(int);   /* Address of handler */
-  __sigset_t sa_mask;        /* Signals blocked during handler invocation */
-  int sa_flags;              /* Flags controlling handler invocation */
-  void (*sa_restorer)(void); /* Restore handler. (Not for application use.)*/
-};
-
-#endif
+int sigemptyset(sigset_t *set) {
+  if (!set)
+    return -1;
+  *set = 0;
+  return 0;
+}

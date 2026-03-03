@@ -15,19 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_SIGNAL_H_
-#define _QLIBC_X86_64_BITS_SIGNAL_H_
+#include <errno.h>
+#include <signal.h>
+#include <sys/syscall.h>
 
-#define _SIGSET_NWORDS (1024 / (8 * sizeof(unsigned long int)))
-/* A set of signals to be blocked, unblocked, or waited for. */
-typedef unsigned long long __sigset_t;
+int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) {
+  if (how != SIG_BLOCK && how != SIG_UNBLOCK && how != SIG_SETMASK) {
+    errno = EINVAL;
+    return -1;
+  }
 
-/* Structure describing the action to be taken when a signal arrives. */
-struct sigaction {
-  void (*sa_handler)(int);   /* Address of handler */
-  __sigset_t sa_mask;        /* Signals blocked during handler invocation */
-  int sa_flags;              /* Flags controlling handler invocation */
-  void (*sa_restorer)(void); /* Restore handler. (Not for application use.)*/
-};
-
-#endif
+  long ret = __syscall4_raw(SYS_rt_sigprocmask, how, set ? (long)set : 0,
+                            oldset ? (long)oldset : 0, (long)sizeof(sigset_t));
+  return __syscall_ret(ret);
+}
