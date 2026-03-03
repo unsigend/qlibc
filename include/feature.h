@@ -33,9 +33,9 @@
 #define ISO_C_STANDARD_C23 202311L
 #define QLIBC_ISO_C_VERSION __STDC_VERSION__
 
-#define QLIBC_SUPPORT_MB_STRING 0         /* Multi-byte string support */
-#define QLIBC_SUPPORT_FLOATING_POINT 0    /* Floating-point support */
-#define __QLIBC_CALLOC_CHECK_OVERFLOW__ 1 /* Check for overflow in calloc */
+#define QLIBC_SUPPORT_MB_STRING 0      /* Multi-byte string support */
+#define QLIBC_SUPPORT_FLOATING_POINT 0 /* Floating-point support */
+#define QLIBC_SUPPORT_THREADS 0        /* Multi-thread support */
 
 /* C++ specific macros */
 #ifdef __cplusplus
@@ -45,5 +45,12 @@
 #define __BEGIN_DECLS
 #define __END_DECLS
 #endif
+
+/* Configurable features */
+
+/* __USE_QLIBC_EXTENDED: Use qlibc extended features
+
+   __QLIBC_CALLOC_CHECK_OVERFLOW__: Check for overflow in calloc
+*/
 
 #endif

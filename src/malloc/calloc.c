@@ -17,7 +17,8 @@
 
 #include "mm/mm.h"
 #include <string.h>
-#if __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
+#if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__) &&                                \
+    __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
 #include <errno.h>
 #endif
 
@@ -32,7 +33,8 @@ void *calloc(size_t num, size_t size) {
 
   size_t sz;
 
-#if __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
+#if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__) &&                                \
+    __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
   /* Calculate the size of the memory requested in bytes, and detect if there is
     overflow */
 

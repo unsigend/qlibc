@@ -15,12 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_SIGNAL_H_
-#define _QLIBC_X86_64_BITS_SIGNAL_H_
+#include <signal.h>
 
-#define _SIGSET_NWORDS (1024 / (8 * sizeof(unsigned long int)))
-typedef struct {
-  unsigned long int __val[_SIGSET_NWORDS];
-} __sigset_t;
-
-#endif
+int killpg(int pgrp, int sig) { return kill(-pgrp, sig); }

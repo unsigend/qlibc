@@ -18,4 +18,17 @@
 #ifndef _QLIBC_I386_BITS_SIGNAL_H_
 #define _QLIBC_I386_BITS_SIGNAL_H_
 
+/* A set of signals to be blocked, unblocked, or waited for. */
+typedef struct {
+  unsigned long int __val[1];
+} __sigset_t;
+
+/* Structure describing the action to be taken when a signal arrives. */
+struct sigaction {
+  void (*sa_handler)(int);   /* Address of handler */
+  __sigset_t sa_mask;        /* Signals blocked during handler invocation */
+  int sa_flags;              /* Flags controlling handler invocation */
+  void (*sa_restorer)(void); /* Restore handler. (Not for application use.)*/
+};
+
 #endif
