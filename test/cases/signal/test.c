@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#define _GNU_SOURCE
 #include <signal.h>
 #include <utest.h>
 
@@ -60,7 +61,101 @@ UTEST_TEST_CASE(macros) {
   EXPECT_EQUAL_INT(SA_SIGINFO, 4);
 }
 
+UTEST_TEST_CASE(sigemptyset) {
+  sigset_t set;
+  EXPECT_EQUAL_INT(sigemptyset(&set), 0);
+  EXPECT_TRUE(sigisemptyset(&set));
+  EXPECT_FALSE(sigismember(&set, SIGINT));
+  EXPECT_FALSE(sigismember(&set, 1));
+}
+
+UTEST_TEST_CASE(sigfillset) {
+  sigset_t set;
+  EXPECT_EQUAL_INT(sigfillset(&set), 0);
+  EXPECT_FALSE(sigisemptyset(&set));
+  EXPECT_EQUAL_INT(sigismember(&set, SIGINT), 1);
+  EXPECT_TRUE(sigismember(&set, SIGTERM));
+  EXPECT_TRUE(sigismember(&set, 1));
+}
+
+UTEST_TEST_CASE(sigaddset) {
+  sigset_t set;
+  sigemptyset(&set);
+  EXPECT_EQUAL_INT(sigaddset(&set, SIGINT), 0);
+  EXPECT_TRUE(sigismember(&set, SIGINT));
+  EXPECT_FALSE(sigismember(&set, SIGTERM));
+  EXPECT_EQUAL_INT(sigaddset(&set, SIGTERM), 0);
+  EXPECT_TRUE(sigismember(&set, SIGTERM));
+}
+
+UTEST_TEST_CASE(sigdelset) {
+  sigset_t set;
+  sigfillset(&set);
+  EXPECT_EQUAL_INT(sigdelset(&set, SIGINT), 0);
+  EXPECT_FALSE(sigismember(&set, SIGINT));
+  EXPECT_TRUE(sigismember(&set, SIGTERM));
+  EXPECT_EQUAL_INT(sigdelset(&set, SIGTERM), 0);
+  EXPECT_FALSE(sigismember(&set, SIGTERM));
+}
+
+UTEST_TEST_CASE(sigismember) {
+  sigset_t set;
+  sigemptyset(&set);
+  sigaddset(&set, SIGUSR1);
+  EXPECT_TRUE(sigismember(&set, SIGUSR1));
+  EXPECT_FALSE(sigismember(&set, SIGUSR2));
+  EXPECT_FALSE(sigismember(&set, 1));
+  EXPECT_EQUAL_INT(sigismember(NULL, SIGINT), -1);
+}
+
+UTEST_TEST_CASE(sigandset) {
+  sigset_t left, right, dest;
+  sigemptyset(&left);
+  sigemptyset(&right);
+  sigaddset(&left, SIGINT);
+  sigaddset(&left, SIGTERM);
+  sigaddset(&right, SIGINT);
+  EXPECT_EQUAL_INT(sigandset(&dest, &left, &right), 0);
+  EXPECT_TRUE(sigismember(&dest, SIGINT));
+  EXPECT_FALSE(sigismember(&dest, SIGTERM));
+}
+
+UTEST_TEST_CASE(sigorset) {
+  sigset_t left, right, dest;
+  sigemptyset(&left);
+  sigemptyset(&right);
+  sigaddset(&left, SIGINT);
+  sigaddset(&right, SIGTERM);
+  EXPECT_EQUAL_INT(sigorset(&dest, &left, &right), 0);
+  EXPECT_TRUE(sigismember(&dest, SIGINT));
+  EXPECT_TRUE(sigismember(&dest, SIGTERM));
+}
+
+UTEST_TEST_CASE(sigisemptyset) {
+  sigset_t set;
+  sigemptyset(&set);
+  EXPECT_TRUE(sigisemptyset(&set));
+  sigaddset(&set, SIGINT);
+  EXPECT_FALSE(sigisemptyset(&set));
+  EXPECT_EQUAL_INT(sigisemptyset(NULL), -1);
+}
+
+UTEST_TEST_CASE(sigpending) {
+  sigset_t set;
+  EXPECT_EQUAL_INT(sigpending(&set), 0);
+  EXPECT_EQUAL_INT(sigpending(NULL), -1);
+}
+
 UTEST_TEST_SUITE(signal) {
   UTEST_RUN_TEST_CASE(types);
   UTEST_RUN_TEST_CASE(macros);
+  UTEST_RUN_TEST_CASE(sigemptyset);
+  UTEST_RUN_TEST_CASE(sigfillset);
+  UTEST_RUN_TEST_CASE(sigaddset);
+  UTEST_RUN_TEST_CASE(sigdelset);
+  UTEST_RUN_TEST_CASE(sigismember);
+  UTEST_RUN_TEST_CASE(sigandset);
+  UTEST_RUN_TEST_CASE(sigorset);
+  UTEST_RUN_TEST_CASE(sigisemptyset);
+  UTEST_RUN_TEST_CASE(sigpending);
 }

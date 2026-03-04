@@ -147,7 +147,12 @@ extern unsigned int alarm(unsigned int seconds);
 extern int execve(const char *filename, const char *argv[], const char *envp[]);
 
 /* Exits the current process with the specified status. */
-extern _Noreturn void _exit(int status);
+#if defined(QLIBC_ISO_C_VERSION) && QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#include <stdnoreturn.h>
+extern noreturn void _exit(int status);
+#else
+extern void _exit(int status);
+#endif
 
 __END_DECLS
 

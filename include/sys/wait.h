@@ -25,6 +25,32 @@
 #define WUNTRACED 2  /* Report status of stopped children. */
 #define WCONTINUED 8 /* Report continued child. */
 
+#define __W_CONTINUED 0xffff /* Continued child */
+#define __WCOREFLAG 0x80     /* Core dump flag */
+#define __WTERMSIG(status)                                                     \
+  ((status) & 0x7f) /* Get the signal number that killed the process */
+
+#define WIFEXITED(status)                                                      \
+  (__WTERMSIG(status) == 0) /* If the process exited normally */
+#define WEXITSTATUS(status)                                                    \
+  (((status) & 0xff00) >> 8) /* Get the exit status of the process */
+
+#define WIFSIGNALED(status)                                                    \
+  (((signed char)(((status) & 0x7f) + 1) >> 1) >                               \
+   0) /* If the process was terminated by a signal */
+#define WTERMSIG(status)                                                       \
+  __WTERMSIG(status) /* Get the signal number that killed the process */
+#define WCOREDUMP(status)                                                      \
+  ((status) & __WCOREFLAG) /* If the process dumped core */
+
+#define WIFSTOPPED(status)                                                     \
+  (((status) & 0xff) == 0x7f) /* If the process was stopped */
+#define WSTOPSIG(status)                                                       \
+  WEXITSTATUS(status) /* Get the signal number that stopped the process */
+
+#define WIFCONTINUED(status)                                                   \
+  ((status) == __W_CONTINUED) /* If the process was continued */
+
 __BEGIN_DECLS
 
 /* Waits for a child process to exit or stop. If pid > 0, wait for the child

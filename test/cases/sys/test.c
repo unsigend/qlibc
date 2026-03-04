@@ -49,4 +49,5 @@ UTEST_TEST_SUITE(sys) {
 
   /* wait */
   UTEST_RUN_TEST_CASE(wait_macros);
+  UTEST_RUN_TEST_CASE(wait);
 }
