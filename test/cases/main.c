@@ -30,6 +30,7 @@ static const suite_t suites[] = {
     {"time", UTEST_CONCATENATE(UTEST_SUITENAME_PREFIX, time)},
     {"termios", UTEST_CONCATENATE(UTEST_SUITENAME_PREFIX, termios)},
     {"printf", UTEST_CONCATENATE(UTEST_SUITENAME_PREFIX, printf)},
+    {"scanf", UTEST_CONCATENATE(UTEST_SUITENAME_PREFIX, scanf)},
     {"signal", UTEST_CONCATENATE(UTEST_SUITENAME_PREFIX, signal)},
 #if defined(_QLIBC) || defined(__QLIBC__) || defined(_QLIBC_SOURCE)
     {"ext", UTEST_CONCATENATE(UTEST_SUITENAME_PREFIX, ext)},

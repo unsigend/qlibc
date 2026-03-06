@@ -16,12 +16,10 @@
  */
 
 #include <stdarg.h>
-#include <stddef.h>
 
-extern int printf_core(char *restrict buff, size_t bufsz,
-                       const char *restrict fmt, va_list vlist);
-
-int vsnprintf(char *restrict buffer, size_t bufsz, const char *restrict format,
-              va_list vlist) {
-  return printf_core(buffer, bufsz, format, vlist);
+/* Internal core implementation of formatted input. With parser and
+   formatter support. */
+int scanf_core(const char *restrict buff, const char *restrict fmt,
+               va_list vlist) {
+  return 0;
 }

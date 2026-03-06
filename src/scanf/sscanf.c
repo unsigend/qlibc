@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <stdio.h>
 
-#include <stdarg.h>
-#include <stddef.h>
-
-extern int printf_core(char *restrict buff, size_t bufsz,
-                       const char *restrict fmt, va_list vlist);
-
-int vsnprintf(char *restrict buffer, size_t bufsz, const char *restrict format,
-              va_list vlist) {
-  return printf_core(buffer, bufsz, format, vlist);
+int sscanf(const char *restrict buffer, const char *restrict format, ...) {
+  va_list ap;
+  va_start(ap, format);
+  int ret = vsscanf(buffer, format, ap);
+  va_end(ap);
+  return ret;
 }

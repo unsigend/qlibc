@@ -14,6 +14,7 @@ extern UTEST_TEST_SUITE(stdint);
 extern UTEST_TEST_SUITE(stdlib);
 extern UTEST_TEST_SUITE(time);
 extern UTEST_TEST_SUITE(printf);
+extern UTEST_TEST_SUITE(scanf);
 extern UTEST_TEST_SUITE(signal);
 
 /* POSIX Unix */

@@ -15,33 +15,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _EXT_PRINTF_H_
-#define _EXT_PRINTF_H_ 1
+#ifndef _EXT_SCANF_H_
+#define _EXT_SCANF_H_ 1
 
+#include <feature.h>
 #include <stdarg.h>
-#include <stddef.h>
 
 /* This is not part of ANSI/ISO C Standard header file, it is part of qlibc
-   header extensions. This header just provide pure formatted output functions
+   header extensions. This header just provide pure formatted input functions
    for kernel use. */
 
 __BEGIN_DECLS
 
-/* Format and store data in a buffer */
-extern int sprintf(char *restrict buffer, const char *restrict format, ...);
+/* Read formatted data from a buffer */
+extern int sscanf(const char *restrict buffer, const char *restrict format,
+                  ...);
 
-/* Format and store data in a buffer with a maximum length */
-extern int snprintf(char *restrict buffer, size_t bufsz,
-                    const char *restrict format, ...);
-
-/* Format and store data in a buffer using a variable argument list */
-extern int vsprintf(char *restrict buffer, const char *restrict format,
-                    va_list vlist);
-
-/* Format and store data in a buffer with a maximum length using a variable
-   argument list */
-extern int vsnprintf(char *restrict buffer, size_t bufsz,
-                     const char *restrict format, va_list vlist);
+/* Read formatted data from a buffer using a variable argument list */
+extern int vsscanf(const char *restrict buffer, const char *restrict format,
+                   va_list vlist);
 
 __END_DECLS
 
