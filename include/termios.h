@@ -15,11 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_TERMIOS_H_
-#define _QLIBC_TERMIOS_H_
+#ifndef _TERMIOS_H_
+#define _TERMIOS_H_ 1
 
 #include <bits/termios.h>
-#include <feature.h>
 
 typedef __speed_t speed_t;
 typedef __cc_t cc_t;

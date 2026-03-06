@@ -15,10 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_SYSCALL_H_
-#define _QLIBC_SYS_SYSCALL_H_
-
-#include <feature.h>
+#ifndef _SYS_SYSCALL_H_
+#define _SYS_SYSCALL_H_ 1
 
 /* Generic syscall macros provide a common interface for different
    architectures. */

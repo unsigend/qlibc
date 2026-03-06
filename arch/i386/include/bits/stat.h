@@ -21,9 +21,7 @@
 #include <bits/types.h>
 #include <time.h>
 
-/*
- * The stat structure for i386 architecture is based on GNU glibc.
- */
+/* The stat structure for i386 architecture is based on GNU glibc.*/
 struct stat {
   __dev_t st_dev;           /* ID of device containing file */
   int __pad0;               /* padding */
@@ -43,11 +41,9 @@ struct stat {
   long __unused[2];         /* backwards compatibility */
 };
 
-/*
- * @Note: The __stat64 structure is used for 64-bit file system operations.
- * The use space use stat old structure under i386, but the system call wrapper
- * map the stat to __stat64.
- */
+/* The __stat64 structure is used for 64-bit file system operations. The use
+   space use stat old structure under i386, but the system call wrapper map the
+   stat to __stat64. */
 struct __stat64 {
   __dev64_t st_dev;         /* ID of device containing file */
   int __pad0;               /* padding */

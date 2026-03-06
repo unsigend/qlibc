@@ -22,20 +22,48 @@
 #define QLIBC_VERSION_MAJOR 0
 #define QLIBC_VERSION_MINOR 1
 #define QLIBC_VERSION_PATCH 0
-#define _QLIBC_SOURCE 1
-#define _QLIBC 1
-#define __QLIBC__ 1
 
 /* ISO C Standard macros */
 #define ISO_C_STANDARD_C99 199901L
 #define ISO_C_STANDARD_C11 201112L
 #define ISO_C_STANDARD_C17 201710L
 #define ISO_C_STANDARD_C23 202311L
-#define QLIBC_ISO_C_VERSION __STDC_VERSION__
 
-#define QLIBC_SUPPORT_MB_STRING 0      /* Multi-byte string support */
-#define QLIBC_SUPPORT_FLOATING_POINT 0 /* Floating-point support */
-#define QLIBC_SUPPORT_THREADS 0        /* Multi-thread support */
+#if defined(__STDC_VERSION__)
+#if __STDC_VERSION__ >= ISO_C_STANDARD_C99
+#define __USE_ISO_C99 1
+#else
+#define __USE_ISO_C99 0
+#endif
+#if __STDC_VERSION__ >= ISO_C_STANDARD_C11
+#define __USE_ISO_C11 1
+#else
+#define __USE_ISO_C11 0
+#endif
+#if __STDC_VERSION__ >= ISO_C_STANDARD_C17
+#define __USE_ISO_C17 1
+#else
+#define __USE_ISO_C17 0
+#endif
+#if __STDC_VERSION__ >= ISO_C_STANDARD_C23
+#define __USE_ISO_C23 1
+#else
+#define __USE_ISO_C23 0
+#endif
+#else
+#error "qlibc: ISO C Standard is not defined"
+#endif
+
+/* Feature support macros, these macros are used to enable or disable features.
+   If the feature is not supported in current qlibc version, the macro will be
+   ignored. */
+#define __SUPPORT_MB 0      /* Multi-byte string support */
+#define __SUPPORT_FPT 0     /* Floating-point support */
+#define __SUPPORT_THREADS 0 /* Multi-thread support */
+
+#if defined(_GNU_SOURCE)
+#define _QLIBC_SOURCE 1
+#endif
 
 /* C++ specific macros */
 #ifdef __cplusplus
@@ -45,12 +73,5 @@
 #define __BEGIN_DECLS
 #define __END_DECLS
 #endif
-
-/* Configurable features */
-
-/* __USE_QLIBC_EXTENDED: Use qlibc extended features
-
-   __QLIBC_CALLOC_CHECK_OVERFLOW__: Check for overflow in calloc
-*/
 
 #endif

@@ -15,44 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_CTYPE_H_
-#define _QLIBC_CTYPE_H_
+#ifndef _CTYPE_H_
+#define _CTYPE_H_ 1
 
 #include <feature.h>
 
 __BEGIN_DECLS
 
-/* Check if a character is alphanumeric (a-z, A-Z, 0-9) */
+/* ASCII character classification functions */
 extern int isalnum(int c);
-/* Check if a character is alphabetic (a-z, A-Z) */
 extern int isalpha(int c);
-/* Check if a character is a digit (0-9) */
 extern int isdigit(int c);
-/* Check if a character is a hexadecimal digit (0-9, a-f, A-F) */
 extern int isxdigit(int c);
-
-/* Check if a character is a blank character */
 extern int isblank(int c);
-/* Check if a character is a control character */
 extern int iscntrl(int c);
-/* Check if a character is a space character */
 extern int isspace(int c);
-/* Check if a character is a punctuation character */
 extern int ispunct(int c);
-
-/* Check if a character is a lowercase letter */
+extern int isgraph(int c);
+extern int isprint(int c);
 extern int islower(int c);
-/* Check if a character is an uppercase letter */
 extern int isupper(int c);
 
-/* Check if a character is a graphical character */
-extern int isgraph(int c);
-/* Check if a character is a printable character */
-extern int isprint(int c);
-
-/* Convert a character to lowercase */
+/* ASCII character conversion functions */
 extern int tolower(int c);
-/* Convert a character to uppercase */
 extern int toupper(int c);
 
 __END_DECLS

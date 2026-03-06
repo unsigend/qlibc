@@ -15,12 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_STDDEF_H_
-#define _QLIBC_X86_64_BITS_STDDEF_H_
+#ifndef _BITS_STDDEF_H_
+#define _BITS_STDDEF_H_ 1
 
 #include <feature.h>
 
-#if QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 typedef long double max_align_t;
 #endif
 

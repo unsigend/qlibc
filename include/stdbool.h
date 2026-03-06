@@ -15,10 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDBOOL_H_
-#define _QLIBC_STDBOOL_H_
-
-#include <feature.h>
+#ifndef _STDBOOL_H_
+#define _STDBOOL_H_ 1
 
 #ifndef __cplusplus
 

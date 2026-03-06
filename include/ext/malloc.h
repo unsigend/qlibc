@@ -15,18 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_MALLOC_H_
-#define _QLIBC_MALLOC_H_
+#ifndef _EXT_MALLOC_H_
+#define _EXT_MALLOC_H_ 1
 
 /* This header file is not part of ANSI/ISO C standard, it is a extension of
    the malloc API. Which confirms the GNU glibc malloc extension API. It only
    used for debugging and profiling memory allocation statistics purposes.*/
 
-#include <feature.h>
 #include <stddef.h>
 
 /* Malloc extension support */
-#if defined(__USE_QLIBC_EXTENDED)
+#if defined(_QLIBC_SOURCE) || defined(_GNU_SOURCE)
 struct mallinfo {
   size_t arena;    /* Non-mmapped space allocated (bytes) */
   size_t ordblks;  /* Number of free chunks */
@@ -51,13 +50,13 @@ extern void *calloc(size_t num, size_t size);
 /* Reallocate memory and invalidate the old memory */
 extern void *realloc(void *ptr, size_t new_size);
 
-#if QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 /* Allocate memory with a specific alignment */
 extern void *aligned_alloc(size_t alignment, size_t size);
 #endif
 
 /* Malloc extension support */
-#if defined(__USE_QLIBC_EXTENDED)
+#if defined(_QLIBC_SOURCE) || defined(_GNU_SOURCE)
 /* Get memory allocation information, return 0 on success, -1 on failure, note
    that this is not GNU glibc compatible API */
 

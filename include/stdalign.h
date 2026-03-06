@@ -15,10 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDALIGN_H_
-#define _QLIBC_STDALIGN_H_
-
-#include <feature.h>
+#ifndef _STDALIGN_H_
+#define _STDALIGN_H_ 1
 
 /* Macros for alignment */
 

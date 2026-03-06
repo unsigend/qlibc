@@ -1,6 +1,10 @@
 #include <limits.h>
 #include <utest.h>
 
+#if __SUPPORT_MB == 0
+#define MB_LEN_MAX 4
+#endif
+
 UTEST_TEST_CASE(macros) {
   EXPECT_EQUAL_INT(CHAR_BIT, 8);
   EXPECT_TRUE(MB_LEN_MAX > 0);

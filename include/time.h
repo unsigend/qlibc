@@ -15,10 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_TIME_H_
-#define _QLIBC_TIME_H_
-
-#include <feature.h>
+#ifndef _TIME_H_
+#define _TIME_H_ 1
 
 typedef long time_t;
 

@@ -15,41 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_WAIT_H_
-#define _QLIBC_SYS_WAIT_H_
+#ifndef _SYS_WAIT_H_
+#define _SYS_WAIT_H_ 1
 
-#include "sys/types.h"
+#include <bits/waitflags.h>
 #include <feature.h>
-
-#define WNOHANG 1    /* Don't block waiting. */
-#define WUNTRACED 2  /* Report status of stopped children. */
-#define WCONTINUED 8 /* Report continued child. */
-
-#define __W_CONTINUED 0xffff /* Continued child */
-#define __WCOREFLAG 0x80     /* Core dump flag */
-#define __WTERMSIG(status)                                                     \
-  ((status) & 0x7f) /* Get the signal number that killed the process */
-
-#define WIFEXITED(status)                                                      \
-  (__WTERMSIG(status) == 0) /* If the process exited normally */
-#define WEXITSTATUS(status)                                                    \
-  (((status) & 0xff00) >> 8) /* Get the exit status of the process */
-
-#define WIFSIGNALED(status)                                                    \
-  (((signed char)(((status) & 0x7f) + 1) >> 1) >                               \
-   0) /* If the process was terminated by a signal */
-#define WTERMSIG(status)                                                       \
-  __WTERMSIG(status) /* Get the signal number that killed the process */
-#define WCOREDUMP(status)                                                      \
-  ((status) & __WCOREFLAG) /* If the process dumped core */
-
-#define WIFSTOPPED(status)                                                     \
-  (((status) & 0xff) == 0x7f) /* If the process was stopped */
-#define WSTOPSIG(status)                                                       \
-  WEXITSTATUS(status) /* Get the signal number that stopped the process */
-
-#define WIFCONTINUED(status)                                                   \
-  ((status) == __W_CONTINUED) /* If the process was continued */
+#include <sys/types.h>
 
 __BEGIN_DECLS
 

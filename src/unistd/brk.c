@@ -17,6 +17,8 @@
 #include <errno.h>
 #include <unistd.h>
 
+extern void *__brk(void *addr);
+
 int brk(void *addr) {
   void *newaddr = __brk(addr);
   /* if the newaddr > addr, it means the heap is expanded successfully, the

@@ -15,13 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDARG_H_
-#define _QLIBC_STDARG_H_
-
-#include <feature.h>
+#ifndef _STDARG_H_
+#define _STDARG_H_ 1
 
 /* GNU C compatible macros */
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(_GNU_SOURCE)
 typedef __builtin_va_list __gnuc_va_list;
 #endif
 

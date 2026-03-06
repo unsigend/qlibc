@@ -15,10 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDLIB_H_
-#define _QLIBC_STDLIB_H_
+#ifndef _STDLIB_H_
+#define _STDLIB_H_ 1
 
-#include <feature.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -57,7 +56,7 @@ extern unsigned long strtoul(const char *restrict str, char **restrict str_end,
 extern unsigned long long strtoull(const char *restrict str,
                                    char **restrict str_end, int base);
 
-#if defined(QLIBC_ISO_C_VERSION) && QLIBC_ISO_C_VERSION < ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 /* Causes abnormal program termination without cleaning up */
 extern void abort(void);
 
@@ -90,7 +89,7 @@ extern void *calloc(size_t num, size_t size);
 /* Reallocate memory and invalidate the old memory */
 extern void *realloc(void *ptr, size_t new_size);
 
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 /* Allocate memory with a specific ALIGNMENT bytes */
 extern void *aligned_alloc(size_t alignment, size_t size);
 #endif
@@ -144,8 +143,8 @@ extern void clearenv(void);
 
 __END_DECLS
 
-#if defined(__USE_QLIBC_EXTENDED)
+#if defined(_QLIBC_SOURCE) || defined(_GNU_SOURCE)
 #include <ext/itoa.h>
 #endif
 
-#endif // _QLIBC_STDLIB_H_
+#endif

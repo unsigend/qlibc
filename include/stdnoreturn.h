@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef _QLIBC_STDNORETURN_H_
-#define _QLIBC_STDNORETURN_H_
+#ifndef _STDNORETURN_H_
+#define _STDNORETURN_H_ 1
 
 #include <feature.h>
 
+#if __USE_ISO_C11
 #define noreturn _Noreturn
+#endif
 
 #endif

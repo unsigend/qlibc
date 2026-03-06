@@ -15,13 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_ERRNO_H
-#define _QLIBC_ERRNO_H
+#ifndef _ERRNO_H_
+#define _ERRNO_H_ 1
 
-#include <feature.h>
-
-/* Include architecture-specific errno.h */
 #include <bits/errno.h>
+#include <feature.h>
 
 __BEGIN_DECLS
 

@@ -15,10 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDDEF_H_
-#define _QLIBC_STDDEF_H_
-
-#include <feature.h>
+#ifndef _STDDEF_H_
+#define _STDDEF_H_ 1
 
 #ifdef NULL
 #undef NULL
@@ -32,9 +30,13 @@
 
 #include <bits/stddef.h>
 
+#if defined(__GNUC__)
+#define offsetof(TYPE, MEMBER) __builtin_offsetof(TYPE, MEMBER)
+#else
 #define offsetof(TYPE, MEMBER) ((size_t)&((TYPE *)0)->MEMBER)
+#endif
 
-#if defined(__linux__)
+#if __SUPPORT_MB == 0 && defined(__linux__)
 typedef int wchar_t;
 #endif
 

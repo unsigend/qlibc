@@ -15,11 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_TYPES_H_
-#define _QLIBC_SYS_TYPES_H_
+#ifndef _SYS_TYPES_H_
+#define _SYS_TYPES_H_ 1
 
 #include <bits/types.h>
-#include <feature.h>
 
 typedef __dev_t dev_t;
 typedef __dev64_t dev64_t;

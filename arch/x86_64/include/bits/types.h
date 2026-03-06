@@ -50,4 +50,7 @@ typedef int __pid_t;
 /* An integer type that can be accessed as an atomic entity */
 typedef int __sig_atomic_t;
 
+/* A set of signals to be blocked, unblocked, or waited for. */
+typedef unsigned long long __sigset_t;
+
 #endif

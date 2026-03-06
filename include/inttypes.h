@@ -15,10 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_INTTYPES_H_
-#define _QLIBC_INTTYPES_H_
+#ifndef _INTTYPES_H_
+#define _INTTYPES_H_ 1
 
 #include <feature.h>
+
+#if __USE_ISO_C99
 #include <stdint.h>
 
 /* Returned by imaxdiv */
@@ -30,6 +32,7 @@ typedef struct {
 __BEGIN_DECLS
 /* Compute the absolute value of an intmax_t integer */
 extern intmax_t imaxabs(intmax_t n);
+
 /* Compute the division of two intmax_t integers */
 extern imaxdiv_t imaxdiv(intmax_t x, intmax_t y);
 
@@ -40,5 +43,6 @@ extern uintmax_t strtoumax(const char *restrict str, char **restrict str_end,
                            int base);
 
 __END_DECLS
+#endif
 
-#endif // _QLIBC_INTTYPES_H_
+#endif

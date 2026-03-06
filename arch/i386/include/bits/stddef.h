@@ -20,7 +20,7 @@
 
 #include <feature.h>
 
-#if QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 typedef double max_align_t;
 #endif
 

@@ -18,6 +18,8 @@
 #include <errno.h>
 #include <unistd.h>
 
+extern void *__brk(void *addr);
+
 /* The current implementation of sbrk is not thread-safe, it has no lock
    protection and it is not recommend for user to call this function to break
    the heap state that malloc will use. */

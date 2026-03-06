@@ -14,11 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-/* This file is part of C numeric limits. */
-
-#ifndef _QLIBC_LIMITS_H_
-#define _QLIBC_LIMITS_H_
+#ifndef _LIMITS_H_
+#define _LIMITS_H_ 1
 
 #include <bits/limits.h>
 #include <feature.h>
@@ -49,7 +46,8 @@
 #define ULONG_MAX (_ULONG_MAX_)
 #define ULLONG_MAX (0xffffffffffffffff)
 
-// for future support for multibyte character set
+#if __SUPPORT_MB
 #define MB_LEN_MAX 4
+#endif
 
 #endif

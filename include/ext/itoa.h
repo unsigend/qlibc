@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_EXT_ITOA_H_
-#define _QLIBC_EXT_ITOA_H_
+#ifndef _EXT_ITOA_H_
+#define _EXT_ITOA_H_ 1
 
 /* This header is not part of ANSI/ISO C Standard header file, it is part of
    qlibc header extensions. This header provides integer to string conversion

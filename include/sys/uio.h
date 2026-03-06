@@ -15,10 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_SYS_UIO_H_
-#define _QLIBC_SYS_UIO_H_
+#ifndef _SYS_UIO_H_
+#define _SYS_UIO_H_ 1
 
-#include <feature.h>
 #include <stddef.h>
 #include <sys/types.h>
 

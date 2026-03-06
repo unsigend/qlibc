@@ -15,20 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STRING_H_
-#define _QLIBC_STRING_H_
+#ifndef _STRING_H_
+#define _STRING_H_ 1
 
-#include <feature.h>
 #include <stddef.h>
 
 __BEGIN_DECLS
-/* Search the memory area for the first occurrence of the character ch */
+/* Search first CHAR in memory area */
 extern void *memchr(const void *ptr, int ch, size_t count);
 
 /* Compare the memory areas */
 extern int memcmp(const void *lhs, const void *rhs, size_t count);
 
-/* Fill the memory area with the specified value */
+/* Set N bytes of S to C. */
 extern void *memset(void *dest, int ch, size_t count);
 
 /* Copy from SRC to DEST*/
@@ -91,12 +90,14 @@ extern char *strncat(char *restrict dest, const char *restrict src,
 extern size_t strxfrm(char *restrict dest, const char *restrict src,
                       size_t count);
 
+#if __USE_ISO_C23
 /* Duplicate the string */
 extern char *strdup(const char *src);
+#endif
 
 /* Get the error message for the error number */
 extern char *strerror(int errnum);
 
 __END_DECLS
 
-#endif // _QLIBC_STRING_H_
+#endif

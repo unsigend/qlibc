@@ -21,6 +21,8 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+extern void *__brk(void *addr);
+
 /* Global heap instance */
 heap_t __heap = {.init = false};
 

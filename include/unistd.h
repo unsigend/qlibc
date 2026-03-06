@@ -15,10 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_UNISTD_H_
-#define _QLIBC_UNISTD_H_
+#ifndef _UNISTD_H_
+#define _UNISTD_H_ 1
 
-#include <feature.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <sys/types.h>
@@ -147,7 +146,7 @@ extern unsigned int alarm(unsigned int seconds);
 extern int execve(const char *filename, const char *argv[], const char *envp[]);
 
 /* Exits the current process with the specified status. */
-#if defined(QLIBC_ISO_C_VERSION) && QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 #include <stdnoreturn.h>
 extern noreturn void _exit(int status);
 #else

@@ -14,12 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef _QLIBC_X86_64_BITS_LIMITS_H_
-#define _QLIBC_X86_64_BITS_LIMITS_H_
-
 #define _LONG_MAX_ (0x7fffffffffffffff)
 #define _LONG_MIN_ (-1 - _LONG_MAX_)
 
 #define _ULONG_MAX_ (0xffffffffffffffff)
-#endif

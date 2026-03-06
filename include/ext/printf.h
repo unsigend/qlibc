@@ -15,22 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_PRINTF_H_
-#define _QLIBC_PRINTF_H_
+#ifndef _EXT_PRINTF_H_
+#define _EXT_PRINTF_H_ 1
 
-#include <feature.h>
-#include <stdio.h>
+#include <stdarg.h>
+#include <stddef.h>
 
 /* This is not part of ANSI/ISO C Standard header file, it is part of qlibc
    header extensions. This header just provide formatted output functions. */
 
 __BEGIN_DECLS
-
-/* Print formatted data to stdout */
-extern int printf(const char *restrict format, ...);
-
-/* Print formatted data to a file stream */
-extern int fprintf(FILE *restrict stream, const char *restrict format, ...);
 
 /* Format and store data in a buffer */
 extern int sprintf(char *restrict buffer, const char *restrict format, ...);
@@ -38,13 +32,6 @@ extern int sprintf(char *restrict buffer, const char *restrict format, ...);
 /* Format and store data in a buffer with a maximum length */
 extern int snprintf(char *restrict buffer, size_t bufsz,
                     const char *restrict format, ...);
-
-/* Print formatted data to stdout using a variable argument list */
-extern int vprintf(const char *restrict format, va_list vlist);
-
-/* Print formatted data to a file stream using a variable argument list */
-extern int vfprintf(FILE *restrict stream, const char *restrict format,
-                    va_list vlist);
 
 /* Format and store data in a buffer using a variable argument list */
 extern int vsprintf(char *restrict buffer, const char *restrict format,

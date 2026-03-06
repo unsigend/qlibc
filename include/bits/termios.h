@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_SYSDEP_TERMIOS_H_
-#define _QLIBC_I386_SYSDEP_TERMIOS_H_
+#ifndef _BITS_TERMIOS_H_
+#define _BITS_TERMIOS_H_ 1
 
 typedef unsigned char __cc_t;
 typedef unsigned int __tcflag_t;
