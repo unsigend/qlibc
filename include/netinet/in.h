@@ -15,26 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _TIME_H_
-#define _TIME_H_ 1
+#ifndef _NETINET_IN_H_
+#define _NETINET_IN_H_ 1
 
-#include <bits/time.h>
+#include <stdint.h>
 
-typedef __time_t time_t;
-typedef __clock_t clock_t;
+typedef uint16_t in_port_t;
+typedef uint32_t in_addr_t;
 
-struct timespec {
-  time_t tv_sec; /* seconds */
-  long tv_nsec;  /* nanoseconds */
+/* IPv4 address */
+struct in_addr {
+  in_addr_t s_addr;
 };
 
-__BEGIN_DECLS
-
-/* Suspends the execution of the calling thread for the time specified in
-   req. If the sleep is interrupted by a signal, the remaining time is stored
-   in rem. */
-extern int nanosleep(const struct timespec *req, struct timespec *rem);
-
-__END_DECLS
+/* IPv6 address */
+struct in6_addr {
+  union {
+    uint8_t __s6_addr[16];
+    uint16_t __s6_addr16[8];
+    uint32_t __s6_addr32[4];
+  } __in6_union;
+};
+#define s6_addr __in6_union.__s6_addr
+#define s6_addr16 __in6_union.__s6_addr16
+#define s6_addr32 __in6_union.__s6_addr32
 
 #endif

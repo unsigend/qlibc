@@ -15,26 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _TIME_H_
-#define _TIME_H_ 1
+#include <time.h>
 
-#include <bits/time.h>
-
-typedef __time_t time_t;
-typedef __clock_t clock_t;
-
-struct timespec {
-  time_t tv_sec; /* seconds */
-  long tv_nsec;  /* nanoseconds */
-};
-
-__BEGIN_DECLS
-
-/* Suspends the execution of the calling thread for the time specified in
-   req. If the sleep is interrupted by a signal, the remaining time is stored
-   in rem. */
-extern int nanosleep(const struct timespec *req, struct timespec *rem);
-
-__END_DECLS
-
-#endif
+unsigned int sleep(unsigned int seconds) {
+  struct timespec tv = {.tv_nsec = 0, .tv_sec = seconds};
+  if (nanosleep(&tv, &tv))
+    return tv.tv_sec;
+  return 0;
+}

@@ -15,26 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _TIME_H_
-#define _TIME_H_ 1
+#include <syscall.h>
 
-#include <bits/time.h>
-
-typedef __time_t time_t;
-typedef __clock_t clock_t;
-
-struct timespec {
-  time_t tv_sec; /* seconds */
-  long tv_nsec;  /* nanoseconds */
-};
-
-__BEGIN_DECLS
-
-/* Suspends the execution of the calling thread for the time specified in
-   req. If the sleep is interrupted by a signal, the remaining time is stored
-   in rem. */
-extern int nanosleep(const struct timespec *req, struct timespec *rem);
-
-__END_DECLS
-
-#endif
+unsigned int alarm(unsigned int seconds) {
+  return __syscall(SYS_alarm, seconds);
+}
