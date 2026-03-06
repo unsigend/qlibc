@@ -16,6 +16,5 @@
  */
 
 #include <sys/syscall.h>
-#include <unistd.h>
 
 int pause(void) { return __syscall(SYS_pause); }

@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_EXIT_FUNCS_H_
-#define _QLIBC_EXIT_FUNCS_H_
+#ifndef _EXIT_FUNCS_H_
+#define _EXIT_FUNCS_H_ 1
 
 /* Internal header file for exit functions. */
 

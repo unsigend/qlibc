@@ -20,13 +20,13 @@ char *strpbrk(const char *str, const char *charset) {
   if (*str == '\0' || *charset == '\0') {
     return NULL;
   }
-  unsigned char mapper[256] = {0};
+  unsigned char map[256] = {0};
   while (*charset) {
-    mapper[(unsigned char)*charset] = 1;
+    map[(unsigned char)*charset] = 1;
     charset++;
   }
   for (; *str; str++) {
-    if (mapper[(unsigned char)*str]) {
+    if (map[(unsigned char)*str]) {
       return (char *)str;
     }
   }

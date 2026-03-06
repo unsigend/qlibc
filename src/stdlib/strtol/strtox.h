@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STRTOX_H_
-#define _QLIBC_STRTOX_H_
+#ifndef _STRTOX_H_
+#define _STRTOX_H_ 1
 
 /* Core parser function for converting a string to a number. The lim is positive
    boundary, if the sequence contains negative sign, set the neg to 1. */

@@ -21,7 +21,7 @@
 
 int __atexit_lock = 0;
 
-#if defined(QLIBC_ISO_C_VERSION) && QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 #include <stdnoreturn.h>
 noreturn void exit(int status) {
 #else

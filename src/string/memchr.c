@@ -18,10 +18,10 @@
 #include <stddef.h>
 
 void *memchr(const void *ptr, int ch, size_t count) {
-  const unsigned char *char_ptr = (const unsigned char *)ptr;
+  const unsigned char *p = (const unsigned char *)ptr;
   for (size_t i = 0; i < count; i++) {
-    if (char_ptr[i] == (unsigned char)ch) {
-      return (void *)(char_ptr + i);
+    if (p[i] == (unsigned char)ch) {
+      return (void *)(p + i);
     }
   }
   return NULL;

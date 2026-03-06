@@ -16,10 +16,6 @@
  */
 
 #include <syscall.h>
-#include <unistd.h>
 
 int dup(int fd) { return __syscall(SYS_dup, (long)fd); }
-int dup2(int fd, int fd2) { return __syscall(SYS_dup2, (long)fd, (long)fd2); }
-int dup3(int fd, int fd2, int flags) {
-  return __syscall(SYS_dup3, (long)fd, (long)fd2, (long)flags);
-}
+

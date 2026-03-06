@@ -17,20 +17,21 @@
 #include <string.h>
 
 void *memmove(void *dest, const void *src, size_t count) {
-  unsigned char *dest_ptr = (unsigned char *)dest;
-  const unsigned char *src_ptr = (const unsigned char *)src;
-  if (dest_ptr == src_ptr || count == 0) {
+  unsigned char *wp = (unsigned char *)dest;
+  const unsigned char *rp = (const unsigned char *)src;
+
+  if (wp == rp || count == 0) {
     return dest;
   }
-  if (dest_ptr < src_ptr || src_ptr + count <= dest_ptr) {
+  if (wp < rp || rp + count <= wp) {
     return memcpy(dest, src, count);
   } else {
-    dest_ptr += count;
-    src_ptr += count;
+    wp += count;
+    rp += count;
     while (count--) {
-      dest_ptr--;
-      src_ptr--;
-      *dest_ptr = *src_ptr;
+      wp--;
+      rp--;
+      *wp = *rp;
     }
   }
   return dest;

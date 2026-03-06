@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_MALLOC_MM_H_
-#define _QLIBC_MALLOC_MM_H_
+#ifndef _MM_H_
+#define _MM_H_ 1
 
 #include <stdalign.h>
 #include <stdbool.h>

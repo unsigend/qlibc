@@ -17,14 +17,14 @@
 #include <stddef.h>
 
 size_t strcspn(const char *str, const char *charset) {
-  unsigned char mapper[256] = {0};
+  unsigned char map[256] = {0};
+  size_t n = 0;
   for (; *charset; ++charset) {
-    mapper[(unsigned char)*charset] = 1;
+    map[(unsigned char)*charset] = 1;
   }
-  size_t counter = 0;
-  while (*str && mapper[*((unsigned char *)str)] != 1) {
-    ++counter;
+  while (*str && map[*((unsigned char *)str)] != 1) {
+    ++n;
     ++str;
   }
-  return counter;
+  return n;
 }

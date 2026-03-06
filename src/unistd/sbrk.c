@@ -16,7 +16,8 @@
  */
 
 #include <errno.h>
-#include <unistd.h>
+#include <stdint.h>
+#include <sys/types.h>
 
 extern void *__brk(void *addr);
 

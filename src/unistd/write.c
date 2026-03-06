@@ -15,8 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stddef.h>
+#include <sys/types.h>
 #include <syscall.h>
-#include <unistd.h>
 
 ssize_t write(int fd, const void *buf, size_t count) {
   return __syscall(SYS_write, (long)fd, (long)buf, (long)count);

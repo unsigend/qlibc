@@ -15,26 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stddef.h>
+#include <syscall.h>
 
-void *bsearch(const void *key, const void *ptr, size_t count, size_t size,
-              int (*comp)(const void *, const void *)) {
-  size_t maxidx = (size_t)count - 1;
-  const char *l = (const char *)ptr;
-  const char *r = (const char *)ptr + maxidx * size;
-  size_t off;
-  const char *m = NULL;
-
-  while (l <= r) {
-    off = ((size_t)r - (size_t)l) / size;
-    m = l + (off / 2) * size;
-    if (!comp(key, m))
-      return (void *)m;
-    else if (comp(key, m) < 0)
-      r = m - size;
-    else
-      l = m + size;
-  }
-
-  return NULL;
+int dup3(int fd, int fd2, int flags) {
+  return __syscall(SYS_dup3, (long)fd, (long)fd2, (long)flags);
 }

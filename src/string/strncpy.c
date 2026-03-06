@@ -17,10 +17,10 @@
 #include <string.h>
 
 char *strncpy(char *restrict dest, const char *restrict src, size_t count) {
-  size_t len_src = strlen(src);
-  if (len_src < count) {
-    memcpy(dest, src, len_src);
-    memset(dest + len_src, '\0', count - len_src);
+  size_t len = strlen(src);
+  if (len < count) {
+    memcpy(dest, src, len);
+    memset(dest + len, '\0', count - len);
   } else {
     memcpy(dest, src, count);
   }

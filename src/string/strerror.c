@@ -18,30 +18,31 @@
 #include <errno.h>
 #include <string.h>
 
-/**
- * Map the error number to the error string
- */
+/* Map the error number to the error string. */
 #define ERROR(errnum, errstr) errnum
-static unsigned char __strerror_id[] = {
+static unsigned char errnums[] = {
 #include <bits/strerror.h>
 };
 
 #undef ERROR
 #define ERROR(errnum, errstr) errstr
-static const char *__strerror_str[] = {
+static const char *errorstrs[] = {
 #include <bits/strerror.h>
 };
 
-#define _ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+static const char *unknown = "Unknown error";
+
+#define ARRAY_SZ(arr) (sizeof(arr) / sizeof(arr[0]))
+
 char *strerror(int errnum) {
   if (errnum < 0) {
-    return (char *)"Unknown error";
+    return (char *)unknown;
   }
   unsigned long i;
-  for (i = 0; i < _ARRAY_SIZE(__strerror_id); i++) {
-    if (__strerror_id[i] == errnum) {
-      return (char *)__strerror_str[i];
+  for (i = 0; i < ARRAY_SZ(errnums); i++) {
+    if (errnums[i] == errnum) {
+      return (char *)errorstrs[i];
     }
   }
-  return (char *)"Unknown error";
+  return (char *)unknown;
 }

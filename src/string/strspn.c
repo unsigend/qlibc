@@ -18,15 +18,15 @@
 #include <stddef.h>
 
 size_t strspn(const char *str, const char *charset) {
-  unsigned char mapper[256] = {0};
+  unsigned char map[256] = {0};
+  size_t n = 0;
   for (; *charset; ++charset) {
-    mapper[(unsigned char)*charset] = 1;
+    map[(unsigned char)*charset] = 1;
   }
 
-  size_t counter = 0;
-  while (mapper[*((unsigned char *)str)]) {
-    ++counter;
+  while (map[*((unsigned char *)str)]) {
+    ++n;
     ++str;
   }
-  return counter;
+  return n;
 }

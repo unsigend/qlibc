@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_ENV_H_
-#define _QLIBC_ENV_H_
+#ifndef _ENV_H_
+#define _ENV_H_ 1
 
 #include <stddef.h>
 

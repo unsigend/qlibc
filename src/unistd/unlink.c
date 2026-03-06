@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sys/types.h>
 #include <syscall.h>
-#include <unistd.h>
 
 int unlink(const char *pathname) {
   return __syscall(SYS_unlink, (long)pathname);

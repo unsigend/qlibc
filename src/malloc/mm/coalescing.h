@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_MALLOC_MM_COALESCING_H_
-#define _QLIBC_MALLOC_MM_COALESCING_H_
+#ifndef _COALESCING_H_
+#define _COALESCING_H_ 1
 
 #include "mm.h"
 

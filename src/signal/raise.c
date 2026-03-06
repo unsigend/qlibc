@@ -19,7 +19,7 @@
 #include <unistd.h>
 
 int raise(int sig) {
-#if defined(QLIBC_SUPPORT_THREADS) && QLIBC_SUPPORT_THREADS == 1
+#if __SUPPORT_THREADS
 #include <pthread.h>
   return pthread_kill(pthread_self(), sig);
 #else

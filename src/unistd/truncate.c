@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sys/types.h>
 #include <syscall.h>
-#include <unistd.h>
 
 int truncate(const char *path, off_t length) {
   return __syscall(SYS_truncate, (long)path, (long)length);

@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_EXT_ITOA_XTOA_H_
-#define _QLIBC_EXT_ITOA_XTOA_H_
+#ifndef _XTOA_H_
+#define _XTOA_H_ 1
 
 extern char *xtoa(unsigned long long value, char *buff, int base);
 

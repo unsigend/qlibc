@@ -18,11 +18,11 @@
 #include <string.h>
 
 char *strcat(char *restrict dest, const char *restrict src) {
-  char *_d = dest;
+  char *wp = dest;
   while (*dest)
     ++dest;
   while (*src)
     *dest++ = *src++;
   *dest = '\0';
-  return _d;
+  return wp;
 }

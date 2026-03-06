@@ -17,7 +17,6 @@
 
 #include <stdarg.h>
 #include <sys/syscall.h>
-#include <unistd.h>
 
 long syscall(long number, ...) {
   va_list args;

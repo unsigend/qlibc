@@ -17,7 +17,7 @@
 
 #include <unistd.h>
 
-#if defined(QLIBC_ISO_C_VERSION) && QLIBC_ISO_C_VERSION >= ISO_C_STANDARD_C11
+#if __USE_ISO_C11
 #include <stdnoreturn.h>
 noreturn void _Exit(int status) {
 #else
