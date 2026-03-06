@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_SYSDEP_NR_H_
-#define _QLIBC_X86_64_SYSDEP_NR_H_
+#ifndef _BITS_NR_H_
+#define _BITS_NR_H_ 1
 
 #define __NR_read 0
 #define __NR_write 1

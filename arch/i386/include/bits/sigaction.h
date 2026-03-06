@@ -15,6 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef _BITS_SIGACTION_H_
+#define _BITS_SIGACTION_H_ 1
+
 #include <bits/types.h>
 
 #define SA_NOCLDSTOP 1 /* Don't send SIGCHLD when children stop.  */
@@ -39,3 +42,5 @@ struct sigaction {
 #define SIG_BLOCK 0   /* Block signals.  */
 #define SIG_UNBLOCK 1 /* Unblock signals.  */
 #define SIG_SETMASK 2 /* Set the set of blocked signals.  */
+
+#endif

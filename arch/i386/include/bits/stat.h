@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_BITS_STAT_H_
-#define _QLIBC_I386_BITS_STAT_H_
+#ifndef _BITS_STAT_H_
+#define _BITS_STAT_H_ 1
 
 #include <bits/types.h>
 #include <time.h>

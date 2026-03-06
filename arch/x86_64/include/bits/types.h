@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_TYPES_H_
-#define _QLIBC_X86_64_BITS_TYPES_H_
+#ifndef _BITS_TYPES_H_
+#define _BITS_TYPES_H_ 1
 
 typedef unsigned long __dev_t;
 typedef __dev_t __dev64_t;

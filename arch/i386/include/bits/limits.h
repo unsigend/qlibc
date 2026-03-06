@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_BITS_LIMITS_H_
-#define _QLIBC_I386_BITS_LIMITS_H_
+#ifndef _BITS_LIMITS_H_
+#define _BITS_LIMITS_H_ 1
 
 #define _LONG_MAX_ (0x7fffffff)
 #define _LONG_MIN_ (-1 - _LONG_MAX_)

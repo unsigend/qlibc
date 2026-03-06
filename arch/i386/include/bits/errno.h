@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef _QLIBC_I386_SYSDEP_ERRNO_H_
-#define _QLIBC_I386_SYSDEP_ERRNO_H_
+
+#ifndef _BITS_ERRNO_H_
+#define _BITS_ERRNO_H_ 1
 
 #define EPERM 1            /* Operation not permitted */
 #define ENOENT 2           /* No such file or directory */
@@ -76,4 +77,4 @@
 #define EBADSLT 57         /* Invalid slot */
 #define EILSEQ 84          /* Illegal byte sequence */
 
-#endif /* _QLIBC_I386_SYSDEP_ERRNO_H_ */
+#endif

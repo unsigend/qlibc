@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_STDINT_H_
-#define _QLIBC_X86_64_BITS_STDINT_H_
+#ifndef _BITS_STDINT_H_
+#define _BITS_STDINT_H_ 1
 
 typedef signed char int8_t;
 typedef signed short int16_t;

@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_BITS_STDDEF_H_
-#define _QLIBC_I386_BITS_STDDEF_H_
+#ifndef _BITS_STDDEF_H_
+#define _BITS_STDDEF_H_ 1
 
 #include <feature.h>
 

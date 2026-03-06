@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_I386_BITS_IOCTL_H_
-#define _QLIBC_I386_BITS_IOCTL_H_
+#ifndef _BITS_IOCTL_H_
+#define _BITS_IOCTL_H_ 1
 
 #define TCGETS 0x5401
 #define TCSETS 0x5402

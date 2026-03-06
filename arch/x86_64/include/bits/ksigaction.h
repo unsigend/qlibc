@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_BITS_KSIGACTION_H_
-#define _QLIBC_X86_64_BITS_KSIGACTION_H_
+#ifndef _BITS_KSIGACTION_H_
+#define _BITS_KSIGACTION_H_ 1
 
 /* Structure describing the action to be taken when a signal arrives. This is
    used for kernel-level signal handling. */

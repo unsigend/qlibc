@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_X86_64_SYSDEP_SYSCALL_H_
-#define _QLIBC_X86_64_SYSDEP_SYSCALL_H_
+#ifndef _BITS_SYSCALL_H_
+#define _BITS_SYSCALL_H_ 1
 
 #include <errno.h>
 #include <stdint.h>
@@ -108,7 +108,7 @@ static inline long __syscall6_raw(uint64_t __num, uint64_t __arg1,
   return ret;
 }
 
-// __syscall just a wrapper for the raw syscall functions
+/* __syscall is just a wrapper for the raw syscall functions */
 #define __syscall0(NUM) __syscall_ret(__syscall0_raw(NUM))
 #define __syscall1(NUM, ARG1) __syscall_ret(__syscall1_raw(NUM, ARG1))
 #define __syscall2(NUM, ARG1, ARG2)                                            \
