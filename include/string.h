@@ -98,6 +98,10 @@ extern char *strdup(const char *src);
 /* Get the error message for the error number */
 extern char *strerror(int errnum);
 
+/* Returns a string or print the signal description specified by sig. */
+extern char *strsignal(int sig);
+extern void psignal(int sig, const char *msg);
+
 __END_DECLS
 
 #endif

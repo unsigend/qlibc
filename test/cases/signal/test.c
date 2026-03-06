@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
 #include <signal.h>
+#include <string.h>
 #include <utest.h>
 
 UTEST_TEST_CASE(types) {
@@ -146,6 +147,45 @@ UTEST_TEST_CASE(sigpending) {
   EXPECT_EQUAL_INT(sigpending(NULL), -1);
 }
 
+UTEST_TEST_CASE(strsignal) {
+  EXPECT_EQUAL_STRING(strsignal(0), "Unknown signal 0");
+  EXPECT_EQUAL_STRING(strsignal(SIGHUP), "Hangup");
+  EXPECT_EQUAL_STRING(strsignal(SIGINT), "Interrupt");
+  EXPECT_EQUAL_STRING(strsignal(SIGQUIT), "Quit");
+  EXPECT_EQUAL_STRING(strsignal(SIGILL), "Illegal instruction");
+  EXPECT_EQUAL_STRING(strsignal(SIGTRAP), "Trace/breakpoint trap");
+  EXPECT_EQUAL_STRING(strsignal(SIGABRT), "Aborted");
+  EXPECT_EQUAL_STRING(strsignal(SIGBUS), "Bus error");
+  EXPECT_EQUAL_STRING(strsignal(SIGFPE), "Floating point exception");
+  EXPECT_EQUAL_STRING(strsignal(SIGKILL), "Killed");
+  EXPECT_EQUAL_STRING(strsignal(SIGUSR1), "User defined signal 1");
+  EXPECT_EQUAL_STRING(strsignal(SIGSEGV), "Segmentation fault");
+  EXPECT_EQUAL_STRING(strsignal(SIGUSR2), "User defined signal 2");
+  EXPECT_EQUAL_STRING(strsignal(SIGPIPE), "Broken pipe");
+  EXPECT_EQUAL_STRING(strsignal(SIGALRM), "Alarm clock");
+  EXPECT_EQUAL_STRING(strsignal(SIGTERM), "Terminated");
+  EXPECT_EQUAL_STRING(strsignal(SIGSTKFLT), "Stack fault");
+  EXPECT_EQUAL_STRING(strsignal(SIGCHLD), "Child exited");
+  EXPECT_EQUAL_STRING(strsignal(SIGCONT), "Continued");
+  EXPECT_EQUAL_STRING(strsignal(SIGSTOP), "Stopped (signal)");
+  EXPECT_EQUAL_STRING(strsignal(SIGTSTP), "Stopped");
+  EXPECT_EQUAL_STRING(strsignal(SIGTTIN), "Stopped (tty input)");
+  EXPECT_EQUAL_STRING(strsignal(SIGTTOU), "Stopped (tty output)");
+  EXPECT_EQUAL_STRING(strsignal(SIGURG), "Urgent I/O condition");
+  EXPECT_EQUAL_STRING(strsignal(SIGXCPU), "CPU time limit exceeded");
+  EXPECT_EQUAL_STRING(strsignal(SIGXFSZ), "File size limit exceeded");
+  EXPECT_EQUAL_STRING(strsignal(SIGVTALRM), "Virtual timer expired");
+  EXPECT_EQUAL_STRING(strsignal(SIGPROF), "Profiling timer expired");
+  EXPECT_EQUAL_STRING(strsignal(SIGWINCH), "Window changed");
+  EXPECT_EQUAL_STRING(strsignal(SIGIO), "I/O possible");
+  EXPECT_EQUAL_STRING(strsignal(SIGPWR), "Power failure");
+  EXPECT_EQUAL_STRING(strsignal(SIGSYS), "Bad system call");
+  EXPECT_EQUAL_STRING(strsignal(32), "Unknown signal 32");
+  EXPECT_EQUAL_STRING(strsignal(-1), "Unknown signal -1");
+  EXPECT_EQUAL_STRING(strsignal(100), "Unknown signal 100");
+  EXPECT_EQUAL_STRING(strsignal(999999999), "Unknown signal 999999999");
+}
+
 UTEST_TEST_SUITE(signal) {
   UTEST_RUN_TEST_CASE(types);
   UTEST_RUN_TEST_CASE(macros);
@@ -158,4 +198,5 @@ UTEST_TEST_SUITE(signal) {
   UTEST_RUN_TEST_CASE(sigorset);
   UTEST_RUN_TEST_CASE(sigisemptyset);
   UTEST_RUN_TEST_CASE(sigpending);
+  UTEST_RUN_TEST_CASE(strsignal);
 }
