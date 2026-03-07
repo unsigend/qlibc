@@ -35,7 +35,7 @@
       - 0x prefix:      # (%x, %X, %o)
    Width:      fixed %Nd, dynamic %*d
    Precision:  fixed %.Nd, dynamic %.*d
-   Length:     l (long), ll (long long), z (size_t), h (short)
+   Length:     l (long), ll (long long), z (size_t), h (short), hh (char)
    Format sequence is ordered: %[flags][width][precision][length][specifier]
 */
 
@@ -329,52 +329,52 @@ static int unsigned_arg_type(int len) {
 /* Pop arguments from the argument list based on promotion rules, the
    implementation is based on the reference implementation of the musl C
    library 1.2.5 */
-static void pop_arg(union arg *__arg, int __type, va_list *__ap) {
-  switch (__type) {
+static void pop_arg(union arg *arg, int type, va_list *ap) {
+  switch (type) {
   case ARG_PTR:
-    __arg->p = va_arg(*__ap, void *);
+    arg->p = va_arg(*ap, void *);
     break;
   case ARG_SHORT:
-    __arg->i = va_arg(*__ap, int);
+    arg->i = va_arg(*ap, int);
     break;
   case ARG_USHORT:
-    __arg->i = va_arg(*__ap, unsigned int);
+    arg->i = va_arg(*ap, unsigned int);
     break;
   case ARG_CHAR:
-    __arg->i = va_arg(*__ap, int);
+    arg->i = va_arg(*ap, int);
     break;
   case ARG_UCHAR:
-    __arg->i = va_arg(*__ap, unsigned int);
+    arg->i = va_arg(*ap, unsigned int);
     break;
   case ARG_INT:
-    __arg->i = va_arg(*__ap, int);
+    arg->i = va_arg(*ap, int);
     break;
   case ARG_UINT:
-    __arg->i = va_arg(*__ap, unsigned int);
+    arg->i = va_arg(*ap, unsigned int);
     break;
   case ARG_LONG:
-    __arg->i = va_arg(*__ap, long);
+    arg->i = va_arg(*ap, long);
     break;
   case ARG_ULONG:
-    __arg->i = va_arg(*__ap, unsigned long);
+    arg->i = va_arg(*ap, unsigned long);
     break;
   case ARG_LLONG:
-    __arg->i = va_arg(*__ap, long long);
+    arg->i = va_arg(*ap, long long);
     break;
   case ARG_ULLONG:
-    __arg->i = va_arg(*__ap, unsigned long long);
+    arg->i = va_arg(*ap, unsigned long long);
     break;
   case ARG_IMAX:
-    __arg->i = va_arg(*__ap, intmax_t);
+    arg->i = va_arg(*ap, intmax_t);
     break;
   case ARG_UMAX:
-    __arg->i = va_arg(*__ap, uintmax_t);
+    arg->i = va_arg(*ap, uintmax_t);
     break;
   case ARG_SIZE_T:
-    __arg->i = va_arg(*__ap, size_t);
+    arg->i = va_arg(*ap, size_t);
     break;
   case ARG_SSIZE_T:
-    __arg->i = va_arg(*__ap, ssize_t);
+    arg->i = va_arg(*ap, ssize_t);
     break;
   }
 }
