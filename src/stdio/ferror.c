@@ -15,28 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include <stdio.h>
 
-int setvbuf(FILE *restrict stream, char *restrict buffer, int mode,
-            size_t size) {
-  if (!stream || (mode != _IONBF && mode != _IOLBF && mode != _IOFBF))
-    return EOF;
+int ferror(FILE *stream) {
+  if (!stream)
+    return 0;
 
-  if (stream->buf)
-    return EOF;
-
-  // user provided buffer
-  if (buffer) {
-    stream->buf = (unsigned char *)buffer;
-    stream->bufmode = mode;
-    stream->bufsz = size;
-
-    __init_buf_pointers(stream, stream->buf, size);
-  } else {
-    // allocate buffer
-    stream->bufmode = mode;
-    if (__allocbuf(stream) == EOF)
-      return EOF;
-  }
-  return 0;
+  return stream->error;
 }

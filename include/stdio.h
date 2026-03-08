@@ -15,29 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _QLIBC_STDIO_H_
-#define _QLIBC_STDIO_H_
+#ifndef _STDIO_H_
+#define _STDIO_H_ 1
 
 #include <stdarg.h>
 #include <stddef.h>
 #include <sys/types.h>
 
-/* seek flags */
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
+#define SEEK_SET 0 /* set file position to offset */
+#define SEEK_CUR 1 /* set file position to current position + offset */
+#define SEEK_END 2 /* set file position to end of file + offset */
 
-/* buffer mode */
-#define _IOFBF 0
-#define _IOLBF 1
-#define _IONBF 2
+#define _IOFBF 0 /* fully buffered */
+#define _IOLBF 1 /* line buffered */
+#define _IONBF 2 /* no buffering */
 
-#define EOF (-1)
-#define BUFSIZ 8192
-#define FILENAME_MAX 4096
-#define FOPEN_MAX 1000
-#define TMP_MAX 10000
-#define L_tmpnam 20
+#define EOF (-1)          /* end of file */
+#define BUFSIZ 8192       /* buffer size */
+#define FILENAME_MAX 4096 /* maximum file name length */
+#define FOPEN_MAX 1000    /* maximum number of open files */
+#define TMP_MAX 10000     /* maximum number of temporary files */
+#define L_tmpnam 20       /* length of temporary file name */
 
 /* file IO structure */
 typedef struct _FILE_IO {
@@ -63,18 +61,14 @@ typedef struct _FILE_IO {
 } FILE;
 
 /* file position structure */
-typedef struct _fpos_t {
+typedef struct _FPOS_T {
   off_t pos; /* file position */
 } fpos_t;
 
 /* standard file streams */
-extern FILE *__stdin;
-extern FILE *__stdout;
-extern FILE *__stderr;
-
-#define stdin __stdin
-#define stdout __stdout
-#define stderr __stderr
+extern FILE *stdin;
+extern FILE *stdout;
+extern FILE *stderr;
 
 /* file access */
 extern FILE *fopen(const char *restrict filename, const char *restrict mode);
@@ -175,4 +169,5 @@ extern int remove(const char *pathname);
 extern int rename(const char *oldpath, const char *newpath);
 extern FILE *tmpfile(void);
 extern char *tmpnam(char *str);
+
 #endif

@@ -15,22 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
 #include <stdio.h>
 
-static FILE __stdin_stream;
-static FILE __stdout_stream;
-static FILE __stderr_stream;
-
-FILE *__stdin = NULL;
-FILE *__stdout = NULL;
-FILE *__stderr = NULL;
-
-// __stdio_init(void)
-//    stdio module initialization function.
-
-__attribute__((constructor)) void __stdio_init(void) {
-  __stdin = __finit(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
-  __stdout = __finit(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
-  __stderr = __finit(&__stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
-}
+int getchar(void) { return fgetc(stdin); }

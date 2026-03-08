@@ -15,27 +15,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 #include <stdlib.h>
+#include <string.h>
 
-#define __DEFAULT_PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+#define PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
-// fopen(filename, mode)
-//    Open a file and return a stream.
-//    Return the stream on success, NULL on failure.
-//
-//    Note: for lazy loading optimization, the buffer will not allocated until
-//    the first read or write operation is performed. So in fopen, it will only
-//    deal with the file descriptor and mode.
+FILE *freopen(const char *restrict filename, const char *restrict mode,
+              FILE *restrict stream) {
+  int fd, oflags;
 
-FILE *fopen(const char *restrict filename, const char *restrict mode) {
-  int fd;
-  int oflags;
-  int bufmode;
-  FILE *stream;
-
-  if (!filename || !mode)
+  if (!filename || !mode || !stream)
     return NULL;
+
+  /* flush the buffered write data */
+  if (fflush(stream) == EOF)
+    return NULL;
+
+  if (close(stream->fd) == -1) {
+    stream->error = 1;
+    return NULL;
+  }
+
+  if (stream->flags & S_MYBUF && stream->buf)
+    free(stream->buf);
 
   switch (mode[0]) {
   case 'r':
@@ -47,26 +50,20 @@ FILE *fopen(const char *restrict filename, const char *restrict mode) {
   case 'a':
     oflags = O_WRONLY | O_CREAT | O_APPEND;
     break;
-  default:
-    return NULL;
   }
 
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
-  fd = open(filename, oflags, __DEFAULT_PERM);
-  if (fd == -1)
+  if ((fd = open(filename, oflags, PERM)) == -1)
     return NULL;
 
-  stream = malloc(sizeof(FILE));
-  if (!stream) {
-    close(fd);
-    return NULL;
-  }
+  memset(stream, 0, sizeof(FILE));
 
-  // determine the buffer mode
-  bufmode = isatty(fd) ? _IOLBF : _IOFBF;
+  stream->fd = fd;
+  stream->flags = mtoflags(oflags);
+  stream->mode = oflags;
+  stream->bufmode = isatty(fd) ? _IOLBF : _IOFBF;
 
-  __finit(stream, fd, oflags, bufmode);
   return stream;
 }

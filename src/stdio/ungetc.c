@@ -15,17 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 #include <stdlib.h>
 
 int ungetc(int ch, FILE *stream) {
-  if (!stream || ch == EOF || __FILE_IS_ERR(stream))
+  if (!stream || ch == EOF || stream->error)
     return EOF;
 
   if (!stream->shbuf) {
     stream->shbuf = malloc(UNGET);
     if (!stream->shbuf) {
-      __FILE_SET_ERR(stream);
+      stream->error = 1;
       return EOF;
     }
     stream->shlim = UNGET;
@@ -33,11 +33,11 @@ int ungetc(int ch, FILE *stream) {
   }
 
   if (stream->shcnt >= stream->shlim) {
-    __FILE_SET_ERR(stream);
+    stream->error = 1;
     return EOF;
   }
 
   stream->shbuf[stream->shcnt++] = (unsigned char)ch;
-  __FILE_CLEAR_EOF(stream);
+  stream->eof = 0;
   return ch;
 }

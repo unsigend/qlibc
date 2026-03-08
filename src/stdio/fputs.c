@@ -15,12 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include <stdio.h>
+#include <string.h>
 
-void clearerr(FILE *stream) {
-  if (!stream)
-    return;
-
-  __FILE_CLEAR_EOF(stream);
-  __FILE_CLEAR_ERR(stream);
+int fputs(const char *restrict str, FILE *stream) {
+  if (!str || !stream)
+    return EOF;
+  size_t len = strlen(str);
+  return (fwrite(str, 1, len, stream) == len) ? 0 : EOF;
 }

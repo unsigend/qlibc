@@ -15,32 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include <stdio.h>
 
-static int __flushall(void) {
-  FILE *__c = __stdio_head;
-  while (__c) {
-    if (__FILE_IS_WRITE(__c) && !__IO_WBUF_EMPTY(__c)) {
-      if (__flushbuf(__c) == EOF)
-        return EOF;
-    }
-    if (__FILE_IS_READ(__c))
-      __IO_RBUF_DROP(__c);
-    __c = __c->next;
-  }
-  return 0;
-}
+int fgetpos(FILE *restrict stream, fpos_t *restrict pos) {
+  if (!stream || !pos)
+    return -1;
 
-int fflush(FILE *stream) {
-  if (!stream)
-    return __flushall();
-  if (__FILE_IS_ERR(stream))
-    return EOF;
-  if (__FILE_IS_WRITE(stream) && !__IO_WBUF_EMPTY(stream)) {
-    if (__flushbuf(stream) == EOF)
-      return EOF;
-  }
-  if (__FILE_IS_READ(stream))
-    __IO_RBUF_DROP(stream);
+  long off = ftell(stream);
+  if (off == -1)
+    return -1;
+
+  pos->pos = off;
   return 0;
 }

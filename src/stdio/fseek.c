@@ -15,24 +15,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
-#include <unistd.h>
+#include "io.h"
+#include <stdio.h>
 
-long ftell(FILE *stream) {
+int fseek(FILE *stream, long offset, int origin) {
   if (!stream)
     return -1;
 
-  // TODO: optimize the offset by replacing lseek with maintained offset field
-  off_t pos = lseek(stream->fd, 0, SEEK_CUR);
+  if (origin == SEEK_CUR) {
+    if (stream->flags & S_WRITE) {
+      offset += (stream->wpos - stream->wbase);
+    }
+    if (stream->flags & S_READ) {
+      offset -= (stream->rend - stream->rpos);
+    }
+  }
+
+  if (flushbuf(stream) == EOF)
+    return -1;
+
+  if (stream->flags & S_READ)
+    IBUF_DROP(stream);
+
+  off_t pos = lseek(stream->fd, offset, origin);
   if (pos == -1)
     return -1;
 
-  if (__FILE_IS_READ(stream)) {
-    pos -= (stream->rend - stream->rpos);
-  }
-  if (__FILE_IS_WRITE(stream)) {
-    pos += (stream->wpos - stream->wbase);
-  }
-
-  return pos;
+  stream->eof = 0;
+  stream->offset = pos;
+  return 0;
 }

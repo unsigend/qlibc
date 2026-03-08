@@ -15,23 +15,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
+#include <unistd.h>
 
-int fputc(int ch, FILE *stream) {
+long ftell(FILE *stream) {
   if (!stream)
-    return EOF;
-  if (__FILE_IS_ERR(stream) || __FILE_IS_EOF(stream))
-    return EOF;
+    return -1;
 
-  if (!stream->buf)
-    if (__allocbuf(stream) == EOF)
-      return EOF;
+  // TODO: optimize the offset by replacing lseek with maintained offset field
+  off_t pos = lseek(stream->fd, 0, SEEK_CUR);
+  if (pos == -1)
+    return -1;
 
-  *stream->wpos++ = (unsigned char)ch;
+  if (stream->flags & S_READ)
+    pos -= (stream->rend - stream->rpos);
+  if (stream->flags & S_WRITE)
+    pos += (stream->wpos - stream->wbase);
 
-  if (__IO_WBUF_FULL(stream) || (__FILE_IS_LINEBUF(stream) && ch == '\n'))
-    if (__flushbuf(stream) == EOF)
-      return EOF;
-
-  return ch;
+  return pos;
 }

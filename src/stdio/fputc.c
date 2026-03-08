@@ -15,10 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
+#include "io.h"
 
-int puts(const char *str) {
-  if (!str || fputs(str, __stdout) == EOF)
+int fputc(int ch, FILE *stream) {
+  if (!stream || stream->error || stream->eof)
     return EOF;
-  return fputc('\n', __stdout) == '\n' ? 0 : EOF;
+
+  if (!stream->buf && allocbuf(stream) == EOF)
+    return EOF;
+
+  *stream->wpos++ = (unsigned char)ch;
+
+  if (OBUF_FULL(stream) || (stream->flags & S_LINEBUF && ch == '\n'))
+    if (flushbuf(stream) == EOF)
+      return EOF;
+
+  return ch;
 }

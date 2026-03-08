@@ -17,14 +17,22 @@
 
 #include <stdio.h>
 
-int fgetpos(FILE *restrict stream, fpos_t *restrict pos) {
-  if (!stream || !pos)
-    return -1;
+char *fgets(char *restrict str, int count, FILE *stream) {
+  if (!str || count <= 0 || !stream)
+    return NULL;
 
-  long r = ftell(stream);
-  if (r == -1)
-    return -1;
+  size_t rn = count - 1;
+  size_t total = 0;
 
-  pos->pos = r;
-  return 0;
+  while (total < rn) {
+    int ch = fgetc(stream);
+    if (ch == EOF)
+      break;
+    str[total++] = ch;
+    if (ch == '\n')
+      break;
+  }
+
+  str[total] = '\0';
+  return total ? str : NULL;
 }

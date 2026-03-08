@@ -15,11 +15,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 
-int feof(FILE *stream) {
-  if (!stream)
-    return 0;
+int fgetc(FILE *stream) {
+  if (!stream || stream->error || stream->eof)
+    return EOF;
 
-  return __FILE_IS_EOF(stream);
+  if (stream->shcnt > 0)
+    return stream->shbuf[--stream->shcnt];
+
+  if (IBUF_FULL(stream)) {
+    if (!stream->buf && allocbuf(stream) == EOF)
+      return EOF;
+    if (refill(stream) == EOF)
+      return EOF;
+  }
+
+  return *stream->rpos++;
 }

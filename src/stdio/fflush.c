@@ -15,6 +15,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
+#include "io.h"
 
-int getchar(void) { return fgetc(__stdin); }
+static int flushall(void) {
+  FILE *cur = stdio_head;
+  while (cur) {
+    /* flush the write buffer */
+    if (flushbuf(cur) == EOF)
+      return EOF;
+    if (cur->flags & S_READ)
+      IBUF_DROP(cur);
+    cur = cur->next;
+  }
+  return 0;
+}
+
+int fflush(FILE *stream) {
+  if (!stream)
+    return flushall();
+
+  if (stream->error || flushbuf(stream) == EOF)
+    return EOF;
+
+  if (stream->flags & S_READ)
+    IBUF_DROP(stream);
+
+  return 0;
+}

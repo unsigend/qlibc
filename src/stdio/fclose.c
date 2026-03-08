@@ -15,35 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 #include <stdlib.h>
 #include <unistd.h>
-
-// fclose(stream)
-//    Implementation:
-//    1. Flush the buffered write data
-//    2. Remove the stream from global stream list
-//    3. Free the buffer (if managed by qlibc)
-//    4. Close the file descriptor
-//    5. Free FILE structure
 
 int fclose(FILE *stream) {
   if (!stream)
     return EOF;
 
-  // flush the buffered write data
+  /* flush the buffered write data */
   if (fflush(stream) == EOF)
     return EOF;
 
+  /* remove the stream from global stream list */
   if (stream->prev)
     stream->prev->next = stream->next;
   else
-    __stdio_head = stream->next;
+    stdio_head = stream->next;
 
   if (stream->next)
     stream->next->prev = stream->prev;
 
-  if (__FILE_IS_MYBUF(stream) && stream->buf) {
+  /* free the buffer if not managed by user */
+  if (stream->flags & S_MYBUF && stream->buf) {
     free(stream->buf);
     stream->buf = NULL;
   }
@@ -53,8 +47,9 @@ int fclose(FILE *stream) {
     stream->shbuf = NULL;
   }
 
+  /* close the file descriptor */
   if (close(stream->fd) == -1) {
-    __FILE_SET_ERR(stream);
+    stream->error = 1;
     free(stream);
     return EOF;
   }

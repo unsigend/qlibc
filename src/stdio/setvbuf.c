@@ -15,11 +15,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 
-int ferror(FILE *stream) {
-  if (!stream)
-    return 0;
+#define VMODE(mode) ((mode) == _IONBF || (mode) == _IOLBF || (mode) == _IOFBF)
 
-  return __FILE_IS_ERR(stream);
+int setvbuf(FILE *restrict stream, char *restrict buffer, int mode,
+            size_t size) {
+  if (!stream || !VMODE(mode) || stream->buf)
+    return EOF;
+
+  if (buffer) {
+    stream->buf = (unsigned char *)buffer;
+    stream->bufmode = mode;
+    stream->bufsz = size;
+
+    resetbufp(stream, stream->buf, size);
+  } else {
+    stream->bufmode = mode;
+    if (allocbuf(stream) == EOF)
+      return EOF;
+  }
+  return 0;
 }

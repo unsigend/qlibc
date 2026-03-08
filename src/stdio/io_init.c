@@ -15,36 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 #include <stdio.h>
 
-int fseek(FILE *stream, long offset, int origin) {
-  if (!stream)
-    return -1;
+static FILE stdin_stream;
+static FILE stdout_stream;
+static FILE stderr_stream;
 
-  if (origin == SEEK_CUR) {
-    if (__FILE_IS_WRITE(stream)) {
-      offset += (stream->wpos - stream->wbase);
-    }
-    if (__FILE_IS_READ(stream)) {
-      offset -= (stream->rend - stream->rpos);
-    }
-  }
+FILE *stdin = NULL;
+FILE *stdout = NULL;
+FILE *stderr = NULL;
 
-  if (__FILE_IS_WRITE(stream) && !__IO_WBUF_EMPTY(stream)) {
-    if (__flushbuf(stream) == EOF)
-      return -1;
-  }
-
-  if (__FILE_IS_READ(stream))
-    __IO_RBUF_DROP(stream);
-
-  off_t pos = lseek(stream->fd, offset, origin);
-  if (pos == -1)
-    return -1;
-
-  __FILE_CLEAR_EOF(stream);
-
-  stream->offset = pos;
-  return 0;
+__attribute__((constructor)) void stdio_init(void) {
+  stdin = inits(&stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
+  stdout = inits(&stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
+  stderr = inits(&stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
 }

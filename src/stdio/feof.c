@@ -17,22 +17,9 @@
 
 #include <stdio.h>
 
-char *fgets(char *restrict str, int count, FILE *stream) {
-  if (!str || count <= 0 || !stream)
-    return NULL;
+int feof(FILE *stream) {
+  if (!stream)
+    return 0;
 
-  size_t nreq = count - 1;
-  size_t rn = 0;
-
-  while (rn < nreq) {
-    int ch = fgetc(stream);
-    if (ch == EOF)
-      break;
-    str[rn++] = ch;
-    if (ch == '\n')
-      break;
-  }
-
-  str[rn] = '\0';
-  return rn ? str : NULL;
+  return stream->eof;
 }

@@ -15,32 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "__stdio.h"
+#include "io.h"
 #include <stdlib.h>
 
-#define __DEFAULT_PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+#define PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
-FILE *freopen(const char *restrict filename, const char *restrict mode,
-              FILE *restrict stream) {
-  if (!filename || !mode || !stream)
-    return NULL;
-
-  // flush the buffered write data
-  if (fflush(stream) == EOF)
-    return NULL;
-
-  // close the file descriptor
-  if (close(stream->fd) == -1) {
-    __FILE_SET_ERR(stream);
-    return NULL;
-  }
-
-  if (__FILE_IS_MYBUF(stream) && stream->buf) {
-    free(stream->buf);
-  }
-
-  int fd, oflags;
+FILE *fopen(const char *restrict filename, const char *restrict mode) {
+  int fd;
+  int oflags;
   int bufmode;
+  FILE *stream;
+
+  if (!filename || !mode)
+    return NULL;
 
   switch (mode[0]) {
   case 'r':
@@ -52,35 +39,25 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   case 'a':
     oflags = O_WRONLY | O_CREAT | O_APPEND;
     break;
+  default:
+    return NULL;
   }
 
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
-  fd = open(filename, oflags, __DEFAULT_PERM);
+  fd = open(filename, oflags, PERM);
   if (fd == -1)
     return NULL;
 
+  stream = malloc(sizeof(FILE));
+  if (!stream) {
+    close(fd);
+    return NULL;
+  }
+
   bufmode = isatty(fd) ? _IOLBF : _IOFBF;
 
-  // init strem state
-  stream->fd = fd;
-  stream->flags = __mode_to_flags(oflags);
-  stream->mode = oflags;
-  stream->bufmode = bufmode;
-
-  stream->error = 0;
-  stream->eof = 0;
-  stream->offset = 0;
-
-  stream->buf = NULL;
-  stream->bufsz = 0;
-  stream->rpos = stream->rend = NULL;
-  stream->wpos = stream->wbase = stream->wend = NULL;
-
-  stream->shbuf = NULL;
-  stream->shlim = UNGET;
-  stream->shcnt = 0;
-
+  inits(stream, fd, oflags, bufmode);
   return stream;
 }
