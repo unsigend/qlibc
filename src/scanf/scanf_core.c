@@ -209,7 +209,7 @@ static int innum(const char *restrict str, struct fsm_t *fsm, void *dest,
 /* Internal core implementation of formatted input. With parser and
    formatter support. */
 int scanf_core(const char *restrict buff, const char *restrict fmt,
-               va_list vlist) {
+               va_list vlist, const char **end) {
   struct ctx ctx = {.cursor = buff, .n = 0};
   struct fsm_t fsm;
   int fail = 0;
@@ -417,6 +417,8 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
   }
 
 done:
+  if (end)
+    *end = ctx.cursor;
   va_end(ap);
   return (fail && ctx.n == 0) ? EOF : ctx.n;
 }

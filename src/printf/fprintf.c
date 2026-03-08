@@ -16,12 +16,12 @@
  */
 
 #include <stdarg.h>
-#include <stddef.h>
+#include <stdio.h>
 
-extern int scanf_core(const char *restrict buff, const char *restrict fmt,
-                      va_list vlist, const char **end);
-
-int vsscanf(const char *restrict buffer, const char *restrict format,
-            va_list vlist) {
-  return scanf_core(buffer, format, vlist, NULL);
+int fprintf(FILE *restrict stream, const char *restrict format, ...) {
+  va_list ap;
+  va_start(ap, format);
+  int ret = vfprintf(stream, format, ap);
+  va_end(ap);
+  return ret;
 }

@@ -17,12 +17,12 @@
 #include <stdio.h>
 
 extern int scanf_core(const char *restrict buff, const char *restrict fmt,
-                      va_list vlist);
+                      va_list vlist, const char **end);
 
 int sscanf(const char *restrict buffer, const char *restrict format, ...) {
   va_list ap;
   va_start(ap, format);
-  int ret = scanf_core(buffer, format, ap);
+  int ret = scanf_core(buffer, format, ap, NULL);
   va_end(ap);
   return ret;
 }

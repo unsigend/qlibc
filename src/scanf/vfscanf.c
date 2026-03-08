@@ -15,13 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdarg.h>
-#include <stddef.h>
-
-extern int scanf_core(const char *restrict buff, const char *restrict fmt,
-                      va_list vlist, const char **end);
-
-int vsscanf(const char *restrict buffer, const char *restrict format,
-            va_list vlist) {
-  return scanf_core(buffer, format, vlist, NULL);
-}
+#include <stdio.h>

@@ -15,13 +15,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdarg.h>
-#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-extern int scanf_core(const char *restrict buff, const char *restrict fmt,
-                      va_list vlist, const char **end);
+int vfprintf(FILE *restrict stream, const char *restrict format,
+             va_list vlist) {
+  va_list ap_copy;
 
-int vsscanf(const char *restrict buffer, const char *restrict format,
-            va_list vlist) {
-  return scanf_core(buffer, format, vlist, NULL);
+  va_copy(ap_copy, vlist);
+  int n = vsnprintf(NULL, 0, format, ap_copy);
+  va_end(ap_copy);
+
+  if (n < 0) {
+    return -1;
+  }
+
+  char *buff = malloc(n + 1);
+  if (!buff) {
+    return -1;
+  }
+
+  va_copy(ap_copy, vlist);
+  vsnprintf(buff, n + 1, format, ap_copy);
+  va_end(ap_copy);
+
+  int wn = fwrite(buff, 1, n, stream);
+  free(buff);
+  return wn;
 }
