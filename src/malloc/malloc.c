@@ -43,7 +43,7 @@ const size_t __slots[BUCKET_COUNT] = {
     2621440, 3145728, 4194304, 5242880};
 
 /* Initialize the malloc package. */
-static int __init(void) {
+static int initm(void) {
   /* Initialize the free buckets */
   memset(__heap.free_buckets, 0, sizeof(__heap.free_buckets));
   __heap.heap_start = (unsigned char *)__brk(0);
@@ -86,7 +86,7 @@ void *malloc(size_t size) {
     return (void *)((unsigned char *)p + sizeof(header_t));
   }
   if (!__heap.init) {
-    if (__init() == -1) {
+    if (initm() == -1) {
       errno = ENOMEM;
       return NULL;
     }

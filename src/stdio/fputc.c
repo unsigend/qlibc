@@ -21,12 +21,17 @@ int fputc(int ch, FILE *stream) {
   if (!stream || stream->error || stream->eof)
     return EOF;
 
+  toout(stream);
+
   if (!stream->buf && allocbuf(stream) == EOF)
+    return EOF;
+
+  if (OBUF_FULL(stream) && flushbuf(stream) == EOF)
     return EOF;
 
   *stream->wpos++ = (unsigned char)ch;
 
-  if (OBUF_FULL(stream) || (stream->flags & S_LINEBUF && ch == '\n'))
+  if (stream->bufmode == _IOLBF && ch == '\n')
     if (flushbuf(stream) == EOF)
       return EOF;
 

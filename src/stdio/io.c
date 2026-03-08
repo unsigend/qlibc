@@ -26,24 +26,9 @@
 
 FILE *stdio_head = NULL;
 
-int mtoflags(int mode) {
-  int flags = 0;
-  int access = mode & O_ACCMODE;
-
-  if (access == O_RDONLY || access == O_RDWR)
-    flags |= S_READ;
-  if (access == O_WRONLY || access == O_RDWR)
-    flags |= S_WRITE;
-  if (mode & O_APPEND)
-    flags |= S_APPEND;
-
-  return flags;
-}
-
 FILE *inits(FILE *stream, int fd, int mode, int bufmode) {
   memset(stream, 0, sizeof(FILE));
   stream->fd = fd;
-  stream->flags = mtoflags(mode);
   stream->mode = mode;
   stream->bufmode = bufmode;
   stream->next = stdio_head;
@@ -55,13 +40,9 @@ FILE *inits(FILE *stream, int fd, int mode, int bufmode) {
 }
 
 void resetbufp(FILE *stream, unsigned char *buf, size_t sz) {
-  if (stream->flags & S_WRITE) {
-    stream->wbase = stream->wpos = buf;
-    stream->wend = buf + sz;
-  }
-  if (stream->flags & S_READ) {
-    stream->rpos = stream->rend = buf;
-  }
+  stream->wbase = stream->wpos = buf;
+  stream->wend = buf + sz;
+  stream->rpos = stream->rend = buf;
 }
 
 int allocbuf(FILE *stream) {
@@ -86,6 +67,12 @@ int allocbuf(FILE *stream) {
 }
 
 int refill(FILE *stream) {
+  off_t cur = lseek(stream->fd, 0, SEEK_CUR);
+  if (cur == -1) {
+    stream->error = 1;
+    return EOF;
+  }
+  stream->offset = cur;
   ssize_t n = read(stream->fd, stream->buf, stream->bufsz);
   if (n == -1) {
     stream->error = 1;
@@ -116,13 +103,33 @@ int writeall(int fd, const unsigned char *buf, ssize_t n) {
 }
 
 int flushbuf(FILE *stream) {
-  if (stream->flags & S_WRITE && !OBUF_EMPTY(stream)) {
+  if (stream->flags & D_WRITE && !OBUF_EMPTY(stream)) {
     ssize_t wn = stream->wpos - stream->wbase;
     if (writeall(stream->fd, stream->wbase, wn) == -1) {
       stream->error = 1;
       return EOF;
     }
     OBUF_DROP(stream);
+    stream->offset += wn;
   }
   return 0;
+}
+
+int toin(FILE *stream) {
+  if (stream->flags & D_WRITE) {
+    if (flushbuf(stream) == EOF)
+      return EOF;
+    stream->flags &= ~D_WRITE;
+  }
+  stream->flags |= D_READ;
+  return 0;
+}
+
+void toout(FILE *stream) {
+  if (stream->flags & D_READ) {
+    IBUF_DROP(stream);
+    stream->flags &= ~D_READ;
+    stream->shcnt = 0;
+  }
+  stream->flags |= D_WRITE;
 }

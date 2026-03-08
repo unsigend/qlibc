@@ -23,6 +23,8 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
   if (!ptr || !size || !count || !stream || stream->error || stream->eof)
     return 0;
 
+  toout(stream);
+
   if (!stream->buf && allocbuf(stream) == EOF)
     return 0;
 
@@ -32,7 +34,7 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
   /* fast path, write to buffer if possible */
   if (wn <= stream->bufsz) {
     /* line buffered, flush when '\n' */
-    if (stream->flags & S_LINEBUF) {
+    if (stream->bufmode == _IOLBF) {
       while (total < wn) {
         int r = fputc(((unsigned char *)ptr)[total], stream);
         if (r == EOF)
@@ -66,6 +68,7 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
       return total / size;
     }
     total += n;
+    stream->offset += n;
   }
 
   return total / size;

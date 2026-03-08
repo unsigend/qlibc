@@ -40,6 +40,9 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   if (stream->flags & S_MYBUF && stream->buf)
     free(stream->buf);
 
+  if (stream->shbuf)
+    free(stream->shbuf);
+
   switch (mode[0]) {
   case 'r':
     oflags = O_RDONLY;
@@ -50,6 +53,8 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   case 'a':
     oflags = O_WRONLY | O_CREAT | O_APPEND;
     break;
+  default:
+    return NULL;
   }
 
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
@@ -58,12 +63,15 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   if ((fd = open(filename, oflags, PERM)) == -1)
     return NULL;
 
+  FILE *prev = stream->prev;
+  FILE *next = stream->next;
   memset(stream, 0, sizeof(FILE));
 
   stream->fd = fd;
-  stream->flags = mtoflags(oflags);
   stream->mode = oflags;
   stream->bufmode = isatty(fd) ? _IOLBF : _IOFBF;
+  stream->prev = prev;
+  stream->next = next;
 
   return stream;
 }

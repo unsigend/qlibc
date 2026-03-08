@@ -17,11 +17,16 @@
 
 #include "io.h"
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 int fclose(FILE *stream) {
+  int fd;
+
   if (!stream)
     return EOF;
+
+  fd = stream->fd;
 
   /* flush the buffered write data */
   if (fflush(stream) == EOF)
@@ -48,12 +53,15 @@ int fclose(FILE *stream) {
   }
 
   /* close the file descriptor */
-  if (close(stream->fd) == -1) {
+  if (close(fd) == -1) {
     stream->error = 1;
-    free(stream);
     return EOF;
   }
 
-  free(stream);
+  if (!(stream->flags & S_STATIC))
+    free(stream);
+  else
+    memset(stream, 0, sizeof(FILE));
+
   return 0;
 }

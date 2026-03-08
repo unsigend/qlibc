@@ -16,6 +16,7 @@
  */
 
 #include "io.h"
+#include <stddef.h>
 #include <string.h>
 
 size_t fread(void *restrict ptr, size_t size, size_t count,
@@ -25,6 +26,11 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
 
   size_t nreq = size * count;
   size_t total = 0;
+
+  if (toin(stream) == EOF) {
+    stream->error = 1;
+    return 0;
+  }
 
   if (!stream->buf && allocbuf(stream) == EOF) {
     stream->error = 1;
@@ -49,14 +55,14 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
   else {
     /* consume the buffer left first */
     size_t leftn = stream->rend - stream->rpos;
+    size_t oldbuffsz = stream->rend - stream->buf;
     if (leftn) {
       memcpy(ptr, stream->rpos, leftn);
       ptr = (unsigned char *)ptr + leftn;
       total += leftn;
-
-      /* drop the buffer */
-      IBUF_DROP(stream);
     }
+    /* drop the buffer */
+    IBUF_DROP(stream);
 
     /* read the rest from system call */
     ssize_t rn = read(stream->fd, ptr, nreq - total);
@@ -69,6 +75,8 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
       return total / size;
     }
     total += rn;
+    /* skip old buffer and direct I/O size. */
+    stream->offset += rn + oldbuffsz;
   }
 
   return total / size;

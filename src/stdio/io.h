@@ -26,11 +26,10 @@
 
 #define UNGET 8 /* pushback buffer limit */
 
-#define S_READ 0x01    /* open for reading */
-#define S_WRITE 0x02   /* open for writing */
-#define S_APPEND 0x04  /* append mode */
-#define S_MYBUF 0x08   /* qlibc buffer */
-#define S_LINEBUF 0x10 /* line buffered */
+#define D_READ 0x01   /* read direction */
+#define D_WRITE 0x02  /* write direction */
+#define S_MYBUF 0x04  /* qlibc buffer */
+#define S_STATIC 0x08 /* FILE is static */
 
 #define IBUF_FULL(s) ((s)->rpos == (s)->rend) /* input buffer is full */
 #define IBUF_EMPTY(s) ((s)->rpos == (s)->buf) /* input buffer is empty */
@@ -69,7 +68,10 @@ extern int writeall(int fd, const unsigned char *buf, ssize_t n);
 /* Reset the buffer pointers to initial state. */
 extern void resetbufp(FILE *stream, unsigned char *buf, size_t sz);
 
-/* Convert the open mode to internal flags*/
-extern int mtoflags(int mode);
+/* Switch a stream status to read direction or write direction. When switching
+   to read direction, return EOF on failure. Switch to out direction is always
+   succeed. */
+extern int toin(FILE *stream);
+extern void toout(FILE *stream);
 
 #endif

@@ -21,6 +21,11 @@ int fgetc(FILE *stream) {
   if (!stream || stream->error || stream->eof)
     return EOF;
 
+  if (toin(stream) == EOF) {
+    stream->error = 1;
+    return EOF;
+  }
+
   if (stream->shcnt > 0)
     return stream->shbuf[--stream->shcnt];
 

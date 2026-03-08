@@ -16,32 +16,31 @@
  */
 
 #include "io.h"
-#include <stdio.h>
 
 int fseek(FILE *stream, long offset, int origin) {
   if (!stream)
     return -1;
 
   if (origin == SEEK_CUR) {
-    if (stream->flags & S_WRITE) {
+    if (stream->flags & D_WRITE)
       offset += (stream->wpos - stream->wbase);
-    }
-    if (stream->flags & S_READ) {
-      offset -= (stream->rend - stream->rpos);
-    }
+    if (stream->flags & D_READ)
+      offset -= (stream->rend - stream->rpos) + stream->shcnt;
   }
 
   if (flushbuf(stream) == EOF)
     return -1;
 
-  if (stream->flags & S_READ)
+  if (stream->flags & D_READ)
     IBUF_DROP(stream);
 
   off_t pos = lseek(stream->fd, offset, origin);
   if (pos == -1)
     return -1;
 
+  stream->shcnt = 0;
   stream->eof = 0;
   stream->offset = pos;
+  stream->flags &= ~(D_READ | D_WRITE);
   return 0;
 }

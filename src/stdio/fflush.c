@@ -23,7 +23,7 @@ static int flushall(void) {
     /* flush the write buffer */
     if (flushbuf(cur) == EOF)
       return EOF;
-    if (cur->flags & S_READ)
+    if (cur->flags & D_READ)
       IBUF_DROP(cur);
     cur = cur->next;
   }
@@ -37,7 +37,7 @@ int fflush(FILE *stream) {
   if (stream->error || flushbuf(stream) == EOF)
     return EOF;
 
-  if (stream->flags & S_READ)
+  if (stream->flags & D_READ)
     IBUF_DROP(stream);
 
   return 0;

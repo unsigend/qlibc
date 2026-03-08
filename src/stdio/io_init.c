@@ -27,7 +27,18 @@ FILE *stdout = NULL;
 FILE *stderr = NULL;
 
 __attribute__((constructor)) void stdio_init(void) {
-  stdin = inits(&stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
-  stdout = inits(&stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
+  if (isatty(STDIN_FILENO))
+    stdin = inits(&stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
+  else
+    stdin = inits(&stdin_stream, STDIN_FILENO, O_RDONLY, _IOFBF);
+  if (isatty(STDOUT_FILENO))
+    stdout = inits(&stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
+  else
+    stdout = inits(&stdout_stream, STDOUT_FILENO, O_WRONLY, _IOFBF);
+
+  /* Based on ANSI/ISO C standard, stderr is always unbuffered */
   stderr = inits(&stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
+  stdin->flags |= S_STATIC;
+  stdout->flags |= S_STATIC;
+  stderr->flags |= S_STATIC;
 }

@@ -16,21 +16,18 @@
  */
 
 #include "io.h"
-#include <unistd.h>
 
 long ftell(FILE *stream) {
   if (!stream)
     return -1;
 
-  // TODO: optimize the offset by replacing lseek with maintained offset field
-  off_t pos = lseek(stream->fd, 0, SEEK_CUR);
-  if (pos == -1)
-    return -1;
+  off_t off;
+  if (stream->flags & D_READ) {
+    off = stream->rpos - stream->buf;
+    off -= stream->shcnt;
+  }
+  if (stream->flags & D_WRITE)
+    off = stream->wpos - stream->wbase;
 
-  if (stream->flags & S_READ)
-    pos -= (stream->rend - stream->rpos);
-  if (stream->flags & S_WRITE)
-    pos += (stream->wpos - stream->wbase);
-
-  return pos;
+  return stream->offset + off;
 }
