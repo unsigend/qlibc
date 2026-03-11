@@ -38,7 +38,7 @@ void *calloc(size_t num, size_t size)
 #if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__) &&                                \
     __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
   /* Calculate the size of the memory requested in bytes, and detect if there
-    is overflow */
+     is overflow */
 
   if (__builtin_mul_overflow(num, size, &sz)) {
     errno = ENOMEM;
@@ -51,7 +51,7 @@ void *calloc(size_t num, size_t size)
   void *p = malloc(sz);
 
   /* If the requested size reach the mmap threshold, the MAP_ANONYMOUS flag
-    will be set, so the memory will be initialized to 0 by the kernel */
+     will be set, so the memory will be initialized to 0 by the kernel */
   if (p && sz < MMAP_THRESHOLD)
     memset(p, 0, sz);
   return p;

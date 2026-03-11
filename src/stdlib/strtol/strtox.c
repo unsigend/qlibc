@@ -51,8 +51,8 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
 
   if (AUTO_BASE(base)) {
     if (*p == '0')
-      /* Only when next character is valid hex digit after prefix, then
-           move forward two characters. */
+      /* Only when next character is valid hex digit after prefix, then move
+         forward two characters. */
       if (BASE_HEX(p)) {
         base = 16;
         p += 2;
@@ -69,8 +69,8 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
     if (!isalnum(ch) || !VALID_DIGIT(ch, base))
       break;
 
-    /* Based on ANSI/ISO C standard, even the overflow occurs, it should
-         still consuming digits. */
+    /* Based on ANSI/ISO C standard, even the overflow occurs, it should still
+       consuming digits. */
     if (n > (lim - CHARTODIGIT(ch)) / base) {
       errno = ERANGE;
       overflow = 1;

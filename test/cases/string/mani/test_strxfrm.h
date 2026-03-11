@@ -1,10 +1,7 @@
-#include <string.h>
 #include <utest.h>
 
 UTEST_TEST_CASE(strxfrm)
 {
-  /**
-   * Current the implementation is just a copy of the string,
-   * so the result is always the length of the string.
-   */
+  /* Current the implementation is just a copy of the string, so the result is
+     always the length of the string. */
 }

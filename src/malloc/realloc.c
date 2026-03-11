@@ -74,8 +74,8 @@ void *realloc(void *ptr, size_t new_size)
       removeblk((free_block_t *)nextblk, getbucketidx(nextblk->header.sz));
       size_t leftsz = newsz - reqsz;
 
-      /* If the left size is less than the minimum block size, return the
-             whole block */
+      /* If the left size is less than the minimum block size, return the whole
+         block */
       if (leftsz < MINIMUM_BLOCKSZ) {
         writemeta((block_t *)blk, newsz, true, false);
       } else {
