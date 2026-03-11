@@ -29,20 +29,28 @@
 #undef __syscall5
 #undef __syscall6
 
-static inline long __syscall_ret(uint32_t __ret) {
-  if (__ret >= -4096U) {
-    errno = -__ret;
-    return -1;
-  }
+static inline long
+__syscall_ret(uint32_t __ret)
+{
+  if (__ret >= -4096U)
+    {
+      errno = -__ret;
+      return -1;
+    }
   return __ret;
 }
 
-static inline long __syscall0_raw(uint32_t __num) {
+static inline long
+__syscall0_raw(uint32_t __num)
+{
   uint32_t ret;
   __asm__ volatile("int $0x80" : "=a"(ret) : "a"(__num) : "memory");
   return ret;
 }
-static inline long __syscall1_raw(uint32_t __num, uint32_t __arg1) {
+
+static inline long
+__syscall1_raw(uint32_t __num, uint32_t __arg1)
+{
   uint32_t ret;
   __asm__ volatile("int $0x80"
                    : "=a"(ret)
@@ -50,8 +58,10 @@ static inline long __syscall1_raw(uint32_t __num, uint32_t __arg1) {
                    : "memory");
   return ret;
 }
-static inline long __syscall2_raw(uint32_t __num, uint32_t __arg1,
-                                  uint32_t __arg2) {
+
+static inline long
+__syscall2_raw(uint32_t __num, uint32_t __arg1, uint32_t __arg2)
+{
   uint32_t ret;
   __asm__ volatile("int $0x80"
                    : "=a"(ret)
@@ -59,8 +69,11 @@ static inline long __syscall2_raw(uint32_t __num, uint32_t __arg1,
                    : "memory");
   return ret;
 }
-static inline long __syscall3_raw(uint32_t __num, uint32_t __arg1,
-                                  uint32_t __arg2, uint32_t __arg3) {
+
+static inline long
+__syscall3_raw(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+               uint32_t __arg3)
+{
   uint32_t ret;
   __asm__ volatile("int $0x80"
                    : "=a"(ret)
@@ -68,9 +81,11 @@ static inline long __syscall3_raw(uint32_t __num, uint32_t __arg1,
                    : "memory");
   return ret;
 }
-static inline long __syscall4_raw(uint32_t __num, uint32_t __arg1,
-                                  uint32_t __arg2, uint32_t __arg3,
-                                  uint32_t __arg4) {
+
+static inline long
+__syscall4_raw(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+               uint32_t __arg3, uint32_t __arg4)
+{
   uint32_t ret;
   __asm__ volatile("int $0x80"
                    : "=a"(ret)
@@ -79,9 +94,11 @@ static inline long __syscall4_raw(uint32_t __num, uint32_t __arg1,
                    : "memory");
   return ret;
 }
-static inline long __syscall5_raw(uint32_t __num, uint32_t __arg1,
-                                  uint32_t __arg2, uint32_t __arg3,
-                                  uint32_t __arg4, uint32_t __arg5) {
+
+static inline long
+__syscall5_raw(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+               uint32_t __arg3, uint32_t __arg4, uint32_t __arg5)
+{
   uint32_t ret;
   __asm__ volatile("int $0x80"
                    : "=a"(ret)
@@ -90,10 +107,12 @@ static inline long __syscall5_raw(uint32_t __num, uint32_t __arg1,
                    : "memory");
   return ret;
 }
-static inline long __syscall6_raw(uint32_t __num, uint32_t __arg1,
-                                  uint32_t __arg2, uint32_t __arg3,
-                                  uint32_t __arg4, uint32_t __arg5,
-                                  uint32_t __arg6) {
+
+static inline long
+__syscall6_raw(uint32_t __num, uint32_t __arg1, uint32_t __arg2,
+               uint32_t __arg3, uint32_t __arg4, uint32_t __arg5,
+               uint32_t __arg6)
+{
   uint32_t ret;
   __asm__ volatile("pushl %%ebp\n\t"
                    "movl %7, %%ebp\n\t"
@@ -109,15 +128,15 @@ static inline long __syscall6_raw(uint32_t __num, uint32_t __arg1,
 /* __syscall is just a wrapper for the raw syscall functions */
 #define __syscall0(NUM) __syscall_ret(__syscall0_raw(NUM))
 #define __syscall1(NUM, ARG1) __syscall_ret(__syscall1_raw(NUM, ARG1))
-#define __syscall2(NUM, ARG1, ARG2)                                            \
+#define __syscall2(NUM, ARG1, ARG2)                                           \
   __syscall_ret(__syscall2_raw(NUM, ARG1, ARG2))
-#define __syscall3(NUM, ARG1, ARG2, ARG3)                                      \
+#define __syscall3(NUM, ARG1, ARG2, ARG3)                                     \
   __syscall_ret(__syscall3_raw(NUM, ARG1, ARG2, ARG3))
-#define __syscall4(NUM, ARG1, ARG2, ARG3, ARG4)                                \
+#define __syscall4(NUM, ARG1, ARG2, ARG3, ARG4)                               \
   __syscall_ret(__syscall4_raw(NUM, ARG1, ARG2, ARG3, ARG4))
-#define __syscall5(NUM, ARG1, ARG2, ARG3, ARG4, ARG5)                          \
+#define __syscall5(NUM, ARG1, ARG2, ARG3, ARG4, ARG5)                         \
   __syscall_ret(__syscall5_raw(NUM, ARG1, ARG2, ARG3, ARG4, ARG5))
-#define __syscall6(NUM, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6)                    \
+#define __syscall6(NUM, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6)                   \
   __syscall_ret(__syscall6_raw(NUM, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6))
 
 #include <bits/NR.h>

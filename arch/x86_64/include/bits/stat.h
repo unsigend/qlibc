@@ -24,7 +24,8 @@
 /*
  * The stat structure for x64 architecture is based on GNU glibc.
  */
-struct stat {
+struct stat
+{
   __dev_t st_dev;           /* ID of device containing file */
   __ino_t st_ino;           /* inode number */
   __nlink_t st_nlink;       /* number of hard links */

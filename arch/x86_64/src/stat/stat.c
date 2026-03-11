@@ -18,6 +18,8 @@
 #include <sys/stat.h>
 #include <syscall.h>
 
-int stat(const char *restrict path, struct stat *restrict buf) {
+int
+stat(const char *restrict path, struct stat *restrict buf)
+{
   return __syscall(SYS_stat, (long)path, (long)buf);
 }
