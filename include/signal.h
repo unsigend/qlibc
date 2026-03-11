@@ -44,8 +44,8 @@ extern int kill(pid_t pid, int sig);
 /* Sets the signal handler for the signal specified by signum to the function
    specified by handler. Returns the previous signal handler for the signal.
 
-   NOTE: This function implementation is layer on top of the sigaction function.
-   So it is compatible with different UNIX implementations. */
+   NOTE: This function implementation is layer on top of the sigaction
+   function. So it is compatible with different UNIX implementations. */
 extern sighandler_t signal(int signum, sighandler_t handler);
 
 /* Raises a signal to the current process or thread. */

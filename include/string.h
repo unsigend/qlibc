@@ -55,15 +55,16 @@ extern char *strchr(const char *str, int ch);
 /* Search the string for the last occurrence of the character ch */
 extern char *strrchr(const char *str, int ch);
 
-/* Get the length of the initial segment of the string that consists of only the
-   characters in the charset */
+/* Get the length of the initial segment of the string that consists of only
+   the characters in the charset */
 extern size_t strspn(const char *str, const char *charset);
 
-/* Get the length of the initial segment of the string that consists of only the
-   characters not in the charset */
+/* Get the length of the initial segment of the string that consists of only
+   the characters not in the charset */
 extern size_t strcspn(const char *str, const char *charset);
 
-/* Search the string for the first occurrence of any character in the charset */
+/* Search the string for the first occurrence of any character in the charset.
+   Returns the pointer to the first occurrence */
 extern char *strpbrk(const char *str, const char *charset);
 
 /* Search the string for the first occurrence of the substring */

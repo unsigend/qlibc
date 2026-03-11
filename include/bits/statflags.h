@@ -22,19 +22,20 @@
 #define S_IRUSR 00400 /* User read permission */
 #define S_IWUSR 00200 /* User write permission */
 #define S_IXUSR 00100 /* User execute permission */
-#define S_IRWXU                                                                \
-  (S_IRUSR | S_IWUSR | S_IXUSR) /* User read, write, and execute permission */
+#define S_IRWXU                                                               \
+  (S_IRUSR | S_IWUSR | S_IXUSR) /* User read, write, and execute permission   \
+                                 */
 #define S_IRGRP 00040           /* Group read permission */
 #define S_IWGRP 00020           /* Group write permission */
 #define S_IXGRP 00010           /* Group execute permission */
-#define S_IRWXG                                                                \
-  (S_IRGRP | S_IWGRP | S_IXGRP) /* Group read, write, and execute permission   \
+#define S_IRWXG                                                               \
+  (S_IRGRP | S_IWGRP | S_IXGRP) /* Group read, write, and execute permission  \
                                  */
 #define S_IROTH 00004           /* Other read permission */
 #define S_IWOTH 00002           /* Other write permission */
 #define S_IXOTH 00001           /* Other execute permission */
-#define S_IRWXO                                                                \
-  (S_IROTH | S_IWOTH | S_IXOTH) /* Other read, write, and execute permission   \
+#define S_IRWXO                                                               \
+  (S_IROTH | S_IWOTH | S_IXOTH) /* Other read, write, and execute permission  \
                                  */
 
 /* file type flags */
@@ -47,19 +48,20 @@
 #define S_IFLNK 0120000  /* Symbolic link */
 #define S_IFSOCK 0140000 /* Socket */
 
-#define S_ISDIR(mode)                                                          \
+#define S_ISDIR(mode)                                                         \
   (((mode) & S_IFMT) == S_IFDIR) /* Check if the file is a directory */
-#define S_ISCHR(mode)                                                          \
-  (((mode) & S_IFMT) == S_IFCHR) /* Check if the file is a character device */
-#define S_ISBLK(mode)                                                          \
+#define S_ISCHR(mode)                                                         \
+  (((mode) & S_IFMT) == S_IFCHR) /* Check if the file is a character device   \
+                                  */
+#define S_ISBLK(mode)                                                         \
   (((mode) & S_IFMT) == S_IFBLK) /* Check if the file is a block device */
-#define S_ISREG(mode)                                                          \
+#define S_ISREG(mode)                                                         \
   (((mode) & S_IFMT) == S_IFREG) /* Check if the file is a regular file */
-#define S_ISFIFO(mode)                                                         \
+#define S_ISFIFO(mode)                                                        \
   (((mode) & S_IFMT) == S_IFIFO) /* Check if the file is a FIFO */
-#define S_ISLNK(mode)                                                          \
+#define S_ISLNK(mode)                                                         \
   (((mode) & S_IFMT) == S_IFLNK) /* Check if the file is a symbolic link */
-#define S_ISSOCK(mode)                                                         \
+#define S_ISSOCK(mode)                                                        \
   (((mode) & S_IFMT) == S_IFSOCK) /* Check if the file is a socket */
 
 #endif

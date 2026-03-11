@@ -27,9 +27,9 @@ typedef __builtin_va_list __gnuc_va_list;
 typedef __builtin_va_list __qlibc_va_list;
 typedef __qlibc_va_list va_list;
 
-/* Variable argument macros, the implementation is based on the GNU GCC built-in
-   support. The va_start, va_end, va_arg, va_copy macros are defined as the GNU
-   GCC built-in macros. */
+/* Variable argument macros, the implementation is based on the GNU GCC
+   built-in support. The va_start, va_end, va_arg, va_copy macros are defined
+   as the GNU GCC built-in macros. */
 
 #define va_start(v, l) __builtin_va_start(v, l)
 #define va_end(v) __builtin_va_end(v)

@@ -38,7 +38,8 @@
 #define L_tmpnam 20       /* length of temporary file name */
 
 /* file IO structure */
-typedef struct _FILE_IO {
+typedef struct _FILE_IO
+{
   int fd;                /* file descriptor */
   int flags;             /* file flags */
   int mode;              /* file mode */
@@ -61,7 +62,8 @@ typedef struct _FILE_IO {
 } FILE;
 
 /* file position structure */
-typedef struct _FPOS_T {
+typedef struct _FPOS_T
+{
   off_t pos; /* file position */
 } fpos_t;
 

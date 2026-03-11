@@ -26,7 +26,8 @@
 
 /* Malloc extension support */
 #if defined(_QLIBC_SOURCE) || defined(_GNU_SOURCE)
-struct mallinfo {
+struct mallinfo
+{
   size_t arena;    /* Non-mmapped space allocated (bytes) */
   size_t ordblks;  /* Number of free chunks */
   size_t smblks;   /* Number of free fastbin blocks */

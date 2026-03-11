@@ -21,7 +21,8 @@
 #include <stddef.h>
 #include <sys/types.h>
 
-struct iovec {
+struct iovec
+{
   void *iov_base; /* Base address of the memory area */
   size_t iov_len; /* Length of the memory area */
 };

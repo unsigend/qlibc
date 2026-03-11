@@ -27,20 +27,20 @@ __BEGIN_DECLS
 
 /* Convert an integer to a string. If base is 10 and value is negative, the
    resulting string is preceded with a minus sign (-). With any other base,
-   value is always considered unsigned.  Return the pointer to the NULL
+   value is always considered unsigned. Return the pointer to the NULL
    terminated string.*/
 extern char *itoa(int value, char *buff, int base);
 
 /* Convert a long integer to a string. If base is 10 and value is negative, the
    resulting string is preceded with a minus sign (-). With any other base,
-   value is always considered unsigned.  Return the pointer to the NULL
+   value is always considered unsigned. Return the pointer to the NULL
    terminated string.*/
 extern char *ltoa(long value, char *buff, int base);
 
-/* Convert a long long integer to a string. If base is 10 and value is negative,
-   the resulting string is preceded with a minus sign (-). With any other base,
-   value is always considered unsigned.  Return the pointer to the NULL
-   terminated string.*/
+/* Convert a long long integer to a string. If base is 10 and value is
+   negative, the resulting string is preceded with a minus sign (-). With any
+   other base, value is always considered unsigned. Return the pointer to the
+   NULL terminated string.*/
 extern char *lltoa(long long value, char *buff, int base);
 
 /* Convert an unsigned integer to a string. Return the pointer to the NULL
