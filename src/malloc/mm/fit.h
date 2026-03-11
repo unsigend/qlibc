@@ -25,16 +25,20 @@
    necessary, and return the pointer to the allocated block. This function is
    for reserved usage only.*/
 
-static inline void *first_fit(size_t sz, size_t bucket_idx) {
-  free_block_t *free_block = __heap.free_buckets[bucket_idx];
-  while (free_block) {
-    if (free_block->header.sz >= sz) {
-      remove_block(free_block, bucket_idx);
-      void *p = slice_block(free_block, sz);
-      return p;
+static inline void *
+firstfit(size_t sz, size_t buckidx)
+{
+  free_block_t *freeblk = __heap.buckets[buckidx];
+  while (freeblk)
+    {
+      if (freeblk->header.sz >= sz)
+        {
+          removeblk(freeblk, buckidx);
+          void *p = sliceblk(freeblk, sz);
+          return p;
+        }
+      freeblk = freeblk->next;
     }
-    free_block = free_block->next;
-  }
   return NULL;
 }
 
@@ -42,23 +46,28 @@ static inline void *first_fit(size_t sz, size_t bucket_idx) {
    allocate the requested size. Remove it from the free buckets, slice it if
    necessary, and return the pointer to the allocated block. */
 
-static inline void *best_fit(size_t sz, size_t bucket_idx) {
-  free_block_t *free_block = __heap.free_buckets[bucket_idx];
-  free_block_t *best_free_block = NULL;
-  while (free_block) {
-    if (free_block->header.sz >= sz) {
-      if (!best_free_block ||
-          free_block->header.sz < best_free_block->header.sz) {
-        best_free_block = free_block;
-      }
+static inline void *
+bestfit(size_t sz, size_t buckidx)
+{
+  free_block_t *freeblk = __heap.buckets[buckidx];
+  free_block_t *bestfreeblk = NULL;
+  while (freeblk)
+    {
+      if (freeblk->header.sz >= sz)
+        {
+          if (!bestfreeblk || freeblk->header.sz < bestfreeblk->header.sz)
+            {
+              bestfreeblk = freeblk;
+            }
+        }
+      freeblk = freeblk->next;
     }
-    free_block = free_block->next;
-  }
-  if (best_free_block) {
-    remove_block(best_free_block, bucket_idx);
-    void *p = slice_block(best_free_block, sz);
-    return p;
-  }
+  if (bestfreeblk)
+    {
+      removeblk(bestfreeblk, buckidx);
+      void *p = sliceblk(bestfreeblk, sz);
+      return p;
+    }
   return NULL;
 }
 

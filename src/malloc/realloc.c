@@ -24,76 +24,85 @@
 extern void *malloc(size_t size);
 extern void free(void *ptr);
 
-void *realloc(void *ptr, size_t new_size) {
+void *
+realloc(void *ptr, size_t new_size)
+{
   /* realloc(NULL, size) is equivalent to malloc(size) */
-  if (!ptr)
-    return malloc(new_size);
+  if (!ptr) return malloc(new_size);
+
   /* realloc(ptr, 0) is equivalent to free(ptr) */
-  if (!new_size) {
-    free(ptr);
-    return NULL;
-  }
-  block_t *block = (block_t *)((unsigned char *)ptr - sizeof(header_t));
-  size_t old_payloadsz;
-
-  /* If the block is allocated by mmap, use mremap to resize the block */
-  if (IS_MMAP(block)) {
-    old_payloadsz = block->header.sz - sizeof(header_t);
-  } else {
-    old_payloadsz = block->header.sz - sizeof(header_t) - sizeof(footer_t);
-  }
-
-  /* If the payload size is large enough, return the pointer to the old block */
-  if (old_payloadsz >= new_size)
-    return ptr;
-
-  /* If the block is allocated by mmap, use mremap to resize the block */
-  if (IS_MMAP(block)) {
-    size_t newsz = ALIGN_PAGE(new_size + sizeof(header_t));
-    void *new_ptr =
-        mremap((unsigned char *)block, block->header.sz, newsz, MREMAP_MAYMOVE);
-    if (new_ptr == MAP_FAILED) {
-      errno = ENOMEM;
+  if (!new_size)
+    {
+      free(ptr);
       return NULL;
     }
-    write_meta((block_t *)new_ptr, newsz, true, true);
-    return (void *)((unsigned char *)new_ptr + sizeof(header_t));
-  }
+
+  block_t *blk = (block_t *)((unsigned char *)ptr - sizeof(header_t));
+  size_t oldpayloadsz;
+
+  /* If the block is allocated by mmap, use mremap to resize the block */
+  if (IS_MMAP(blk))
+    oldpayloadsz = blk->header.sz - sizeof(header_t);
+  else
+    oldpayloadsz = blk->header.sz - sizeof(header_t) - sizeof(footer_t);
+
+  /* If the payload size is large enough, return the pointer to the old block,
+     and no action is needed. */
+  if (oldpayloadsz >= new_size) return ptr;
+
+  /* If the block is allocated by mmap, use mremap to resize the block */
+  if (IS_MMAP(blk))
+    {
+      size_t newsz = ALIGN_PAGE(new_size + sizeof(header_t));
+      void *newptr = mremap((unsigned char *)blk, blk->header.sz, newsz,
+                            MREMAP_MAYMOVE);
+      if (newptr == MAP_FAILED)
+        {
+          errno = ENOMEM;
+          return NULL;
+        }
+      writemeta((block_t *)newptr, newsz, true, true);
+      return (void *)((unsigned char *)newptr + sizeof(header_t));
+    }
 
   /* Optimize with in-place expansion */
-  size_t required_sz = calc_block_sz(new_size);
-  block_t *next_block = (block_t *)((unsigned char *)block + block->header.sz);
-  bool is_last_block = ((unsigned char *)next_block >= __heap.heap_end);
+  size_t reqsz = calcblksz(new_size);
+  block_t *nextblk = (block_t *)((unsigned char *)blk + blk->header.sz);
+  bool islastblk = ((unsigned char *)nextblk >= __heap.end);
 
-  if (!is_last_block && !next_block->header.alloc) {
-    size_t newsz = block->header.sz + next_block->header.sz;
-    if (newsz >= required_sz) {
-      remove_block((free_block_t *)next_block,
-                   get_bucket_idx(next_block->header.sz));
-      size_t leftsz = newsz - required_sz;
+  if (!islastblk && !nextblk->header.alloc)
+    {
+      size_t newsz = blk->header.sz + nextblk->header.sz;
+      if (newsz >= reqsz)
+        {
+          removeblk((free_block_t *)nextblk, getbucketidx(nextblk->header.sz));
+          size_t leftsz = newsz - reqsz;
 
-      /* If the left size is less than the minimum block size, return the whole
-         block */
-      if (leftsz < MINIMUM_BLOCKSZ) {
-        write_meta((block_t *)block, newsz, true, false);
-      } else {
-        free_block_t *remaining_block =
-            (free_block_t *)((unsigned char *)block + required_sz);
-        write_meta((block_t *)block, required_sz, true, false);
-        write_meta((block_t *)remaining_block, leftsz, false, false);
-        insert_block(remaining_block, get_bucket_idx(leftsz));
-      }
+          /* If the left size is less than the minimum block size, return the
+             whole block */
+          if (leftsz < MINIMUM_BLOCKSZ)
+            {
+              writemeta((block_t *)blk, newsz, true, false);
+            }
+          else
+            {
+              free_block_t *remainblk
+                  = (free_block_t *)((unsigned char *)blk + reqsz);
+              writemeta((block_t *)blk, reqsz, true, false);
+              writemeta((block_t *)remainblk, leftsz, false, false);
+              insertblk(remainblk, getbucketidx(leftsz));
+            }
 
-      return ptr;
+          return ptr;
+        }
     }
-  }
 
   /* Fallback to malloc, copy and free case, CPU intensive case. */
-  void *new_ptr = malloc(new_size);
-  if (!new_ptr)
-    return NULL;
+  void *newptr = malloc(new_size);
+  if (!newptr) return NULL;
+
   /* Copy the data from the old block to the new block */
-  memcpy(new_ptr, ptr, MIN(old_payloadsz, new_size));
+  memcpy(newptr, ptr, MIN(oldpayloadsz, new_size));
   free(ptr);
-  return new_ptr;
+  return newptr;
 }

@@ -17,7 +17,8 @@
 
 #include <stdlib.h>
 
-intmax_t strtoimax(const char *restrict str, char **restrict str_end,
-                   int base) {
+intmax_t
+strtoimax(const char *restrict str, char **restrict str_end, int base)
+{
   return strtoll(str, str_end, base);
 }

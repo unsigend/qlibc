@@ -17,24 +17,30 @@
 
 #include <errno.h>
 
-char *xtoa(unsigned long long value, char *buff, int base) {
-  if (base < 2 || base > 36) {
-    errno = EINVAL;
-    return buff;
-  }
+char *
+xtoa(unsigned long long value, char *buff, int base)
+{
+  if (base < 2 || base > 36)
+    {
+      errno = EINVAL;
+      return buff;
+    }
 
   char *p = buff;
   const char *d = "0123456789abcdefghijklmnopqrstuvwxyz";
-  do {
-    *p++ = d[value % base];
-    value /= base;
-  } while (value);
+  do
+    {
+      *p++ = d[value % base];
+      value /= base;
+    }
+  while (value);
 
-  for (char *l = buff, *r = p - 1; l < r; l++, r--) {
-    char tmp = *l;
-    *l = *r;
-    *r = tmp;
-  }
+  for (char *l = buff, *r = p - 1; l < r; l++, r--)
+    {
+      char tmp = *l;
+      *l = *r;
+      *r = tmp;
+    }
 
   *p = '\0';
   return buff;

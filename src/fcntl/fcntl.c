@@ -19,7 +19,9 @@
 #include <stdarg.h>
 #include <syscall.h>
 
-int fcntl(int fd, int cmd, ...) {
+int
+fcntl(int fd, int cmd, ...)
+{
   va_list ap;
   unsigned long arg;
 

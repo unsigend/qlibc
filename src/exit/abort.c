@@ -20,9 +20,13 @@
 
 #if __USE_ISO_C11
 #include <stdnoreturn.h>
-noreturn void abort(void) {
+noreturn void
+abort(void)
+{
 #else
-void abort(void) {
+void
+abort(void)
+{
 #endif
   raise(SIGABRT);
   _exit(127);

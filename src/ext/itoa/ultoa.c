@@ -17,6 +17,8 @@
 
 #include "xtoa.h"
 
-char *ultoa(unsigned long value, char *buff, int base) {
+char *
+ultoa(unsigned long value, char *buff, int base)
+{
   return xtoa((ULL)value, buff, base);
 }

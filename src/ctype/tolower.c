@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include <ctype.h>
 
-int tolower(int c) {
-  if (isupper(c))
-    return c | 32;
+int
+tolower(int c)
+{
+  if (isupper(c)) return c | 32;
   return c;
 }

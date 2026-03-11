@@ -21,21 +21,25 @@
 #include <sys/mman.h>
 #include <sys/syscall.h>
 
-void *mremap(void *old_addr, size_t old_len, size_t new_len, int flags, ...) {
+void *
+mremap(void *old_addr, size_t old_len, size_t new_len, int flags, ...)
+{
   va_list ap;
-  void *new_addr = NULL;
+  void *newaddr = NULL;
 
-  if (new_len >= PTRDIFF_MAX) {
-    errno = ENOMEM;
-    return MAP_FAILED;
-  }
+  if (new_len >= PTRDIFF_MAX)
+    {
+      errno = ENOMEM;
+      return MAP_FAILED;
+    }
 
-  if (flags & MREMAP_FIXED) {
-    va_start(ap, flags);
-    new_addr = va_arg(ap, void *);
-    va_end(ap);
-  }
+  if (flags & MREMAP_FIXED)
+    {
+      va_start(ap, flags);
+      newaddr = va_arg(ap, void *);
+      va_end(ap);
+    }
 
   return (void *)__syscall(SYS_mremap, (long)old_addr, old_len, new_len, flags,
-                           (long)new_addr);
+                           (long)newaddr);
 }

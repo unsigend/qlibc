@@ -19,7 +19,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-int sprintf(char *restrict buffer, const char *restrict format, ...) {
+int
+sprintf(char *restrict buffer, const char *restrict format, ...)
+{
   va_list ap;
   va_start(ap, format);
   int ret = vsnprintf(buffer, INT_MAX, format, ap);

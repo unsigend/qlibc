@@ -24,92 +24,104 @@
    This function has no heap boundary check. And will assume both prev, next
    and current block are not NULL.*/
 
-static inline void coalescing_mid(free_block_t *prev_block, free_block_t *block,
-                                  free_block_t *next_block) {
+static inline void
+coalescing_mid(free_block_t *prevblk, free_block_t *blk, free_block_t *nextblk)
+{
   /* No coalescing is needed. */
-  if (prev_block->header.alloc && next_block->header.alloc) {
-    write_meta((block_t *)block, block->header.sz, false, false);
-    insert_block(block, get_bucket_idx(block->header.sz));
-    return;
-  }
+  if (prevblk->header.alloc && nextblk->header.alloc)
+    {
+      writemeta((block_t *)blk, blk->header.sz, false, false);
+      insertblk(blk, getbucketidx(blk->header.sz));
+      return;
+    }
 
   /* Coalescing the next block with the current block. */
-  if (prev_block->header.alloc && !next_block->header.alloc) {
-    size_t newsz = block->header.sz + next_block->header.sz;
-    remove_block(next_block, get_bucket_idx(next_block->header.sz));
-    write_meta((block_t *)block, newsz, false, false);
-    insert_block(block, get_bucket_idx(newsz));
-    return;
-  }
+  if (prevblk->header.alloc && !nextblk->header.alloc)
+    {
+      size_t newsz = blk->header.sz + nextblk->header.sz;
+      removeblk(nextblk, getbucketidx(nextblk->header.sz));
+      writemeta((block_t *)blk, newsz, false, false);
+      insertblk(blk, getbucketidx(newsz));
+      return;
+    }
 
   /* Coalescing the previous block with the current block. */
-  if (!prev_block->header.alloc && next_block->header.alloc) {
-    size_t newsz = block->header.sz + prev_block->header.sz;
-    remove_block(prev_block, get_bucket_idx(prev_block->header.sz));
-    write_meta((block_t *)prev_block, newsz, false, false);
-    insert_block(prev_block, get_bucket_idx(newsz));
-    return;
-  }
+  if (!prevblk->header.alloc && nextblk->header.alloc)
+    {
+      size_t newsz = blk->header.sz + prevblk->header.sz;
+      removeblk(prevblk, getbucketidx(prevblk->header.sz));
+      writemeta((block_t *)prevblk, newsz, false, false);
+      insertblk(prevblk, getbucketidx(newsz));
+      return;
+    }
 
   /* Coalescing the previous and next blocks with the current block. */
-  else {
-    size_t newsz =
-        prev_block->header.sz + block->header.sz + next_block->header.sz;
-    remove_block(next_block, get_bucket_idx(next_block->header.sz));
-    remove_block(prev_block, get_bucket_idx(prev_block->header.sz));
-    write_meta((block_t *)prev_block, newsz, false, false);
-    insert_block(prev_block, get_bucket_idx(newsz));
-    return;
-  }
+  else
+    {
+      size_t newsz = prevblk->header.sz + blk->header.sz + nextblk->header.sz;
+      removeblk(nextblk, getbucketidx(nextblk->header.sz));
+      removeblk(prevblk, getbucketidx(prevblk->header.sz));
+      writemeta((block_t *)prevblk, newsz, false, false);
+      insertblk(prevblk, getbucketidx(newsz));
+      return;
+    }
 }
 
 /* Coalescing the block with the adjacent memory-allocated free blocks. */
-static inline void coalescing(free_block_t *block) {
+static inline void
+coalescing(free_block_t *blk)
+{
   /* The coalescing is based on the adjacent heap memory blocks. */
-  bool is_first_block = ((unsigned char *)block == __heap.heap_start);
-  bool is_last_block = ((unsigned char *)((unsigned char *)block +
-                                          block->header.sz) == __heap.heap_end);
-  block_t *next_block, *prev_block;
-  footer_t *prev_block_footer;
+  bool isfirstblk = ((unsigned char *)blk == __heap.start);
+  bool islastblk = ((unsigned char *)((unsigned char *)blk + blk->header.sz)
+                    == __heap.end);
+  block_t *nextblk, *prevblk;
+  footer_t *prevblkfooter;
 
   /* If the current block is the first block in the heap, coalescing the next
      block is needed.*/
-  if (is_first_block) {
-    next_block = (block_t *)((unsigned char *)block + block->header.sz);
-    if (!is_last_block && !next_block->header.alloc) {
-      size_t newsz = block->header.sz + next_block->header.sz;
-      remove_block((free_block_t *)next_block,
-                   get_bucket_idx(next_block->header.sz));
-      write_meta((block_t *)block, newsz, false, false);
-      insert_block(block, get_bucket_idx(newsz));
-    } else {
-      write_meta((block_t *)block, block->header.sz, false, false);
-      insert_block(block, get_bucket_idx(block->header.sz));
+  if (isfirstblk)
+    {
+      nextblk = (block_t *)((unsigned char *)blk + blk->header.sz);
+      if (!islastblk && !nextblk->header.alloc)
+        {
+          size_t newsz = blk->header.sz + nextblk->header.sz;
+          removeblk((free_block_t *)nextblk, getbucketidx(nextblk->header.sz));
+          writemeta((block_t *)blk, newsz, false, false);
+          insertblk(blk, getbucketidx(newsz));
+        }
+      else
+        {
+          writemeta((block_t *)blk, blk->header.sz, false, false);
+          insertblk(blk, getbucketidx(blk->header.sz));
+        }
+      return;
     }
-    return;
-  }
 
-  prev_block_footer = (footer_t *)((unsigned char *)block - sizeof(footer_t));
-  prev_block = (block_t *)((unsigned char *)block - prev_block_footer->sz);
+  prevblkfooter = (footer_t *)((unsigned char *)blk - sizeof(footer_t));
+  prevblk = (block_t *)((unsigned char *)blk - prevblkfooter->sz);
 
-  /* If the current block is the last block in the heap, coalescing the previous
-     block is needed.*/
-  if (is_last_block) {
-    if (!prev_block->header.alloc) {
-      size_t newsz = block->header.sz + prev_block->header.sz;
-      remove_block((free_block_t *)prev_block,
-                   get_bucket_idx(prev_block->header.sz));
-      write_meta((block_t *)prev_block, newsz, false, false);
-      insert_block((free_block_t *)prev_block, get_bucket_idx(newsz));
-    } else {
-      write_meta((block_t *)block, block->header.sz, false, false);
-      insert_block(block, get_bucket_idx(block->header.sz));
+  /* If the current block is the last block in the heap, coalescing the
+     previous block is needed.*/
+  if (islastblk)
+    {
+      if (!prevblk->header.alloc)
+        {
+          size_t newsz = blk->header.sz + prevblk->header.sz;
+          removeblk((free_block_t *)prevblk, getbucketidx(prevblk->header.sz));
+          writemeta((block_t *)prevblk, newsz, false, false);
+          insertblk((free_block_t *)prevblk, getbucketidx(newsz));
+        }
+      else
+        {
+          writemeta((block_t *)blk, blk->header.sz, false, false);
+          insertblk(blk, getbucketidx(blk->header.sz));
+        }
+      return;
     }
-    return;
-  }
 
-  next_block = (block_t *)((unsigned char *)block + block->header.sz);
-  coalescing_mid((free_block_t *)prev_block, block, (free_block_t *)next_block);
+  nextblk = (block_t *)((unsigned char *)blk + blk->header.sz);
+  coalescing_mid((free_block_t *)prevblk, blk, (free_block_t *)nextblk);
 }
 
 #endif

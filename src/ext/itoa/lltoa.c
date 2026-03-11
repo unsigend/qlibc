@@ -18,13 +18,17 @@
 #include "xtoa.h"
 #include <limits.h>
 
-char *lltoa(long long value, char *buff, int base) {
+char *
+lltoa(long long value, char *buff, int base)
+{
   char *p = buff;
   unsigned long long uvalue;
-  if (base == 10 && value < 0) {
-    *p++ = '-';
-    uvalue = (value == LLONG_MIN) ? (ULL)LLONG_MAX + 1 : (ULL)(-value);
-  } else
+  if (base == 10 && value < 0)
+    {
+      *p++ = '-';
+      uvalue = (value == LLONG_MIN) ? (ULL)LLONG_MAX + 1 : (ULL)(-value);
+    }
+  else
     uvalue = (ULL)value;
 
   xtoa(uvalue, p, base);

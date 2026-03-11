@@ -19,7 +19,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-int vsprintf(char *restrict buffer, const char *restrict format,
-             va_list vlist) {
+int
+vsprintf(char *restrict buffer, const char *restrict format, va_list vlist)
+{
   return vsnprintf(buffer, INT_MAX, format, vlist);
 }

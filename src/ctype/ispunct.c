@@ -14,6 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include <ctype.h>
 
-int ispunct(int c) { return isgraph(c) && !isalnum(c); }
+int
+ispunct(int c)
+{
+  return isgraph(c) && !isalnum(c);
+}
