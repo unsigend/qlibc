@@ -7,7 +7,8 @@
 #define ITOA_BUFSZ 128
 #endif
 
-UTEST_TEST_CASE(utoa) {
+UTEST_TEST_CASE(utoa)
+{
   char buf[ITOA_BUFSZ];
 
   EXPECT_TRUE(ulltoa(0ULL, buf, 10) == buf);

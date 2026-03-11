@@ -5,7 +5,8 @@
 /* Integration tests: %[*][width][length]specifier combined across all
    specifiers (d,i,u,o,x,c,s,p). Tests parser integration and modifier combos.
  */
-UTEST_TEST_CASE(in_integration) {
+UTEST_TEST_CASE(in_integration)
+{
   char buf[BUFSZ];
   int n;
 

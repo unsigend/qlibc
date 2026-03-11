@@ -27,7 +27,8 @@
 #include "exam/test_strstr.h"
 #include "exam/test_strtok.h"
 
-UTEST_TEST_SUITE(string) {
+UTEST_TEST_SUITE(string)
+{
   UTEST_RUN_TEST_CASE(memchr);
   UTEST_RUN_TEST_CASE(memcmp);
   UTEST_RUN_TEST_CASE(memcpy);

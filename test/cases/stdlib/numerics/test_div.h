@@ -6,7 +6,8 @@
 #include <inttypes.h>
 #endif
 
-UTEST_TEST_CASE(div) {
+UTEST_TEST_CASE(div)
+{
   div_t r;
   r = div(7, 3);
   EXPECT_EQUAL_INT(r.quot, 2);

@@ -3,7 +3,8 @@
 #include <stdint.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(fixed_width_types) {
+UTEST_TEST_CASE(fixed_width_types)
+{
   EXPECT_TRUE(sizeof(int8_t) == 1);
   EXPECT_TRUE(sizeof(int16_t) == 2);
   EXPECT_TRUE(sizeof(int32_t) == 4);
@@ -39,7 +40,8 @@ UTEST_TEST_CASE(fixed_width_types) {
   EXPECT_TRUE(UINT64_MAX == (uint64_t)-1);
 }
 
-UTEST_TEST_CASE(least_types) {
+UTEST_TEST_CASE(least_types)
+{
   EXPECT_TRUE(sizeof(int_least8_t) * CHAR_BIT >= 8);
   EXPECT_TRUE(sizeof(int_least16_t) * CHAR_BIT >= 16);
   EXPECT_TRUE(sizeof(int_least32_t) * CHAR_BIT >= 32);
@@ -75,7 +77,8 @@ UTEST_TEST_CASE(least_types) {
   EXPECT_TRUE(UINT_LEAST64_MAX == (uint_least64_t)-1);
 }
 
-UTEST_TEST_CASE(fast_types) {
+UTEST_TEST_CASE(fast_types)
+{
   EXPECT_TRUE(sizeof(int_fast8_t) * CHAR_BIT >= 8);
   EXPECT_TRUE(sizeof(int_fast16_t) * CHAR_BIT >= 16);
   EXPECT_TRUE(sizeof(int_fast32_t) * CHAR_BIT >= 32);
@@ -111,7 +114,8 @@ UTEST_TEST_CASE(fast_types) {
   EXPECT_TRUE(UINT_FAST64_MAX == (uint_fast64_t)-1);
 }
 
-UTEST_TEST_CASE(max_types) {
+UTEST_TEST_CASE(max_types)
+{
   EXPECT_TRUE(sizeof(intmax_t) >= sizeof(long));
   EXPECT_TRUE(sizeof(intmax_t) >= sizeof(long long));
   EXPECT_TRUE(sizeof(uintmax_t) >= sizeof(unsigned long));
@@ -147,7 +151,8 @@ UTEST_TEST_CASE(max_types) {
   }
 }
 
-UTEST_TEST_CASE(ptr_types) {
+UTEST_TEST_CASE(ptr_types)
+{
   EXPECT_TRUE(sizeof(intptr_t) >= sizeof(void *));
   EXPECT_TRUE(sizeof(uintptr_t) >= sizeof(void *));
   EXPECT_TRUE(sizeof(intptr_t) == sizeof(uintptr_t));
@@ -169,7 +174,8 @@ UTEST_TEST_CASE(ptr_types) {
   }
 }
 
-UTEST_TEST_CASE(size_types) {
+UTEST_TEST_CASE(size_types)
+{
   EXPECT_TRUE(sizeof(ptrdiff_t) == sizeof(intptr_t));
   EXPECT_TRUE(sizeof(size_t) == sizeof(uintptr_t));
 
@@ -189,7 +195,8 @@ UTEST_TEST_CASE(size_types) {
   }
 }
 
-UTEST_TEST_CASE(constants) {
+UTEST_TEST_CASE(constants)
+{
   {
     int8_t val = INT8_C(42);
     EXPECT_EQUAL_INT(val, 42);
@@ -231,7 +238,8 @@ UTEST_TEST_CASE(constants) {
   }
 }
 
-UTEST_TEST_CASE(relationships) {
+UTEST_TEST_CASE(relationships)
+{
   EXPECT_TRUE(sizeof(int8_t) <= sizeof(int_least8_t));
   EXPECT_TRUE(sizeof(int_least8_t) <= sizeof(int_fast8_t));
   EXPECT_TRUE(sizeof(int16_t) <= sizeof(int_least16_t));
@@ -285,7 +293,8 @@ UTEST_TEST_CASE(relationships) {
   EXPECT_TRUE(UINTMAX_MAX >= ULONG_MAX);
 }
 
-UTEST_TEST_SUITE(stdint) {
+UTEST_TEST_SUITE(stdint)
+{
   UTEST_RUN_TEST_CASE(fixed_width_types);
   UTEST_RUN_TEST_CASE(least_types);
   UTEST_RUN_TEST_CASE(fast_types);

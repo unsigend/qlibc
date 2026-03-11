@@ -1,7 +1,8 @@
 #include <termios.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(type) {
+UTEST_TEST_CASE(type)
+{
   EXPECT_TRUE(sizeof(speed_t) == sizeof(unsigned int));
   EXPECT_TRUE(sizeof(cc_t) == sizeof(char));
   EXPECT_TRUE(sizeof(tcflag_t) == sizeof(unsigned int));
@@ -20,4 +21,7 @@ UTEST_TEST_CASE(type) {
   EXPECT_EQUAL_UINT(offsetof(struct termios, c_ospeed), 56);
 }
 
-UTEST_TEST_SUITE(termios) { UTEST_RUN_TEST_CASE(type); }
+UTEST_TEST_SUITE(termios)
+{
+  UTEST_RUN_TEST_CASE(type);
+}

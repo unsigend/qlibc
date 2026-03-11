@@ -20,7 +20,8 @@
 
 #include "program/test_env.h"
 
-UTEST_TEST_SUITE(stdlib) {
+UTEST_TEST_SUITE(stdlib)
+{
   // ASCII to integer conversions
   UTEST_RUN_TEST_CASE(atoi);
   UTEST_RUN_TEST_CASE(atol);

@@ -1,17 +1,22 @@
 #include <stdarg.h>
 #include <utest.h>
 
-static void sum_ints(int *result, int count, ...) {
+static void
+sum_ints(int *result, int count, ...)
+{
   va_list args;
   va_start(args, count);
   *result = 0;
-  for (int i = 0; i < count; i++) {
-    *result += va_arg(args, int);
-  }
+  for (int i = 0; i < count; i++)
+    {
+      *result += va_arg(args, int);
+    }
   va_end(args);
 }
 
-static void modify_ints(int *a, int *b, int *c, ...) {
+static void
+modify_ints(int *a, int *b, int *c, ...)
+{
   va_list args;
   va_start(args, c);
   *a = va_arg(args, int);
@@ -20,17 +25,22 @@ static void modify_ints(int *a, int *b, int *c, ...) {
   va_end(args);
 }
 
-static void sum_doubles(double *result, int count, ...) {
+static void
+sum_doubles(double *result, int count, ...)
+{
   va_list args;
   va_start(args, count);
   *result = 0.0;
-  for (int i = 0; i < count; i++) {
-    *result += va_arg(args, double);
-  }
+  for (int i = 0; i < count; i++)
+    {
+      *result += va_arg(args, double);
+    }
   va_end(args);
 }
 
-static void modify_chars(char *a, char *b, ...) {
+static void
+modify_chars(char *a, char *b, ...)
+{
   va_list args;
   va_start(args, b);
   *a = va_arg(args, int);
@@ -38,7 +48,9 @@ static void modify_chars(char *a, char *b, ...) {
   va_end(args);
 }
 
-static void modify_pointers(int **a, int **b, ...) {
+static void
+modify_pointers(int **a, int **b, ...)
+{
   va_list args;
   va_start(args, b);
   *a = va_arg(args, int *);
@@ -46,24 +58,29 @@ static void modify_pointers(int **a, int **b, ...) {
   va_end(args);
 }
 
-static void va_copy_test(int *result, int count, ...) {
+static void
+va_copy_test(int *result, int count, ...)
+{
   va_list args1, args2;
   va_start(args1, count);
   va_copy(args2, args1);
   *result = 0;
-  for (int i = 0; i < count; i++) {
-    *result += va_arg(args1, int);
-  }
+  for (int i = 0; i < count; i++)
+    {
+      *result += va_arg(args1, int);
+    }
   int sum2 = 0;
-  for (int i = 0; i < count; i++) {
-    sum2 += va_arg(args2, int);
-  }
+  for (int i = 0; i < count; i++)
+    {
+      sum2 += va_arg(args2, int);
+    }
   va_end(args1);
   va_end(args2);
   *result = (*result == sum2) ? *result : -1;
 }
 
-UTEST_TEST_CASE(va_start_va_arg_va_end) {
+UTEST_TEST_CASE(va_start_va_arg_va_end)
+{
   {
     int result = 0;
     sum_ints(&result, 3, 1, 2, 3);
@@ -89,7 +106,8 @@ UTEST_TEST_CASE(va_start_va_arg_va_end) {
   }
 }
 
-UTEST_TEST_CASE(va_modify_pointers) {
+UTEST_TEST_CASE(va_modify_pointers)
+{
   {
     int a = 0, b = 0, c = 0;
     modify_ints(&a, &b, &c, 10, 20, 30);
@@ -107,7 +125,8 @@ UTEST_TEST_CASE(va_modify_pointers) {
   }
 }
 
-UTEST_TEST_CASE(va_different_types) {
+UTEST_TEST_CASE(va_different_types)
+{
   {
     double result = 0.0;
     sum_doubles(&result, 3, 1.5, 2.5, 3.5);
@@ -132,7 +151,8 @@ UTEST_TEST_CASE(va_different_types) {
   }
 }
 
-UTEST_TEST_CASE(va_copy) {
+UTEST_TEST_CASE(va_copy)
+{
   {
     int result = 0;
     va_copy_test(&result, 3, 1, 2, 3);
@@ -152,7 +172,8 @@ UTEST_TEST_CASE(va_copy) {
   }
 }
 
-UTEST_TEST_CASE(va_multiple_calls) {
+UTEST_TEST_CASE(va_multiple_calls)
+{
   {
     int result1 = 0, result2 = 0, result3 = 0;
     sum_ints(&result1, 2, 1, 2);
@@ -177,7 +198,8 @@ UTEST_TEST_CASE(va_multiple_calls) {
   }
 }
 
-UTEST_TEST_SUITE(stdarg) {
+UTEST_TEST_SUITE(stdarg)
+{
   UTEST_RUN_TEST_CASE(va_start_va_arg_va_end);
   UTEST_RUN_TEST_CASE(va_modify_pointers);
   UTEST_RUN_TEST_CASE(va_different_types);

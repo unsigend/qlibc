@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(wait_macros) {
+UTEST_TEST_CASE(wait_macros)
+{
   EXPECT_EQUAL_UINT(WNOHANG, 1);
   EXPECT_EQUAL_UINT(WUNTRACED, 2);
   EXPECT_EQUAL_UINT(WCONTINUED, 8);
@@ -54,7 +55,8 @@ UTEST_TEST_CASE(wait_macros) {
   EXPECT_FALSE(WIFCONTINUED(0x057f));
 }
 
-UTEST_TEST_CASE(wait) {
+UTEST_TEST_CASE(wait)
+{
   EXPECT_EQUAL_INT(wait(NULL), -1);
   EXPECT_EQUAL_INT(errno, ECHILD);
 }

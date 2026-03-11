@@ -32,7 +32,8 @@
 #define O_NOATIME __O_NOATIME
 #endif
 
-UTEST_TEST_CASE(macro) {
+UTEST_TEST_CASE(macro)
+{
   /* file access mode flags */
   EXPECT_EQUAL_INT(O_RDONLY, 0);
   EXPECT_EQUAL_INT(O_WRONLY, 1);
@@ -75,7 +76,8 @@ UTEST_TEST_CASE(macro) {
   EXPECT_EQUAL_INT(S_IRWXO, 00007);
 }
 
-UTEST_TEST_CASE(open) {
+UTEST_TEST_CASE(open)
+{
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
 
@@ -83,7 +85,8 @@ UTEST_TEST_CASE(open) {
   EXPECT_EQUAL_INT(ret, 0);
 }
 
-UTEST_TEST_CASE(fcntl) {
+UTEST_TEST_CASE(fcntl)
+{
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
 
@@ -110,7 +113,8 @@ UTEST_TEST_CASE(fcntl) {
   EXPECT_EQUAL_INT(ret, 0);
 }
 
-UTEST_TEST_SUITE(fcntl) {
+UTEST_TEST_SUITE(fcntl)
+{
   /* macros */
   UTEST_RUN_TEST_CASE(macro);
   /* functions */

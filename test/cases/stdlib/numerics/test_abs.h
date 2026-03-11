@@ -6,7 +6,8 @@
 #include <inttypes.h>
 #endif
 
-UTEST_TEST_CASE(abs) {
+UTEST_TEST_CASE(abs)
+{
   EXPECT_EQUAL_INT(llabs(0LL), 0);
   EXPECT_EQUAL_INT(llabs(1LL), 1);
   EXPECT_EQUAL_INT(llabs(-1LL), 1);

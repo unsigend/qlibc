@@ -4,7 +4,8 @@
 #include <string.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(types) {
+UTEST_TEST_CASE(types)
+{
   EXPECT_EQUAL_UINT(sizeof(sig_atomic_t), sizeof(int));
 #if defined(_QLIBC_SOURCE) || defined(__QLIBC__)
   EXPECT_EQUAL_UINT(sizeof(sighandler_t), sizeof(void *));
@@ -13,7 +14,8 @@ UTEST_TEST_CASE(types) {
 #endif
 }
 
-UTEST_TEST_CASE(macros) {
+UTEST_TEST_CASE(macros)
+{
   EXPECT_EQUAL_INT(SIG_DFL, 0);
   EXPECT_EQUAL_INT(SIG_IGN, 1);
   EXPECT_EQUAL_INT(SIG_ERR, -1);
@@ -62,7 +64,8 @@ UTEST_TEST_CASE(macros) {
   EXPECT_EQUAL_INT(SA_SIGINFO, 4);
 }
 
-UTEST_TEST_CASE(sigemptyset) {
+UTEST_TEST_CASE(sigemptyset)
+{
   sigset_t set;
   EXPECT_EQUAL_INT(sigemptyset(&set), 0);
   EXPECT_TRUE(sigisemptyset(&set));
@@ -70,7 +73,8 @@ UTEST_TEST_CASE(sigemptyset) {
   EXPECT_FALSE(sigismember(&set, 1));
 }
 
-UTEST_TEST_CASE(sigfillset) {
+UTEST_TEST_CASE(sigfillset)
+{
   sigset_t set;
   EXPECT_EQUAL_INT(sigfillset(&set), 0);
   EXPECT_FALSE(sigisemptyset(&set));
@@ -79,7 +83,8 @@ UTEST_TEST_CASE(sigfillset) {
   EXPECT_TRUE(sigismember(&set, 1));
 }
 
-UTEST_TEST_CASE(sigaddset) {
+UTEST_TEST_CASE(sigaddset)
+{
   sigset_t set;
   sigemptyset(&set);
   EXPECT_EQUAL_INT(sigaddset(&set, SIGINT), 0);
@@ -89,7 +94,8 @@ UTEST_TEST_CASE(sigaddset) {
   EXPECT_TRUE(sigismember(&set, SIGTERM));
 }
 
-UTEST_TEST_CASE(sigdelset) {
+UTEST_TEST_CASE(sigdelset)
+{
   sigset_t set;
   sigfillset(&set);
   EXPECT_EQUAL_INT(sigdelset(&set, SIGINT), 0);
@@ -99,7 +105,8 @@ UTEST_TEST_CASE(sigdelset) {
   EXPECT_FALSE(sigismember(&set, SIGTERM));
 }
 
-UTEST_TEST_CASE(sigismember) {
+UTEST_TEST_CASE(sigismember)
+{
   sigset_t set;
   sigemptyset(&set);
   sigaddset(&set, SIGUSR1);
@@ -109,7 +116,8 @@ UTEST_TEST_CASE(sigismember) {
   EXPECT_EQUAL_INT(sigismember(NULL, SIGINT), -1);
 }
 
-UTEST_TEST_CASE(sigandset) {
+UTEST_TEST_CASE(sigandset)
+{
   sigset_t left, right, dest;
   sigemptyset(&left);
   sigemptyset(&right);
@@ -121,7 +129,8 @@ UTEST_TEST_CASE(sigandset) {
   EXPECT_FALSE(sigismember(&dest, SIGTERM));
 }
 
-UTEST_TEST_CASE(sigorset) {
+UTEST_TEST_CASE(sigorset)
+{
   sigset_t left, right, dest;
   sigemptyset(&left);
   sigemptyset(&right);
@@ -132,7 +141,8 @@ UTEST_TEST_CASE(sigorset) {
   EXPECT_TRUE(sigismember(&dest, SIGTERM));
 }
 
-UTEST_TEST_CASE(sigisemptyset) {
+UTEST_TEST_CASE(sigisemptyset)
+{
   sigset_t set;
   sigemptyset(&set);
   EXPECT_TRUE(sigisemptyset(&set));
@@ -141,13 +151,15 @@ UTEST_TEST_CASE(sigisemptyset) {
   EXPECT_EQUAL_INT(sigisemptyset(NULL), -1);
 }
 
-UTEST_TEST_CASE(sigpending) {
+UTEST_TEST_CASE(sigpending)
+{
   sigset_t set;
   EXPECT_EQUAL_INT(sigpending(&set), 0);
   EXPECT_EQUAL_INT(sigpending(NULL), -1);
 }
 
-UTEST_TEST_CASE(strsignal) {
+UTEST_TEST_CASE(strsignal)
+{
   EXPECT_EQUAL_STRING(strsignal(0), "Unknown signal 0");
   EXPECT_EQUAL_STRING(strsignal(SIGHUP), "Hangup");
   EXPECT_EQUAL_STRING(strsignal(SIGINT), "Interrupt");
@@ -186,7 +198,8 @@ UTEST_TEST_CASE(strsignal) {
   EXPECT_EQUAL_STRING(strsignal(999999999), "Unknown signal 999999999");
 }
 
-UTEST_TEST_SUITE(signal) {
+UTEST_TEST_SUITE(signal)
+{
   UTEST_RUN_TEST_CASE(types);
   UTEST_RUN_TEST_CASE(macros);
   UTEST_RUN_TEST_CASE(sigemptyset);

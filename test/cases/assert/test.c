@@ -1,7 +1,8 @@
 #include <assert.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(assert_defined) {
+UTEST_TEST_CASE(assert_defined)
+{
   int x = 5;
   assert(x == 5);
   assert(x > 0);
@@ -11,7 +12,8 @@ UTEST_TEST_CASE(assert_defined) {
   assert(2 + 2 == 4);
 }
 
-UTEST_TEST_CASE(assert_expressions) {
+UTEST_TEST_CASE(assert_expressions)
+{
   {
     int a = 10;
     int b = 20;
@@ -27,7 +29,7 @@ UTEST_TEST_CASE(assert_expressions) {
   }
 
   {
-    int arr[5] = {1, 2, 3, 4, 5};
+    int arr[5] = { 1, 2, 3, 4, 5 };
     assert(arr[0] == 1);
     assert(arr[4] == 5);
     assert(sizeof(arr) == 5 * sizeof(int));
@@ -49,7 +51,8 @@ UTEST_TEST_CASE(assert_expressions) {
   }
 }
 
-UTEST_TEST_CASE(assert_void_result) {
+UTEST_TEST_CASE(assert_void_result)
+{
   {
     int result = 0;
     assert(1);
@@ -65,7 +68,8 @@ UTEST_TEST_CASE(assert_void_result) {
   }
 }
 
-UTEST_TEST_CASE(assert_ndebug) {
+UTEST_TEST_CASE(assert_ndebug)
+{
 #undef assert
 #define NDEBUG
 #include <assert.h>
@@ -85,7 +89,8 @@ UTEST_TEST_CASE(assert_ndebug) {
 #undef assert
 }
 
-UTEST_TEST_SUITE(assert) {
+UTEST_TEST_SUITE(assert)
+{
   UTEST_RUN_TEST_CASE(assert_defined);
   UTEST_RUN_TEST_CASE(assert_expressions);
   UTEST_RUN_TEST_CASE(assert_void_result);

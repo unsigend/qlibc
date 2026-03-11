@@ -8,7 +8,8 @@
 
 #define MAGIC 0xec
 
-UTEST_TEST_CASE(mman_macros) {
+UTEST_TEST_CASE(mman_macros)
+{
   EXPECT_EQUAL_UINT(PROT_NONE, 0x00);
   EXPECT_EQUAL_UINT(PROT_READ, 0x01);
   EXPECT_EQUAL_UINT(PROT_WRITE, 0x02);
@@ -32,17 +33,19 @@ UTEST_TEST_CASE(mman_macros) {
   EXPECT_EQUAL_UINT(MREMAP_DONTUNMAP, 0x04);
 }
 
-UTEST_TEST_CASE(mmap) {
+UTEST_TEST_CASE(mmap)
+{
   void *addr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
                     MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
   EXPECT_TRUE(addr != MAP_FAILED);
 
   // check the access permissions in the 4KiB page
   unsigned char *ptr = (unsigned char *)addr;
-  for (size_t i = 0; i < PAGE_SIZE; i++) {
-    ptr[i] = MAGIC;
-    EXPECT_EQUAL_UINT(ptr[i], MAGIC);
-  }
+  for (size_t i = 0; i < PAGE_SIZE; i++)
+    {
+      ptr[i] = MAGIC;
+      EXPECT_EQUAL_UINT(ptr[i], MAGIC);
+    }
 
   EXPECT_TRUE(munmap(addr, PAGE_SIZE) == 0);
 }

@@ -1,7 +1,8 @@
 #include <stdbool.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(constants) {
+UTEST_TEST_CASE(constants)
+{
   EXPECT_EQUAL_INT(__bool_true_false_are_defined, 1);
   EXPECT_EQUAL_INT(true, 1);
   EXPECT_EQUAL_INT(false, 0);
@@ -9,7 +10,8 @@ UTEST_TEST_CASE(constants) {
   EXPECT_FALSE(false);
 }
 
-UTEST_TEST_CASE(macros) {
+UTEST_TEST_CASE(macros)
+{
   bool b1 = true;
   bool b2 = false;
 
@@ -112,24 +114,30 @@ UTEST_TEST_CASE(macros) {
 
   {
     bool b = true;
-    if (b) {
-      EXPECT_TRUE(1);
-    } else {
-      EXPECT_FALSE(1);
-    }
+    if (b)
+      {
+        EXPECT_TRUE(1);
+      }
+    else
+      {
+        EXPECT_FALSE(1);
+      }
   }
 
   {
     bool b = false;
-    if (b) {
-      EXPECT_FALSE(1);
-    } else {
-      EXPECT_TRUE(1);
-    }
+    if (b)
+      {
+        EXPECT_FALSE(1);
+      }
+    else
+      {
+        EXPECT_TRUE(1);
+      }
   }
 
   {
-    bool arr[2] = {true, false};
+    bool arr[2] = { true, false };
     EXPECT_TRUE(arr[0]);
     EXPECT_FALSE(arr[1]);
   }
@@ -139,7 +147,9 @@ UTEST_TEST_CASE(macros) {
     EXPECT_TRUE(b);
   }
 
-  { EXPECT_TRUE(sizeof(bool) == sizeof(_Bool)); }
+  {
+    EXPECT_TRUE(sizeof(bool) == sizeof(_Bool));
+  }
 
   {
     _Bool b = 1;
@@ -149,7 +159,8 @@ UTEST_TEST_CASE(macros) {
   }
 }
 
-UTEST_TEST_SUITE(stdbool) {
+UTEST_TEST_SUITE(stdbool)
+{
   UTEST_RUN_TEST_CASE(constants);
   UTEST_RUN_TEST_CASE(macros);
 }

@@ -33,7 +33,7 @@
 #if defined(__GNUC__)
 #define offsetof(TYPE, MEMBER) __builtin_offsetof(TYPE, MEMBER)
 #else
-#define offsetof(TYPE, MEMBER) ((size_t)&((TYPE *)0)->MEMBER)
+#define offsetof(TYPE, MEMBER) ((size_t) & ((TYPE *)0)->MEMBER)
 #endif
 
 #if __SUPPORT_MB == 0 && defined(__linux__)

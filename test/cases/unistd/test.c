@@ -7,7 +7,8 @@
 
 #define PAGE_SIZE 4096
 
-UTEST_TEST_CASE(macro) {
+UTEST_TEST_CASE(macro)
+{
   EXPECT_EQUAL_INT(STDIN_FILENO, 0);
   EXPECT_EQUAL_INT(STDOUT_FILENO, 1);
   EXPECT_EQUAL_INT(STDERR_FILENO, 2);
@@ -20,7 +21,8 @@ UTEST_TEST_CASE(macro) {
 #ifndef _QLIBC_SOURCE
 extern long syscall(long __number, ...);
 #endif
-UTEST_TEST_CASE(syscall) {
+UTEST_TEST_CASE(syscall)
+{
   long ret;
 
   ret = syscall(SYS_getpid);
@@ -41,13 +43,15 @@ UTEST_TEST_CASE(syscall) {
   EXPECT_TRUE(errno != 0);
 }
 
-UTEST_TEST_CASE(close) {
+UTEST_TEST_CASE(close)
+{
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd != -1);
   EXPECT_EQUAL_INT(close(fd), 0);
 }
 
-UTEST_TEST_CASE(lseek) {
+UTEST_TEST_CASE(lseek)
+{
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
 
@@ -69,7 +73,8 @@ UTEST_TEST_CASE(lseek) {
   EXPECT_EQUAL_INT(close(fd), 0);
 }
 
-UTEST_TEST_CASE(read) {
+UTEST_TEST_CASE(read)
+{
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
 
@@ -85,7 +90,8 @@ UTEST_TEST_CASE(read) {
   EXPECT_EQUAL_INT(close(fd), 0);
 }
 
-UTEST_TEST_CASE(write) {
+UTEST_TEST_CASE(write)
+{
   int fd = open("/dev/null", O_WRONLY);
   EXPECT_TRUE(fd >= 0);
 
@@ -99,7 +105,8 @@ UTEST_TEST_CASE(write) {
   EXPECT_EQUAL_INT(close(fd), 0);
 }
 
-UTEST_TEST_CASE(isatty) {
+UTEST_TEST_CASE(isatty)
+{
   EXPECT_TRUE(isatty(STDIN_FILENO));
   EXPECT_TRUE(isatty(STDOUT_FILENO));
   EXPECT_TRUE(isatty(STDERR_FILENO));
@@ -113,7 +120,8 @@ UTEST_TEST_CASE(isatty) {
 #include <stdint.h>
 extern void *sbrk(intptr_t increment);
 #endif
-UTEST_TEST_CASE(sbrk) {
+UTEST_TEST_CASE(sbrk)
+{
   void *addr = sbrk(0);
   EXPECT_TRUE(addr != (void *)-1);
 
@@ -134,7 +142,8 @@ UTEST_TEST_CASE(sbrk) {
   EXPECT_TRUE(new_addr == addr);
 }
 
-UTEST_TEST_CASE(brk) {
+UTEST_TEST_CASE(brk)
+{
 #ifdef _QLIBC_SOURCE
   void *addr = __brk(0);
   EXPECT_TRUE(addr != (void *)-1);
@@ -142,22 +151,26 @@ UTEST_TEST_CASE(brk) {
 #endif
 }
 
-UTEST_TEST_CASE(getpid) {
+UTEST_TEST_CASE(getpid)
+{
   pid_t pid = getpid();
   EXPECT_TRUE(pid > 0);
 }
 
-UTEST_TEST_CASE(getppid) {
+UTEST_TEST_CASE(getppid)
+{
   pid_t ppid = getppid();
   EXPECT_TRUE(ppid > 0);
 }
 
-UTEST_TEST_CASE(getpgrp) {
+UTEST_TEST_CASE(getpgrp)
+{
   pid_t pgrp = getpgrp();
   EXPECT_TRUE(pgrp > 0);
 }
 
-UTEST_TEST_CASE(setpgid) {
+UTEST_TEST_CASE(setpgid)
+{
   pid_t pgrp = getpgrp();
   EXPECT_TRUE(pgrp > 0);
 
@@ -165,12 +178,14 @@ UTEST_TEST_CASE(setpgid) {
   EXPECT_EQUAL_INT(ret, 0);
 }
 
-UTEST_TEST_CASE(alarm) {
+UTEST_TEST_CASE(alarm)
+{
   unsigned int ret = alarm(0);
   EXPECT_EQUAL_INT(ret, 0);
 }
 
-UTEST_TEST_SUITE(unistd) {
+UTEST_TEST_SUITE(unistd)
+{
   /* macros */
   UTEST_RUN_TEST_CASE(macro);
 

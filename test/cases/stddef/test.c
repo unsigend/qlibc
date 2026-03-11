@@ -1,7 +1,8 @@
 #include <stddef.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(types) {
+UTEST_TEST_CASE(types)
+{
   EXPECT_TRUE(sizeof(size_t));
   EXPECT_TRUE(sizeof(ptrdiff_t));
   EXPECT_TRUE(sizeof(size_t) == sizeof(ptrdiff_t));
@@ -59,7 +60,8 @@ UTEST_TEST_CASE(types) {
   }
 }
 
-UTEST_TEST_CASE(constants) {
+UTEST_TEST_CASE(constants)
+{
   void *null_ptr = NULL;
   EXPECT_NULL(null_ptr);
 
@@ -84,7 +86,7 @@ UTEST_TEST_CASE(constants) {
   }
 
   {
-    int arr[5] = {1, 2, 3, 4, 5};
+    int arr[5] = { 1, 2, 3, 4, 5 };
     int *p = arr;
     EXPECT_NOT_NULL(p);
     p = NULL;
@@ -99,8 +101,10 @@ UTEST_TEST_CASE(constants) {
   }
 }
 
-UTEST_TEST_CASE(macros) {
-  struct test_struct {
+UTEST_TEST_CASE(macros)
+{
+  struct test_struct
+  {
     char a;
     int b;
     char c;
@@ -110,15 +114,16 @@ UTEST_TEST_CASE(macros) {
 
   EXPECT_EQUAL_UINT(offsetof(struct test_struct, a), 0);
   EXPECT_TRUE(offsetof(struct test_struct, b) >= sizeof(char));
-  EXPECT_TRUE(offsetof(struct test_struct, c) >=
-              offsetof(struct test_struct, b) + sizeof(int));
-  EXPECT_TRUE(offsetof(struct test_struct, d) >=
-              offsetof(struct test_struct, c) + sizeof(char));
-  EXPECT_TRUE(offsetof(struct test_struct, e) >=
-              offsetof(struct test_struct, d) + sizeof(long));
+  EXPECT_TRUE(offsetof(struct test_struct, c)
+              >= offsetof(struct test_struct, b) + sizeof(int));
+  EXPECT_TRUE(offsetof(struct test_struct, d)
+              >= offsetof(struct test_struct, c) + sizeof(char));
+  EXPECT_TRUE(offsetof(struct test_struct, e)
+              >= offsetof(struct test_struct, d) + sizeof(long));
 
   {
-    struct simple_struct {
+    struct simple_struct
+    {
       int first;
       int second;
     };
@@ -128,7 +133,8 @@ UTEST_TEST_CASE(macros) {
   }
 
   {
-    struct aligned_struct {
+    struct aligned_struct
+    {
       char a;
       long b;
     };
@@ -138,8 +144,10 @@ UTEST_TEST_CASE(macros) {
   }
 
   {
-    struct nested_struct {
-      struct {
+    struct nested_struct
+    {
+      struct
+      {
         int x;
         int y;
       } inner;
@@ -147,12 +155,13 @@ UTEST_TEST_CASE(macros) {
     };
 
     EXPECT_EQUAL_UINT(offsetof(struct nested_struct, inner), 0);
-    EXPECT_TRUE(offsetof(struct nested_struct, z) >=
-                sizeof(struct nested_struct) - sizeof(int));
+    EXPECT_TRUE(offsetof(struct nested_struct, z)
+                >= sizeof(struct nested_struct) - sizeof(int));
   }
 
   {
-    struct array_struct {
+    struct array_struct
+    {
       int arr[10];
       int next;
     };
@@ -162,7 +171,8 @@ UTEST_TEST_CASE(macros) {
   }
 }
 
-UTEST_TEST_SUITE(stddef) {
+UTEST_TEST_SUITE(stddef)
+{
   UTEST_RUN_TEST_CASE(types);
   UTEST_RUN_TEST_CASE(constants);
   UTEST_RUN_TEST_CASE(macros);

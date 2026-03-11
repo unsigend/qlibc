@@ -8,7 +8,8 @@
 #include <unistd.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(stat_types) {
+UTEST_TEST_CASE(stat_types)
+{
 #if defined(__x86_64__)
   EXPECT_EQUAL_UINT(offsetof(struct stat, st_dev), 0);
   EXPECT_EQUAL_UINT(offsetof(struct stat, st_ino), 8);
@@ -46,7 +47,8 @@ UTEST_TEST_CASE(stat_types) {
 #endif
 }
 
-UTEST_TEST_CASE(stat) {
+UTEST_TEST_CASE(stat)
+{
   struct stat st;
   int ret = stat(__FILE__, &st);
   EXPECT_EQUAL_INT(ret, 0);
@@ -69,7 +71,8 @@ UTEST_TEST_CASE(stat) {
   EXPECT_EQUAL_INT(close(fd), 0);
 }
 
-UTEST_TEST_CASE(fstat) {
+UTEST_TEST_CASE(fstat)
+{
   int fd = open(__FILE__, O_RDONLY);
   EXPECT_TRUE(fd >= 0);
 

@@ -1,7 +1,8 @@
 #include <elf.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(elf) {
+UTEST_TEST_CASE(elf)
+{
   /* 64-bits types */
   EXPECT_EQUAL_UINT(sizeof(Elf64_Half), 2);
   EXPECT_EQUAL_UINT(sizeof(Elf64_Word), 4);
@@ -33,4 +34,7 @@ UTEST_TEST_CASE(elf) {
   EXPECT_EQUAL_UINT(sizeof(Elf32_Rel), 8);
 }
 
-UTEST_TEST_SUITE(elf) { UTEST_RUN_TEST_CASE(elf); }
+UTEST_TEST_SUITE(elf)
+{
+  UTEST_RUN_TEST_CASE(elf);
+}

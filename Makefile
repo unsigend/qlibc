@@ -206,6 +206,7 @@ help:
 	@echo "\tmake test          - Run all the test cases"
 	@echo "\tmake test-[module] - Run the test cases for a specific module"
 	@echo "\tmake clang         - Run the clang command to generate compile_commands.json"
+	@echo "\tmake format        - Format the .c and .h files"
 	@echo ""
 
 # clang target
@@ -242,3 +243,10 @@ test: $(TEST_DEP)
 # test target for specific module
 test-%: $(TEST_DEP)
 	@$(MAKE) -C $(TEST_PATH) test-$*
+
+# format .c and .h files
+format:
+	@find $(TEST_PATH)/cases $(SRC_PATH) $(INCLUDE_PATH) $(ARCH_PATH) \
+		\( -name "*.c" -o -name "*.h" \) -exec clang-format -i {} +
+	@echo "Format done."
+

@@ -12,7 +12,8 @@
    specifier, this test suite as a freestanding test suites, which will has no
    buffer related manipulation, and only test the pure function */
 
-UTEST_TEST_SUITE(printf) {
+UTEST_TEST_SUITE(printf)
+{
   UTEST_RUN_TEST_CASE(out);
   UTEST_RUN_TEST_CASE(out_c);
   UTEST_RUN_TEST_CASE(out_s);

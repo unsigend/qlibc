@@ -2,12 +2,14 @@
 #include <stddef.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(constants) {
+UTEST_TEST_CASE(constants)
+{
   EXPECT_EQUAL_INT(__alignas_is_defined, 1);
   EXPECT_EQUAL_INT(__alignof_is_defined, 1);
 }
 
-UTEST_TEST_CASE(macros) {
+UTEST_TEST_CASE(macros)
+{
   EXPECT_TRUE(alignof(char) > 0);
   EXPECT_TRUE(alignof(char) <= sizeof(char));
 
@@ -42,7 +44,8 @@ UTEST_TEST_CASE(macros) {
   EXPECT_TRUE(alignof(ptrdiff_t) <= sizeof(ptrdiff_t));
 
   {
-    struct test_struct {
+    struct test_struct
+    {
       char a;
       int b;
     };
@@ -51,24 +54,32 @@ UTEST_TEST_CASE(macros) {
   }
 
   {
-    struct aligned_struct {
+    struct aligned_struct
+    {
       alignas(16) char data[16];
     };
     EXPECT_TRUE(alignof(struct aligned_struct) >= 16);
   }
 
   {
-    struct double_aligned {
+    struct double_aligned
+    {
       alignas(double) char c;
     };
     EXPECT_TRUE(alignof(struct double_aligned) >= alignof(double));
   }
 
-  { EXPECT_TRUE(alignof(int[10]) == alignof(int)); }
+  {
+    EXPECT_TRUE(alignof(int[10]) == alignof(int));
+  }
 
-  { EXPECT_TRUE(alignof(char *) == alignof(void *)); }
+  {
+    EXPECT_TRUE(alignof(char *) == alignof(void *));
+  }
 
-  { EXPECT_TRUE(alignof(char) == 1); }
+  {
+    EXPECT_TRUE(alignof(char) == 1);
+  }
 
   {
     EXPECT_TRUE(alignof(int) >= alignof(char));
@@ -117,7 +128,8 @@ UTEST_TEST_CASE(macros) {
   }
 }
 
-UTEST_TEST_SUITE(stdalign) {
+UTEST_TEST_SUITE(stdalign)
+{
   UTEST_RUN_TEST_CASE(constants);
   UTEST_RUN_TEST_CASE(macros);
 }

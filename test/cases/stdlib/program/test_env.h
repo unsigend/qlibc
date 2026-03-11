@@ -1,7 +1,14 @@
 #include <stdlib.h>
 #include <utest.h>
 
-UTEST_TEST_CASE(getenv) {
+/* supress warnings */
+extern int setenv(const char *name, const char *value, int overwrite);
+extern int unsetenv(const char *name);
+extern int putenv(char *string);
+extern void clearenv(void);
+
+UTEST_TEST_CASE(getenv)
+{
   EXPECT_NULL(getenv("QLIBC_T_NONEXISTENT"));
   EXPECT_NULL(getenv(""));
   setenv("QLIBC_T_A", "v", 1);
@@ -12,7 +19,8 @@ UTEST_TEST_CASE(getenv) {
   EXPECT_NULL(getenv("QLIBC_T_A"));
 }
 
-UTEST_TEST_CASE(putenv) {
+UTEST_TEST_CASE(putenv)
+{
   char s[] = "QLIBC_T_B=val";
   EXPECT_EQUAL_INT(putenv(s), 0);
   EXPECT_EQUAL_STRING(getenv("QLIBC_T_B"), "val");
@@ -30,7 +38,8 @@ UTEST_TEST_CASE(putenv) {
   unsetenv("QLIBC_T_B");
 }
 
-UTEST_TEST_CASE(setenv) {
+UTEST_TEST_CASE(setenv)
+{
   EXPECT_EQUAL_INT(setenv("QLIBC_T_C", "v1", 1), 0);
   EXPECT_EQUAL_STRING(getenv("QLIBC_T_C"), "v1");
   setenv("QLIBC_T_C", "v2", 0);
@@ -45,7 +54,8 @@ UTEST_TEST_CASE(setenv) {
   unsetenv("QLIBC_T_C");
 }
 
-UTEST_TEST_CASE(unsetenv) {
+UTEST_TEST_CASE(unsetenv)
+{
   setenv("QLIBC_T_D", "x", 1);
   EXPECT_EQUAL_INT(unsetenv("QLIBC_T_D"), 0);
   EXPECT_NULL(getenv("QLIBC_T_D"));
@@ -57,7 +67,8 @@ UTEST_TEST_CASE(unsetenv) {
   unsetenv("QLIBC_T_D");
 }
 
-UTEST_TEST_CASE(clearenv) {
+UTEST_TEST_CASE(clearenv)
+{
   setenv("QLIBC_T_E", "x", 1);
   clearenv();
   EXPECT_NULL(getenv("QLIBC_T_E"));

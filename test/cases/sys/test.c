@@ -6,7 +6,8 @@
 #include "cases/test_uio.h"
 #include "cases/test_wait.h"
 
-UTEST_TEST_CASE(types) {
+UTEST_TEST_CASE(types)
+{
   EXPECT_EQUAL_UINT(sizeof(off_t), sizeof(long));
   EXPECT_EQUAL_UINT(sizeof(ssize_t), sizeof(long));
   EXPECT_EQUAL_UINT(sizeof(time_t), sizeof(long));
@@ -31,7 +32,8 @@ UTEST_TEST_CASE(types) {
 #endif
 }
 
-UTEST_TEST_SUITE(sys) {
+UTEST_TEST_SUITE(sys)
+{
   /* types */
   UTEST_RUN_TEST_CASE(types);
 

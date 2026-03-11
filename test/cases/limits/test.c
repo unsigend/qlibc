@@ -7,7 +7,8 @@
 #endif
 #endif
 
-UTEST_TEST_CASE(macros) {
+UTEST_TEST_CASE(macros)
+{
   EXPECT_EQUAL_INT(CHAR_BIT, 8);
   EXPECT_TRUE(MB_LEN_MAX > 0);
   EXPECT_TRUE(MB_LEN_MAX >= 1);
@@ -77,7 +78,8 @@ UTEST_TEST_CASE(macros) {
   EXPECT_TRUE(sizeof(unsigned long long) * CHAR_BIT >= 64);
 }
 
-UTEST_TEST_CASE(relationships) {
+UTEST_TEST_CASE(relationships)
+{
   EXPECT_TRUE(SCHAR_MAX <= UCHAR_MAX);
   EXPECT_TRUE(SHRT_MAX <= USHRT_MAX);
   EXPECT_TRUE(INT_MAX <= UINT_MAX);
@@ -102,7 +104,8 @@ UTEST_TEST_CASE(relationships) {
   EXPECT_TRUE(sizeof(long) <= sizeof(long long));
 }
 
-UTEST_TEST_CASE(size_consistency) {
+UTEST_TEST_CASE(size_consistency)
+{
   {
     unsigned char max = 0;
     max = ~max;
@@ -146,7 +149,8 @@ UTEST_TEST_CASE(size_consistency) {
   EXPECT_TRUE(sizeof(long long) == sizeof(unsigned long long));
 }
 
-UTEST_TEST_SUITE(limits) {
+UTEST_TEST_SUITE(limits)
+{
   UTEST_RUN_TEST_CASE(macros);
   UTEST_RUN_TEST_CASE(relationships);
   UTEST_RUN_TEST_CASE(size_consistency);
