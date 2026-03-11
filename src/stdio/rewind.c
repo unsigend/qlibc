@@ -17,9 +17,10 @@
 
 #include <stdio.h>
 
-void rewind(FILE *stream) {
-  if (!stream)
-    return;
+void
+rewind(FILE *stream)
+{
+  if (!stream) return;
 
   fseek(stream, 0, SEEK_SET);
   clearerr(stream);

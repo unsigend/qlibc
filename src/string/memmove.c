@@ -16,23 +16,24 @@
  */
 #include <string.h>
 
-void *memmove(void *dest, const void *src, size_t count) {
+void *
+memmove(void *dest, const void *src, size_t count)
+{
   unsigned char *wp = (unsigned char *)dest;
   const unsigned char *rp = (const unsigned char *)src;
 
-  if (wp == rp || count == 0) {
-    return dest;
-  }
-  if (wp < rp || rp + count <= wp) {
+  if (wp == rp || count == 0) return dest;
+
+  if (wp < rp || rp + count <= wp)
     return memcpy(dest, src, count);
-  } else {
-    wp += count;
-    rp += count;
-    while (count--) {
-      wp--;
-      rp--;
-      *wp = *rp;
+  else
+    {
+      wp += count, rp += count;
+      while (count--)
+        {
+          wp--, rp--;
+          *wp = *rp;
+        }
     }
-  }
   return dest;
 }

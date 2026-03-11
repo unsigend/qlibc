@@ -17,28 +17,29 @@
 
 #include "io.h"
 
-static int flushall(void) {
+static int
+flushall(void)
+{
   FILE *cur = stdio_head;
-  while (cur) {
-    /* flush the write buffer */
-    if (flushbuf(cur) == EOF)
-      return EOF;
-    if (cur->flags & D_READ)
-      IBUF_DROP(cur);
-    cur = cur->next;
-  }
+  while (cur)
+    {
+      /* flush the write buffer */
+      if (flushbuf(cur) == EOF) return EOF;
+
+      if (cur->flags & D_READ) IBUF_DROP(cur);
+      cur = cur->next;
+    }
   return 0;
 }
 
-int fflush(FILE *stream) {
-  if (!stream)
-    return flushall();
+int
+fflush(FILE *stream)
+{
+  /* If stream is NULL, flush all the streams. */
+  if (!stream) return flushall();
 
-  if (stream->error || flushbuf(stream) == EOF)
-    return EOF;
-
-  if (stream->flags & D_READ)
-    IBUF_DROP(stream);
+  if (stream->error || flushbuf(stream) == EOF) return EOF;
+  if (stream->flags & D_READ) IBUF_DROP(stream);
 
   return 0;
 }

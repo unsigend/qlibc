@@ -18,6 +18,9 @@
 #include <sys/uio.h>
 #include <syscall.h>
 
-ssize_t preadv(int fd, const struct iovec *iov, int iovcnt, off_t offset) {
-  return __syscall(SYS_preadv, (long)fd, (long)iov, (long)iovcnt, (long)offset);
+ssize_t
+preadv(int fd, const struct iovec *iov, int iovcnt, off_t offset)
+{
+  return __syscall(SYS_preadv, (long)fd, (long)iov, (long)iovcnt,
+                   (long)offset);
 }

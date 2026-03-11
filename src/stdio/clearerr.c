@@ -17,9 +17,10 @@
 
 #include <stdio.h>
 
-void clearerr(FILE *stream) {
-  if (!stream)
-    return;
+void
+clearerr(FILE *stream)
+{
+  if (!stream) return;
 
   stream->eof = 0;
   stream->error = 0;

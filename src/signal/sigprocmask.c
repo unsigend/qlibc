@@ -19,11 +19,14 @@
 #include <signal.h>
 #include <sys/syscall.h>
 
-int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) {
-  if (how != SIG_BLOCK && how != SIG_UNBLOCK && how != SIG_SETMASK) {
-    errno = EINVAL;
-    return -1;
-  }
+int
+sigprocmask(int how, const sigset_t *set, sigset_t *oldset)
+{
+  if (how != SIG_BLOCK && how != SIG_UNBLOCK && how != SIG_SETMASK)
+    {
+      errno = EINVAL;
+      return -1;
+    }
 
   long ret = __syscall4_raw(SYS_rt_sigprocmask, how, set ? (long)set : 0,
                             oldset ? (long)oldset : 0, (long)sizeof(sigset_t));

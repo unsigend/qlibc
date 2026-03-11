@@ -20,12 +20,14 @@
 
 #define MAX_SIGNUM 64
 
-int sigismember(const sigset_t *set, int signum) {
-  if (!set)
-    return -1;
-  if (signum < 1 || signum > MAX_SIGNUM) {
-    errno = EINVAL;
-    return -1;
-  }
+int
+sigismember(const sigset_t *set, int signum)
+{
+  if (!set) return -1;
+  if (signum < 1 || signum > MAX_SIGNUM)
+    {
+      errno = EINVAL;
+      return -1;
+    }
   return (*set & (1ULL << (signum - 1))) != 0;
 }

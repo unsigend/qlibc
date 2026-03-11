@@ -18,8 +18,9 @@
 #include "strtox.h"
 #include <limits.h>
 
-unsigned long strtoul(const char *restrict str, char **restrict str_end,
-                      int base) {
+unsigned long
+strtoul(const char *restrict str, char **restrict str_end, int base)
+{
   int neg = 0;
   unsigned long long r = strtox(str, str_end, base, (ULL)ULONG_MAX, &neg);
   return neg ? (UL)-r : (UL)r;

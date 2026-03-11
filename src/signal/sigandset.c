@@ -17,9 +17,10 @@
 
 #include <signal.h>
 
-int sigandset(sigset_t *dest, const sigset_t *left, const sigset_t *right) {
-  if (!dest || !left || !right)
-    return -1;
+int
+sigandset(sigset_t *dest, const sigset_t *left, const sigset_t *right)
+{
+  if (!dest || !left || !right) return -1;
   *dest = *left & *right;
   return 0;
 }

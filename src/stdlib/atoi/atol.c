@@ -17,4 +17,8 @@
 
 extern long long atoll(const char *str);
 
-long atol(const char *str) { return (long)atoll(str); }
+long
+atol(const char *str)
+{
+  return (long)atoll(str);
+}

@@ -20,41 +20,43 @@
 
 #define PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
-FILE *fopen(const char *restrict filename, const char *restrict mode) {
+FILE *
+fopen(const char *restrict filename, const char *restrict mode)
+{
   int fd;
   int oflags;
   int bufmode;
   FILE *stream;
 
-  if (!filename || !mode)
-    return NULL;
+  if (!filename || !mode) return NULL;
 
-  switch (mode[0]) {
-  case 'r':
-    oflags = O_RDONLY;
-    break;
-  case 'w':
-    oflags = O_WRONLY | O_CREAT | O_TRUNC;
-    break;
-  case 'a':
-    oflags = O_WRONLY | O_CREAT | O_APPEND;
-    break;
-  default:
-    return NULL;
-  }
+  switch (mode[0])
+    {
+    case 'r':
+      oflags = O_RDONLY;
+      break;
+    case 'w':
+      oflags = O_WRONLY | O_CREAT | O_TRUNC;
+      break;
+    case 'a':
+      oflags = O_WRONLY | O_CREAT | O_APPEND;
+      break;
+    default:
+      return NULL;
+    }
 
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
   fd = open(filename, oflags, PERM);
-  if (fd == -1)
-    return NULL;
+  if (fd == -1) return NULL;
 
   stream = malloc(sizeof(FILE));
-  if (!stream) {
-    close(fd);
-    return NULL;
-  }
+  if (!stream)
+    {
+      close(fd);
+      return NULL;
+    }
 
   bufmode = isatty(fd) ? _IOLBF : _IOFBF;
 

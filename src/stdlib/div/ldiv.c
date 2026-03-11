@@ -17,4 +17,8 @@
 
 #include <stdlib.h>
 
-ldiv_t ldiv(long x, long y) { return (ldiv_t){x / y, x % y}; }
+ldiv_t
+ldiv(long x, long y)
+{
+  return (ldiv_t){ x / y, x % y };
+}

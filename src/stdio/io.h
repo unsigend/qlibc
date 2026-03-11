@@ -33,8 +33,8 @@
 
 #define IBUF_FULL(s) ((s)->rpos == (s)->rend) /* input buffer is full */
 #define IBUF_EMPTY(s) ((s)->rpos == (s)->buf) /* input buffer is empty */
-#define IBUF_DROP(s)                                                           \
-  ((s)->rpos = (s)->rend = (s)->buf)            /* drop input buffer           \
+#define IBUF_DROP(s)                                                          \
+  ((s)->rpos = (s)->rend = (s)->buf)            /* drop input buffer          \
                                                  */
 #define OBUF_FULL(s) ((s)->wpos == (s)->wend)   /* output buffer is full */
 #define OBUF_EMPTY(s) ((s)->wpos == (s)->wbase) /* output buffer is empty */
@@ -61,8 +61,8 @@ extern int refill(FILE *stream);
 /* Flush the write buffer. Return 0 on success, EOF on failure. */
 extern int flushbuf(FILE *stream);
 
-/* Write all the data to the file descriptor. Return the number of bytes written
-   on success, -1 on failure. */
+/* Write all the data to the file descriptor. Return the number of bytes
+   written on success, -1 on failure. */
 extern int writeall(int fd, const unsigned char *buf, ssize_t n);
 
 /* Reset the buffer pointers to initial state. */

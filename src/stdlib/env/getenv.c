@@ -18,16 +18,16 @@
 #include "env.h"
 #include <string.h>
 
-char *getenv(const char *name) {
-  if (!name || !environ)
-    return NULL;
+char *
+getenv(const char *name)
+{
+  if (!name || !environ) return NULL;
   size_t len = strlen(name);
-  if (!len)
-    return NULL;
-  for (size_t i = 0; environ[i]; i++) {
-    if (!strncmp(environ[i], name, len) && environ[i][len] == '=') {
+  if (!len) return NULL;
+
+  for (size_t i = 0; environ[i]; i++)
+    if (!strncmp(environ[i], name, len) && environ[i][len] == '=')
       return environ[i] + len + 1;
-    }
-  }
+
   return NULL;
 }

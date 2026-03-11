@@ -18,15 +18,15 @@
 #include <signal.h>
 #include <stddef.h>
 
-sighandler_t signal(int signum, sighandler_t handler) {
+sighandler_t
+signal(int signum, sighandler_t handler)
+{
   struct sigaction act, oldact;
   act.sa_handler = handler;
   sigemptyset(&act.sa_mask);
   act.sa_flags = SA_RESTART; /* Restart system calls when possible. */
   act.sa_restorer = NULL;
 
-  if (sigaction(signum, &act, &oldact) < 0) {
-    return SIG_ERR;
-  }
+  if (sigaction(signum, &act, &oldact) < 0) return SIG_ERR;
   return oldact.sa_handler;
 }

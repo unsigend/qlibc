@@ -18,9 +18,9 @@
 #include <signal.h>
 #include <stdio.h>
 
-void psignal(int sig, const char *msg) {
-  if (msg && *msg) {
-    fprintf(stderr, "%s: ", msg);
-  }
+void
+psignal(int sig, const char *msg)
+{
+  if (msg && *msg) fprintf(stderr, "%s: ", msg);
   fprintf(stderr, "%s\n", strsignal(sig));
 }

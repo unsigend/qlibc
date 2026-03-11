@@ -19,46 +19,49 @@
 #include <stdio.h>
 
 static const char *sigdescs[32] = {
-    [SIGHUP] = "Hangup",
-    [SIGINT] = "Interrupt",
-    [SIGQUIT] = "Quit",
-    [SIGILL] = "Illegal instruction",
-    [SIGTRAP] = "Trace/breakpoint trap",
-    [SIGABRT] = "Aborted",
-    [SIGBUS] = "Bus error",
-    [SIGFPE] = "Floating point exception",
-    [SIGKILL] = "Killed",
-    [SIGUSR1] = "User defined signal 1",
-    [SIGSEGV] = "Segmentation fault",
-    [SIGUSR2] = "User defined signal 2",
-    [SIGPIPE] = "Broken pipe",
-    [SIGALRM] = "Alarm clock",
-    [SIGTERM] = "Terminated",
-    [SIGSTKFLT] = "Stack fault",
-    [SIGCHLD] = "Child exited",
-    [SIGCONT] = "Continued",
-    [SIGSTOP] = "Stopped (signal)",
-    [SIGTSTP] = "Stopped",
-    [SIGTTIN] = "Stopped (tty input)",
-    [SIGTTOU] = "Stopped (tty output)",
-    [SIGURG] = "Urgent I/O condition",
-    [SIGXCPU] = "CPU time limit exceeded",
-    [SIGXFSZ] = "File size limit exceeded",
-    [SIGVTALRM] = "Virtual timer expired",
-    [SIGPROF] = "Profiling timer expired",
-    [SIGWINCH] = "Window changed",
-    [SIGPOLL] = "I/O possible",
-    [SIGPWR] = "Power failure",
-    [SIGSYS] = "Bad system call",
+  [SIGHUP] = "Hangup",
+  [SIGINT] = "Interrupt",
+  [SIGQUIT] = "Quit",
+  [SIGILL] = "Illegal instruction",
+  [SIGTRAP] = "Trace/breakpoint trap",
+  [SIGABRT] = "Aborted",
+  [SIGBUS] = "Bus error",
+  [SIGFPE] = "Floating point exception",
+  [SIGKILL] = "Killed",
+  [SIGUSR1] = "User defined signal 1",
+  [SIGSEGV] = "Segmentation fault",
+  [SIGUSR2] = "User defined signal 2",
+  [SIGPIPE] = "Broken pipe",
+  [SIGALRM] = "Alarm clock",
+  [SIGTERM] = "Terminated",
+  [SIGSTKFLT] = "Stack fault",
+  [SIGCHLD] = "Child exited",
+  [SIGCONT] = "Continued",
+  [SIGSTOP] = "Stopped (signal)",
+  [SIGTSTP] = "Stopped",
+  [SIGTTIN] = "Stopped (tty input)",
+  [SIGTTOU] = "Stopped (tty output)",
+  [SIGURG] = "Urgent I/O condition",
+  [SIGXCPU] = "CPU time limit exceeded",
+  [SIGXFSZ] = "File size limit exceeded",
+  [SIGVTALRM] = "Virtual timer expired",
+  [SIGPROF] = "Profiling timer expired",
+  [SIGWINCH] = "Window changed",
+  [SIGPOLL] = "I/O possible",
+  [SIGPWR] = "Power failure",
+  [SIGSYS] = "Bad system call",
 };
 
 #define BUFSZ 64
-static char unknownbuf[BUFSZ] = {0};
+static char unknownbuf[BUFSZ];
 
-char *strsignal(int sig) {
-  if (sig < 0 || sig >= 32 || !sigdescs[sig]) {
-    snprintf(unknownbuf, BUFSZ, "Unknown signal %d", sig);
-    return (char *)unknownbuf;
-  }
+char *
+strsignal(int sig)
+{
+  if (sig < 0 || sig >= 32 || !sigdescs[sig])
+    {
+      snprintf(unknownbuf, BUFSZ, "Unknown signal %d", sig);
+      return (char *)unknownbuf;
+    }
   return (char *)sigdescs[sig];
 }

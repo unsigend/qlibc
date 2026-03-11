@@ -17,19 +17,22 @@
 
 #include <ctype.h>
 
-long long atoll(const char *str) {
+long long
+atoll(const char *str)
+{
   long long n = 0;
   int neg = 0;
 
   while (isspace(*str))
     ++str;
 
-  switch (*str) {
-  case '-':
-    neg = 1;
-  case '+':
-    ++str;
-  }
+  switch (*str)
+    {
+    case '-':
+      neg = 1;
+    case '+':
+      ++str;
+    }
 
   while (isdigit(*str))
     n = n * 10 + (*str++ - '0');

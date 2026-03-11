@@ -16,29 +16,27 @@
  */
 #include <string.h>
 
-char *strtok(char *restrict str, const char *restrict delim) {
+char *
+strtok(char *restrict str, const char *restrict delim)
+{
   static char *saved = NULL;
-  if (str == NULL) {
-    if (saved == NULL) {
-      return NULL;
+  if (str == NULL)
+    {
+      if (saved == NULL) return NULL;
+      str = saved;
     }
-    str = saved;
-  }
-  if (*str == '\0') {
-    saved = NULL;
-    return NULL;
-  }
+  if (*str == '\0') return NULL;
+
   str += strspn(str, delim);
-  if (*str == '\0') {
-    saved = NULL;
-    return NULL;
-  }
+  if (*str == '\0') return NULL;
+
   char *token = str;
   str += strcspn(str, delim);
-  if (*str == '\0') {
-    saved = NULL;
-    return token;
-  }
+  if (*str == '\0')
+    {
+      saved = NULL;
+      return token;
+    }
   *str = '\0';
   saved = str + 1;
   return token;

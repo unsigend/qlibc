@@ -23,6 +23,8 @@
    part of POSIX standard. It will always return the previous heap address and
    ignore the errno. */
 
-void *__brk(void *addr) {
+void *
+__brk(void *addr)
+{
   return (void *)__syscall1_raw(SYS_brk, (uintptr_t)addr);
 }

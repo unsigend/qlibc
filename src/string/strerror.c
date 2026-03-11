@@ -34,15 +34,12 @@ static const char *unknown = "Unknown error";
 
 #define ARRAY_SZ(arr) (sizeof(arr) / sizeof(arr[0]))
 
-char *strerror(int errnum) {
-  if (errnum < 0) {
-    return (char *)unknown;
-  }
+char *
+strerror(int errnum)
+{
+  if (errnum < 0) return (char *)unknown;
   unsigned long i;
-  for (i = 0; i < ARRAY_SZ(errnums); i++) {
-    if (errnums[i] == errnum) {
-      return (char *)errorstrs[i];
-    }
-  }
+  for (i = 0; i < ARRAY_SZ(errnums); ++i)
+    if (errnums[i] == errnum) return (char *)errorstrs[i];
   return (char *)unknown;
 }

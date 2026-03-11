@@ -18,8 +18,9 @@
 #ifndef _STRTOX_H_
 #define _STRTOX_H_ 1
 
-/* Core parser function for converting a string to a number. The lim is positive
-   boundary, if the sequence contains negative sign, set the neg to 1. */
+/* Core parser function for converting a string to a number. The lim is
+   positive boundary, if the sequence contains negative sign, set the neg to 1.
+ */
 extern unsigned long long strtox(const char *restrict str,
                                  char **restrict str_end, int base,
                                  unsigned long long lim, int *neg);

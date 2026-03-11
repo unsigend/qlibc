@@ -19,21 +19,23 @@
 
 #define VMODE(mode) ((mode) == _IONBF || (mode) == _IOLBF || (mode) == _IOFBF)
 
-int setvbuf(FILE *restrict stream, char *restrict buffer, int mode,
-            size_t size) {
-  if (!stream || !VMODE(mode) || stream->buf)
-    return EOF;
+int
+setvbuf(FILE *restrict stream, char *restrict buffer, int mode, size_t size)
+{
+  if (!stream || !VMODE(mode) || stream->buf) return EOF;
 
-  if (buffer) {
-    stream->buf = (unsigned char *)buffer;
-    stream->bufmode = mode;
-    stream->bufsz = size;
+  if (buffer)
+    {
+      stream->buf = (unsigned char *)buffer;
+      stream->bufmode = mode;
+      stream->bufsz = size;
 
-    resetbufp(stream, stream->buf, size);
-  } else {
-    stream->bufmode = mode;
-    if (allocbuf(stream) == EOF)
-      return EOF;
-  }
+      resetbufp(stream, stream->buf, size);
+    }
+  else
+    {
+      stream->bufmode = mode;
+      if (allocbuf(stream) == EOF) return EOF;
+    }
   return 0;
 }

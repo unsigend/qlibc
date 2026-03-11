@@ -17,4 +17,8 @@
 
 #include <unistd.h>
 
-off_t tell(int fd) { return lseek(fd, 0, SEEK_CUR); }
+off_t
+tell(int fd)
+{
+  return lseek(fd, 0, SEEK_CUR);
+}

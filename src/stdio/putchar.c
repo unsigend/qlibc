@@ -17,4 +17,8 @@
 
 #include <stdio.h>
 
-int putchar(int ch) { return fputc(ch, stdout); }
+int
+putchar(int ch)
+{
+  return fputc(ch, stdout);
+}

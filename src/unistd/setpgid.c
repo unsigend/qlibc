@@ -18,4 +18,8 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-int setpgid(pid_t pid, pid_t pgid) { return __syscall(SYS_setpgid, pid, pgid); }
+int
+setpgid(pid_t pid, pid_t pgid)
+{
+  return __syscall(SYS_setpgid, pid, pgid);
+}

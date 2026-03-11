@@ -23,8 +23,8 @@
 /* This variable will be set by the CRT. */
 extern char **environ;
 
-/* The __heap_environ is used to store the environment variables in heap. Always
-   sync with environ. */
+/* The __heap_environ is used to store the environment variables in heap.
+   Always sync with environ. */
 extern char **__heap_environ;
 
 /* These Internal helper functions are used to manipulate the environment

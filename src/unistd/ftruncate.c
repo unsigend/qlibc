@@ -18,6 +18,8 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-int ftruncate(int fd, off_t length) {
+int
+ftruncate(int fd, off_t length)
+{
   return __syscall(SYS_ftruncate, (long)fd, (long)length);
 }

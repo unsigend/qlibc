@@ -17,16 +17,15 @@
 
 #include <stddef.h>
 
-size_t strspn(const char *str, const char *charset) {
-  unsigned char map[256] = {0};
+size_t
+strspn(const char *str, const char *charset)
+{
+  unsigned char map[256] = { 0 };
   size_t n = 0;
-  for (; *charset; ++charset) {
+  for (; *charset; ++charset)
     map[(unsigned char)*charset] = 1;
-  }
 
-  while (map[*((unsigned char *)str)]) {
+  while (map[*((unsigned char *)str++)])
     ++n;
-    ++str;
-  }
   return n;
 }

@@ -18,6 +18,8 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-int truncate(const char *path, off_t length) {
+int
+truncate(const char *path, off_t length)
+{
   return __syscall(SYS_truncate, (long)path, (long)length);
 }

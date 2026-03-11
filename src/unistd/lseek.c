@@ -18,6 +18,8 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-off_t lseek(int fd, off_t offset, int whence) {
+off_t
+lseek(int fd, off_t offset, int whence)
+{
   return __syscall(SYS_lseek, (long)fd, (long)offset, (long)whence);
 }

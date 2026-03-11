@@ -20,17 +20,16 @@
 #include <string.h>
 #include <unistd.h>
 
-int fclose(FILE *stream) {
+int
+fclose(FILE *stream)
+{
+  if (!stream) return EOF;
+
   int fd;
-
-  if (!stream)
-    return EOF;
-
   fd = stream->fd;
 
   /* flush the buffered write data */
-  if (fflush(stream) == EOF)
-    return EOF;
+  if (fflush(stream) == EOF) return EOF;
 
   /* remove the stream from global stream list */
   if (stream->prev)
@@ -38,25 +37,27 @@ int fclose(FILE *stream) {
   else
     stdio_head = stream->next;
 
-  if (stream->next)
-    stream->next->prev = stream->prev;
+  if (stream->next) stream->next->prev = stream->prev;
 
   /* free the buffer if not managed by user */
-  if (stream->flags & S_MYBUF && stream->buf) {
-    free(stream->buf);
-    stream->buf = NULL;
-  }
+  if (stream->flags & S_MYBUF && stream->buf)
+    {
+      free(stream->buf);
+      stream->buf = NULL;
+    }
 
-  if (stream->shbuf) {
-    free(stream->shbuf);
-    stream->shbuf = NULL;
-  }
+  if (stream->shbuf)
+    {
+      free(stream->shbuf);
+      stream->shbuf = NULL;
+    }
 
   /* close the file descriptor */
-  if (close(fd) == -1) {
-    stream->error = 1;
-    return EOF;
-  }
+  if (close(fd) == -1)
+    {
+      stream->error = 1;
+      return EOF;
+    }
 
   if (!(stream->flags & S_STATIC))
     free(stream);

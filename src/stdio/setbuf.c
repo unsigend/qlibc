@@ -17,6 +17,8 @@
 
 #include <stdio.h>
 
-void setbuf(FILE *restrict stream, char *restrict buffer) {
+void
+setbuf(FILE *restrict stream, char *restrict buffer)
+{
   setvbuf(stream, buffer, buffer ? _IOFBF : _IONBF, BUFSIZ);
 }

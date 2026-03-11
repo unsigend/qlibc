@@ -17,9 +17,10 @@
 
 #include <stdio.h>
 
-int feof(FILE *stream) {
-  if (!stream)
-    return 0;
+int
+feof(FILE *stream)
+{
+  if (!stream) return 0;
 
   return stream->eof;
 }

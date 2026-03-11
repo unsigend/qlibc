@@ -17,6 +17,8 @@
 
 #include <syscall.h>
 
-int dup3(int fd, int fd2, int flags) {
+int
+dup3(int fd, int fd2, int flags)
+{
   return __syscall(SYS_dup3, (long)fd, (long)fd2, (long)flags);
 }

@@ -18,9 +18,10 @@
 #include <stdio.h>
 #include <string.h>
 
-int fputs(const char *restrict str, FILE *stream) {
-  if (!str || !stream)
-    return EOF;
+int
+fputs(const char *restrict str, FILE *stream)
+{
+  if (!str || !stream) return EOF;
   size_t len = strlen(str);
   return (fwrite(str, 1, len, stream) == len) ? 0 : EOF;
 }

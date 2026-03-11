@@ -22,35 +22,39 @@
 
 #define MAX_SIGNUM 64
 
-int sigaction(int signum, const struct sigaction *act,
-              struct sigaction *oldact) {
-  if (signum < 1 || signum > MAX_SIGNUM || signum == SIGKILL ||
-      signum == SIGSTOP) {
-    errno = EINVAL;
-    return -1;
-  }
+int
+sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+{
+  if (signum < 1 || signum > MAX_SIGNUM || signum == SIGKILL
+      || signum == SIGSTOP)
+    {
+      errno = EINVAL;
+      return -1;
+    }
   struct k_sigaction k_act;
   struct k_sigaction k_oldact;
 
-  if (act) {
-    k_act.handler = act->sa_handler;
-    k_act.flags = (unsigned long)act->sa_flags;
-    k_act.restorer = act->sa_restorer;
-    k_act.mask[0] = (unsigned)(act->sa_mask & 0xFFFFFFFF);
-    k_act.mask[1] = (unsigned)(act->sa_mask >> 32);
-  }
+  if (act)
+    {
+      k_act.handler = act->sa_handler;
+      k_act.flags = (unsigned long)act->sa_flags;
+      k_act.restorer = act->sa_restorer;
+      k_act.mask[0] = (unsigned)(act->sa_mask & 0xFFFFFFFF);
+      k_act.mask[1] = (unsigned)(act->sa_mask >> 32);
+    }
 
-  long ret =
-      __syscall4_raw(SYS_rt_sigaction, signum, act ? (long)&k_act : 0,
-                     oldact ? (long)&k_oldact : 0, (long)sizeof(sigset_t));
+  long ret
+      = __syscall4_raw(SYS_rt_sigaction, signum, act ? (long)&k_act : 0,
+                       oldact ? (long)&k_oldact : 0, (long)sizeof(sigset_t));
 
-  if (ret >= 0 && oldact) {
-    oldact->sa_handler = k_oldact.handler;
-    oldact->sa_flags = k_oldact.flags;
-    oldact->sa_restorer = k_oldact.restorer;
-    oldact->sa_mask = ((unsigned long long)k_oldact.mask[0] |
-                       (unsigned long long)k_oldact.mask[1] << 32);
-  }
+  if (ret >= 0 && oldact)
+    {
+      oldact->sa_handler = k_oldact.handler;
+      oldact->sa_flags = k_oldact.flags;
+      oldact->sa_restorer = k_oldact.restorer;
+      oldact->sa_mask = ((unsigned long long)k_oldact.mask[0]
+                         | (unsigned long long)k_oldact.mask[1] << 32);
+    }
 
   return __syscall_ret(ret);
 }
