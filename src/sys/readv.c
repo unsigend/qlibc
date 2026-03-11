@@ -18,8 +18,7 @@
 #include <sys/uio.h>
 #include <syscall.h>
 
-ssize_t
-readv(int fd, const struct iovec *iov, int iovcnt)
+ssize_t readv(int fd, const struct iovec *iov, int iovcnt)
 {
   return __syscall(SYS_readv, (long)fd, (long)iov, (long)iovcnt);
 }

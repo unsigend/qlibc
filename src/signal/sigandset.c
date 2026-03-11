@@ -17,8 +17,7 @@
 
 #include <signal.h>
 
-int
-sigandset(sigset_t *dest, const sigset_t *left, const sigset_t *right)
+int sigandset(sigset_t *dest, const sigset_t *left, const sigset_t *right)
 {
   if (!dest || !left || !right)
     return -1;

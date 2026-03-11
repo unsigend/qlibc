@@ -1,21 +1,18 @@
 #include <stdarg.h>
 #include <utest.h>
 
-static void
-sum_ints(int *result, int count, ...)
+static void sum_ints(int *result, int count, ...)
 {
   va_list args;
   va_start(args, count);
   *result = 0;
-  for (int i = 0; i < count; i++)
-    {
-      *result += va_arg(args, int);
-    }
+  for (int i = 0; i < count; i++) {
+    *result += va_arg(args, int);
+  }
   va_end(args);
 }
 
-static void
-modify_ints(int *a, int *b, int *c, ...)
+static void modify_ints(int *a, int *b, int *c, ...)
 {
   va_list args;
   va_start(args, c);
@@ -25,21 +22,18 @@ modify_ints(int *a, int *b, int *c, ...)
   va_end(args);
 }
 
-static void
-sum_doubles(double *result, int count, ...)
+static void sum_doubles(double *result, int count, ...)
 {
   va_list args;
   va_start(args, count);
   *result = 0.0;
-  for (int i = 0; i < count; i++)
-    {
-      *result += va_arg(args, double);
-    }
+  for (int i = 0; i < count; i++) {
+    *result += va_arg(args, double);
+  }
   va_end(args);
 }
 
-static void
-modify_chars(char *a, char *b, ...)
+static void modify_chars(char *a, char *b, ...)
 {
   va_list args;
   va_start(args, b);
@@ -48,8 +42,7 @@ modify_chars(char *a, char *b, ...)
   va_end(args);
 }
 
-static void
-modify_pointers(int **a, int **b, ...)
+static void modify_pointers(int **a, int **b, ...)
 {
   va_list args;
   va_start(args, b);
@@ -58,22 +51,19 @@ modify_pointers(int **a, int **b, ...)
   va_end(args);
 }
 
-static void
-va_copy_test(int *result, int count, ...)
+static void va_copy_test(int *result, int count, ...)
 {
   va_list args1, args2;
   va_start(args1, count);
   va_copy(args2, args1);
   *result = 0;
-  for (int i = 0; i < count; i++)
-    {
-      *result += va_arg(args1, int);
-    }
+  for (int i = 0; i < count; i++) {
+    *result += va_arg(args1, int);
+  }
   int sum2 = 0;
-  for (int i = 0; i < count; i++)
-    {
-      sum2 += va_arg(args2, int);
-    }
+  for (int i = 0; i < count; i++) {
+    sum2 += va_arg(args2, int);
+  }
   va_end(args1);
   va_end(args2);
   *result = (*result == sum2) ? *result : -1;

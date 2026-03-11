@@ -104,8 +104,7 @@ UTEST_TEST_CASE(out_p)
   }
   {
     int arr[4];
-    n = snprintf((char *)buf, BUFSZ, "%p %p", (void *)&arr[0],
-                 (void *)&arr[3]);
+    n = snprintf((char *)buf, BUFSZ, "%p %p", (void *)&arr[0], (void *)&arr[3]);
     EXPECT_GREATER_INT(n, 5);
     {
       char *end;

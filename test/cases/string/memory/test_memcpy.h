@@ -5,7 +5,7 @@
 UTEST_TEST_CASE(memcpy)
 {
   {
-    char src[] = { 'a', 'b', 'c', 'd', 'e' };
+    char src[] = {'a', 'b', 'c', 'd', 'e'};
     char dest[5];
     void *result = memcpy(dest, src, 5);
     EXPECT_TRUE(result == dest);
@@ -13,7 +13,7 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'a', 'b', 'c' };
+    char src[] = {'a', 'b', 'c'};
     char dest[3];
     void *result = memcpy(dest, src, 3);
     EXPECT_TRUE(result == dest);
@@ -21,7 +21,7 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'x' };
+    char src[] = {'x'};
     char dest[1];
     void *result = memcpy(dest, src, 1);
     EXPECT_TRUE(result == dest);
@@ -29,14 +29,14 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'a', 'b', 'c', 'd', 'e' };
+    char src[] = {'a', 'b', 'c', 'd', 'e'};
     char dest[5];
     void *result = memcpy(dest, src, 0);
     EXPECT_TRUE(result == dest);
   }
 
   {
-    unsigned char src[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    unsigned char src[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     unsigned char dest[10];
     void *result = memcpy(dest, src, 10);
     EXPECT_TRUE(result == dest);
@@ -44,7 +44,7 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    unsigned char src[] = { 255, 128, 64, 32, 16 };
+    unsigned char src[] = {255, 128, 64, 32, 16};
     unsigned char dest[5];
     void *result = memcpy(dest, src, 5);
     EXPECT_TRUE(result == dest);
@@ -52,7 +52,7 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'H', 'e', 'l', 'l', 'o' };
+    char src[] = {'H', 'e', 'l', 'l', 'o'};
     char dest[5];
     void *result = memcpy(dest, src, 5);
     EXPECT_TRUE(result == dest);
@@ -60,7 +60,7 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'a', 'a', 'a', 'a', 'a' };
+    char src[] = {'a', 'a', 'a', 'a', 'a'};
     char dest[5];
     void *result = memcpy(dest, src, 5);
     EXPECT_TRUE(result == dest);
@@ -70,17 +70,16 @@ UTEST_TEST_CASE(memcpy)
   {
     char src[100];
     char dest[100];
-    for (int i = 0; i < 100; i++)
-      {
-        src[i] = (char)(i % 256);
-      }
+    for (int i = 0; i < 100; i++) {
+      src[i] = (char)(i % 256);
+    }
     void *result = memcpy(dest, src, 100);
     EXPECT_TRUE(result == dest);
     EXPECT_TRUE(memcmp(dest, src, 100) == 0);
   }
 
   {
-    char src[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+    char src[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
     char dest[10];
     void *result = memcpy(dest, src, 10);
     EXPECT_TRUE(result == dest);
@@ -88,7 +87,7 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'a', 'b', 'c', 'd', 'e' };
+    char src[] = {'a', 'b', 'c', 'd', 'e'};
     char dest[10];
     void *result = memcpy(dest, src, 3);
     EXPECT_TRUE(result == dest);
@@ -96,18 +95,17 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    unsigned char src[] = { 0, 1, 2, 3, 4 };
+    unsigned char src[] = {0, 1, 2, 3, 4};
     unsigned char dest[5];
     void *result = memcpy(dest, src, 5);
     EXPECT_TRUE(result == dest);
-    for (int i = 0; i < 5; i++)
-      {
-        EXPECT_TRUE(dest[i] == src[i]);
-      }
+    for (int i = 0; i < 5; i++) {
+      EXPECT_TRUE(dest[i] == src[i]);
+    }
   }
 
   {
-    char src[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' };
+    char src[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
     char dest[10];
     void *result = memcpy(dest, src, 10);
     EXPECT_TRUE(result == dest);
@@ -115,8 +113,8 @@ UTEST_TEST_CASE(memcpy)
   }
 
   {
-    char src[] = { 'x', 'y', 'z' };
-    char dest[5] = { 'a', 'b', 'c', 'd', 'e' };
+    char src[] = {'x', 'y', 'z'};
+    char dest[5] = {'a', 'b', 'c', 'd', 'e'};
     void *result = memcpy(dest, src, 3);
     EXPECT_TRUE(result == dest);
     EXPECT_TRUE(dest[0] == 'x');

@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-char *
-fgets(char *restrict str, int count, FILE *stream)
+char *fgets(char *restrict str, int count, FILE *stream)
 {
   if (!str || count <= 0 || !stream)
     return NULL;
@@ -26,15 +25,14 @@ fgets(char *restrict str, int count, FILE *stream)
   size_t rn = count - 1;
   size_t total = 0;
 
-  while (total < rn)
-    {
-      int ch = fgetc(stream);
-      if (ch == EOF)
-        break;
-      str[total++] = ch;
-      if (ch == '\n')
-        break;
-    }
+  while (total < rn) {
+    int ch = fgetc(stream);
+    if (ch == EOF)
+      break;
+    str[total++] = ch;
+    if (ch == '\n')
+      break;
+  }
 
   str[total] = '\0';
   return total ? str : NULL;

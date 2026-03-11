@@ -18,12 +18,11 @@
 #include <signal.h>
 #include <sys/syscall.h>
 
-int
-sigpending(sigset_t *set)
+int sigpending(sigset_t *set)
 {
   if (!set)
     return -1;
-  long ret
-      = __syscall2_raw(SYS_rt_sigpending, (long)set, (long)sizeof(sigset_t));
+  long ret =
+      __syscall2_raw(SYS_rt_sigpending, (long)set, (long)sizeof(sigset_t));
   return __syscall_ret(ret);
 }

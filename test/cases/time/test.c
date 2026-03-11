@@ -10,7 +10,4 @@ UTEST_TEST_CASE(type)
 #endif
 }
 
-UTEST_TEST_SUITE(time)
-{
-  UTEST_RUN_TEST_CASE(type);
-}
+UTEST_TEST_SUITE(time) { UTEST_RUN_TEST_CASE(type); }

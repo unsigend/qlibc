@@ -17,8 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *
-strdup(const char *src)
+char *strdup(const char *src)
 {
   size_t len = strlen(src);
   char *dest = malloc(len + 1);

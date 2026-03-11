@@ -19,8 +19,7 @@
 #include <sys/stat.h>
 #include <syscall.h>
 
-int
-creat(const char *pathname, mode_t mode)
+int creat(const char *pathname, mode_t mode)
 {
   return open(pathname, O_CREAT | O_WRONLY | O_TRUNC, mode);
 }

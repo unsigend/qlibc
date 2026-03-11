@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-int
-ferror(FILE *stream)
+int ferror(FILE *stream)
 {
   if (!stream)
     return 0;

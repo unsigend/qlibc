@@ -18,8 +18,7 @@
 #include <stdarg.h>
 #include <sys/syscall.h>
 
-long
-syscall(long number, ...)
+long syscall(long number, ...)
 {
   va_list args;
   va_start(args, number);

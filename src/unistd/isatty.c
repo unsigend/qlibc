@@ -19,8 +19,7 @@
 #include <sys/types.h>
 #include <termios.h>
 
-int
-isatty(int fd)
+int isatty(int fd)
 {
   struct termios ts;
   return ioctl(fd, TCGETS, &ts) == 0;

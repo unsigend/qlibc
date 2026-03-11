@@ -20,8 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int
-setenv(const char *name, const char *value, int overwrite)
+int setenv(const char *name, const char *value, int overwrite)
 {
   if (!name || !value)
     return -1;
@@ -32,36 +31,30 @@ setenv(const char *name, const char *value, int overwrite)
     return -1;
 
   /* Required size for name=value pair: namelen + '=' + valuelen + '\0' */
-  if (environ)
-    {
-      for (size_t i = 0; environ[i]; i++)
-        {
-          if (!strncmp(environ[i], name, namelen)
-              && environ[i][namelen] == '=')
-            {
-              if (!overwrite)
-                return 0;
-              environ[i] = malloc(namelen + valuelen + 2);
-              if (!environ[i])
-                {
-                  errno = ENOMEM;
-                  return -1;
-                }
-              memcpy(environ[i], name, namelen);
-              environ[i][namelen] = '=';
-              memcpy(environ[i] + namelen + 1, value, valuelen);
-              environ[i][namelen + valuelen + 1] = '\0';
-              return 0;
-            }
+  if (environ) {
+    for (size_t i = 0; environ[i]; i++) {
+      if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=') {
+        if (!overwrite)
+          return 0;
+        environ[i] = malloc(namelen + valuelen + 2);
+        if (!environ[i]) {
+          errno = ENOMEM;
+          return -1;
         }
+        memcpy(environ[i], name, namelen);
+        environ[i][namelen] = '=';
+        memcpy(environ[i] + namelen + 1, value, valuelen);
+        environ[i][namelen + valuelen + 1] = '\0';
+        return 0;
+      }
     }
+  }
 
   char *newstr = (char *)malloc(namelen + valuelen + 2);
-  if (!newstr)
-    {
-      errno = ENOMEM;
-      return -1;
-    }
+  if (!newstr) {
+    errno = ENOMEM;
+    return -1;
+  }
 
   memcpy(newstr, name, namelen);
   newstr[namelen] = '=';
@@ -69,11 +62,10 @@ setenv(const char *name, const char *value, int overwrite)
   newstr[namelen + valuelen + 1] = '\0';
 
   char **newenviron = env_expand(environ, newstr);
-  if (!newenviron)
-    {
-      free(newstr);
-      return -1; /* errno is set by env_expand */
-    }
+  if (!newenviron) {
+    free(newstr);
+    return -1; /* errno is set by env_expand */
+  }
 
   if (__heap_environ)
     free(__heap_environ);

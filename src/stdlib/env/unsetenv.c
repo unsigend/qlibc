@@ -20,8 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int
-unsetenv(const char *name)
+int unsetenv(const char *name)
 {
   if (!name || !name[0])
     return -1;
@@ -32,16 +31,14 @@ unsetenv(const char *name)
   char **newenviron = NULL;
   size_t namelen = strlen(name);
 
-  for (size_t i = 0; environ[i]; i++)
-    {
-      if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=')
-        {
-          newenviron = env_remove(environ, i, &inplace);
-          if (!newenviron)
-            return -1;
-          break;
-        }
+  for (size_t i = 0; environ[i]; i++) {
+    if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=') {
+      newenviron = env_remove(environ, i, &inplace);
+      if (!newenviron)
+        return -1;
+      break;
     }
+  }
 
   if (!newenviron || inplace)
     return 0;

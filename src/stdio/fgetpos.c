@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-int
-fgetpos(FILE *restrict stream, fpos_t *restrict pos)
+int fgetpos(FILE *restrict stream, fpos_t *restrict pos)
 {
   if (!stream || !pos)
     return -1;

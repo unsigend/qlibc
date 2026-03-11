@@ -18,8 +18,7 @@
 #include "env.h"
 #include <string.h>
 
-char *
-getenv(const char *name)
+char *getenv(const char *name)
 {
   if (!name || !environ)
     return NULL;

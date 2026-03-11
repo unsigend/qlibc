@@ -21,9 +21,8 @@
 
 #define PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
-FILE *
-freopen(const char *restrict filename, const char *restrict mode,
-        FILE *restrict stream)
+FILE *freopen(const char *restrict filename, const char *restrict mode,
+              FILE *restrict stream)
 {
   int fd, oflags;
 
@@ -34,31 +33,29 @@ freopen(const char *restrict filename, const char *restrict mode,
   if (fflush(stream) == EOF)
     return NULL;
 
-  if (close(stream->fd) == -1)
-    {
-      stream->error = 1;
-      return NULL;
-    }
+  if (close(stream->fd) == -1) {
+    stream->error = 1;
+    return NULL;
+  }
 
   if (stream->flags & S_MYBUF && stream->buf)
     free(stream->buf);
   if (stream->shbuf)
     free(stream->shbuf);
 
-  switch (mode[0])
-    {
-    case 'r':
-      oflags = O_RDONLY;
-      break;
-    case 'w':
-      oflags = O_WRONLY | O_CREAT | O_TRUNC;
-      break;
-    case 'a':
-      oflags = O_WRONLY | O_CREAT | O_APPEND;
-      break;
-    default:
-      return NULL;
-    }
+  switch (mode[0]) {
+  case 'r':
+    oflags = O_RDONLY;
+    break;
+  case 'w':
+    oflags = O_WRONLY | O_CREAT | O_TRUNC;
+    break;
+  case 'a':
+    oflags = O_WRONLY | O_CREAT | O_APPEND;
+    break;
+  default:
+    return NULL;
+  }
 
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;

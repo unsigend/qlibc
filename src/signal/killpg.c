@@ -17,8 +17,4 @@
 
 #include <signal.h>
 
-int
-killpg(int pgrp, int sig)
-{
-  return kill(-pgrp, sig);
-}
+int killpg(int pgrp, int sig) { return kill(-pgrp, sig); }

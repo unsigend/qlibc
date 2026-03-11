@@ -353,17 +353,15 @@ UTEST_TEST_CASE(strtoull)
     unsigned long long max_val = ULLONG_MAX;
     int len = 0;
     unsigned long long val = max_val;
-    while (val > 0)
-      {
-        str[len++] = '0' + (val % 10);
-        val /= 10;
-      }
-    for (int i = 0; i < len / 2; i++)
-      {
-        char tmp = str[i];
-        str[i] = str[len - 1 - i];
-        str[len - 1 - i] = tmp;
-      }
+    while (val > 0) {
+      str[len++] = '0' + (val % 10);
+      val /= 10;
+    }
+    for (int i = 0; i < len / 2; i++) {
+      char tmp = str[i];
+      str[i] = str[len - 1 - i];
+      str[len - 1 - i] = tmp;
+    }
     str[len] = '\0';
     errno = 0;
     result = strtoull(str, &endptr, 10);

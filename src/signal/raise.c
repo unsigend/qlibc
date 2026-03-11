@@ -18,8 +18,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-int
-raise(int sig)
+int raise(int sig)
 {
 #if __SUPPORT_THREADS
 #include <pthread.h>

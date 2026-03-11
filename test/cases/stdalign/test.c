@@ -44,8 +44,7 @@ UTEST_TEST_CASE(macros)
   EXPECT_TRUE(alignof(ptrdiff_t) <= sizeof(ptrdiff_t));
 
   {
-    struct test_struct
-    {
+    struct test_struct {
       char a;
       int b;
     };
@@ -54,16 +53,14 @@ UTEST_TEST_CASE(macros)
   }
 
   {
-    struct aligned_struct
-    {
+    struct aligned_struct {
       alignas(16) char data[16];
     };
     EXPECT_TRUE(alignof(struct aligned_struct) >= 16);
   }
 
   {
-    struct double_aligned
-    {
+    struct double_aligned {
       alignas(double) char c;
     };
     EXPECT_TRUE(alignof(struct double_aligned) >= alignof(double));

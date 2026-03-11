@@ -19,8 +19,8 @@
 #include <stddef.h>
 #include <string.h>
 
-size_t
-fread(void *restrict ptr, size_t size, size_t count, FILE *restrict stream)
+size_t fread(void *restrict ptr, size_t size, size_t count,
+             FILE *restrict stream)
 {
   if (!ptr || !size || !count || !stream || stream->error || stream->eof)
     return 0;
@@ -28,65 +28,57 @@ fread(void *restrict ptr, size_t size, size_t count, FILE *restrict stream)
   size_t nreq = size * count;
   size_t total = 0;
 
-  if (toin(stream) == EOF)
-    {
-      stream->error = 1;
-      return 0;
-    }
+  if (toin(stream) == EOF) {
+    stream->error = 1;
+    return 0;
+  }
 
-  if (!stream->buf && allocbuf(stream) == EOF)
-    {
-      stream->error = 1;
-      return 0;
-    }
+  if (!stream->buf && allocbuf(stream) == EOF) {
+    stream->error = 1;
+    return 0;
+  }
 
   /* fast path, read from buffer if possible */
-  if (nreq <= stream->bufsz)
-    {
-      while (total < nreq)
-        {
-          if (IBUF_FULL(stream) && refill(stream) == EOF)
-            return total / size;
+  if (nreq <= stream->bufsz) {
+    while (total < nreq) {
+      if (IBUF_FULL(stream) && refill(stream) == EOF)
+        return total / size;
 
-          size_t n = MIN((size_t)(stream->rend - stream->rpos), nreq - total);
-          memcpy(ptr, stream->rpos, n);
-          ptr = (unsigned char *)ptr + n;
-          total += n;
-          stream->rpos += n;
-        }
+      size_t n = MIN((size_t)(stream->rend - stream->rpos), nreq - total);
+      memcpy(ptr, stream->rpos, n);
+      ptr = (unsigned char *)ptr + n;
+      total += n;
+      stream->rpos += n;
     }
+  }
 
   /* slow path, read directly from system call */
-  else
-    {
-      /* consume the buffer left first */
-      size_t leftn = stream->rend - stream->rpos;
-      size_t oldbuffsz = stream->rend - stream->buf;
-      if (leftn)
-        {
-          memcpy(ptr, stream->rpos, leftn);
-          ptr = (unsigned char *)ptr + leftn;
-          total += leftn;
-        }
-      /* drop the buffer */
-      IBUF_DROP(stream);
-
-      /* read the rest from system call */
-      ssize_t rn = read(stream->fd, ptr, nreq - total);
-      if (rn == -1)
-        {
-          stream->error = 1;
-          return total / size;
-        }
-      if (rn == 0)
-        {
-          stream->eof = 1;
-          return total / size;
-        }
-      total += rn;
-      /* move old buffer and direct I/O size. */
-      stream->offset += rn + oldbuffsz;
+  else {
+    /* consume the buffer left first */
+    size_t leftn = stream->rend - stream->rpos;
+    size_t oldbuffsz = stream->rend - stream->buf;
+    if (leftn) {
+      memcpy(ptr, stream->rpos, leftn);
+      ptr = (unsigned char *)ptr + leftn;
+      total += leftn;
     }
+    /* drop the buffer */
+    IBUF_DROP(stream);
+
+    /* read the rest from system call */
+    ssize_t rn = read(stream->fd, ptr, nreq - total);
+    if (rn == -1) {
+      stream->error = 1;
+      return total / size;
+    }
+    if (rn == 0) {
+      stream->eof = 1;
+      return total / size;
+    }
+    total += rn;
+    /* move old buffer and direct I/O size. */
+    stream->offset += rn + oldbuffsz;
+  }
 
   return total / size;
 }

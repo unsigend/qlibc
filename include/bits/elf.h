@@ -54,8 +54,7 @@ typedef Elf64_Half Elf64_Versym;
 /* Number of identifier */
 #define EI_NIDENT (16)
 
-typedef struct
-{
+typedef struct {
   unsigned char e_ident[EI_NIDENT]; /* Magic number and other info */
   Elf32_Half e_type;                /* Object file type */
   Elf32_Half e_machine;             /* Architecture */
@@ -72,8 +71,7 @@ typedef struct
   Elf32_Half e_shstrndx;            /* Section header string table index */
 } Elf32_Ehdr;
 
-typedef struct
-{
+typedef struct {
   unsigned char e_ident[EI_NIDENT]; /* Magic number and other info */
   Elf64_Half e_type;                /* Object file type */
   Elf64_Half e_machine;             /* Architecture */
@@ -241,18 +239,18 @@ typedef struct
 #define EM_FIREPATH 78    /* Element 14 64-bit DSP Processor */
 #define EM_ZSP 79         /* LSI Logic 16-bit DSP Processor */
 #define EM_MMIX 80        /* Donald Knuth's educational 64-bit proc */
-#define EM_HUANY 81   /* Harvard University machine-independent object files */
-#define EM_PRISM 82   /* SiTera Prism */
-#define EM_AVR 83     /* Atmel AVR 8-bit microcontroller */
-#define EM_FR30 84    /* Fujitsu FR30 */
-#define EM_D10V 85    /* Mitsubishi D10V */
-#define EM_D30V 86    /* Mitsubishi D30V */
-#define EM_V850 87    /* NEC v850 */
-#define EM_M32R 88    /* Mitsubishi M32R */
-#define EM_MN10300 89 /* Matsushita MN10300 */
-#define EM_MN10200 90 /* Matsushita MN10200 */
-#define EM_PJ 91      /* picoJava */
-#define EM_OPENRISC 92       /* OpenRISC 32-bit embedded processor */
+#define EM_HUANY 81    /* Harvard University machine-independent object files */
+#define EM_PRISM 82    /* SiTera Prism */
+#define EM_AVR 83      /* Atmel AVR 8-bit microcontroller */
+#define EM_FR30 84     /* Fujitsu FR30 */
+#define EM_D10V 85     /* Mitsubishi D10V */
+#define EM_D30V 86     /* Mitsubishi D30V */
+#define EM_V850 87     /* NEC v850 */
+#define EM_M32R 88     /* Mitsubishi M32R */
+#define EM_MN10300 89  /* Matsushita MN10300 */
+#define EM_MN10200 90  /* Matsushita MN10200 */
+#define EM_PJ 91       /* picoJava */
+#define EM_OPENRISC 92 /* OpenRISC 32-bit embedded processor */
 #define EM_ARC_COMPACT 93    /* ARC International ARCompact */
 #define EM_XTENSA 94         /* Tensilica Xtensa Architecture */
 #define EM_VIDEOCORE 95      /* Alphamosaic VideoCore */
@@ -365,8 +363,7 @@ typedef struct
 #define EV_CURRENT 1 /* Current version */
 #define EV_NUM 2
 
-typedef struct
-{
+typedef struct {
   Elf32_Word sh_name;      /* Section name (string table index) */
   Elf32_Word sh_type;      /* Section type */
   Elf32_Word sh_flags;     /* Section flags */
@@ -379,8 +376,7 @@ typedef struct
   Elf32_Word sh_entsize;   /* Entry size if section holds table */
 } Elf32_Shdr;
 
-typedef struct
-{
+typedef struct {
   Elf64_Word sh_name;       /* Section name (string table index) */
   Elf64_Word sh_type;       /* Section type */
   Elf64_Xword sh_flags;     /* Section flags */
@@ -448,12 +444,11 @@ typedef struct
 #define SHF_MASKPROC 0xf0000000       /* Processor-specific */
 #define SHF_GNU_RETAIN (1 << 21)      /* Not to be GCed by linker */
 #define SHF_ORDERED (1 << 30) /* Special ordering requirement (Solaris) */
-#define SHF_EXCLUDE                                                           \
-  (1U << 31) /* Section is excluded unless referenced or allocated (Solaris)  \
+#define SHF_EXCLUDE                                                            \
+  (1U << 31) /* Section is excluded unless referenced or allocated (Solaris)   \
               */
 
-typedef struct
-{
+typedef struct {
   Elf32_Word st_name;     /* Symbol name (string table index) */
   Elf32_Addr st_value;    /* Symbol value */
   Elf32_Word st_size;     /* Symbol size */
@@ -462,8 +457,7 @@ typedef struct
   Elf32_Section st_shndx; /* Section index */
 } Elf32_Sym;
 
-typedef struct
-{
+typedef struct {
   Elf64_Word st_name;     /* Symbol name (string table index) */
   unsigned char st_info;  /* Symbol type and binding */
   unsigned char st_other; /* Symbol visibility */
@@ -506,14 +500,12 @@ typedef struct
 #define STT_LOPROC 13    /* Start of processor-specific */
 #define STT_HIPROC 15    /* End of processor-specific */
 
-typedef struct
-{
+typedef struct {
   Elf32_Addr r_offset; /* Address */
   Elf32_Word r_info;   /* Relocation type and symbol index */
 } Elf32_Rel;
 
-typedef struct
-{
+typedef struct {
   Elf64_Addr r_offset; /* Address */
   Elf64_Xword r_info;  /* Relocation type and symbol index */
 } Elf64_Rel;

@@ -20,8 +20,7 @@
 #include <sys/stat.h>
 #include <syscall.h>
 
-int
-open(const char *pathname, int flags, ...)
+int open(const char *pathname, int flags, ...)
 {
   va_list args;
   va_start(args, flags);

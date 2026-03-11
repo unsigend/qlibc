@@ -24,8 +24,7 @@
 #include <stdint.h>
 
 /* Returned by imaxdiv */
-typedef struct
-{
+typedef struct {
   intmax_t quot;
   intmax_t rem;
 } imaxdiv_t;

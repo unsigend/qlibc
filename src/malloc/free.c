@@ -18,18 +18,16 @@
 #include <sys/mman.h>
 
 /* Free memory allocated by malloc */
-void
-free(void *ptr)
+void free(void *ptr)
 {
   if (!ptr)
     return;
 
   block_t *blk = (block_t *)((unsigned char *)ptr - sizeof(header_t));
-  if (IS_MMAP(blk))
-    {
-      munmap((void *)blk, blk->header.sz);
-      return;
-    }
+  if (IS_MMAP(blk)) {
+    munmap((void *)blk, blk->header.sz);
+    return;
+  }
   if (!__heap.init)
     return;
 

@@ -18,8 +18,8 @@
 #include "mm/mm.h"
 #include <string.h>
 
-#if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__)                                  \
-    && __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
+#if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__) &&                                \
+    __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
 #include <errno.h>
 #endif
 
@@ -28,24 +28,22 @@ extern void *malloc(size_t size);
 /* Allocate memory for an array of num elements, each of which is size bytes,
    and initialize the memory to 0. */
 
-void *
-calloc(size_t num, size_t size)
+void *calloc(size_t num, size_t size)
 {
   if (!num || !size)
     return NULL;
 
   size_t sz;
 
-#if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__)                                  \
-    && __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
+#if defined(__QLIBC_CALLOC_CHECK_OVERFLOW__) &&                                \
+    __QLIBC_CALLOC_CHECK_OVERFLOW__ == 1
   /* Calculate the size of the memory requested in bytes, and detect if there
     is overflow */
 
-  if (__builtin_mul_overflow(num, size, &sz))
-    {
-      errno = ENOMEM;
-      return NULL;
-    }
+  if (__builtin_mul_overflow(num, size, &sz)) {
+    errno = ENOMEM;
+    return NULL;
+  }
 #else
   sz = num * size;
 #endif

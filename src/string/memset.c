@@ -17,8 +17,7 @@
 
 #include <stddef.h>
 
-void *
-memset(void *dest, int ch, size_t count)
+void *memset(void *dest, int ch, size_t count)
 {
   unsigned char *wp = (unsigned char *)dest;
   for (size_t i = 0; i < count; i++)

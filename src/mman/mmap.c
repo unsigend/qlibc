@@ -23,20 +23,17 @@
 #define OFF_MASK ((-0x2000ULL << (8 * sizeof(long) - 1)) | 0xfff)
 #define PAGEBITS 12
 
-void *
-mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
+void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 {
   long ret = 0;
-  if (offset & OFF_MASK)
-    {
-      errno = EINVAL;
-      return MAP_FAILED;
-    }
-  if (length >= PTRDIFF_MAX)
-    {
-      errno = ENOMEM;
-      return MAP_FAILED;
-    }
+  if (offset & OFF_MASK) {
+    errno = EINVAL;
+    return MAP_FAILED;
+  }
+  if (length >= PTRDIFF_MAX) {
+    errno = ENOMEM;
+    return MAP_FAILED;
+  }
 
 #ifdef SYS_mmap2
   ret = __syscall6_raw(SYS_mmap2, (uintptr_t)addr, length, prot, flags, fd,
@@ -45,8 +42,7 @@ mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
   ret = __syscall6_raw(SYS_mmap, (uintptr_t)addr, length, prot, flags, fd,
                        offset);
 #endif
-  if (ret == -EPERM && !addr && (flags & MAP_ANONYMOUS)
-      && !(flags & MAP_FIXED))
+  if (ret == -EPERM && !addr && (flags & MAP_ANONYMOUS) && !(flags & MAP_FIXED))
     ret = -ENOMEM;
   return (void *)__syscall_ret(ret);
 }

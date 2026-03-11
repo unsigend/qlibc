@@ -17,22 +17,19 @@
 
 #include "io.h"
 
-long
-ftell(FILE *stream)
+long ftell(FILE *stream)
 {
   if (!stream)
     return -1;
 
   off_t off;
-  if (stream->flags & D_READ)
-    {
-      off = stream->rpos - stream->buf;
-      off -= stream->shcnt;
-    }
-  if (stream->flags & D_WRITE)
-    {
-      off = stream->wpos - stream->wbase;
-    }
+  if (stream->flags & D_READ) {
+    off = stream->rpos - stream->buf;
+    off -= stream->shcnt;
+  }
+  if (stream->flags & D_WRITE) {
+    off = stream->wpos - stream->wbase;
+  }
 
   return stream->offset + off;
 }

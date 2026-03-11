@@ -17,8 +17,7 @@
 
 #include <sys/syscall.h>
 
-int
-execve(const char *filename, const char *argv[], const char *envp[])
+int execve(const char *filename, const char *argv[], const char *envp[])
 {
   return __syscall(SYS_execve, (long)filename, (long)argv, (long)envp);
 }

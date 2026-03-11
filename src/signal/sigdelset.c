@@ -20,16 +20,14 @@
 
 #define MAX_SIGNUM 64
 
-int
-sigdelset(sigset_t *set, int signum)
+int sigdelset(sigset_t *set, int signum)
 {
   if (!set)
     return -1;
-  if (signum < 1 || signum > MAX_SIGNUM)
-    {
-      errno = EINVAL;
-      return -1;
-    }
+  if (signum < 1 || signum > MAX_SIGNUM) {
+    errno = EINVAL;
+    return -1;
+  }
   *set &= ~(1ULL << (signum - 1));
   return 0;
 }

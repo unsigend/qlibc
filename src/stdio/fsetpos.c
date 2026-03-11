@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-int
-fsetpos(FILE *restrict stream, const fpos_t *restrict pos)
+int fsetpos(FILE *restrict stream, const fpos_t *restrict pos)
 {
   if (!stream || !pos)
     return -1;

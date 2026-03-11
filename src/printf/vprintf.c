@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-int
-vprintf(const char *restrict format, va_list vlist)
+int vprintf(const char *restrict format, va_list vlist)
 {
   return vfprintf(stdout, format, vlist);
 }

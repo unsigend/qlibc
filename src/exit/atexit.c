@@ -23,8 +23,7 @@
 void (*__exit_funcs[ATEXIT_MAX])(void);
 size_t __exit_func_count = 0;
 
-int
-atexit(void (*func)(void))
+int atexit(void (*func)(void))
 {
   if (__exit_func_count >= ATEXIT_MAX || ATEXIT_LOCKED())
     return -1;

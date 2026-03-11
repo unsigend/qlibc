@@ -17,8 +17,7 @@
 
 #include "io.h"
 
-int
-fputc(int ch, FILE *stream)
+int fputc(int ch, FILE *stream)
 {
   if (!stream || stream->error || stream->eof)
     return EOF;

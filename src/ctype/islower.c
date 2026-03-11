@@ -15,8 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-int
-islower(int c)
-{
-  return (unsigned)c - 'a' < 26;
-}
+int islower(int c) { return (unsigned)c - 'a' < 26; }

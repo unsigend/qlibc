@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-int
-puts(const char *str)
+int puts(const char *str)
 {
   if (!str || fputs(str, stdout) == EOF)
     return EOF;

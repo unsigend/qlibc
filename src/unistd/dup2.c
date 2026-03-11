@@ -17,8 +17,4 @@
 
 #include <syscall.h>
 
-int
-dup2(int fd, int fd2)
-{
-  return __syscall(SYS_dup2, (long)fd, (long)fd2);
-}
+int dup2(int fd, int fd2) { return __syscall(SYS_dup2, (long)fd, (long)fd2); }

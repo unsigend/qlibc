@@ -353,17 +353,15 @@ UTEST_TEST_CASE(strtoll)
     long long max_val = LLONG_MAX;
     int len = 0;
     long long val = max_val;
-    while (val > 0)
-      {
-        str[len++] = '0' + (val % 10);
-        val /= 10;
-      }
-    for (int i = 0; i < len / 2; i++)
-      {
-        char tmp = str[i];
-        str[i] = str[len - 1 - i];
-        str[len - 1 - i] = tmp;
-      }
+    while (val > 0) {
+      str[len++] = '0' + (val % 10);
+      val /= 10;
+    }
+    for (int i = 0; i < len / 2; i++) {
+      char tmp = str[i];
+      str[i] = str[len - 1 - i];
+      str[len - 1 - i] = tmp;
+    }
     str[len] = '\0';
     errno = 0;
     result = strtoll(str, &endptr, 10);
@@ -378,25 +376,20 @@ UTEST_TEST_CASE(strtoll)
     int len = 0;
     str[len++] = '-';
     unsigned long long abs_val;
-    if (min_val == LLONG_MIN)
-      {
-        abs_val = (unsigned long long)LLONG_MAX + 1;
-      }
-    else
-      {
-        abs_val = (unsigned long long)(-min_val);
-      }
+    if (min_val == LLONG_MIN) {
+      abs_val = (unsigned long long)LLONG_MAX + 1;
+    } else {
+      abs_val = (unsigned long long)(-min_val);
+    }
     int digits[32];
     int digit_count = 0;
-    while (abs_val > 0)
-      {
-        digits[digit_count++] = abs_val % 10;
-        abs_val /= 10;
-      }
-    for (int i = digit_count - 1; i >= 0; i--)
-      {
-        str[len++] = '0' + digits[i];
-      }
+    while (abs_val > 0) {
+      digits[digit_count++] = abs_val % 10;
+      abs_val /= 10;
+    }
+    for (int i = digit_count - 1; i >= 0; i--) {
+      str[len++] = '0' + digits[i];
+    }
     str[len] = '\0';
     errno = 0;
     result = strtoll(str, &endptr, 10);

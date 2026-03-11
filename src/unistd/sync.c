@@ -17,8 +17,4 @@
 
 #include <syscall.h>
 
-int
-sync(void)
-{
-  return __syscall(SYS_sync);
-}
+int sync(void) { return __syscall(SYS_sync); }

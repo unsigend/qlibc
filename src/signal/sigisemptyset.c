@@ -17,8 +17,7 @@
 
 #include <signal.h>
 
-int
-sigisemptyset(const sigset_t *set)
+int sigisemptyset(const sigset_t *set)
 {
   if (!set)
     return -1;

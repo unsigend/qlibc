@@ -30,14 +30,14 @@
    support.*/
 
 #define ALIGNMENT alignof(max_align_t) /* alignment size */
-#define ALIGN(size)                                                           \
-  (((size) + (ALIGNMENT - 1))                                                 \
-   & ~(ALIGNMENT - 1))  /* rounds up to the nearest multiple of ALIGNMENT */
+#define ALIGN(size)                                                            \
+  (((size) + (ALIGNMENT - 1)) &                                                \
+   ~(ALIGNMENT - 1))    /* rounds up to the nearest multiple of ALIGNMENT */
 #define BUCKET_COUNT 64 /* bucket count */
 #define PAGE_SIZE 4096  /* page size */
-#define ALIGN_PAGE(size)                                                      \
-  (((size) + (PAGE_SIZE - 1))                                                 \
-   & ~(PAGE_SIZE - 1)) /* rounds up to the nearest multiple of PAGE_SIZE */
+#define ALIGN_PAGE(size)                                                       \
+  (((size) + (PAGE_SIZE - 1)) &                                                \
+   ~(PAGE_SIZE - 1)) /* rounds up to the nearest multiple of PAGE_SIZE */
 #define MMAP_THRESHOLD (4096 * 128) /* threshold size to use mmap: 128 KiB */
 
 /* Meta data type: used for both header and footer, here 32 bits is chosen to
@@ -58,8 +58,7 @@ typedef uint32_t nmeta_t;
    overhead, since needs add padding to the meta data to confirms the ANSI/ISO
    C standard.*/
 
-typedef struct meta
-{
+typedef struct meta {
   nmeta_t alloc : 1;  /* allocation status */
   nmeta_t ismmap : 1; /* whether the block is allocated by mmap */
   nmeta_t unused : 1; /* unused bits */
@@ -69,22 +68,19 @@ typedef struct meta
 typedef meta_t header_t;
 typedef meta_t footer_t;
 
-typedef struct block
-{
+typedef struct block {
   header_t header;         /* header of the block */
   unsigned char payload[]; /* payload of the block */
 } block_t;
 
-typedef struct free_block
-{
+typedef struct free_block {
   header_t header;         /* header of the free block */
   struct free_block *next; /* next free block */
   struct free_block *prev; /* previous free block */
   unsigned char payload[]; /* payload of the block */
 } free_block_t;
 
-typedef struct heap
-{
+typedef struct heap {
   free_block_t *buckets[BUCKET_COUNT]; /* free buckets */
   unsigned char *start;                /* start of the heap */
   unsigned char *end;                  /* end of the heap */
@@ -97,14 +93,14 @@ extern heap_t __heap;
 extern const size_t __slots[BUCKET_COUNT];
 
 /* Minimum threshold of the block size */
-#define MINIMUM_BLOCKSZ                                                       \
+#define MINIMUM_BLOCKSZ                                                        \
   (sizeof(header_t) + sizeof(footer_t) + 2 * sizeof(uintptr_t))
 
 /* Returns the header of the block */
 #define GET_HEADER(blk) (header_t *)((char *)blk)
 
 /* Returns the footer of the block */
-#define GET_FOOTER(blk)                                                       \
+#define GET_FOOTER(blk)                                                        \
   (footer_t *)((char *)blk + (blk)->header.sz - sizeof(footer_t))
 
 /* Returns whether the block is allocated by mmap */
@@ -114,8 +110,7 @@ extern const size_t __slots[BUCKET_COUNT];
 #define IS_ALLOC(blk) ((blk)->header.alloc)
 
 /* Writes the meta data to the block */
-static inline void
-writemeta(block_t *blk, size_t sz, bool alloc, bool ismmap)
+static inline void writemeta(block_t *blk, size_t sz, bool alloc, bool ismmap)
 {
   blk->header.sz = sz;
   blk->header.alloc = alloc;
@@ -125,8 +120,7 @@ writemeta(block_t *blk, size_t sz, bool alloc, bool ismmap)
 }
 
 /* Returns the required size of the block with meta data after alignment */
-static inline size_t
-calcblksz(size_t reqsz)
+static inline size_t calcblksz(size_t reqsz)
 {
   return MAX(ALIGN(reqsz + sizeof(header_t) + sizeof(footer_t)),
              ALIGN(MINIMUM_BLOCKSZ));
@@ -136,22 +130,19 @@ calcblksz(size_t reqsz)
    size of the whole block (header + footer + payload) after alignment.The
    progressing order is based on the Fibonacci method. */
 
-static inline size_t
-getbucketidx(size_t sz)
+static inline size_t getbucketidx(size_t sz)
 {
-  for (size_t i = 0; i < BUCKET_COUNT; ++i)
-    {
-      if (sz <= __slots[i])
-        return i;
-    }
+  for (size_t i = 0; i < BUCKET_COUNT; ++i) {
+    if (sz <= __slots[i])
+      return i;
+  }
   return BUCKET_COUNT - 1;
 }
 
 /* Inserts the block into the free buckets. The block is inserted based on
    LIFO strategy, so the new block is inserted at the head of the bucket. */
 
-static inline void
-insertblk(free_block_t *blk, size_t buckidx)
+static inline void insertblk(free_block_t *blk, size_t buckidx)
 {
   /* Based on LIFO strategy, the new block is inserted at the head of the
      bucket. */
@@ -159,10 +150,9 @@ insertblk(free_block_t *blk, size_t buckidx)
   free_block_t *freehead = __heap.buckets[buckidx];
   blk->next = freehead;
   blk->prev = NULL;
-  if (freehead)
-    {
-      freehead->prev = blk;
-    }
+  if (freehead) {
+    freehead->prev = blk;
+  }
   __heap.buckets[buckidx] = blk;
 }
 
@@ -170,23 +160,18 @@ insertblk(free_block_t *blk, size_t buckidx)
    block is not NULL. The bucket_idx is the index of the bucket that the block
    belongs to. */
 
-static inline free_block_t *
-removeblk(free_block_t *blk, size_t buckidx)
+static inline free_block_t *removeblk(free_block_t *blk, size_t buckidx)
 {
   free_block_t *prevblk = blk->prev;
   free_block_t *nextblk = blk->next;
-  if (prevblk)
-    {
-      prevblk->next = nextblk;
-    }
-  else
-    {
-      __heap.buckets[buckidx] = nextblk;
-    }
-  if (nextblk)
-    {
-      nextblk->prev = prevblk;
-    }
+  if (prevblk) {
+    prevblk->next = nextblk;
+  } else {
+    __heap.buckets[buckidx] = nextblk;
+  }
+  if (nextblk) {
+    nextblk->prev = prevblk;
+  }
   blk->next = NULL;
   blk->prev = NULL;
   return blk;
@@ -196,8 +181,7 @@ removeblk(free_block_t *blk, size_t buckidx)
    second part is the remaining block. It will put the second part back to the
    free buckets. */
 
-static inline void *
-sliceblk(free_block_t *blk, size_t sz)
+static inline void *sliceblk(free_block_t *blk, size_t sz)
 {
   size_t blocksz = blk->header.sz;
   size_t leftsz = blocksz - sz;
@@ -205,11 +189,10 @@ sliceblk(free_block_t *blk, size_t sz)
   /* If the left size is less than the minimum block size, return the whole
      block, since it is not worth splitting and acceptable internal
      fragmentation. */
-  if (leftsz < MINIMUM_BLOCKSZ)
-    {
-      writemeta((block_t *)blk, blocksz, true, false);
-      return (void *)((unsigned char *)blk + sizeof(header_t));
-    }
+  if (leftsz < MINIMUM_BLOCKSZ) {
+    writemeta((block_t *)blk, blocksz, true, false);
+    return (void *)((unsigned char *)blk + sizeof(header_t));
+  }
 
   /* Otherwise, split the block into two parts: the first part is the requested
      size, the second part is the remaining block. */

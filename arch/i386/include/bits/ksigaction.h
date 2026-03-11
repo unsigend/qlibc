@@ -20,8 +20,7 @@
 
 /* Structure describing the action to be taken when a signal arrives. This is
    used for kernel-level signal handling. */
-struct k_sigaction
-{
+struct k_sigaction {
   void (*handler)(int);
   unsigned long flags;
   void (*restorer)(void);

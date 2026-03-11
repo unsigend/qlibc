@@ -16,10 +16,9 @@
  */
 #include <stddef.h>
 
-size_t
-strcspn(const char *str, const char *charset)
+size_t strcspn(const char *str, const char *charset)
 {
-  unsigned char map[256] = { 0 };
+  unsigned char map[256] = {0};
   size_t n = 0;
 
   for (; *charset; ++charset)

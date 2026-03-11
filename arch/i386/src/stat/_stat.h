@@ -18,8 +18,8 @@
 #include <bits/types.h>
 
 /* Backward compatibility for old stat structure in system calls */
-static inline void
-_stat64_to_stat(const struct __stat64 *restrict src, struct stat *restrict dst)
+static inline void _stat64_to_stat(const struct __stat64 *restrict src,
+                                   struct stat *restrict dst)
 {
   dst->st_dev = (__dev_t)(src->st_dev);
   dst->__pad0 = src->__pad0;

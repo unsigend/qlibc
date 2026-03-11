@@ -24,7 +24,7 @@
 #ifdef NDEBUG
 #define assert(expr) ((void)0)
 #else
-#define assert(expr)                                                          \
+#define assert(expr)                                                           \
   (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
 #endif
 

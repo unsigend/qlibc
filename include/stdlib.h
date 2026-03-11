@@ -22,22 +22,19 @@
 #include <stdint.h>
 
 /* Returned by div */
-typedef struct
-{
+typedef struct {
   int quot;
   int rem;
 } div_t;
 
 /* Returned by ldiv */
-typedef struct
-{
+typedef struct {
   long quot;
   long rem;
 } ldiv_t;
 
 /* Returned by lldiv */
-typedef struct
-{
+typedef struct {
   long long quot;
   long long rem;
 } lldiv_t;
@@ -51,8 +48,7 @@ extern long long atoll(const char *str);
 
 /* Convert a string to an integer with a specified base, and move forward the
    pointer str_end to the last converted character */
-extern long strtol(const char *restrict str, char **restrict str_end,
-                   int base);
+extern long strtol(const char *restrict str, char **restrict str_end, int base);
 extern long long strtoll(const char *restrict str, char **restrict str_end,
                          int base);
 extern unsigned long strtoul(const char *restrict str, char **restrict str_end,
@@ -124,9 +120,9 @@ extern char *getenv(const char *name);
    of the form name=value. */
 extern int putenv(char *string);
 
-#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE)                        \
-    || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE) \
-    || defined(_QLIBC_SOURCE)
+#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) ||                      \
+    defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE) ||  \
+    defined(_QLIBC_SOURCE)
 /* Sets the value of the environment variable specified by name to value.
    If name does exist in the environment, then its value is changed to
    value if overwrite is nonzero. */

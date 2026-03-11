@@ -18,13 +18,11 @@
 #include "env.h"
 #include <stdlib.h>
 
-void
-clearenv(void)
+void clearenv(void)
 {
-  if (__heap_environ)
-    {
-      free(__heap_environ);
-      __heap_environ = NULL;
-    }
+  if (__heap_environ) {
+    free(__heap_environ);
+    __heap_environ = NULL;
+  }
   environ = NULL;
 }

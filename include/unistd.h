@@ -143,8 +143,7 @@ extern unsigned int alarm(unsigned int seconds);
 /* Executes the file specified by filename. The file must be a regular file
    and executable. The argv array is the argument vector for the new program.
    The envp array is the environment for the new program. */
-extern int execve(const char *filename, const char *argv[],
-                  const char *envp[]);
+extern int execve(const char *filename, const char *argv[], const char *envp[]);
 
 /* Exits the current process with the specified status. */
 #if __USE_ISO_C11

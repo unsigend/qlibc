@@ -17,19 +17,17 @@
 
 #include "io.h"
 
-int
-fseek(FILE *stream, long offset, int origin)
+int fseek(FILE *stream, long offset, int origin)
 {
   if (!stream)
     return -1;
 
-  if (origin == SEEK_CUR)
-    {
-      if (stream->flags & D_WRITE)
-        offset += (stream->wpos - stream->wbase);
-      if (stream->flags & D_READ)
-        offset -= (stream->rend - stream->rpos) + stream->shcnt;
-    }
+  if (origin == SEEK_CUR) {
+    if (stream->flags & D_WRITE)
+      offset += (stream->wpos - stream->wbase);
+    if (stream->flags & D_READ)
+      offset -= (stream->rend - stream->rpos) + stream->shcnt;
+  }
 
   if (flushbuf(stream) == EOF)
     return -1;

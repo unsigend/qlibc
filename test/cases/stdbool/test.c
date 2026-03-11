@@ -114,30 +114,24 @@ UTEST_TEST_CASE(macros)
 
   {
     bool b = true;
-    if (b)
-      {
-        EXPECT_TRUE(1);
-      }
-    else
-      {
-        EXPECT_FALSE(1);
-      }
+    if (b) {
+      EXPECT_TRUE(1);
+    } else {
+      EXPECT_FALSE(1);
+    }
   }
 
   {
     bool b = false;
-    if (b)
-      {
-        EXPECT_FALSE(1);
-      }
-    else
-      {
-        EXPECT_TRUE(1);
-      }
+    if (b) {
+      EXPECT_FALSE(1);
+    } else {
+      EXPECT_TRUE(1);
+    }
   }
 
   {
-    bool arr[2] = { true, false };
+    bool arr[2] = {true, false};
     EXPECT_TRUE(arr[0]);
     EXPECT_FALSE(arr[1]);
   }

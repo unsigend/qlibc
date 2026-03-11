@@ -17,8 +17,4 @@
 
 #include <sys/syscall.h>
 
-int
-pause(void)
-{
-  return __syscall(SYS_pause);
-}
+int pause(void) { return __syscall(SYS_pause); }

@@ -17,8 +17,4 @@
 
 #include <syscall.h>
 
-int
-fdatasync(int fd)
-{
-  return __syscall(SYS_fdatasync, (long)fd);
-}
+int fdatasync(int fd) { return __syscall(SYS_fdatasync, (long)fd); }

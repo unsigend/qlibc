@@ -17,8 +17,7 @@
 
 #include <string.h>
 
-char *
-strcat(char *restrict dest, const char *restrict src)
+char *strcat(char *restrict dest, const char *restrict src)
 {
   char *wp = dest;
   while (*dest)

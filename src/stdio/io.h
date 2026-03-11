@@ -33,8 +33,8 @@
 
 #define IBUF_FULL(s) ((s)->rpos == (s)->rend) /* input buffer is full */
 #define IBUF_EMPTY(s) ((s)->rpos == (s)->buf) /* input buffer is empty */
-#define IBUF_DROP(s)                                                          \
-  ((s)->rpos = (s)->rend = (s)->buf)            /* drop input buffer          \
+#define IBUF_DROP(s)                                                           \
+  ((s)->rpos = (s)->rend = (s)->buf)            /* drop input buffer           \
                                                  */
 #define OBUF_FULL(s) ((s)->wpos == (s)->wend)   /* output buffer is full */
 #define OBUF_EMPTY(s) ((s)->wpos == (s)->wbase) /* output buffer is empty */

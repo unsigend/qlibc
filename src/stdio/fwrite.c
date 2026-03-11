@@ -18,9 +18,8 @@
 #include "io.h"
 #include <string.h>
 
-size_t
-fwrite(const void *restrict ptr, size_t size, size_t count,
-       FILE *restrict stream)
+size_t fwrite(const void *restrict ptr, size_t size, size_t count,
+              FILE *restrict stream)
 {
   if (!ptr || !size || !count || !stream || stream->error || stream->eof)
     return 0;
@@ -34,49 +33,41 @@ fwrite(const void *restrict ptr, size_t size, size_t count,
   size_t total = 0;
 
   /* fast path, write to buffer if possible */
-  if (wn <= stream->bufsz)
-    {
-      /* line buffered, flush when '\n' */
-      if (stream->bufmode == _IOLBF)
-        {
-          while (total < wn)
-            {
-              int r = fputc(((unsigned char *)ptr)[total], stream);
-              if (r == EOF)
-                return total / size;
-              total++;
-            }
-        }
-      /* full buffered, flush when buffer is full */
-      else
-        {
-          while (total < wn)
-            {
-              if (OBUF_FULL(stream) && flushbuf(stream) == EOF)
-                return total / size;
-              size_t n
-                  = MIN((size_t)(stream->wend - stream->wpos), wn - total);
-              memcpy(stream->wpos, (unsigned char *)ptr + total, n);
-              stream->wpos += n;
-              total += n;
-            }
-        }
-    }
-  /* slow path, write directly to file descriptor */
-  else
-    {
-      if (flushbuf(stream) == EOF)
-        return 0;
-      /* write the rest from system call */
-      ssize_t n = writeall(stream->fd, (unsigned char *)ptr, wn);
-      if (n == -1)
-        {
-          stream->error = 1;
+  if (wn <= stream->bufsz) {
+    /* line buffered, flush when '\n' */
+    if (stream->bufmode == _IOLBF) {
+      while (total < wn) {
+        int r = fputc(((unsigned char *)ptr)[total], stream);
+        if (r == EOF)
           return total / size;
-        }
-      total += n;
-      stream->offset += n;
+        total++;
+      }
     }
+    /* full buffered, flush when buffer is full */
+    else {
+      while (total < wn) {
+        if (OBUF_FULL(stream) && flushbuf(stream) == EOF)
+          return total / size;
+        size_t n = MIN((size_t)(stream->wend - stream->wpos), wn - total);
+        memcpy(stream->wpos, (unsigned char *)ptr + total, n);
+        stream->wpos += n;
+        total += n;
+      }
+    }
+  }
+  /* slow path, write directly to file descriptor */
+  else {
+    if (flushbuf(stream) == EOF)
+      return 0;
+    /* write the rest from system call */
+    ssize_t n = writeall(stream->fd, (unsigned char *)ptr, wn);
+    if (n == -1) {
+      stream->error = 1;
+      return total / size;
+    }
+    total += n;
+    stream->offset += n;
+  }
 
   return total / size;
 }

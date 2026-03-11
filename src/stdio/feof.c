@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-int
-feof(FILE *stream)
+int feof(FILE *stream)
 {
   if (!stream)
     return 0;

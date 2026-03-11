@@ -29,7 +29,7 @@ UTEST_TEST_CASE(assert_expressions)
   }
 
   {
-    int arr[5] = { 1, 2, 3, 4, 5 };
+    int arr[5] = {1, 2, 3, 4, 5};
     assert(arr[0] == 1);
     assert(arr[4] == 5);
     assert(sizeof(arr) == 5 * sizeof(int));

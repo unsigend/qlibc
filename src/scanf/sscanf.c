@@ -19,8 +19,7 @@
 extern int scanf_core(const char *restrict buff, const char *restrict fmt,
                       va_list vlist, const char **end);
 
-int
-sscanf(const char *restrict buffer, const char *restrict format, ...)
+int sscanf(const char *restrict buffer, const char *restrict format, ...)
 {
   va_list ap;
   va_start(ap, format);

@@ -18,8 +18,7 @@
 #include <sys/stat.h>
 #include <syscall.h>
 
-int
-lstat(const char *restrict path, struct stat *restrict buf)
+int lstat(const char *restrict path, struct stat *restrict buf)
 {
   return __syscall(SYS_stat, (long)path, (long)buf);
 }

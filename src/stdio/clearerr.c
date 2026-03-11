@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-void
-clearerr(FILE *stream)
+void clearerr(FILE *stream)
 {
   if (!stream)
     return;

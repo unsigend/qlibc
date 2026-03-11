@@ -19,8 +19,7 @@
 #include <sys/ioctl.h>
 #include <syscall.h>
 
-int
-ioctl(int fd, int request, ...)
+int ioctl(int fd, int request, ...)
 {
   va_list args;
   va_start(args, request);

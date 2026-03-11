@@ -18,8 +18,7 @@
 #include <sys/stat.h>
 #include <syscall.h>
 
-int
-fstat(int fd, struct stat *restrict buf)
+int fstat(int fd, struct stat *restrict buf)
 {
   return __syscall(SYS_fstat, (long)fd, (long)buf);
 }

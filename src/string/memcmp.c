@@ -16,8 +16,7 @@
  */
 #include <stddef.h>
 
-int
-memcmp(const void *lhs, const void *rhs, size_t count)
+int memcmp(const void *lhs, const void *rhs, size_t count)
 {
   const unsigned char *lp = (const unsigned char *)lhs;
   const unsigned char *rp = (const unsigned char *)rhs;

@@ -18,8 +18,7 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-int
-unlink(const char *pathname)
+int unlink(const char *pathname)
 {
   return __syscall(SYS_unlink, (long)pathname);
 }

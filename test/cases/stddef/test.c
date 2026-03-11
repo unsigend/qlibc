@@ -86,7 +86,7 @@ UTEST_TEST_CASE(constants)
   }
 
   {
-    int arr[5] = { 1, 2, 3, 4, 5 };
+    int arr[5] = {1, 2, 3, 4, 5};
     int *p = arr;
     EXPECT_NOT_NULL(p);
     p = NULL;
@@ -103,8 +103,7 @@ UTEST_TEST_CASE(constants)
 
 UTEST_TEST_CASE(macros)
 {
-  struct test_struct
-  {
+  struct test_struct {
     char a;
     int b;
     char c;
@@ -114,16 +113,15 @@ UTEST_TEST_CASE(macros)
 
   EXPECT_EQUAL_UINT(offsetof(struct test_struct, a), 0);
   EXPECT_TRUE(offsetof(struct test_struct, b) >= sizeof(char));
-  EXPECT_TRUE(offsetof(struct test_struct, c)
-              >= offsetof(struct test_struct, b) + sizeof(int));
-  EXPECT_TRUE(offsetof(struct test_struct, d)
-              >= offsetof(struct test_struct, c) + sizeof(char));
-  EXPECT_TRUE(offsetof(struct test_struct, e)
-              >= offsetof(struct test_struct, d) + sizeof(long));
+  EXPECT_TRUE(offsetof(struct test_struct, c) >=
+              offsetof(struct test_struct, b) + sizeof(int));
+  EXPECT_TRUE(offsetof(struct test_struct, d) >=
+              offsetof(struct test_struct, c) + sizeof(char));
+  EXPECT_TRUE(offsetof(struct test_struct, e) >=
+              offsetof(struct test_struct, d) + sizeof(long));
 
   {
-    struct simple_struct
-    {
+    struct simple_struct {
       int first;
       int second;
     };
@@ -133,8 +131,7 @@ UTEST_TEST_CASE(macros)
   }
 
   {
-    struct aligned_struct
-    {
+    struct aligned_struct {
       char a;
       long b;
     };
@@ -144,10 +141,8 @@ UTEST_TEST_CASE(macros)
   }
 
   {
-    struct nested_struct
-    {
-      struct
-      {
+    struct nested_struct {
+      struct {
         int x;
         int y;
       } inner;
@@ -155,13 +150,12 @@ UTEST_TEST_CASE(macros)
     };
 
     EXPECT_EQUAL_UINT(offsetof(struct nested_struct, inner), 0);
-    EXPECT_TRUE(offsetof(struct nested_struct, z)
-                >= sizeof(struct nested_struct) - sizeof(int));
+    EXPECT_TRUE(offsetof(struct nested_struct, z) >=
+                sizeof(struct nested_struct) - sizeof(int));
   }
 
   {
-    struct array_struct
-    {
+    struct array_struct {
       int arr[10];
       int next;
     };

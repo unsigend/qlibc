@@ -18,8 +18,7 @@
 #include <signal.h>
 #include <stddef.h>
 
-sighandler_t
-signal(int signum, sighandler_t handler)
+sighandler_t signal(int signum, sighandler_t handler)
 {
   struct sigaction act, oldact;
   act.sa_handler = handler;

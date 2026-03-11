@@ -34,7 +34,4 @@ UTEST_TEST_CASE(elf)
   EXPECT_EQUAL_UINT(sizeof(Elf32_Rel), 8);
 }
 
-UTEST_TEST_SUITE(elf)
-{
-  UTEST_RUN_TEST_CASE(elf);
-}
+UTEST_TEST_SUITE(elf) { UTEST_RUN_TEST_CASE(elf); }

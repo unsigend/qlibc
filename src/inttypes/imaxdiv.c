@@ -17,8 +17,4 @@
 
 #include <inttypes.h>
 
-imaxdiv_t
-imaxdiv(intmax_t x, intmax_t y)
-{
-  return (imaxdiv_t){ x / y, x % y };
-}
+imaxdiv_t imaxdiv(intmax_t x, intmax_t y) { return (imaxdiv_t){x / y, x % y}; }

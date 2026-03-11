@@ -19,12 +19,10 @@
 
 #if __USE_ISO_C11
 #include <stdnoreturn.h>
-noreturn void
-_Exit(int status)
+noreturn void _Exit(int status)
 {
 #else
-void
-_Exit(int status)
+void _Exit(int status)
 {
 #endif
   _exit(status);

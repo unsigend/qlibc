@@ -21,7 +21,4 @@ UTEST_TEST_CASE(type)
   EXPECT_EQUAL_UINT(offsetof(struct termios, c_ospeed), 56);
 }
 
-UTEST_TEST_SUITE(termios)
-{
-  UTEST_RUN_TEST_CASE(type);
-}
+UTEST_TEST_SUITE(termios) { UTEST_RUN_TEST_CASE(type); }

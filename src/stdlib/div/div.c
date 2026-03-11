@@ -17,8 +17,4 @@
 
 #include <stdlib.h>
 
-div_t
-div(int x, int y)
-{
-  return (div_t){ x / y, x % y };
-}
+div_t div(int x, int y) { return (div_t){x / y, x % y}; }

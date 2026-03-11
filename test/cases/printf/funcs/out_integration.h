@@ -72,8 +72,7 @@ UTEST_TEST_CASE(out_integration)
   EXPECT_EQUAL_INT(n, 10);
   EXPECT_EQUAL_STRING((char *)buf, "      0100");
 
-  n = snprintf((char *)buf, BUFSZ, "%#*.*llx", 10, 4,
-               (unsigned long long)0xff);
+  n = snprintf((char *)buf, BUFSZ, "%#*.*llx", 10, 4, (unsigned long long)0xff);
   EXPECT_EQUAL_INT(n, 10);
   EXPECT_EQUAL_STRING((char *)buf, "    0x00ff");
 

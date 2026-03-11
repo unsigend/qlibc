@@ -17,8 +17,4 @@
 
 #include <sys/syscall.h>
 
-int
-close(int fd)
-{
-  return __syscall(SYS_close, fd);
-}
+int close(int fd) { return __syscall(SYS_close, fd); }

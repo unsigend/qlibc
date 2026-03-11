@@ -19,8 +19,7 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-ssize_t
-pwrite(int fd, const void *buf, size_t count, off_t offset)
+ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
 {
   return __syscall(SYS_pwrite64, (long)fd, (long)buf, (long)count,
                    (long)offset);

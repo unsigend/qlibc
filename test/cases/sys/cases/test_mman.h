@@ -41,11 +41,10 @@ UTEST_TEST_CASE(mmap)
 
   // check the access permissions in the 4KiB page
   unsigned char *ptr = (unsigned char *)addr;
-  for (size_t i = 0; i < PAGE_SIZE; i++)
-    {
-      ptr[i] = MAGIC;
-      EXPECT_EQUAL_UINT(ptr[i], MAGIC);
-    }
+  for (size_t i = 0; i < PAGE_SIZE; i++) {
+    ptr[i] = MAGIC;
+    EXPECT_EQUAL_UINT(ptr[i], MAGIC);
+  }
 
   EXPECT_TRUE(munmap(addr, PAGE_SIZE) == 0);
 }

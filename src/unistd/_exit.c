@@ -17,8 +17,7 @@
 
 #include <sys/syscall.h>
 
-_Noreturn void
-_exit(int status)
+_Noreturn void _exit(int status)
 {
   __syscall(SYS_exit_group, (long)status);
   __builtin_unreachable();

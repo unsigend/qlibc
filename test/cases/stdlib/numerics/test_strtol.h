@@ -334,16 +334,13 @@ UTEST_TEST_CASE(strtol)
     char str[] = "9223372036854775807";
     errno = 0;
     result = strtol(str, &endptr, 10);
-    if (sizeof(long) == 8)
-      {
-        EXPECT_EQUAL_INT(result, 9223372036854775807);
-        EXPECT_TRUE(errno == 0);
-      }
-    else
-      {
-        EXPECT_EQUAL_INT(result, LONG_MAX);
-        EXPECT_TRUE(errno == ERANGE);
-      }
+    if (sizeof(long) == 8) {
+      EXPECT_EQUAL_INT(result, 9223372036854775807);
+      EXPECT_TRUE(errno == 0);
+    } else {
+      EXPECT_EQUAL_INT(result, LONG_MAX);
+      EXPECT_TRUE(errno == ERANGE);
+    }
     EXPECT_TRUE(endptr == str + 19);
   }
 
@@ -351,16 +348,13 @@ UTEST_TEST_CASE(strtol)
     char str[] = "-9223372036854775808";
     errno = 0;
     result = strtol(str, &endptr, 10);
-    if (sizeof(long) == 8)
-      {
-        EXPECT_EQUAL_INT(result, LONG_MIN);
-        EXPECT_TRUE(errno == 0);
-      }
-    else
-      {
-        EXPECT_EQUAL_INT(result, LONG_MIN);
-        EXPECT_TRUE(errno == ERANGE);
-      }
+    if (sizeof(long) == 8) {
+      EXPECT_EQUAL_INT(result, LONG_MIN);
+      EXPECT_TRUE(errno == 0);
+    } else {
+      EXPECT_EQUAL_INT(result, LONG_MIN);
+      EXPECT_TRUE(errno == ERANGE);
+    }
     EXPECT_TRUE(endptr == str + 20);
   }
 
@@ -369,17 +363,15 @@ UTEST_TEST_CASE(strtol)
     long max_val = LONG_MAX;
     int len = 0;
     long val = max_val;
-    while (val > 0)
-      {
-        str[len++] = '0' + (val % 10);
-        val /= 10;
-      }
-    for (int i = 0; i < len / 2; i++)
-      {
-        char tmp = str[i];
-        str[i] = str[len - 1 - i];
-        str[len - 1 - i] = tmp;
-      }
+    while (val > 0) {
+      str[len++] = '0' + (val % 10);
+      val /= 10;
+    }
+    for (int i = 0; i < len / 2; i++) {
+      char tmp = str[i];
+      str[i] = str[len - 1 - i];
+      str[len - 1 - i] = tmp;
+    }
     str[len] = '\0';
     errno = 0;
     result = strtol(str, &endptr, 10);
@@ -394,25 +386,20 @@ UTEST_TEST_CASE(strtol)
     int len = 0;
     str[len++] = '-';
     unsigned long abs_val;
-    if (min_val == LONG_MIN)
-      {
-        abs_val = (unsigned long)LONG_MAX + 1;
-      }
-    else
-      {
-        abs_val = (unsigned long)(-min_val);
-      }
+    if (min_val == LONG_MIN) {
+      abs_val = (unsigned long)LONG_MAX + 1;
+    } else {
+      abs_val = (unsigned long)(-min_val);
+    }
     int digits[32];
     int digit_count = 0;
-    while (abs_val > 0)
-      {
-        digits[digit_count++] = abs_val % 10;
-        abs_val /= 10;
-      }
-    for (int i = digit_count - 1; i >= 0; i--)
-      {
-        str[len++] = '0' + digits[i];
-      }
+    while (abs_val > 0) {
+      digits[digit_count++] = abs_val % 10;
+      abs_val /= 10;
+    }
+    for (int i = digit_count - 1; i >= 0; i--) {
+      str[len++] = '0' + digits[i];
+    }
     str[len] = '\0';
     errno = 0;
     result = strtol(str, &endptr, 10);

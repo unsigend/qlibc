@@ -17,8 +17,4 @@
 
 #include <unistd.h>
 
-int
-remove(const char *pathname)
-{
-  return unlink(pathname);
-}
+int remove(const char *pathname) { return unlink(pathname); }

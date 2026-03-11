@@ -17,8 +17,7 @@
 
 #include <stdlib.h>
 
-uintmax_t
-strtoumax(const char *restrict str, char **restrict str_end, int base)
+uintmax_t strtoumax(const char *restrict str, char **restrict str_end, int base)
 {
   return strtoull(str, str_end, base);
 }

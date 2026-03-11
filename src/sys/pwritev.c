@@ -18,8 +18,7 @@
 #include <sys/uio.h>
 #include <syscall.h>
 
-ssize_t
-pwritev(int fd, const struct iovec *iov, int iovcnt, off_t offset)
+ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt, off_t offset)
 {
   return __syscall(SYS_pwritev, (long)fd, (long)iov, (long)iovcnt,
                    (long)offset);

@@ -10,7 +10,7 @@ UTEST_TEST_CASE(readv)
 
   char buf1[10];
   char buf2[10];
-  struct iovec iov[2] = { { buf1, sizeof(buf1) }, { buf2, sizeof(buf2) } };
+  struct iovec iov[2] = {{buf1, sizeof(buf1)}, {buf2, sizeof(buf2)}};
 
   ssize_t ret = readv(fd, iov, 2);
   EXPECT_TRUE(ret > 0);

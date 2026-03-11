@@ -25,20 +25,17 @@
    necessary, and return the pointer to the allocated block. This function is
    for reserved usage only.*/
 
-static inline void *
-firstfit(size_t sz, size_t buckidx)
+static inline void *firstfit(size_t sz, size_t buckidx)
 {
   free_block_t *freeblk = __heap.buckets[buckidx];
-  while (freeblk)
-    {
-      if (freeblk->header.sz >= sz)
-        {
-          removeblk(freeblk, buckidx);
-          void *p = sliceblk(freeblk, sz);
-          return p;
-        }
-      freeblk = freeblk->next;
+  while (freeblk) {
+    if (freeblk->header.sz >= sz) {
+      removeblk(freeblk, buckidx);
+      void *p = sliceblk(freeblk, sz);
+      return p;
     }
+    freeblk = freeblk->next;
+  }
   return NULL;
 }
 
@@ -46,28 +43,23 @@ firstfit(size_t sz, size_t buckidx)
    allocate the requested size. Remove it from the free buckets, slice it if
    necessary, and return the pointer to the allocated block. */
 
-static inline void *
-bestfit(size_t sz, size_t buckidx)
+static inline void *bestfit(size_t sz, size_t buckidx)
 {
   free_block_t *freeblk = __heap.buckets[buckidx];
   free_block_t *bestfreeblk = NULL;
-  while (freeblk)
-    {
-      if (freeblk->header.sz >= sz)
-        {
-          if (!bestfreeblk || freeblk->header.sz < bestfreeblk->header.sz)
-            {
-              bestfreeblk = freeblk;
-            }
-        }
-      freeblk = freeblk->next;
+  while (freeblk) {
+    if (freeblk->header.sz >= sz) {
+      if (!bestfreeblk || freeblk->header.sz < bestfreeblk->header.sz) {
+        bestfreeblk = freeblk;
+      }
     }
-  if (bestfreeblk)
-    {
-      removeblk(bestfreeblk, buckidx);
-      void *p = sliceblk(bestfreeblk, sz);
-      return p;
-    }
+    freeblk = freeblk->next;
+  }
+  if (bestfreeblk) {
+    removeblk(bestfreeblk, buckidx);
+    void *p = sliceblk(bestfreeblk, sz);
+    return p;
+  }
   return NULL;
 }
 

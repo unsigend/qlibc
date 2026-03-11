@@ -18,8 +18,4 @@
 #include <sys/types.h>
 #include <syscall.h>
 
-pid_t
-getpgrp(void)
-{
-  return __syscall(SYS_getpgrp);
-}
+pid_t getpgrp(void) { return __syscall(SYS_getpgrp); }

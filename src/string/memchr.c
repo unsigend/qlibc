@@ -17,8 +17,7 @@
 
 #include <stddef.h>
 
-void *
-memchr(const void *ptr, int ch, size_t count)
+void *memchr(const void *ptr, int ch, size_t count)
 {
   const unsigned char *p = (const unsigned char *)ptr;
   for (size_t i = 0; i < count; i++)

@@ -21,8 +21,7 @@
 /* Based on ANSI/ISO C standard, putenv() function will not copy the string to
    a buffer. Return 0 if success, otherwise return -1. */
 
-int
-putenv(char *string)
+int putenv(char *string)
 {
   if (!string)
     return -1;
@@ -32,18 +31,14 @@ putenv(char *string)
     return -1;
   size_t namelen = eq - string;
 
-  if (environ)
-    {
-      for (size_t i = 0; environ[i]; i++)
-        {
-          if (!strncmp(environ[i], string, namelen)
-              && environ[i][namelen] == '=')
-            {
-              environ[i] = string;
-              return 0;
-            }
-        }
+  if (environ) {
+    for (size_t i = 0; environ[i]; i++) {
+      if (!strncmp(environ[i], string, namelen) && environ[i][namelen] == '=') {
+        environ[i] = string;
+        return 0;
+      }
     }
+  }
   char **newenviron = env_expand(environ, string);
   if (!newenviron)
     return -1; /* errno is set by env_expand */

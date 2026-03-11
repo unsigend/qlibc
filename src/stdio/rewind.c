@@ -17,8 +17,7 @@
 
 #include <stdio.h>
 
-void
-rewind(FILE *stream)
+void rewind(FILE *stream)
 {
   if (!stream)
     return;
