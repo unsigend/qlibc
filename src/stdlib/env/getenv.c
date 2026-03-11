@@ -21,9 +21,11 @@
 char *
 getenv(const char *name)
 {
-  if (!name || !environ) return NULL;
+  if (!name || !environ)
+    return NULL;
   size_t len = strlen(name);
-  if (!len) return NULL;
+  if (!len)
+    return NULL;
 
   for (size_t i = 0; environ[i]; i++)
     if (!strncmp(environ[i], name, len) && environ[i][len] == '=')

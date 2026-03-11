@@ -31,7 +31,8 @@ void
 exit(int status)
 {
 #endif
-  if (!__exit_func_count) goto done;
+  if (!__exit_func_count)
+    goto done;
   LOCK();
   for (size_t i = __exit_func_count; i > 0;)
     {

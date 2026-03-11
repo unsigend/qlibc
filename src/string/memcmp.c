@@ -22,6 +22,7 @@ memcmp(const void *lhs, const void *rhs, size_t count)
   const unsigned char *lp = (const unsigned char *)lhs;
   const unsigned char *rp = (const unsigned char *)rhs;
   for (size_t i = 0; i < count; i++)
-    if (lp[i] != rp[i]) return lp[i] - rp[i];
+    if (lp[i] != rp[i])
+      return lp[i] - rp[i];
   return 0;
 }

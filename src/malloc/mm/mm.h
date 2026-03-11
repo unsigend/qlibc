@@ -141,7 +141,8 @@ getbucketidx(size_t sz)
 {
   for (size_t i = 0; i < BUCKET_COUNT; ++i)
     {
-      if (sz <= __slots[i]) return i;
+      if (sz <= __slots[i])
+        return i;
     }
   return BUCKET_COUNT - 1;
 }

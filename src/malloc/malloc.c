@@ -63,7 +63,8 @@ static inline int
 refill(size_t sz)
 {
   void *p = sbrk((intptr_t)sz);
-  if (p == (void *)-1) return -1;
+  if (p == (void *)-1)
+    return -1;
   free_block_t *freeblk = (free_block_t *)p;
   writemeta((block_t *)freeblk, sz, false, false);
   insertblk(freeblk, getbucketidx(sz));
@@ -101,13 +102,15 @@ malloc(size_t size)
           return NULL;
         }
     }
-  if (!size) return NULL;
+  if (!size)
+    return NULL;
   size_t blksz = calcblksz(size);
   size_t buckidx = getbucketidx(blksz);
   while (buckidx < BUCKET_COUNT)
     {
       void *p = bestfit(blksz, buckidx);
-      if (p) return p;
+      if (p)
+        return p;
       ++buckidx;
     }
 

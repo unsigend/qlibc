@@ -20,7 +20,8 @@
 int
 fgetc(FILE *stream)
 {
-  if (!stream || stream->error || stream->eof) return EOF;
+  if (!stream || stream->error || stream->eof)
+    return EOF;
 
   if (toin(stream) == EOF)
     {
@@ -28,11 +29,14 @@ fgetc(FILE *stream)
       return EOF;
     }
 
-  if (stream->shcnt > 0) return stream->shbuf[--stream->shcnt];
+  if (stream->shcnt > 0)
+    return stream->shbuf[--stream->shcnt];
   if (IBUF_FULL(stream))
     {
-      if (!stream->buf && allocbuf(stream) == EOF) return EOF;
-      if (refill(stream) == EOF) return EOF;
+      if (!stream->buf && allocbuf(stream) == EOF)
+        return EOF;
+      if (refill(stream) == EOF)
+        return EOF;
     }
 
   return *stream->rpos++;

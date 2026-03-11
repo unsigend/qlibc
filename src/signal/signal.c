@@ -27,6 +27,7 @@ signal(int signum, sighandler_t handler)
   act.sa_flags = SA_RESTART; /* Restart system calls when possible. */
   act.sa_restorer = NULL;
 
-  if (sigaction(signum, &act, &oldact) < 0) return SIG_ERR;
+  if (sigaction(signum, &act, &oldact) < 0)
+    return SIG_ERR;
   return oldact.sa_handler;
 }

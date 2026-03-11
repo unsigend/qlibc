@@ -36,7 +36,8 @@ strtox(const char *restrict str, char **restrict str_end, int base,
   if (base == 1 || base < 0 || base > 36)
     {
       errno = EINVAL;
-      if (str_end) *str_end = p;
+      if (str_end)
+        *str_end = p;
       return n;
     }
 
@@ -73,7 +74,8 @@ strtox(const char *restrict str, char **restrict str_end, int base,
   while (*p)
     {
       unsigned char ch = tolower(*p);
-      if (!isalnum(ch) || !VALID_DIGIT(ch, base)) break;
+      if (!isalnum(ch) || !VALID_DIGIT(ch, base))
+        break;
 
       /* Based on ANSI/ISO C standard, even the overflow occurs, it should
          still consuming digits. */
@@ -82,12 +84,15 @@ strtox(const char *restrict str, char **restrict str_end, int base,
           errno = ERANGE;
           overflow = 1;
         }
-      if (!overflow) n = n * base + CHARTODIGIT(ch);
+      if (!overflow)
+        n = n * base + CHARTODIGIT(ch);
       ++p;
     }
 
-  if (overflow) n = lim;
-  if (str_end) *str_end = p > dstart ? p : (char *)str;
+  if (overflow)
+    n = lim;
+  if (str_end)
+    *str_end = p > dstart ? p : (char *)str;
 
   return n;
 }

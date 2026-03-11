@@ -37,9 +37,11 @@ static const char *unknown = "Unknown error";
 char *
 strerror(int errnum)
 {
-  if (errnum < 0) return (char *)unknown;
+  if (errnum < 0)
+    return (char *)unknown;
   unsigned long i;
   for (i = 0; i < ARRAY_SZ(errnums); ++i)
-    if (errnums[i] == errnum) return (char *)errorstrs[i];
+    if (errnums[i] == errnum)
+      return (char *)errorstrs[i];
   return (char *)unknown;
 }

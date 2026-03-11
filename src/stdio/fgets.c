@@ -20,7 +20,8 @@
 char *
 fgets(char *restrict str, int count, FILE *stream)
 {
-  if (!str || count <= 0 || !stream) return NULL;
+  if (!str || count <= 0 || !stream)
+    return NULL;
 
   size_t rn = count - 1;
   size_t total = 0;
@@ -28,9 +29,11 @@ fgets(char *restrict str, int count, FILE *stream)
   while (total < rn)
     {
       int ch = fgetc(stream);
-      if (ch == EOF) break;
+      if (ch == EOF)
+        break;
       str[total++] = ch;
-      if (ch == '\n') break;
+      if (ch == '\n')
+        break;
     }
 
   str[total] = '\0';

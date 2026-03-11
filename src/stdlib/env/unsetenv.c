@@ -23,8 +23,10 @@
 int
 unsetenv(const char *name)
 {
-  if (!name || !name[0]) return -1;
-  if (!environ) return 0;
+  if (!name || !name[0])
+    return -1;
+  if (!environ)
+    return 0;
 
   int inplace = 0;
   char **newenviron = NULL;
@@ -35,13 +37,16 @@ unsetenv(const char *name)
       if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=')
         {
           newenviron = env_remove(environ, i, &inplace);
-          if (!newenviron) return -1;
+          if (!newenviron)
+            return -1;
           break;
         }
     }
 
-  if (!newenviron || inplace) return 0;
-  if (__heap_environ) free(__heap_environ);
+  if (!newenviron || inplace)
+    return 0;
+  if (__heap_environ)
+    free(__heap_environ);
   environ = __heap_environ = newenviron;
   return 0;
 }

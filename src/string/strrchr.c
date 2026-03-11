@@ -23,9 +23,11 @@ strrchr(const char *str, int ch)
   const char *last = NULL;
   while (*str != '\0')
     {
-      if (*str == (unsigned char)ch) last = str;
+      if (*str == (unsigned char)ch)
+        last = str;
       ++str;
     }
-  if (ch == '\0') return (char *)str;
+  if (ch == '\0')
+    return (char *)str;
   return (char *)last;
 }

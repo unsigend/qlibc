@@ -24,10 +24,12 @@
 int
 putenv(char *string)
 {
-  if (!string) return -1;
+  if (!string)
+    return -1;
   size_t len = strlen(string);
   char *eq = strchr(string, '=');
-  if (!len || !eq) return -1;
+  if (!len || !eq)
+    return -1;
   size_t namelen = eq - string;
 
   if (environ)
@@ -43,9 +45,11 @@ putenv(char *string)
         }
     }
   char **newenviron = env_expand(environ, string);
-  if (!newenviron) return -1; /* errno is set by env_expand */
+  if (!newenviron)
+    return -1; /* errno is set by env_expand */
 
-  if (__heap_environ) free(__heap_environ);
+  if (__heap_environ)
+    free(__heap_environ);
 
   environ = __heap_environ = newenviron;
   return 0;

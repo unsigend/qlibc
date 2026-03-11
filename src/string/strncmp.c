@@ -24,7 +24,8 @@ strncmp(const char *lhs, const char *rhs, size_t count)
     {
       if (*lhs != *rhs)
         return (int)((unsigned char)*lhs - (unsigned char)*rhs);
-      if (*lhs == '\0') return 0;
+      if (*lhs == '\0')
+        return 0;
       ++lhs;
       ++rhs;
     }

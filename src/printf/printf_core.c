@@ -189,7 +189,8 @@ itoa(unsigned char *buff, uintmax_t val, int base, bool upper)
       unsigned char cw = d < 10  ? '0' + d
                          : upper ? 'A' + d - 10
                                  : 'a' + d - 10;
-      if (buff) buff[len] = cw;
+      if (buff)
+        buff[len] = cw;
       len++;
       val /= base;
     }
@@ -214,7 +215,8 @@ static void
 rawoutc(struct ctx *ctx, unsigned char ch)
 {
   ctx->total++;
-  if (!BUFF_IS_FULL(ctx)) ctx->buff[ctx->pos++] = ch;
+  if (!BUFF_IS_FULL(ctx))
+    ctx->buff[ctx->pos++] = ch;
 }
 
 /* Write a string to the buffer and update the context, truncate if the string
@@ -236,9 +238,7 @@ static inline void
 rawpad(struct ctx *ctx, int len, unsigned char pad)
 {
   while (len-- > 0)
-    {
-      rawoutc(ctx, pad);
-    }
+    rawoutc(ctx, pad);
 }
 
 /* Emit the prefix, body, fillings (zeros) and padding (spaces or zeros) to the
@@ -606,7 +606,8 @@ printf_core(char *restrict buff, size_t bufsz, const char *restrict fmt,
                 {
                   /* If the * yields a negative value in precision, ignore
                    * it */
-                  if (wp >= 0) fsm.precision = wp;
+                  if (wp >= 0)
+                    fsm.precision = wp;
                 }
               else
                 {
@@ -627,7 +628,8 @@ printf_core(char *restrict buff, size_t bufsz, const char *restrict fmt,
       fmt++;
     }
 
-  if (buff && bufsz) ctx.buff[MIN(ctx.pos, ctx.bufsz)] = '\0';
+  if (buff && bufsz)
+    ctx.buff[MIN(ctx.pos, ctx.bufsz)] = '\0';
 
   va_end(ap);
   return ctx.total;

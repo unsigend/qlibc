@@ -22,7 +22,8 @@
 int
 setvbuf(FILE *restrict stream, char *restrict buffer, int mode, size_t size)
 {
-  if (!stream || !VMODE(mode) || stream->buf) return EOF;
+  if (!stream || !VMODE(mode) || stream->buf)
+    return EOF;
 
   if (buffer)
     {
@@ -35,7 +36,8 @@ setvbuf(FILE *restrict stream, char *restrict buffer, int mode, size_t size)
   else
     {
       stream->bufmode = mode;
-      if (allocbuf(stream) == EOF) return EOF;
+      if (allocbuf(stream) == EOF)
+        return EOF;
     }
   return 0;
 }

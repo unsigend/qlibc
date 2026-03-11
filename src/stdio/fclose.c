@@ -23,13 +23,15 @@
 int
 fclose(FILE *stream)
 {
-  if (!stream) return EOF;
+  if (!stream)
+    return EOF;
 
   int fd;
   fd = stream->fd;
 
   /* flush the buffered write data */
-  if (fflush(stream) == EOF) return EOF;
+  if (fflush(stream) == EOF)
+    return EOF;
 
   /* remove the stream from global stream list */
   if (stream->prev)
@@ -37,7 +39,8 @@ fclose(FILE *stream)
   else
     stdio_head = stream->next;
 
-  if (stream->next) stream->next->prev = stream->prev;
+  if (stream->next)
+    stream->next->prev = stream->prev;
 
   /* free the buffer if not managed by user */
   if (stream->flags & S_MYBUF && stream->buf)

@@ -21,7 +21,8 @@
 int
 ungetc(int ch, FILE *stream)
 {
-  if (!stream || ch == EOF || stream->error) return EOF;
+  if (!stream || ch == EOF || stream->error)
+    return EOF;
 
   if (!stream->shbuf)
     {

@@ -34,7 +34,8 @@ inits(FILE *stream, int fd, int mode, int bufmode)
   stream->mode = mode;
   stream->bufmode = bufmode;
   stream->next = stdio_head;
-  if (stdio_head) stdio_head->prev = stream;
+  if (stdio_head)
+    stdio_head->prev = stream;
   stdio_head = stream;
 
   return stream;
@@ -109,7 +110,8 @@ writeall(int fd, const unsigned char *buf, ssize_t n)
       ssize_t wn = write(fd, buf + total, n - total);
       if (wn == -1)
         {
-          if (errno == EINTR || errno == EAGAIN) continue;
+          if (errno == EINTR || errno == EAGAIN)
+            continue;
           return -1;
         }
       total += wn;
@@ -139,7 +141,8 @@ toin(FILE *stream)
 {
   if (stream->flags & D_WRITE)
     {
-      if (flushbuf(stream) == EOF) return EOF;
+      if (flushbuf(stream) == EOF)
+        return EOF;
       stream->flags &= ~D_WRITE;
     }
   stream->flags |= D_READ;

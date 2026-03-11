@@ -33,7 +33,8 @@ env_expand(char **oldenvp, char *newstr)
       errno = ENOMEM;
       return NULL;
     }
-  if (envcount) memcpy(newenviron, oldenvp, sizeof(char *) * envcount);
+  if (envcount)
+    memcpy(newenviron, oldenvp, sizeof(char *) * envcount);
   newenviron[envcount] = newstr;
   newenviron[envcount + 1] = NULL;
   return newenviron;
@@ -47,7 +48,8 @@ env_remove(char **oldenvp, size_t index, int *inplace)
   size_t envcount = 0;
   for (; oldenvp[envcount]; envcount++)
     ;
-  if (index >= envcount) return NULL;
+  if (index >= envcount)
+    return NULL;
 
   /* If the removed index is the last one, optimize the operation to inplace
      remove. */

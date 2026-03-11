@@ -6,8 +6,10 @@ int_compare(const void *a, const void *b)
 {
   const int *ia = (const int *)a;
   const int *ib = (const int *)b;
-  if (*ia < *ib) return -1;
-  if (*ia > *ib) return 1;
+  if (*ia < *ib)
+    return -1;
+  if (*ia > *ib)
+    return 1;
   return 0;
 }
 
@@ -16,8 +18,10 @@ char_compare(const void *a, const void *b)
 {
   const char *ca = (const char *)a;
   const char *cb = (const char *)b;
-  if (*ca < *cb) return -1;
-  if (*ca > *cb) return 1;
+  if (*ca < *cb)
+    return -1;
+  if (*ca > *cb)
+    return 1;
   return 0;
 }
 
@@ -26,8 +30,10 @@ long_compare(const void *a, const void *b)
 {
   const long *la = (const long *)a;
   const long *lb = (const long *)b;
-  if (*la < *lb) return -1;
-  if (*la > *lb) return 1;
+  if (*la < *lb)
+    return -1;
+  if (*la > *lb)
+    return 1;
   return 0;
 }
 
@@ -43,8 +49,10 @@ person_compare_id(const void *a, const void *b)
 {
   const struct person *pa = (const struct person *)a;
   const struct person *pb = (const struct person *)b;
-  if (pa->id < pb->id) return -1;
-  if (pa->id > pb->id) return 1;
+  if (pa->id < pb->id)
+    return -1;
+  if (pa->id > pb->id)
+    return 1;
   return 0;
 }
 
@@ -53,8 +61,10 @@ person_compare_age(const void *a, const void *b)
 {
   const struct person *pa = (const struct person *)a;
   const struct person *pb = (const struct person *)b;
-  if (pa->age < pb->age) return -1;
-  if (pa->age > pb->age) return 1;
+  if (pa->age < pb->age)
+    return -1;
+  if (pa->age > pb->age)
+    return 1;
   return 0;
 }
 

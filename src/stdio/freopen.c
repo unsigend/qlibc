@@ -27,10 +27,12 @@ freopen(const char *restrict filename, const char *restrict mode,
 {
   int fd, oflags;
 
-  if (!filename || !mode || !stream) return NULL;
+  if (!filename || !mode || !stream)
+    return NULL;
 
   /* flush the buffered write data */
-  if (fflush(stream) == EOF) return NULL;
+  if (fflush(stream) == EOF)
+    return NULL;
 
   if (close(stream->fd) == -1)
     {
@@ -38,8 +40,10 @@ freopen(const char *restrict filename, const char *restrict mode,
       return NULL;
     }
 
-  if (stream->flags & S_MYBUF && stream->buf) free(stream->buf);
-  if (stream->shbuf) free(stream->shbuf);
+  if (stream->flags & S_MYBUF && stream->buf)
+    free(stream->buf);
+  if (stream->shbuf)
+    free(stream->shbuf);
 
   switch (mode[0])
     {
@@ -59,7 +63,8 @@ freopen(const char *restrict filename, const char *restrict mode,
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
-  if ((fd = open(filename, oflags, PERM)) == -1) return NULL;
+  if ((fd = open(filename, oflags, PERM)) == -1)
+    return NULL;
 
   FILE *prev = stream->prev;
   FILE *next = stream->next;

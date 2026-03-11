@@ -21,7 +21,8 @@
 int
 sigpending(sigset_t *set)
 {
-  if (!set) return -1;
+  if (!set)
+    return -1;
   long ret
       = __syscall2_raw(SYS_rt_sigpending, (long)set, (long)sizeof(sigset_t));
   return __syscall_ret(ret);

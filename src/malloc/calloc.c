@@ -31,7 +31,8 @@ extern void *malloc(size_t size);
 void *
 calloc(size_t num, size_t size)
 {
-  if (!num || !size) return NULL;
+  if (!num || !size)
+    return NULL;
 
   size_t sz;
 
@@ -53,6 +54,7 @@ calloc(size_t num, size_t size)
 
   /* If the requested size reach the mmap threshold, the MAP_ANONYMOUS flag
     will be set, so the memory will be initialized to 0 by the kernel */
-  if (p && sz < MMAP_THRESHOLD) memset(p, 0, sz);
+  if (p && sz < MMAP_THRESHOLD)
+    memset(p, 0, sz);
   return p;
 }

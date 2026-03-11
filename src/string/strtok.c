@@ -22,13 +22,16 @@ strtok(char *restrict str, const char *restrict delim)
   static char *saved = NULL;
   if (str == NULL)
     {
-      if (saved == NULL) return NULL;
+      if (saved == NULL)
+        return NULL;
       str = saved;
     }
-  if (*str == '\0') return NULL;
+  if (*str == '\0')
+    return NULL;
 
   str += strspn(str, delim);
-  if (*str == '\0') return NULL;
+  if (*str == '\0')
+    return NULL;
 
   char *token = str;
   str += strcspn(str, delim);

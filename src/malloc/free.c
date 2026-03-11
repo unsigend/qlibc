@@ -21,7 +21,8 @@
 void
 free(void *ptr)
 {
-  if (!ptr) return;
+  if (!ptr)
+    return;
 
   block_t *blk = (block_t *)((unsigned char *)ptr - sizeof(header_t));
   if (IS_MMAP(blk))
@@ -29,7 +30,8 @@ free(void *ptr)
       munmap((void *)blk, blk->header.sz);
       return;
     }
-  if (!__heap.init) return;
+  if (!__heap.init)
+    return;
 
   coalescing((free_block_t *)blk);
 }

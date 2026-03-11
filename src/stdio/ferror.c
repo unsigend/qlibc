@@ -20,7 +20,8 @@
 int
 ferror(FILE *stream)
 {
-  if (!stream) return 0;
+  if (!stream)
+    return 0;
 
   return stream->error;
 }

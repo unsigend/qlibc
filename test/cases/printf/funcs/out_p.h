@@ -94,7 +94,7 @@ UTEST_TEST_CASE(out_p)
   {
     int arr[4];
     n = snprintf((char *)buf, BUFSZ, "%p", (void *)&arr[0]);
-      EXPECT_GREATER_INT(n, 2);
+    EXPECT_GREATER_INT(n, 2);
     EXPECT_EQUAL_INT(buf[0], '0');
     EXPECT_EQUAL_INT(buf[1], 'x');
     {

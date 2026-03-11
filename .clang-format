@@ -27,4 +27,4 @@ SortIncludes: true
 
 # Other
 AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortIfStatementsOnASingleLine: Never

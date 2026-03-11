@@ -28,7 +28,8 @@ void *
 realloc(void *ptr, size_t new_size)
 {
   /* realloc(NULL, size) is equivalent to malloc(size) */
-  if (!ptr) return malloc(new_size);
+  if (!ptr)
+    return malloc(new_size);
 
   /* realloc(ptr, 0) is equivalent to free(ptr) */
   if (!new_size)
@@ -48,7 +49,8 @@ realloc(void *ptr, size_t new_size)
 
   /* If the payload size is large enough, return the pointer to the old block,
      and no action is needed. */
-  if (oldpayloadsz >= new_size) return ptr;
+  if (oldpayloadsz >= new_size)
+    return ptr;
 
   /* If the block is allocated by mmap, use mremap to resize the block */
   if (IS_MMAP(blk))
@@ -99,7 +101,8 @@ realloc(void *ptr, size_t new_size)
 
   /* Fallback to malloc, copy and free case, CPU intensive case. */
   void *newptr = malloc(new_size);
-  if (!newptr) return NULL;
+  if (!newptr)
+    return NULL;
 
   /* Copy the data from the old block to the new block */
   memcpy(newptr, ptr, MIN(oldpayloadsz, new_size));

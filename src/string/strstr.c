@@ -20,7 +20,8 @@
 char *
 strstr(const char *str, const char *substr)
 {
-  if (*substr == '\0') return (char *)str;
+  if (*substr == '\0')
+    return (char *)str;
 
   const char *search = str;
   const char *pattern = substr;
@@ -33,7 +34,8 @@ strstr(const char *str, const char *substr)
           while (*match && *match == *pattern)
             ++match, ++pattern;
 
-          if (*pattern == '\0') return (char *)search;
+          if (*pattern == '\0')
+            return (char *)search;
           pattern = substr;
         }
       ++search;

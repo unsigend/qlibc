@@ -45,7 +45,8 @@ fread(void *restrict ptr, size_t size, size_t count, FILE *restrict stream)
     {
       while (total < nreq)
         {
-          if (IBUF_FULL(stream) && refill(stream) == EOF) return total / size;
+          if (IBUF_FULL(stream) && refill(stream) == EOF)
+            return total / size;
 
           size_t n = MIN((size_t)(stream->rend - stream->rpos), nreq - total);
           memcpy(ptr, stream->rpos, n);

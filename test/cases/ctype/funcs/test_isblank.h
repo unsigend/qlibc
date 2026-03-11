@@ -58,7 +58,8 @@ UTEST_TEST_CASE(isblank)
   EXPECT_FALSE(isblank('`'));
 
   for (i = 0; i < ' '; i++)
-    if (i != '\t') EXPECT_FALSE(isblank(i));
+    if (i != '\t')
+      EXPECT_FALSE(isblank(i));
 
   for (i = ' ' + 1; i < '0'; i++)
     EXPECT_FALSE(isblank(i));

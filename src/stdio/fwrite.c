@@ -27,7 +27,8 @@ fwrite(const void *restrict ptr, size_t size, size_t count,
 
   toout(stream);
 
-  if (!stream->buf && allocbuf(stream) == EOF) return 0;
+  if (!stream->buf && allocbuf(stream) == EOF)
+    return 0;
 
   size_t wn = size * count;
   size_t total = 0;
@@ -41,7 +42,8 @@ fwrite(const void *restrict ptr, size_t size, size_t count,
           while (total < wn)
             {
               int r = fputc(((unsigned char *)ptr)[total], stream);
-              if (r == EOF) return total / size;
+              if (r == EOF)
+                return total / size;
               total++;
             }
         }
@@ -63,7 +65,8 @@ fwrite(const void *restrict ptr, size_t size, size_t count,
   /* slow path, write directly to file descriptor */
   else
     {
-      if (flushbuf(stream) == EOF) return 0;
+      if (flushbuf(stream) == EOF)
+        return 0;
       /* write the rest from system call */
       ssize_t n = writeall(stream->fd, (unsigned char *)ptr, wn);
       if (n == -1)

@@ -64,7 +64,8 @@ struct fsm_t
 #define POP(ptr, ap)                                                          \
   do                                                                          \
     {                                                                         \
-      if (!(fsm).suppress) pop_ptr((ptr), (ap));                              \
+      if (!(fsm).suppress)                                                    \
+        pop_ptr((ptr), (ap));                                                 \
     }                                                                         \
   while (0) /* pop a pointer from the argument list */
 
@@ -124,17 +125,21 @@ instr(const char *str, char *dest, size_t width, struct fsm_t *fsm, int bhvs)
       total++;
     }
 
-  if (*p == '\0') return -1;
+  if (*p == '\0')
+    return -1;
 
   while (n < width && *p)
     {
-      if (bhvs && isspace(*p)) break;
-      if (!fsm->suppress) *dest++ = *p;
+      if (bhvs && isspace(*p))
+        break;
+      if (!fsm->suppress)
+        *dest++ = *p;
       p++;
       n++;
     }
 
-  if (bhvs && !fsm->suppress) *dest = '\0';
+  if (bhvs && !fsm->suppress)
+    *dest = '\0';
 
   return (int)(total + n);
 }
@@ -169,7 +174,8 @@ innum(const char *restrict str, struct fsm_t *fsm, void *dest, int base,
       const char *skip = str;
       while (isspace(*skip))
         skip++;
-      if (*skip == '\0') *fail = 1;
+      if (*skip == '\0')
+        *fail = 1;
       return -1;
     }
 
@@ -231,7 +237,8 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
   struct fsm_t fsm;
   int fail = 0;
 
-  if (!buff || !fmt || (*fmt && *buff == '\0')) return EOF;
+  if (!buff || !fmt || (*fmt && *buff == '\0'))
+    return EOF;
 
   FSM_RESET(&fsm);
   va_list ap;
@@ -259,7 +266,8 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
               /* literal match */
               else
                 {
-                  if (*ctx.cursor != *fmt) goto done;
+                  if (*ctx.cursor != *fmt)
+                    goto done;
                   ctx.cursor++;
                 }
               break;
@@ -269,7 +277,8 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
           switch (*fmt)
             {
             case '%':
-              if (*ctx.cursor != '%') goto done;
+              if (*ctx.cursor != '%')
+                goto done;
               ctx.cursor++;
               FSM_SWITCH(&fsm, STATE_NORMAL);
               break;
@@ -327,7 +336,8 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                     goto done;
                   }
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -342,7 +352,8 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                     goto done;
                   }
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -351,9 +362,11 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                 void *p = NULL;
                 POP(&p, &ap);
                 int n = innum(ctx.cursor, &fsm, p, 0, 1, fsm.length, &fail);
-                if (n == -1) goto done;
+                if (n == -1)
+                  goto done;
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -362,9 +375,11 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                 void *p = NULL;
                 POP(&p, &ap);
                 int n = innum(ctx.cursor, &fsm, p, 10, 1, fsm.length, &fail);
-                if (n == -1) goto done;
+                if (n == -1)
+                  goto done;
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -373,9 +388,11 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                 void *p = NULL;
                 POP(&p, &ap);
                 int n = innum(ctx.cursor, &fsm, p, 8, 0, fsm.length, &fail);
-                if (n == -1) goto done;
+                if (n == -1)
+                  goto done;
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -385,9 +402,11 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                 void *p = NULL;
                 POP(&p, &ap);
                 int n = innum(ctx.cursor, &fsm, p, 16, 0, fsm.length, &fail);
-                if (n == -1) goto done;
+                if (n == -1)
+                  goto done;
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -396,9 +415,11 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                 void *p = NULL;
                 POP(&p, &ap);
                 int n = innum(ctx.cursor, &fsm, p, 10, 0, fsm.length, &fail);
-                if (n == -1) goto done;
+                if (n == -1)
+                  goto done;
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -412,14 +433,16 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
                   {
                     if (strncmp(ctx.cursor, "(nil)", 5) == 0)
                       {
-                        if (!fsm.suppress) *(void **)p = NULL;
+                        if (!fsm.suppress)
+                          *(void **)p = NULL;
                         n = 5;
                       }
                     else
                       goto done;
                   }
                 ctx.cursor += n;
-                if (!fsm.suppress) ctx.n++;
+                if (!fsm.suppress)
+                  ctx.n++;
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
               }
@@ -430,7 +453,8 @@ scanf_core(const char *restrict buff, const char *restrict fmt, va_list vlist,
     }
 
 done:
-  if (end) *end = ctx.cursor;
+  if (end)
+    *end = ctx.cursor;
   va_end(ap);
   return (fail && ctx.n == 0) ? EOF : ctx.n;
 }

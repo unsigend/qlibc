@@ -23,7 +23,8 @@
 int
 sigdelset(sigset_t *set, int signum)
 {
-  if (!set) return -1;
+  if (!set)
+    return -1;
   if (signum < 1 || signum > MAX_SIGNUM)
     {
       errno = EINVAL;

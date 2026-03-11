@@ -23,11 +23,13 @@
 int
 setenv(const char *name, const char *value, int overwrite)
 {
-  if (!name || !value) return -1;
+  if (!name || !value)
+    return -1;
 
   size_t namelen = strlen(name);
   size_t valuelen = strlen(value);
-  if (!namelen) return -1;
+  if (!namelen)
+    return -1;
 
   /* Required size for name=value pair: namelen + '=' + valuelen + '\0' */
   if (environ)
@@ -37,7 +39,8 @@ setenv(const char *name, const char *value, int overwrite)
           if (!strncmp(environ[i], name, namelen)
               && environ[i][namelen] == '=')
             {
-              if (!overwrite) return 0;
+              if (!overwrite)
+                return 0;
               environ[i] = malloc(namelen + valuelen + 2);
               if (!environ[i])
                 {
@@ -72,7 +75,8 @@ setenv(const char *name, const char *value, int overwrite)
       return -1; /* errno is set by env_expand */
     }
 
-  if (__heap_environ) free(__heap_environ);
+  if (__heap_environ)
+    free(__heap_environ);
   environ = __heap_environ = newenviron;
   return 0;
 }

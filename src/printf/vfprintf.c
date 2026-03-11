@@ -27,10 +27,12 @@ vfprintf(FILE *restrict stream, const char *restrict format, va_list vlist)
   int n = vsnprintf(NULL, 0, format, ap_copy);
   va_end(ap_copy);
 
-  if (n < 0) return -1;
+  if (n < 0)
+    return -1;
 
   char *buff = malloc(n + 1);
-  if (!buff) return -1;
+  if (!buff)
+    return -1;
 
   va_copy(ap_copy, vlist);
   vsnprintf(buff, n + 1, format, ap_copy);

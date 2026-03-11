@@ -26,7 +26,8 @@ size_t __exit_func_count = 0;
 int
 atexit(void (*func)(void))
 {
-  if (__exit_func_count >= ATEXIT_MAX || ATEXIT_LOCKED()) return -1;
+  if (__exit_func_count >= ATEXIT_MAX || ATEXIT_LOCKED())
+    return -1;
   __exit_funcs[__exit_func_count++] = func;
   return 0;
 }

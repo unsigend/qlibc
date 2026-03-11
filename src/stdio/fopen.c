@@ -28,7 +28,8 @@ fopen(const char *restrict filename, const char *restrict mode)
   int bufmode;
   FILE *stream;
 
-  if (!filename || !mode) return NULL;
+  if (!filename || !mode)
+    return NULL;
 
   switch (mode[0])
     {
@@ -49,7 +50,8 @@ fopen(const char *restrict filename, const char *restrict mode)
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
   fd = open(filename, oflags, PERM);
-  if (fd == -1) return NULL;
+  if (fd == -1)
+    return NULL;
 
   stream = malloc(sizeof(FILE));
   if (!stream)

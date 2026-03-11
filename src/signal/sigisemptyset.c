@@ -20,6 +20,7 @@
 int
 sigisemptyset(const sigset_t *set)
 {
-  if (!set) return -1;
+  if (!set)
+    return -1;
   return *set == 0;
 }

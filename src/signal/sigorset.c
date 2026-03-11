@@ -20,7 +20,8 @@
 int
 sigorset(sigset_t *dest, const sigset_t *left, const sigset_t *right)
 {
-  if (!dest || !left || !right) return -1;
+  if (!dest || !left || !right)
+    return -1;
   *dest = *left | *right;
   return 0;
 }

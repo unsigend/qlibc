@@ -20,7 +20,8 @@
 long
 ftell(FILE *stream)
 {
-  if (!stream) return -1;
+  if (!stream)
+    return -1;
 
   off_t off;
   if (stream->flags & D_READ)
