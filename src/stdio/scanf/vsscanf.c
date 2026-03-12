@@ -14,16 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
+
+#include <stdarg.h>
 
 extern int scanf_core(const char *restrict buff, const char *restrict fmt,
-                      va_list vlist, const char **end);
+                      va_list vlist);
 
-int sscanf(const char *restrict buffer, const char *restrict format, ...)
+int vsscanf(const char *restrict buffer, const char *restrict format,
+            va_list vlist)
 {
-  va_list ap;
-  va_start(ap, format);
-  int ret = scanf_core(buffer, format, ap, NULL);
-  va_end(ap);
-  return ret;
+  return scanf_core(buffer, format, vlist);
 }
