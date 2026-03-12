@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "io.h"
+#include "internal/io.h"
 #include <stdlib.h>
 
 #define PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)

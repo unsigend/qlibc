@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "io.h"
+#include "internal/io.h"
 
 #define VMODE(mode) ((mode) == _IONBF || (mode) == _IOLBF || (mode) == _IOFBF)
 

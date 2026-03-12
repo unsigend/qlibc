@@ -19,6 +19,7 @@
    should be a freestanding implementation of the core printf, which is
    independent of the standard library and no buffer related manipulation. */
 
+#include "fmt.h"
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -39,59 +40,8 @@
    Format sequence is ordered: %[flags][width][precision][length][specifier]
 */
 
-/* Specifiers */
-enum {
-  SPEC_C = 'c',
-  SPEC_S = 's',
-  SPEC_I = 'i',
-  SPEC_D = 'd',
-  SPEC_O = 'o',
-  SPEC_X = 'x',
-  SPEC_XX = 'X',
-  SPEC_U = 'u',
-  SPEC_P = 'p',
-};
-
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
 #define INT_BUFFSZ                                                             \
   32 /* buffer size for integer conversion, enough for 64-bit integer */
-
-/* State machine for the parser */
-enum {
-  STATE_NORMAL, /* Normal state, copy characters from format to buffer */
-  STATE_FORMAT, /* Format state, parse the format string */
-};
-
-/* These enum values are used to pop arguments from the stack */
-enum {
-  ARG_PTR,
-  ARG_SHORT,
-  ARG_USHORT,
-  ARG_CHAR,
-  ARG_UCHAR,
-  ARG_INT,
-  ARG_UINT,
-  ARG_LONG,
-  ARG_ULONG,
-  ARG_LLONG,
-  ARG_ULLONG,
-  ARG_IMAX,
-  ARG_UMAX,
-  ARG_SIZE_T,
-  ARG_SSIZE_T,
-};
-
-/* Length modifiers */
-enum {
-  LEN_NONE = 0,
-  LEN_H,
-  LEN_HH,
-  LEN_L,
-  LEN_LL,
-  LEN_Z,
-};
 
 /* Output context */
 struct ctx {
@@ -385,8 +335,6 @@ static void pop_arg(union arg *arg, int type, va_list *ap)
   }
 }
 
-/* Internal core implementation of formatted output. With parser and
-   formatter support. */
 int printf_core(char *restrict buff, size_t bufsz, const char *restrict fmt,
                 va_list vlist)
 {

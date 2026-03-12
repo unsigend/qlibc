@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "fmt.h"
 #include <ctype.h>
 #include <stdarg.h>
 #include <stddef.h>
@@ -34,7 +35,6 @@
 
 struct ctx {
   const char *cursor; /* current cursor position in the input string */
-  int n;              /* number of successfully scanned items */
 };
 
 struct fsm_t {
@@ -54,44 +54,11 @@ struct fsm_t {
 #define FSM_RESET(fsm)                                                         \
   FSM_SWITCH(fsm, STATE_NORMAL) /* reset the finite state machine */
 
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
 #define POP(ptr, ap)                                                           \
   do {                                                                         \
     if (!(fsm).suppress)                                                       \
       pop_ptr((ptr), (ap));                                                    \
   } while (0) /* pop a pointer from the argument list */
-
-/* State machine for the parser */
-enum {
-  STATE_NORMAL, /* Normal state, copy characters from input to buffer */
-  STATE_FORMAT, /* Format state, parse the format string */
-};
-
-/* Length modifiers */
-enum {
-  LEN_NONE = 0,
-  LEN_H,
-  LEN_HH,
-  LEN_L,
-  LEN_LL,
-  LEN_Z,
-  LEN_PTR,
-};
-
-/* Specifiers */
-enum {
-  SPEC_C = 'c',
-  SPEC_S = 's',
-  SPEC_I = 'i',
-  SPEC_D = 'd',
-  SPEC_O = 'o',
-  SPEC_X = 'x',
-  SPEC_XX = 'X',
-  SPEC_U = 'u',
-  SPEC_P = 'p',
-};
 
 static void pop_ptr(void **ptr, va_list *ap) { *ptr = va_arg(*ap, void *); }
 
@@ -213,9 +180,10 @@ static int innum(const char *restrict str, struct fsm_t *fsm, void *dest,
 int scanf_core(const char *restrict buff, const char *restrict fmt,
                va_list vlist)
 {
-  struct ctx ctx = {.cursor = buff, .n = 0};
+  struct ctx ctx = {.cursor = buff};
   struct fsm_t fsm;
   int fail = 0;
+  int n = 0;
 
   if (!buff || !fmt || (*fmt && *buff == '\0'))
     return EOF;
@@ -296,64 +264,64 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_C: {
         char *c = NULL;
         POP((void **)&c, &ap);
-        int n = instr(ctx.cursor, c, fsm.width ? fsm.width : 1, &fsm, 0);
-        if (n == -1) {
+        int num = instr(ctx.cursor, c, fsm.width ? fsm.width : 1, &fsm, 0);
+        if (num == -1) {
           fail = 1;
           goto done;
         }
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
       case SPEC_S: {
         char *s = NULL;
         POP((void **)&s, &ap);
-        int n = instr(ctx.cursor, s, fsm.width, &fsm, 1);
-        if (n == -1) {
+        int num = instr(ctx.cursor, s, fsm.width, &fsm, 1);
+        if (num == -1) {
           fail = 1;
           goto done;
         }
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
       case SPEC_I: {
         void *p = NULL;
         POP(&p, &ap);
-        int n = innum(ctx.cursor, &fsm, p, 0, 1, fsm.length, &fail);
-        if (n == -1)
+        int num = innum(ctx.cursor, &fsm, p, 0, 1, fsm.length, &fail);
+        if (num == -1)
           goto done;
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
       case SPEC_D: {
         void *p = NULL;
         POP(&p, &ap);
-        int n = innum(ctx.cursor, &fsm, p, 10, 1, fsm.length, &fail);
-        if (n == -1)
+        int num = innum(ctx.cursor, &fsm, p, 10, 1, fsm.length, &fail);
+        if (num == -1)
           goto done;
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
       case SPEC_O: {
         void *p = NULL;
         POP(&p, &ap);
-        int n = innum(ctx.cursor, &fsm, p, 8, 0, fsm.length, &fail);
-        if (n == -1)
+        int num = innum(ctx.cursor, &fsm, p, 8, 0, fsm.length, &fail);
+        if (num == -1)
           goto done;
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
@@ -361,24 +329,24 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_XX: {
         void *p = NULL;
         POP(&p, &ap);
-        int n = innum(ctx.cursor, &fsm, p, 16, 0, fsm.length, &fail);
-        if (n == -1)
+        int num = innum(ctx.cursor, &fsm, p, 16, 0, fsm.length, &fail);
+        if (num == -1)
           goto done;
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
       case SPEC_U: {
         void *p = NULL;
         POP(&p, &ap);
-        int n = innum(ctx.cursor, &fsm, p, 10, 0, fsm.length, &fail);
-        if (n == -1)
+        int num = innum(ctx.cursor, &fsm, p, 10, 0, fsm.length, &fail);
+        if (num == -1)
           goto done;
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
@@ -386,18 +354,18 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
         void *p = NULL;
         POP(&p, &ap);
         /* for %p specifier the length modifier is always LEN_PTR */
-        int n = innum(ctx.cursor, &fsm, p, 16, 0, LEN_PTR, &fail);
-        if (n == -1) {
+        int num = innum(ctx.cursor, &fsm, p, 16, 0, LEN_PTR, &fail);
+        if (num == -1) {
           if (strncmp(ctx.cursor, "(nil)", 5) == 0) {
             if (!fsm.suppress)
               *(void **)p = NULL;
-            n = 5;
+            num = 5;
           } else
             goto done;
         }
-        ctx.cursor += n;
+        ctx.cursor += num;
         if (!fsm.suppress)
-          ctx.n++;
+          n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
@@ -410,5 +378,5 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
 done:
 
   va_end(ap);
-  return (fail && ctx.n == 0) ? EOF : ctx.n;
+  return (fail && n == 0) ? EOF : n;
 }

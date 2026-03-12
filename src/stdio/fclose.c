@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "io.h"
+#include "internal/io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

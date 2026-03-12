@@ -15,11 +15,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ext/fmt/scanf_core.h>
-#include <stdarg.h>
+#ifndef _PRINTF_CORE_H_
+#define _PRINTF_CORE_H_ 1
 
-int vsscanf(const char *restrict buffer, const char *restrict format,
-            va_list vlist)
-{
-  return scanf_core(buffer, format, vlist);
-}
+/* Not part of ANSI/ISO C Standard, it include implementation details of printf,
+   just for freestanding kernel use. */
+
+#include <feature.h>
+#include <stdarg.h>
+#include <stddef.h>
+
+__BEGIN_DECLS
+
+/* Formatted core output function */
+extern int printf_core(char *restrict buff, size_t bufsz,
+                       const char *restrict fmt, va_list vlist);
+
+__END_DECLS
+
+#endif

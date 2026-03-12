@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "io.h"
+#include "internal/io.h"
 #include <string.h>
 
 size_t fwrite(const void *restrict ptr, size_t size, size_t count,

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "io.h"
+#include "internal/io.h"
 
 int fseek(FILE *stream, long offset, int origin)
 {

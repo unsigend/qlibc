@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
 
-extern int scanf_core(const char *restrict buff, const char *restrict fmt,
-                      va_list vlist);
+#include <ext/fmt/scanf_core.h>
+#include <stdio.h>
 
 int sscanf(const char *restrict buffer, const char *restrict format, ...)
 {
