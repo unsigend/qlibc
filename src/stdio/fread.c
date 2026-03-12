@@ -25,7 +25,7 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
   if (!ptr || !size || !count || !stream || stream->error || stream->eof)
     return 0;
 
-  size_t nreq = size * count;
+  size_t nbytes = size * count;
   size_t total = 0;
 
   if (toin(stream) == EOF) {
@@ -39,12 +39,19 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
   }
 
   /* fast path, read from buffer if possible */
-  if (nreq <= stream->bufsz) {
-    while (total < nreq) {
+  if (nbytes <= stream->bufsz) {
+    /* read from pushback buffer */
+    while (total < nbytes && stream->shcnt > 0) {
+      *(unsigned char *)ptr = fgetc(stream);
+      ptr = (unsigned char *)ptr + 1;
+      total++;
+    }
+
+    while (total < nbytes) {
       if (IBUF_FULL(stream) && refill(stream) == EOF)
         return total / size;
 
-      size_t n = MIN((size_t)(stream->rend - stream->rpos), nreq - total);
+      size_t n = MIN((size_t)(stream->rend - stream->rpos), nbytes - total);
       memcpy(ptr, stream->rpos, n);
       ptr = (unsigned char *)ptr + n;
       total += n;
@@ -54,19 +61,33 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
 
   /* slow path, read directly from system call */
   else {
-    /* consume the buffer left first */
-    size_t leftn = stream->rend - stream->rpos;
+    /* TODO: potential bugs here */
+
+    /* read from pushback buffer */
+    while (total < nbytes && stream->shcnt > 0) {
+      *(unsigned char *)ptr = fgetc(stream);
+      ptr = (unsigned char *)ptr + 1;
+      total++;
+    }
+
+    /* consume the buffer left */
+    size_t leftn = MIN((size_t)(stream->rend - stream->rpos), nbytes - total);
     size_t oldbuffsz = stream->rend - stream->buf;
     if (leftn) {
       memcpy(ptr, stream->rpos, leftn);
       ptr = (unsigned char *)ptr + leftn;
       total += leftn;
     }
-    /* drop the buffer */
-    IBUF_DROP(stream);
+    if (nbytes - total > leftn)
+      IBUF_DROP(stream);
 
-    /* read the rest from system call */
-    ssize_t rn = read(stream->fd, ptr, nreq - total);
+    if (total == nbytes) {
+      stream->offset += oldbuffsz;
+      return total / size;
+    }
+
+    /* Read rest */
+    ssize_t rn = read(stream->fd, ptr, nbytes - total);
     if (rn == -1) {
       stream->error = 1;
       return total / size;
@@ -76,7 +97,6 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
       return total / size;
     }
     total += rn;
-    /* move old buffer and direct I/O size. */
     stream->offset += rn + oldbuffsz;
   }
 

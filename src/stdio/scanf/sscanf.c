@@ -15,14 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ext/fmt/scanf_core.h>
 #include <stdio.h>
 
 int sscanf(const char *restrict buffer, const char *restrict format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  int ret = scanf_core(buffer, format, ap);
+  int ret = vsscanf(buffer, format, ap);
   va_end(ap);
   return ret;
 }

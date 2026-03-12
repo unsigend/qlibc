@@ -22,7 +22,7 @@ long ftell(FILE *stream)
   if (!stream)
     return -1;
 
-  off_t off;
+  off_t off = 0;
   if (stream->flags & D_READ) {
     off = stream->rpos - stream->buf;
     off -= stream->shcnt;

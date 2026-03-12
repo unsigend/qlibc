@@ -29,14 +29,14 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
   if (!stream->buf && allocbuf(stream) == EOF)
     return 0;
 
-  size_t wn = size * count;
+  size_t nbytes = size * count;
   size_t total = 0;
 
   /* fast path, write to buffer if possible */
-  if (wn <= stream->bufsz) {
+  if (nbytes <= stream->bufsz && stream->bufmode != _IONBF) {
     /* line buffered, flush when '\n' */
     if (stream->bufmode == _IOLBF) {
-      while (total < wn) {
+      while (total < nbytes) {
         int r = fputc(((unsigned char *)ptr)[total], stream);
         if (r == EOF)
           return total / size;
@@ -45,10 +45,10 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
     }
     /* full buffered, flush when buffer is full */
     else {
-      while (total < wn) {
+      while (total < nbytes) {
         if (OBUF_FULL(stream) && flushbuf(stream) == EOF)
           return total / size;
-        size_t n = MIN((size_t)(stream->wend - stream->wpos), wn - total);
+        size_t n = MIN((size_t)(stream->wend - stream->wpos), nbytes - total);
         memcpy(stream->wpos, (unsigned char *)ptr + total, n);
         stream->wpos += n;
         total += n;
@@ -60,7 +60,7 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
     if (flushbuf(stream) == EOF)
       return 0;
     /* write the rest from system call */
-    ssize_t n = writeall(stream->fd, (unsigned char *)ptr, wn);
+    ssize_t n = writeall(stream->fd, (unsigned char *)ptr, nbytes);
     if (n == -1) {
       stream->error = 1;
       return total / size;

@@ -17,7 +17,10 @@
 
 #include "fmt.h"
 #include <ctype.h>
+#include <ext/scanfcore.h>
+#include <iso646.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -32,10 +35,6 @@
    Length:     l (long), ll (long long), z (size_t), h (short), hh (char)
    Format sequence is ordered: %[*][width][length][specifier]
 */
-
-struct ctx {
-  const char *cursor; /* current cursor position in the input string */
-};
 
 struct fsm_t {
   int state;    /* current state of the parser */
@@ -62,72 +61,137 @@ struct fsm_t {
 
 static void pop_ptr(void **ptr, va_list *ap) { *ptr = va_arg(*ap, void *); }
 
-/* Read a string from the buffer and store it in the destination, return the
-   number of characters consumed. Return -1 if failed. String behaviour if bhvs
-   is set to 1, character behaviour otherwise.*/
-static int instr(const char *str, char *dest, size_t width, struct fsm_t *fsm,
-                 int bhvs)
+/* Read a string use reader and store it in the destination. Return false
+   indicating failure. String behaviour if bhvs is set to 1, character behaviour
+   otherwise.*/
+static bool instr(struct reader *reader, char *dest, size_t width,
+                  struct fsm_t *fsm, int bhvs)
 {
-  const char *p = str;
-  size_t total = 0;
+  int c = reader->readc(reader->ctx);
   size_t n = 0;
   width = width ? width : SIZE_MAX;
 
-  while (bhvs && isspace(*p)) /* skip whitespace if string */
-  {
-    p++;
-    total++;
-  }
+  /* skip leading whitespace if string */
+  while (bhvs && isspace(c))
+    c = reader->readc(reader->ctx);
 
-  if (*p == '\0')
-    return -1;
+  if (c == EOF)
+    return false;
 
-  while (n < width && *p) {
-    if (bhvs && isspace(*p))
+  reader->unreadc(c, reader->ctx);
+
+  while (n < width && (c = reader->readc(reader->ctx)) != EOF) {
+    if (bhvs && isspace(c)) {
+      reader->unreadc(c, reader->ctx);
       break;
+    }
     if (!fsm->suppress)
-      *dest++ = *p;
-    p++;
+      *dest++ = c;
     n++;
   }
 
   if (bhvs && !fsm->suppress)
     *dest = '\0';
 
-  return (int)(total + n);
+  return true;
 }
 
-/* Read a number from the buffer and store it in the destination, return the
-  number of characters read. Return -1 if failed (match failed or EOF failed).
-  If it is a EOF failure, set the fail flag to 1.*/
-static int innum(const char *restrict str, struct fsm_t *fsm, void *dest,
-                 int base, int sign, int length, int *fail)
+/* Read a number from the reader and store it in the destination. Return false
+  indicating failure. If it is a EOF failure, set the fail flag to 1.*/
+static bool innum(struct reader *reader, struct fsm_t *fsm, void *dest,
+                  int base, int sign, int length, int *fail)
 {
-  const char *p = str;
+  int c = reader->readc(reader->ctx);
   char *end;
   char buff[INT_BUFFSZ];
   long long ll;
   unsigned long long ull;
+  int n = fsm->width ? MIN(fsm->width, INT_BUFFSZ - 1) : INT_BUFFSZ - 1;
+  int leftn;
 
-  if (fsm->width > 0) {
-    size_t n = MIN(fsm->width, INT_BUFFSZ - 1);
-    strncpy(buff, p, n);
-    buff[n] = '\0';
-    p = buff;
+  /* skip leading whitespace */
+  while (isspace(c))
+    c = reader->readc(reader->ctx);
+
+  if (c == EOF) {
+    *fail = 1;
+    return false;
   }
-  if (sign)
-    ll = strtoll(p, &end, base);
+
+  reader->unreadc(c, reader->ctx);
+
+  /* read the number to the buffer */
+  int i = 0;
+  c = reader->readc(reader->ctx);
+
+  if (c == '-' || c == '+')
+    buff[i++] = c;
   else
-    ull = strtoull(p, &end, base);
+    reader->unreadc(c, reader->ctx);
 
-  if (end == p) {
-    const char *skip = str;
-    while (isspace(*skip))
-      skip++;
-    if (*skip == '\0')
-      *fail = 1;
-    return -1;
+  if (!base) {
+    c = reader->readc(reader->ctx);
+    if (c == '0') {
+      c = reader->readc(reader->ctx);
+      if (c == 'x' || c == 'X') {
+        base = 16;
+        buff[i++] = '0';
+        buff[i++] = c;
+      } else {
+        base = 8;
+        buff[i++] = '0';
+        if (c != EOF)
+          reader->unreadc(c, reader->ctx);
+      }
+    } else {
+      base = 10;
+      reader->unreadc(c, reader->ctx);
+    }
+  } else if (base == 16) {
+    c = reader->readc(reader->ctx);
+    if (c == '0') {
+      int cc = reader->readc(reader->ctx);
+      if (cc == 'x' || cc == 'X') {
+        buff[i++] = '0';
+        buff[i++] = cc;
+      } else {
+        if (cc != EOF)
+          reader->unreadc(cc, reader->ctx);
+        reader->unreadc(c, reader->ctx);
+      }
+    } else
+      reader->unreadc(c, reader->ctx);
   }
+
+  while (i < n && (c = reader->readc(reader->ctx)) != EOF) {
+    if (isspace(c) || (base == 16 && !isxdigit(c)) ||
+        ((base == 8) && (c < '0' || c > '7')) ||
+        ((base == 10) && !isdigit(c))) {
+      reader->unreadc(c, reader->ctx);
+      break;
+    }
+    buff[i++] = c;
+  }
+  buff[i] = '\0';
+
+  /* consume the remaining characters if any. */
+  leftn = (fsm->width > 0 && i < (int)fsm->width) ? fsm->width - i : 0;
+  while (leftn-- && (c = reader->readc(reader->ctx)) != EOF) {
+    if (isspace(c) || (base == 16 && !isxdigit(c)) ||
+        ((base == 8) && (c < '0' || c > '7')) ||
+        ((base == 10) && !isdigit(c))) {
+      reader->unreadc(c, reader->ctx);
+      break;
+    }
+  }
+
+  if (sign)
+    ll = strtoll(buff, &end, base);
+  else
+    ull = strtoull(buff, &end, base);
+
+  if (end == buff)
+    return false;
 
   if (!fsm->suppress) {
     switch (length) {
@@ -172,21 +236,16 @@ static int innum(const char *restrict str, struct fsm_t *fsm, void *dest,
       break;
     }
   }
-  return (int)(end - p);
+  return true;
 }
 
 /* Internal core implementation of formatted input. With parser and
    formatter support. */
-int scanf_core(const char *restrict buff, const char *restrict fmt,
-               va_list vlist)
+int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
 {
-  struct ctx ctx = {.cursor = buff};
   struct fsm_t fsm;
   int fail = 0;
   int n = 0;
-
-  if (!buff || !fmt || (*fmt && *buff == '\0'))
-    return EOF;
 
   FSM_RESET(&fsm);
   va_list ap;
@@ -204,26 +263,35 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       default:
         /* skip whitespace */
         if (isspace(*fmt)) {
-          while (isspace(*ctx.cursor))
-            ctx.cursor++;
+          int c = reader->readc(reader->ctx);
+          while (isspace(c))
+            c = reader->readc(reader->ctx);
+          if (c != EOF)
+            reader->unreadc(c, reader->ctx);
         }
         /* literal match */
         else {
-          if (*ctx.cursor != *fmt)
+          int c = reader->readc(reader->ctx);
+          if (c != *fmt) {
+            reader->unreadc(c, reader->ctx);
             goto done;
-          ctx.cursor++;
+          }
         }
         break;
       }
       break;
     case STATE_FORMAT:
       switch (*fmt) {
-      case '%':
-        if (*ctx.cursor != '%')
+      case '%': {
+        int c = reader->readc(reader->ctx);
+        if (c != '%') {
+          if (c != EOF)
+            reader->unreadc(c, reader->ctx);
           goto done;
-        ctx.cursor++;
+        }
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
+      }
       case '*':
         fsm.suppress = 1;
         break;
@@ -264,12 +332,10 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_C: {
         char *c = NULL;
         POP((void **)&c, &ap);
-        int num = instr(ctx.cursor, c, fsm.width ? fsm.width : 1, &fsm, 0);
-        if (num == -1) {
+        if (!instr(reader, c, fsm.width ? fsm.width : 1, &fsm, 0)) {
           fail = 1;
           goto done;
         }
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -278,12 +344,10 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_S: {
         char *s = NULL;
         POP((void **)&s, &ap);
-        int num = instr(ctx.cursor, s, fsm.width, &fsm, 1);
-        if (num == -1) {
+        if (!instr(reader, s, fsm.width, &fsm, 1)) {
           fail = 1;
           goto done;
         }
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -292,10 +356,8 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_I: {
         void *p = NULL;
         POP(&p, &ap);
-        int num = innum(ctx.cursor, &fsm, p, 0, 1, fsm.length, &fail);
-        if (num == -1)
+        if (!innum(reader, &fsm, p, 0, 1, fsm.length, &fail))
           goto done;
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -304,10 +366,8 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_D: {
         void *p = NULL;
         POP(&p, &ap);
-        int num = innum(ctx.cursor, &fsm, p, 10, 1, fsm.length, &fail);
-        if (num == -1)
+        if (!innum(reader, &fsm, p, 10, 1, fsm.length, &fail))
           goto done;
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -316,10 +376,8 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_O: {
         void *p = NULL;
         POP(&p, &ap);
-        int num = innum(ctx.cursor, &fsm, p, 8, 0, fsm.length, &fail);
-        if (num == -1)
+        if (!innum(reader, &fsm, p, 8, 0, fsm.length, &fail))
           goto done;
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -329,10 +387,8 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_XX: {
         void *p = NULL;
         POP(&p, &ap);
-        int num = innum(ctx.cursor, &fsm, p, 16, 0, fsm.length, &fail);
-        if (num == -1)
+        if (!innum(reader, &fsm, p, 16, 0, fsm.length, &fail))
           goto done;
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -341,10 +397,8 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
       case SPEC_U: {
         void *p = NULL;
         POP(&p, &ap);
-        int num = innum(ctx.cursor, &fsm, p, 10, 0, fsm.length, &fail);
-        if (num == -1)
+        if (!innum(reader, &fsm, p, 10, 0, fsm.length, &fail))
           goto done;
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -354,16 +408,15 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
         void *p = NULL;
         POP(&p, &ap);
         /* for %p specifier the length modifier is always LEN_PTR */
-        int num = innum(ctx.cursor, &fsm, p, 16, 0, LEN_PTR, &fail);
-        if (num == -1) {
-          if (strncmp(ctx.cursor, "(nil)", 5) == 0) {
-            if (!fsm.suppress)
-              *(void **)p = NULL;
-            num = 5;
-          } else
-            goto done;
+        if (!innum(reader, &fsm, p, 16, 0, LEN_PTR, &fail)) {
+          const char *nil = "(nil)";
+          for (size_t i = 0; i < 5; i++) {
+            if (reader->readc(reader->ctx) != nil[i])
+              goto done;
+          }
+          if (!fsm.suppress)
+            *(void **)p = NULL;
         }
-        ctx.cursor += num;
         if (!fsm.suppress)
           n++;
         FSM_SWITCH(&fsm, STATE_NORMAL);
@@ -376,7 +429,6 @@ int scanf_core(const char *restrict buff, const char *restrict fmt,
   }
 
 done:
-
   va_end(ap);
   return (fail && n == 0) ? EOF : n;
 }

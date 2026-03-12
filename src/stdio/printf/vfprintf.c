@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* TODO: optimize this function with a chunked buffer if malloc fails. */
 int vfprintf(FILE *restrict stream, const char *restrict format, va_list vlist)
 {
   va_list ap_copy;

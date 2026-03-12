@@ -32,6 +32,12 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
   char *dstart = (char *)str;
   int overflow = 0;
 
+  if (*p == '\0') {
+    if (str_end)
+      *str_end = p;
+    return n;
+  }
+
   if (base == 1 || base < 0 || base > 36) {
     errno = EINVAL;
     if (str_end)
@@ -60,7 +66,7 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
         base = 8;
     else
       base = 10;
-  } else if (base == 16 && BASE_HEX(p))
+  } else if (base == 16 && *p == '0' && BASE_HEX(p))
     p += 2;
 
   dstart = p;

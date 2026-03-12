@@ -24,10 +24,19 @@
 #include <feature.h>
 #include <stdarg.h>
 
+/* Reader for scanf core, it is a thin wrapper that custom the behaviour of
+   scanf core, scanf will call readc and unreadc to read and unread
+   characters. */
+struct reader {
+  int (*readc)(void *ctx);          /* read a character */
+  int (*unreadc)(int c, void *ctx); /* unread a character */
+  void *ctx;                        /* opaque context pointer*/
+};
+
 __BEGIN_DECLS
 
 /* Formatted core input function */
-extern int scanf_core(const char *restrict buff, const char *restrict fmt,
+extern int scanf_core(struct reader *reader, const char *restrict fmt,
                       va_list vlist);
 
 __END_DECLS

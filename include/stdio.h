@@ -94,7 +94,6 @@ extern int fputc(int ch, FILE *stream);
 extern int putc(int ch, FILE *stream);
 extern int fputs(const char *restrict str, FILE *restrict stream);
 extern int getchar(void);
-extern char *gets(char *str);
 extern int putchar(int ch);
 extern int puts(const char *str);
 extern int ungetc(int ch, FILE *stream);

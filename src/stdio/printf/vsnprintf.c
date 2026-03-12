@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ext/fmt/printf_core.h>
+#include <ext/printfcore.h>
 #include <stdarg.h>
 #include <stddef.h>
 

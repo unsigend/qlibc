@@ -14,3 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+#include <stdarg.h>
+#include <stdio.h>
+
+int fscanf(FILE *restrict stream, const char *restrict format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  int ret = vfscanf(stream, format, ap);
+  va_end(ap);
+  return ret;
+}
