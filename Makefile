@@ -41,6 +41,10 @@ SRCS_ARCH       :=          $(shell find $(ARCH_PATH)/$(ARCH) -name "*.c")
 OBJS            :=          $(patsubst $(SRC_PATH)/%.c, $(OBJ_PATH)/%.o, $(SRCS))
 OBJS_ARCH       :=          $(patsubst $(ARCH_PATH)/$(ARCH)/src/%.c,$(OBJ_PATH)/$(ARCH)/%.o, $(SRCS_ARCH))
 
+# CRT objects
+CRT_OBJ         :=          $(OBJ_PATH)/$(ARCH)/crt/crt.o
+CRT1_OBJ        :=          $(OBJ_PATH)/$(ARCH)/crt/crt1.o
+
 # variables for dependency files
 DEPS            :=          $(patsubst $(SRC_PATH)/%.c, $(DEP_PATH)/%.d, $(SRCS))
 DEPS_ARCH       :=          $(patsubst $(ARCH_PATH)/$(ARCH)/src/%.c,$(DEP_PATH)/$(ARCH)/%.d, $(SRCS_ARCH))
@@ -91,7 +95,7 @@ endif
 
 # variables for GNU C Include flags
 CC_INCLUDES     :=
-# CC_INCLUDES     +=          -nostdinc
+CC_INCLUDES     +=          -nostdinc
 CC_INCLUDES 	+= 		    -I $(INCLUDE_PATH)
 CC_INCLUDES     +=          -I $(ARCH_PATH)/$(ARCH)/include
 
@@ -127,12 +131,25 @@ QLIBC_LIB_POSTFIX		:= 		.so
 endif
 endif
 
-# general rules for all objects
+# CRT .c 
+$(OBJ_PATH)/$(ARCH)/crt/%.o: $(ARCH_PATH)/$(ARCH)/crt/%.c
+	@mkdir -p $(dir $@)
+	@$(GCC) $(CC_FLAGS) $(CC_DEPS_FLAGS) $(DEP_PATH)/$(notdir $(@F:.o=.d)) -c $< -o $@
+	@echo " + CC\t$@"
+
+# CRT .S
+$(OBJ_PATH)/$(ARCH)/crt/%.o: $(ARCH_PATH)/$(ARCH)/crt/%.S
+	@mkdir -p $(dir $@)
+	@$(GCC) $(CC_FLAGS) -c $< -o $@
+	@echo " + AS\t$@"
+
+# SRC .c
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
 	@$(GCC) $(CC_FLAGS) $(CC_DEPS_FLAGS) $(DEP_PATH)/$(notdir $(@F:.o=.d)) -c $< -o $@
 	@echo " + CC\t$@"
 
+# ARCH .c
 $(OBJ_PATH)/$(ARCH)/%.o: $(ARCH_PATH)/$(ARCH)/src/%.c
 	@mkdir -p $(dir $@)
 	@$(GCC) $(CC_FLAGS) $(CC_DEPS_FLAGS) $(DEP_PATH)/$(notdir $(@F:.o=.d)) -c $< -o $@
@@ -143,7 +160,11 @@ $(OBJ_PATH)/$(ARCH)/%.o: $(ARCH_PATH)/$(ARCH)/src/%.c
 
 # default goal
 .DEFAULT_GOAL := help
-.PHONY: all clean create_build_dir info help test welcome lib clang
+.PHONY: all clean create_build_dir info help test welcome lib clang crt
+
+# build CRT only
+crt: create_build_dir $(CRT1_OBJ)
+	@cp $(CRT1_OBJ) $(LIB_PATH)/crt1.o
 
 # target for creating build directory
 create_build_dir:
@@ -159,11 +180,7 @@ clean:
 	@$(MAKE) -C $(TEST_PATH) clean
 
 # all target
-all: welcome create_build_dir lib
-TEST_DEP := welcome create_build_dir
-ifeq ($(USING_GNU), 0)
-TEST_DEP += lib
-endif
+all: welcome lib crt
 
 # welcome target
 welcome:
@@ -199,7 +216,9 @@ endif
 help:
 	@echo "Makefile Build System for qlibc $(QLIBC_VERSION)"
 	@echo "USAGE:"
-	@echo "\tmake all           - Build the qlibc library"
+	@echo "\tmake lib           - Build the qlibc library"
+	@echo "\tmake crt           - Build the CRT objects"
+	@echo "\tmake all           - Build the qlibc library and CRT objects"
 	@echo "\tmake info          - Show the build configuration"
 	@echo "\tmake clean         - Clean the build directory"
 	@echo "\tmake help          - Show this help message"
@@ -214,28 +233,24 @@ clang:
 	@bear -- make test -j4
 
 # lib target
-lib: $(OBJS) $(OBJS_ARCH)
+LIB_DEPS := $(OBJS) $(OBJS_ARCH) $(CRT_OBJ)
+lib: create_build_dir $(LIB_DEPS)
 ifeq ($(BUILD_METHOD), static)
-	@$(AR) $(AR_FLAGS) $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX) $(OBJS) $(OBJS_ARCH)
+	@$(AR) $(AR_FLAGS) $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX) $(LIB_DEPS)
 	@echo " + AR\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
 else
-	@$(GCC) $(LD_FLAGS) -shared $(OBJS) $(OBJS_ARCH) -o $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)
+	@$(GCC) $(LD_FLAGS) -shared $(LIB_DEPS) -o $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)
 	@echo " + LD\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
 endif
 	@echo "Build qlibc library $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
 	@echo ""
 
-# export the variables to the sub-make
-export QLIBC_NAME
-export QLIBC_C_STANDARD
-export QLIBC_VERSION
-export ARCH
-export BUILD_METHOD
-export USING_GNU
-export GCC
-export DEBUG
-
 # test target
+TEST_DEP := welcome
+ifeq ($(USING_GNU), 0)
+TEST_DEP += lib crt
+endif
+
 # execute test command in sub-make
 test: $(TEST_DEP)
 	@$(MAKE) -C $(TEST_PATH)
@@ -249,4 +264,14 @@ format:
 	@find $(TEST_PATH)/cases $(SRC_PATH) $(INCLUDE_PATH) $(ARCH_PATH) \
 		\( -name "*.c" -o -name "*.h" \) -exec clang-format -i {} +
 	@echo "Format done."
+
+# export the variables to the sub-make
+export QLIBC_NAME
+export QLIBC_C_STANDARD
+export QLIBC_VERSION
+export ARCH
+export BUILD_METHOD
+export USING_GNU
+export GCC
+export DEBUG
 

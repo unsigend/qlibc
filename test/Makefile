@@ -57,6 +57,7 @@ OBJS                    :=      $(patsubst $(TEST_PATH)/%.c, $(BUILD_PATH)/%.o, 
 EXTERNAL_SRCS           :=      $(shell find $(EXTERNAL_SRC_PATH) -name "*.c")
 EXTERNAL_OBJS           :=      $(patsubst $(EXTERNAL_SRC_PATH)/%.c, $(BUILD_PATH)/external/%.o, $(EXTERNAL_SRCS))
 OBJS                    +=      $(EXTERNAL_OBJS)
+CRT_OBJ                 :=      $(QLIBC_LIB_PATH)/crt1.o
 
 # dependency files
 DEPS                    :=      $(patsubst $(BUILD_PATH)/%.o, $(DEP_PATH)/%.d, $(OBJS))
@@ -92,7 +93,7 @@ CC_FLAGS                +=      -O2
 endif
 
 ifeq ($(USING_GNU), 0)
-# CC_FLAGS                +=      -nostdinc -nostdlib -nostdlib-headers
+CC_FLAGS                +=      -nostdinc -nostdlib
 CC_FLAGS                +=      -fno-builtin -ffreestanding
 endif
 ifeq ($(ARCH), i386)
@@ -105,8 +106,8 @@ LD_FLAGS                :=      -L$(QLIBC_LIB_PATH) -l$(QLIBC_NAME)
 endif
 LD_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 ifeq ($(USING_GNU), 0)
-# LD_FLAGS                +=      -nostdlib
-# LD_FLAGS                +=      -nolibc
+LD_FLAGS                +=      -nostdlib
+LD_FLAGS                +=      -nolibc
 endif
 ifeq ($(ARCH), i386)
 LD_FLAGS                +=      -m32
@@ -137,7 +138,7 @@ check-dep:
 
 # build all test cases
 all: check-dep $(OBJS)
-	@$(LD) $(OBJS) $(LD_FLAGS) -o $(BUILD_PATH)/test
+	@$(LD) $(CRT_OBJ) $(OBJS) $(LD_FLAGS) -o $(BUILD_PATH)/test
 	@echo " + LD\t$(BUILD_PATH)/test"
 	@echo "Build qlibc test cases: $(BUILD_PATH)/test"
 	@echo ""
