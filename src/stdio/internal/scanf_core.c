@@ -18,7 +18,6 @@
 #include "fmt.h"
 #include <ctype.h>
 #include <ext/scanfcore.h>
-#include <iso646.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
