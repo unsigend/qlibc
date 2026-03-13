@@ -26,7 +26,7 @@ FILE *stdin = NULL;
 FILE *stdout = NULL;
 FILE *stderr = NULL;
 
-__attribute__((constructor)) void stdio_init(void)
+void __qlibc_stdio_init(void)
 {
   if (isatty(STDIN_FILENO))
     stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);

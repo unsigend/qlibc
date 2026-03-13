@@ -35,15 +35,13 @@ include $(CONFIG_PATH)/config.mk
 
 # variables for source files
 SRCS            :=          $(shell find $(SRC_PATH) -name "*.c")
-SRCS_ARCH       :=          $(shell find $(ARCH_PATH)/$(ARCH) -name "*.c")
+SRCS_ARCH       :=          $(shell find $(ARCH_PATH)/$(ARCH)/src -name "*.c")
+CRT_SRCS        :=          $(shell find $(ARCH_PATH)/$(ARCH)/crt -name "*.S")
 
 # variables for object files
 OBJS            :=          $(patsubst $(SRC_PATH)/%.c, $(OBJ_PATH)/%.o, $(SRCS))
 OBJS_ARCH       :=          $(patsubst $(ARCH_PATH)/$(ARCH)/src/%.c,$(OBJ_PATH)/$(ARCH)/%.o, $(SRCS_ARCH))
-
-# CRT objects
-CRT_OBJ         :=          $(OBJ_PATH)/$(ARCH)/crt/crt.o
-CRT1_OBJ        :=          $(OBJ_PATH)/$(ARCH)/crt/crt1.o
+OBJS_CRT        :=          $(patsubst $(ARCH_PATH)/$(ARCH)/crt/%.S, $(OBJ_PATH)/$(ARCH)/crt/%.o, $(CRT_SRCS))
 
 # variables for dependency files
 DEPS            :=          $(patsubst $(SRC_PATH)/%.c, $(DEP_PATH)/%.d, $(SRCS))
@@ -69,7 +67,7 @@ CC_FREESTANDING +=          -fno-builtin
 # variables for GNU C Architecture flags
 CC_ARCHITECTURE	:=
 ifeq ($(ARCH), i386)
-	CC_ARCHITECTURE += -m32
+CC_ARCHITECTURE += -m32
 endif
 
 # variables for GNU C Warning flags
@@ -87,10 +85,10 @@ CC_OPTIMIZE     :=
 
 # variables for GNU C Debugger flags
 ifeq ($(DEBUG), 1)
-	CC_DEBUGGER  	+= 		    -g
-	CC_OPTIMIZE    	+=          -O0
+CC_DEBUGGER  	+= 		    -g
+CC_OPTIMIZE    	+=          -O0
 else
-	CC_OPTIMIZE    	+=          -O2
+CC_OPTIMIZE    	+=          -O2
 endif
 
 # variables for GNU C Include flags
@@ -131,12 +129,6 @@ QLIBC_LIB_POSTFIX		:= 		.so
 endif
 endif
 
-# CRT .c 
-$(OBJ_PATH)/$(ARCH)/crt/%.o: $(ARCH_PATH)/$(ARCH)/crt/%.c
-	@mkdir -p $(dir $@)
-	@$(GCC) $(CC_FLAGS) $(CC_DEPS_FLAGS) $(DEP_PATH)/$(notdir $(@F:.o=.d)) -c $< -o $@
-	@echo " + CC\t$@"
-
 # CRT .S
 $(OBJ_PATH)/$(ARCH)/crt/%.o: $(ARCH_PATH)/$(ARCH)/crt/%.S
 	@mkdir -p $(dir $@)
@@ -163,8 +155,8 @@ $(OBJ_PATH)/$(ARCH)/%.o: $(ARCH_PATH)/$(ARCH)/src/%.c
 .PHONY: all clean create_build_dir info help test welcome lib clang crt
 
 # build CRT only
-crt: create_build_dir $(CRT1_OBJ)
-	@cp $(CRT1_OBJ) $(LIB_PATH)/crt1.o
+crt: create_build_dir $(OBJS_CRT)
+	@cp $(OBJ_PATH)/$(ARCH)/crt/*.o $(LIB_PATH)
 
 # target for creating build directory
 create_build_dir:
@@ -178,6 +170,12 @@ clean:
 	@rm -rf $(BUILD_PATH)
 	@rm -rf $(LIB_PATH)
 	@$(MAKE) -C $(TEST_PATH) clean
+
+flag:
+	@echo "CC_FLAGS: $(CC_FLAGS)\n"
+	@echo "LD_FLAGS: $(LD_FLAGS)"
+	@echo "AR_FLAGS: $(AR_FLAGS)"
+	@$(MAKE) -C $(TEST_PATH) flag
 
 # all target
 all: welcome lib crt
@@ -226,6 +224,7 @@ help:
 	@echo "\tmake test-[module] - Run the test cases for a specific module"
 	@echo "\tmake clang         - Run the clang command to generate compile_commands.json"
 	@echo "\tmake format        - Format the .c and .h files"
+	@echo "\tmake flag          - Show the build flags"
 	@echo ""
 
 # clang target
@@ -233,7 +232,7 @@ clang:
 	@bear -- make test -j4
 
 # lib target
-LIB_DEPS := $(OBJS) $(OBJS_ARCH) $(CRT_OBJ)
+LIB_DEPS := $(OBJS) $(OBJS_ARCH)
 lib: create_build_dir $(LIB_DEPS)
 ifeq ($(BUILD_METHOD), static)
 	@$(AR) $(AR_FLAGS) $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX) $(LIB_DEPS)

@@ -25,6 +25,8 @@ extern void (*__init_array_end[])(void);
 extern void (*__fini_array_start[])(void);
 extern void (*__fini_array_end[])(void);
 
+extern void __qlibc_stdio_init(void);
+
 char **environ;
 char **__environ;
 
@@ -37,14 +39,18 @@ static void __do_global_ctors(void)
 
 static void __do_global_dtors(void)
 {
-  for (void (**f)() = __fini_array_start; f < __fini_array_end; f++) {
-    (*f)();
+  for (void (**f)() = __fini_array_end; f > __fini_array_start;) {
+    (*--f)();
   }
 }
 
 void __qlibc_start_main(int argc, char *argv[], char *envp[])
 {
   environ = __environ = envp;
+
+  /* Initialize the stdio */
+  __qlibc_stdio_init();
+
   __do_global_ctors();
 
   /* Register the global destructors to be called at exit */

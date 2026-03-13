@@ -103,6 +103,9 @@ endif
 # Linker Flags
 ifeq ($(USING_GNU), 0)
 LD_FLAGS                :=      -L$(QLIBC_LIB_PATH) -l$(QLIBC_NAME)
+ifeq ($(ARCH), i386)
+LD_FLAGS                +=      -lgcc
+endif
 endif
 LD_FLAGS                +=      -std=$(QLIBC_C_STANDARD)
 ifeq ($(USING_GNU), 0)
@@ -160,3 +163,8 @@ test-%: all
 
 clean:
 	@rm -rf $(BUILD_PATH)
+
+flag:
+	@echo "TEST_CC_FLAGS: $(CC_FLAGS)\n"
+	@echo "TEST_LD_FLAGS: $(LD_FLAGS)"
+	@echo "CRT: $(CRT_OBJ)"
