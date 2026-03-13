@@ -15,23 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _FIT_H_
-#define _FIT_H_ 1
-
 #include "mm.h"
 
-/* First-fit algorithm: finds the first free block that is large enough to
-   allocate the requested size. Remove it from the free buckets, slice it if
-   necessary, and return the pointer to the allocated block. This function is
-   for reserved usage only.*/
-
-static inline void *firstfit(size_t sz, size_t buckidx)
+/* First fit, reserved usage only.*/
+__hidden void *__firstfit(size_t sz, size_t buckidx)
 {
   free_block_t *freeblk = __heap.buckets[buckidx];
   while (freeblk) {
     if (freeblk->header.sz >= sz) {
-      removeblk(freeblk, buckidx);
-      void *p = sliceblk(freeblk, sz);
+      __removeblk(freeblk, buckidx);
+      void *p = __sliceblk(freeblk, sz);
       return p;
     }
     freeblk = freeblk->next;
@@ -39,11 +32,8 @@ static inline void *firstfit(size_t sz, size_t buckidx)
   return NULL;
 }
 
-/* Best-fit algorithm: finds the smallest free block that is large enough to
-   allocate the requested size. Remove it from the free buckets, slice it if
-   necessary, and return the pointer to the allocated block. */
-
-static inline void *bestfit(size_t sz, size_t buckidx)
+/* Best fit. */
+__hidden void *__bestfit(size_t sz, size_t buckidx)
 {
   free_block_t *freeblk = __heap.buckets[buckidx];
   free_block_t *bestfreeblk = NULL;
@@ -56,11 +46,9 @@ static inline void *bestfit(size_t sz, size_t buckidx)
     freeblk = freeblk->next;
   }
   if (bestfreeblk) {
-    removeblk(bestfreeblk, buckidx);
-    void *p = sliceblk(bestfreeblk, sz);
+    __removeblk(bestfreeblk, buckidx);
+    void *p = __sliceblk(bestfreeblk, sz);
     return p;
   }
   return NULL;
 }
-
-#endif

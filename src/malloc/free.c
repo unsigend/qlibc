@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "mm/coalescing.h"
+#include "mm/mm.h"
 #include <sys/mman.h>
 
 /* Free memory allocated by malloc */
@@ -31,5 +31,5 @@ void free(void *ptr)
   if (!__heap.init)
     return;
 
-  coalescing((free_block_t *)blk);
+  __coalescing((free_block_t *)blk);
 }

@@ -59,31 +59,31 @@ void *realloc(void *ptr, size_t new_size)
       errno = ENOMEM;
       return NULL;
     }
-    writemeta((block_t *)newptr, newsz, true, true);
+    __writemeta((block_t *)newptr, newsz, true, true);
     return (void *)((unsigned char *)newptr + sizeof(header_t));
   }
 
   /* Optimize with in-place expansion */
-  size_t reqsz = calcblksz(new_size);
+  size_t reqsz = CALC_BLOCKSZ(new_size);
   block_t *nextblk = (block_t *)((unsigned char *)blk + blk->header.sz);
   bool islastblk = ((unsigned char *)nextblk >= __heap.end);
 
   if (!islastblk && !nextblk->header.alloc) {
     size_t newsz = blk->header.sz + nextblk->header.sz;
     if (newsz >= reqsz) {
-      removeblk((free_block_t *)nextblk, getbucketidx(nextblk->header.sz));
+      __removeblk((free_block_t *)nextblk, __getbucketidx(nextblk->header.sz));
       size_t leftsz = newsz - reqsz;
 
       /* If the left size is less than the minimum block size, return the whole
          block */
       if (leftsz < MINIMUM_BLOCKSZ) {
-        writemeta((block_t *)blk, newsz, true, false);
+        __writemeta((block_t *)blk, newsz, true, false);
       } else {
         free_block_t *remainblk =
             (free_block_t *)((unsigned char *)blk + reqsz);
-        writemeta((block_t *)blk, reqsz, true, false);
-        writemeta((block_t *)remainblk, leftsz, false, false);
-        insertblk(remainblk, getbucketidx(leftsz));
+        __writemeta((block_t *)blk, reqsz, true, false);
+        __writemeta((block_t *)remainblk, leftsz, false, false);
+        __insertblk(remainblk, __getbucketidx(leftsz));
       }
 
       return ptr;

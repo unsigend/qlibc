@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mm/fit.h"
+#include "mm/mm.h"
 #include <errno.h>
 #include <string.h>
 #include <sys/mman.h>
@@ -63,8 +63,8 @@ static inline int refill(size_t sz)
   if (p == (void *)-1)
     return -1;
   free_block_t *freeblk = (free_block_t *)p;
-  writemeta((block_t *)freeblk, sz, false, false);
-  insertblk(freeblk, getbucketidx(sz));
+  __writemeta((block_t *)freeblk, sz, false, false);
+  __insertblk(freeblk, __getbucketidx(sz));
   __heap.end = (unsigned char *)p + sz;
   return 0;
 }
@@ -85,7 +85,7 @@ void *malloc(size_t size)
       errno = ENOMEM;
       return NULL;
     }
-    writemeta((block_t *)p, mmapsz, true, true);
+    __writemeta((block_t *)p, mmapsz, true, true);
     return (void *)((unsigned char *)p + sizeof(header_t));
   }
   if (!__heap.init) {
@@ -96,10 +96,10 @@ void *malloc(size_t size)
   }
   if (!size)
     return NULL;
-  size_t blksz = calcblksz(size);
-  size_t buckidx = getbucketidx(blksz);
+  size_t blksz = CALC_BLOCKSZ(size);
+  size_t buckidx = __getbucketidx(blksz);
   while (buckidx < BUCKET_COUNT) {
-    void *p = bestfit(blksz, buckidx);
+    void *p = __bestfit(blksz, buckidx);
     if (p)
       return p;
     ++buckidx;
@@ -111,5 +111,5 @@ void *malloc(size_t size)
     errno = ENOMEM;
     return NULL;
   }
-  return bestfit(blksz, getbucketidx(refillsz));
+  return __bestfit(blksz, __getbucketidx(refillsz));
 }
