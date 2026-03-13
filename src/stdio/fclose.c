@@ -32,7 +32,7 @@ int fclose(FILE *stream)
   if (fflush(stream) == EOF)
     error = 1;
 
-  unlinks(stream);
+  __unlinks(stream);
 
   if (stream->flags & S_MYBUF && stream->buf) {
     free(stream->buf);

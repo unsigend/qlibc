@@ -33,12 +33,12 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
   size_t nbytes = size * count;
   size_t nread = 0;
 
-  if (toin(stream) == EOF) {
+  if (__toin(stream) == EOF) {
     stream->error = 1;
     return 0;
   }
 
-  if (!stream->buf && allocbuf(stream) == EOF) {
+  if (!stream->buf && __allocbuf(stream) == EOF) {
     stream->error = 1;
     return 0;
   }
@@ -53,7 +53,7 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
     }
 
     while (nread < nbytes) {
-      if (IBUF_EXHAUSTED(stream) && refill(stream) == EOF)
+      if (IBUF_EXHAUSTED(stream) && __refill(stream) == EOF)
         return nread / size;
 
       size_t n = MIN((size_t)(stream->rend - stream->rpos), nbytes - nread);
@@ -90,7 +90,7 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
     }
 
     /* Read rest */
-    ssize_t rn = readall(stream->fd, ptr, nbytes - nread);
+    ssize_t rn = __readall(stream->fd, ptr, nbytes - nread);
     if (rn == EOF) {
       stream->error = 1;
       return nread / size;

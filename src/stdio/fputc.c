@@ -17,16 +17,16 @@
 
 #include "internal/io.h"
 
-#define FLUSHBUF(s) (flushbuf(stream) == EOF)
+#define FLUSHBUF(s) (__flushbuf(stream) == EOF)
 
 int fputc(int ch, FILE *stream)
 {
   if (!stream || stream->error || stream->eof)
     return EOF;
 
-  toout(stream);
+  __toout(stream);
 
-  if (!stream->buf && allocbuf(stream) == EOF)
+  if (!stream->buf && __allocbuf(stream) == EOF)
     return EOF;
   if (OBUF_FULL(stream) && FLUSHBUF(stream))
     return EOF;

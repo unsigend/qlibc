@@ -59,6 +59,6 @@ FILE *fopen(const char *restrict filename, const char *restrict mode)
 
   bufmode = isatty(fd) ? _IOLBF : _IOFBF;
 
-  inits(stream, fd, oflags, bufmode);
+  __inits(stream, fd, oflags, bufmode);
   return stream;
 }

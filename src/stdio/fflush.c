@@ -17,12 +17,12 @@
 
 #include "internal/io.h"
 
-static int flushall(void)
+static inline int flushall(void)
 {
-  FILE *cur = stdio_head;
+  FILE *cur = __stdio_head;
   while (cur) {
     /* flush the write buffer */
-    if (flushbuf(cur) == EOF)
+    if (__flushbuf(cur) == EOF)
       return EOF;
 
     if (cur->flags & D_READ)
@@ -38,7 +38,7 @@ int fflush(FILE *stream)
   if (!stream)
     return flushall();
 
-  if (stream->error || flushbuf(stream) == EOF)
+  if (stream->error || __flushbuf(stream) == EOF)
     return EOF;
   if (stream->flags & D_READ)
     IBUF_DROP(stream);

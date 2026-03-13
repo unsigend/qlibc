@@ -29,7 +29,7 @@ int fseek(FILE *stream, long offset, int origin)
       offset -= (stream->rend - stream->rpos) + stream->shcnt;
   }
 
-  if (flushbuf(stream) == EOF)
+  if (__flushbuf(stream) == EOF)
     return -1;
   if (stream->flags & D_READ)
     IBUF_DROP(stream);

@@ -18,9 +18,9 @@
 #include "io.h"
 #include <stdio.h>
 
-static FILE stdin_stream;
-static FILE stdout_stream;
-static FILE stderr_stream;
+static FILE __stdin_stream;
+static FILE __stdout_stream;
+static FILE __stderr_stream;
 
 FILE *stdin = NULL;
 FILE *stdout = NULL;
@@ -29,16 +29,16 @@ FILE *stderr = NULL;
 __attribute__((constructor)) void stdio_init(void)
 {
   if (isatty(STDIN_FILENO))
-    stdin = inits(&stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
+    stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
   else
-    stdin = inits(&stdin_stream, STDIN_FILENO, O_RDONLY, _IOFBF);
+    stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOFBF);
   if (isatty(STDOUT_FILENO))
-    stdout = inits(&stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
+    stdout = __inits(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
   else
-    stdout = inits(&stdout_stream, STDOUT_FILENO, O_WRONLY, _IOFBF);
+    stdout = __inits(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOFBF);
 
   /* Based on ANSI/ISO C standard, stderr is always unbuffered */
-  stderr = inits(&stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
+  stderr = __inits(&__stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
   stdin->flags |= S_STATIC;
   stdout->flags |= S_STATIC;
   stderr->flags |= S_STATIC;

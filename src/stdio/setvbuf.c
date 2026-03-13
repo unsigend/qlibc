@@ -29,10 +29,10 @@ int setvbuf(FILE *restrict stream, char *restrict buffer, int mode, size_t size)
     stream->bufmode = mode;
     stream->bufsz = size;
 
-    resetbufp(stream, stream->buf, size);
+    __resetbufp(stream, stream->buf, size);
   } else {
     stream->bufmode = mode;
-    if (allocbuf(stream) == EOF)
+    if (__allocbuf(stream) == EOF)
       return EOF;
   }
   return 0;

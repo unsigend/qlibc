@@ -24,34 +24,34 @@
 
 /* stdio internal I/O utilities helper functions. */
 
-FILE *stdio_head = NULL;
+__hidden FILE *__stdio_head = NULL;
 
-FILE *inits(FILE *stream, int fd, int mode, int bufmode)
+__hidden FILE *__inits(FILE *stream, int fd, int mode, int bufmode)
 {
   memset(stream, 0, sizeof(FILE));
   stream->fd = fd;
   stream->mode = mode;
   stream->bufmode = bufmode;
-  stream->next = stdio_head;
-  if (stdio_head)
-    stdio_head->prev = stream;
-  stdio_head = stream;
+  stream->next = __stdio_head;
+  if (__stdio_head)
+    __stdio_head->prev = stream;
+  __stdio_head = stream;
 
   return stream;
 }
 
-void resetbufp(FILE *stream, unsigned char *buf, size_t sz)
+__hidden void __resetbufp(FILE *stream, unsigned char *buf, size_t sz)
 {
   stream->wbase = stream->wpos = buf;
   stream->wend = buf + sz;
   stream->rpos = stream->rend = buf;
 }
 
-int allocbuf(FILE *stream)
+__hidden int __allocbuf(FILE *stream)
 {
   size_t sz;
   if (stream->buf) {
-    resetbufp(stream, stream->buf, stream->bufsz);
+    __resetbufp(stream, stream->buf, stream->bufsz);
     return 0;
   }
   /* minimum buffer size is 1 */
@@ -64,12 +64,12 @@ int allocbuf(FILE *stream)
 
   stream->bufsz = sz;
   stream->flags |= S_MYBUF;
-  resetbufp(stream, stream->buf, sz);
+  __resetbufp(stream, stream->buf, sz);
 
   return 0;
 }
 
-int refill(FILE *stream)
+__hidden int __refill(FILE *stream)
 {
   off_t cur = lseek(stream->fd, 0, SEEK_CUR);
   if (cur == -1) {
@@ -91,7 +91,7 @@ int refill(FILE *stream)
   return n;
 }
 
-int writeall(int fd, const unsigned char *buf, ssize_t n)
+__hidden int __writeall(int fd, const unsigned char *buf, ssize_t n)
 {
   ssize_t nbytes = 0;
   errno = 0;
@@ -107,7 +107,7 @@ int writeall(int fd, const unsigned char *buf, ssize_t n)
   return nbytes;
 }
 
-int readall(int fd, unsigned char *buf, ssize_t n)
+__hidden int __readall(int fd, unsigned char *buf, ssize_t n)
 {
   ssize_t nbytes = 0;
   errno = 0;
@@ -126,11 +126,11 @@ int readall(int fd, unsigned char *buf, ssize_t n)
   return nbytes;
 }
 
-int flushbuf(FILE *stream)
+__hidden int __flushbuf(FILE *stream)
 {
   if (stream->flags & D_WRITE && !OBUF_EMPTY(stream)) {
     ssize_t wn = stream->wpos - stream->wbase;
-    if (writeall(stream->fd, stream->wbase, wn) == -1) {
+    if (__writeall(stream->fd, stream->wbase, wn) == -1) {
       stream->error = 1;
       return EOF;
     }
@@ -140,10 +140,10 @@ int flushbuf(FILE *stream)
   return 0;
 }
 
-int toin(FILE *stream)
+__hidden int __toin(FILE *stream)
 {
   if (stream->flags & D_WRITE) {
-    if (flushbuf(stream) == EOF)
+    if (__flushbuf(stream) == EOF)
       return EOF;
     stream->flags &= ~D_WRITE;
   }
@@ -151,7 +151,7 @@ int toin(FILE *stream)
   return 0;
 }
 
-void toout(FILE *stream)
+__hidden void __toout(FILE *stream)
 {
   if (stream->flags & D_READ) {
     IBUF_DROP(stream);
@@ -161,12 +161,12 @@ void toout(FILE *stream)
   stream->flags |= D_WRITE;
 }
 
-void unlinks(FILE *stream)
+__hidden void __unlinks(FILE *stream)
 {
   if (stream->prev)
     stream->prev->next = stream->next;
   else
-    stdio_head = stream->next;
+    __stdio_head = stream->next;
 
   if (stream->next)
     stream->next->prev = stream->prev;

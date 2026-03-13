@@ -74,4 +74,7 @@
 #define __END_DECLS
 #endif
 
+#define __hidden __attribute__((visibility("hidden")))
+#define __packed __attribute__((packed))
+
 #endif

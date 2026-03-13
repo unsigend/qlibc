@@ -22,6 +22,7 @@
    model which is 8192 bytes. No lock protection and thread safety is supported
    yet. */
 #include <fcntl.h>
+#include <feature.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -47,41 +48,41 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 /* global pointer to the head of the file stream list */
-extern FILE *stdio_head;
+extern __hidden FILE *__stdio_head;
 
 /* Initialize a file stream, all the fields are initialized to zero or NULL.
  * Return the initialized stream. Always succeed.*/
-extern FILE *inits(FILE *stream, int fd, int mode, int bufmode);
+extern __hidden FILE *__inits(FILE *stream, int fd, int mode, int bufmode);
 
 /* Allocate memory for buffer if F_MYBUF is set, or reset buffer pointer if it
    is maintained by user. Return 0 on success, EOF on failure. */
-extern int allocbuf(FILE *stream);
+extern __hidden int __allocbuf(FILE *stream);
 
 /* Refill the read buffer. Return the number of bytes read on success, EOF on
    failure. */
-extern int refill(FILE *stream);
+extern __hidden int __refill(FILE *stream);
 
 /* Flush the write buffer. Return 0 on success, EOF on failure. */
-extern int flushbuf(FILE *stream);
+extern __hidden int __flushbuf(FILE *stream);
 
 /* Write all the data to the file descriptor. Return the number of bytes
    written on success, -1 on failure. */
-extern int writeall(int fd, const unsigned char *buf, ssize_t n);
+extern __hidden int __writeall(int fd, const unsigned char *buf, ssize_t n);
 
 /* Read all the data from the file descriptor. Return the number of bytes
    read on success, 0 on EOF, -1 on failure. */
-extern int readall(int fd, unsigned char *buf, ssize_t n);
+extern __hidden int __readall(int fd, unsigned char *buf, ssize_t n);
 
 /* Reset the buffer pointers to initial state. */
-extern void resetbufp(FILE *stream, unsigned char *buf, size_t sz);
+extern __hidden void __resetbufp(FILE *stream, unsigned char *buf, size_t sz);
 
 /* Switch a stream status to read direction or write direction. When switching
    to read direction, return EOF on failure. Switch to out direction is always
    succeed. */
-extern int toin(FILE *stream);
-extern void toout(FILE *stream);
+extern __hidden int __toin(FILE *stream);
+extern __hidden void __toout(FILE *stream);
 
 /* Unlink a stream from the global stream list. */
-extern void unlinks(FILE *stream);
+extern __hidden void __unlinks(FILE *stream);
 
 #endif

@@ -73,7 +73,7 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   return stream;
 
 error:
-  unlinks(stream);
+  __unlinks(stream);
   if (stream->flags & S_STATIC)
     memset(stream, 0, sizeof(FILE));
   else

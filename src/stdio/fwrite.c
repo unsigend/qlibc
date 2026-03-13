@@ -29,9 +29,9 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
     return 0;
   }
 
-  toout(stream);
+  __toout(stream);
 
-  if (!stream->buf && allocbuf(stream) == EOF)
+  if (!stream->buf && __allocbuf(stream) == EOF)
     return 0;
 
   size_t nbytes = size * count;
@@ -53,7 +53,7 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
     /* full buffered, flush when buffer is full */
     else {
       while (nwrite < nbytes) {
-        if (OBUF_FULL(stream) && flushbuf(stream) == EOF)
+        if (OBUF_FULL(stream) && __flushbuf(stream) == EOF)
           return nwrite / size;
         size_t n = MIN((size_t)(stream->wend - stream->wpos), nbytes - nwrite);
         memcpy(stream->wpos, (unsigned char *)ptr + nwrite, n);
@@ -62,9 +62,9 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
       }
     }
   } else {
-    if (flushbuf(stream) == EOF)
+    if (__flushbuf(stream) == EOF)
       return 0;
-    ssize_t n = writeall(stream->fd, (unsigned char *)ptr, nbytes);
+    ssize_t n = __writeall(stream->fd, (unsigned char *)ptr, nbytes);
     if (n == -1) {
       stream->error = 1;
       return nwrite / size;
