@@ -30,17 +30,18 @@
 #undef O_LARGEFILE
 #define O_LARGEFILE 0100000 /* Large file */
 #endif
-#define O_NOCTTY 0400      /* No control tty */
-#define O_NOFOLLOW 0400000 /* No follow */
-#define O_TRUNC 01000      /* Truncate */
-#define O_APPEND 02000     /* Append */
-#define O_ASYNC 020000     /* Async */
-#define O_DIRECT 040000    /* Direct */
-#define O_DSYNC 010000     /* Data sync */
-#define O_NOATIME 01000000 /* No atime */
-#define O_NONBLOCK 04000   /* Non-blocking */
-#define O_SYNC 04010000    /* Sync */
-#define O_ACCMODE 0x03     /* Access mode mask */
+#define O_NOCTTY 0400       /* No control tty */
+#define O_NOFOLLOW 0400000  /* No follow */
+#define O_TRUNC 01000       /* Truncate */
+#define O_APPEND 02000      /* Append */
+#define O_ASYNC 020000      /* Async */
+#define O_DIRECT 040000     /* Direct */
+#define O_DSYNC 010000      /* Data sync */
+#define O_NOATIME 01000000  /* No atime */
+#define O_NONBLOCK 04000    /* Non-blocking */
+#define O_SYNC 04010000     /* Sync */
+#define O_ACCMODE 0x03      /* Access mode mask */
+#define O_TMPFILE 020040000 /* Temporary file */
 
 #define F_GETFL 3 /* Get file status flags */
 #define F_SETFL 4 /* Set file status flags */

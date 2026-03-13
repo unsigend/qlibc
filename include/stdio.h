@@ -167,6 +167,5 @@ extern void perror(const char *s);
 extern int remove(const char *pathname);
 extern int rename(const char *oldpath, const char *newpath);
 extern FILE *tmpfile(void);
-extern char *tmpnam(char *str);
 
 #endif

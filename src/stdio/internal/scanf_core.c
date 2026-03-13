@@ -44,7 +44,6 @@ struct fsm_t {
 };
 
 #define INT_BUFFSZ 64 /* buffer size for integer conversion */
-
 #define FSM_SWITCH(fsm, newstate)                                              \
   do {                                                                         \
     memset(fsm, 0, sizeof(struct fsm_t));                                      \
@@ -52,20 +51,27 @@ struct fsm_t {
   } while (0) /* switch to new state */
 #define FSM_RESET(fsm)                                                         \
   FSM_SWITCH(fsm, STATE_NORMAL) /* reset the finite state machine */
-
 #define POP(ptr, ap)                                                           \
   do {                                                                         \
     if (!(fsm).suppress)                                                       \
-      pop_ptr((ptr), (ap));                                                    \
+      *(ptr) = va_arg(*ap, void *);                                            \
   } while (0) /* pop a pointer from the argument list */
-
-static void pop_ptr(void **ptr, va_list *ap) { *ptr = va_arg(*ap, void *); }
+#define PROCNUM(reader, width, base, sign, length, fail)                       \
+  {                                                                            \
+    void *p = NULL;                                                            \
+    POP(&p, &ap);                                                              \
+    if (!innum(reader, width, p, base, sign, length, fail))                    \
+      goto done;                                                               \
+    if (!(fsm).suppress)                                                       \
+      n++;                                                                     \
+    FSM_SWITCH(&fsm, STATE_NORMAL);                                            \
+    break;                                                                     \
+  } /* process a number */
 
 /* Read a string use reader and store it in the destination. Return false
    indicating failure. String behaviour if bhvs is set to 1, character behaviour
    otherwise.*/
-static bool instr(struct reader *reader, char *dest, size_t width,
-                  struct fsm_t *fsm, int bhvs)
+static bool instr(struct reader *reader, char *dest, size_t width, int bhvs)
 {
   int c = reader->readc(reader->ctx);
   size_t n = 0;
@@ -85,29 +91,69 @@ static bool instr(struct reader *reader, char *dest, size_t width,
       reader->unreadc(c, reader->ctx);
       break;
     }
-    if (!fsm->suppress)
+    if (dest)
       *dest++ = c;
     n++;
   }
 
-  if (bhvs && !fsm->suppress)
+  if (bhvs && dest)
     *dest = '\0';
 
   return true;
 }
 
+static void storenum(void *dest, int length, unsigned long long val)
+{
+  if (!dest)
+    return;
+  switch (length) {
+  case LEN_H:
+    *(short *)dest = (short)val;
+    break;
+  case LEN_HH:
+    *(char *)dest = (char)val;
+    break;
+  case LEN_L:
+    *(long *)dest = (long)val;
+    break;
+  case LEN_LL:
+    *(long long *)dest = (long long)val;
+    break;
+  case LEN_Z:
+    *(size_t *)dest = (size_t)val;
+    break;
+  case LEN_PTR:
+    *(uintptr_t *)dest = (uintptr_t)val;
+    break;
+  default:
+    *(int *)dest = (int)val;
+    break;
+  }
+}
+
+static inline bool isdigitc(int c, int base)
+{
+  if (isspace(c))
+    return false;
+  if (base == 16)
+    return isxdigit(c);
+  if (base == 8)
+    return c >= '0' && c <= '7';
+  return isdigit(c);
+}
+
 /* Read a number from the reader and store it in the destination. Return false
   indicating failure. If it is a EOF failure, set the fail flag to 1.*/
-static bool innum(struct reader *reader, struct fsm_t *fsm, void *dest,
-                  int base, int sign, int length, int *fail)
+static bool innum(struct reader *reader, size_t width, void *dest, int base,
+                  int sign, int length, int *fail)
 {
   int c = reader->readc(reader->ctx);
   char *end;
   char buff[INT_BUFFSZ];
   long long ll;
   unsigned long long ull;
-  int n = fsm->width ? MIN(fsm->width, INT_BUFFSZ - 1) : INT_BUFFSZ - 1;
-  int leftn;
+  int n = width ? MIN(width, INT_BUFFSZ - 1) : INT_BUFFSZ - 1;
+  size_t leftn;
 
   /* skip leading whitespace */
   while (isspace(c))
@@ -164,9 +210,7 @@ static bool innum(struct reader *reader, struct fsm_t *fsm, void *dest,
   }
 
   while (i < n && (c = reader->readc(reader->ctx)) != EOF) {
-    if (isspace(c) || (base == 16 && !isxdigit(c)) ||
-        ((base == 8) && (c < '0' || c > '7')) ||
-        ((base == 10) && !isdigit(c))) {
+    if (!isdigitc(c, base)) {
       reader->unreadc(c, reader->ctx);
       break;
     }
@@ -175,11 +219,9 @@ static bool innum(struct reader *reader, struct fsm_t *fsm, void *dest,
   buff[i] = '\0';
 
   /* consume the remaining characters if any. */
-  leftn = (fsm->width > 0 && i < (int)fsm->width) ? fsm->width - i : 0;
+  leftn = (width > 0 && (size_t)i < width) ? width - i : 0;
   while (leftn-- && (c = reader->readc(reader->ctx)) != EOF) {
-    if (isspace(c) || (base == 16 && !isxdigit(c)) ||
-        ((base == 8) && (c < '0' || c > '7')) ||
-        ((base == 10) && !isdigit(c))) {
+    if (!isdigitc(c, base)) {
       reader->unreadc(c, reader->ctx);
       break;
     }
@@ -193,49 +235,8 @@ static bool innum(struct reader *reader, struct fsm_t *fsm, void *dest,
   if (end == buff)
     return false;
 
-  if (!fsm->suppress) {
-    switch (length) {
-    case LEN_H:
-      if (sign)
-        *(short *)dest = (short)ll;
-      else
-        *(unsigned short *)dest = (unsigned short)ull;
-      break;
-    case LEN_HH:
-      if (sign)
-        *(char *)dest = (char)ll;
-      else
-        *(unsigned char *)dest = (unsigned char)ull;
-      break;
-    case LEN_L:
-      if (sign)
-        *(long *)dest = (long)ll;
-      else
-        *(unsigned long *)dest = (unsigned long)ull;
-      break;
-    case LEN_LL:
-      if (sign)
-        *(long long *)dest = ll;
-      else
-        *(unsigned long long *)dest = ull;
-      break;
-    case LEN_Z:
-      if (sign)
-        *(ssize_t *)dest = (ssize_t)ll;
-      else
-        *(size_t *)dest = (size_t)ull;
-      break;
-    case LEN_PTR:
-      *(uintptr_t *)dest = (uintptr_t)ull;
-      break;
-    default:
-      if (sign)
-        *(int *)dest = (int)ll;
-      else
-        *(unsigned int *)dest = (unsigned int)ull;
-      break;
-    }
-  }
+  storenum(dest, length, sign ? (unsigned long long)ll : ull);
+
   return true;
 }
 
@@ -332,7 +333,7 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
       case SPEC_C: {
         char *c = NULL;
         POP((void **)&c, &ap);
-        if (!instr(reader, c, fsm.width ? fsm.width : 1, &fsm, 0)) {
+        if (!instr(reader, c, fsm.width ? fsm.width : 1, 0)) {
           fail = 1;
           goto done;
         }
@@ -344,7 +345,7 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
       case SPEC_S: {
         char *s = NULL;
         POP((void **)&s, &ap);
-        if (!instr(reader, s, fsm.width, &fsm, 1)) {
+        if (!instr(reader, s, fsm.width, 1)) {
           fail = 1;
           goto done;
         }
@@ -353,62 +354,22 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
         FSM_SWITCH(&fsm, STATE_NORMAL);
         break;
       }
-      case SPEC_I: {
-        void *p = NULL;
-        POP(&p, &ap);
-        if (!innum(reader, &fsm, p, 0, 1, fsm.length, &fail))
-          goto done;
-        if (!fsm.suppress)
-          n++;
-        FSM_SWITCH(&fsm, STATE_NORMAL);
-        break;
-      }
-      case SPEC_D: {
-        void *p = NULL;
-        POP(&p, &ap);
-        if (!innum(reader, &fsm, p, 10, 1, fsm.length, &fail))
-          goto done;
-        if (!fsm.suppress)
-          n++;
-        FSM_SWITCH(&fsm, STATE_NORMAL);
-        break;
-      }
-      case SPEC_O: {
-        void *p = NULL;
-        POP(&p, &ap);
-        if (!innum(reader, &fsm, p, 8, 0, fsm.length, &fail))
-          goto done;
-        if (!fsm.suppress)
-          n++;
-        FSM_SWITCH(&fsm, STATE_NORMAL);
-        break;
-      }
+      case SPEC_I:
+        PROCNUM(reader, fsm.width, 0, 1, fsm.length, &fail);
+      case SPEC_D:
+        PROCNUM(reader, fsm.width, 10, 1, fsm.length, &fail);
+      case SPEC_O:
+        PROCNUM(reader, fsm.width, 8, 0, fsm.length, &fail);
       case SPEC_X:
-      case SPEC_XX: {
-        void *p = NULL;
-        POP(&p, &ap);
-        if (!innum(reader, &fsm, p, 16, 0, fsm.length, &fail))
-          goto done;
-        if (!fsm.suppress)
-          n++;
-        FSM_SWITCH(&fsm, STATE_NORMAL);
-        break;
-      }
-      case SPEC_U: {
-        void *p = NULL;
-        POP(&p, &ap);
-        if (!innum(reader, &fsm, p, 10, 0, fsm.length, &fail))
-          goto done;
-        if (!fsm.suppress)
-          n++;
-        FSM_SWITCH(&fsm, STATE_NORMAL);
-        break;
-      }
+      case SPEC_XX:
+        PROCNUM(reader, fsm.width, 16, 0, fsm.length, &fail);
+      case SPEC_U:
+        PROCNUM(reader, fsm.width, 10, 0, fsm.length, &fail);
       case SPEC_P: {
         void *p = NULL;
         POP(&p, &ap);
         /* for %p specifier the length modifier is always LEN_PTR */
-        if (!innum(reader, &fsm, p, 16, 0, LEN_PTR, &fail)) {
+        if (!innum(reader, fsm.width, p, 16, 0, LEN_PTR, &fail)) {
           const char *nil = "(nil)";
           for (size_t i = 0; i < 5; i++) {
             if (reader->readc(reader->ctx) != nil[i])
