@@ -93,6 +93,9 @@ extern int isatty(int fd);
    system. */
 extern int unlink(const char *pathname);
 
+/* Deletes the directory specified by pathname from the file system. */
+extern int rmdir(const char *pathname);
+
 /* Sets the end of the data segment to the value specified by addr, when
    that value is reasonable, the system has enough memory, and the process
    does not exceed its maximum data size */

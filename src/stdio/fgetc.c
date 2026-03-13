@@ -29,7 +29,7 @@ int fgetc(FILE *stream)
 
   if (stream->shcnt > 0)
     return stream->shbuf[--stream->shcnt];
-  if (IBUF_FULL(stream)) {
+  if (IBUF_EXHAUSTED(stream)) {
     if (!stream->buf && allocbuf(stream) == EOF)
       return EOF;
     if (refill(stream) == EOF)

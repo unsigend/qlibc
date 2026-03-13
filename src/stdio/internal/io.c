@@ -93,18 +93,37 @@ int refill(FILE *stream)
 
 int writeall(int fd, const unsigned char *buf, ssize_t n)
 {
-  ssize_t total = 0;
+  ssize_t nbytes = 0;
   errno = 0;
-  while (total < n) {
-    ssize_t wn = write(fd, buf + total, n - total);
+  while (nbytes < n) {
+    ssize_t wn = write(fd, buf + nbytes, n - nbytes);
     if (wn == -1) {
       if (errno == EINTR || errno == EAGAIN)
         continue;
       return -1;
     }
-    total += wn;
+    nbytes += wn;
   }
-  return total;
+  return nbytes;
+}
+
+int readall(int fd, unsigned char *buf, ssize_t n)
+{
+  ssize_t nbytes = 0;
+  errno = 0;
+  while (nbytes < n) {
+    ssize_t rn = read(fd, buf + nbytes, n - nbytes);
+    if (rn == -1) {
+      if (errno == EINTR || errno == EAGAIN)
+        continue;
+      return -1;
+    }
+    if (rn == 0) {
+      return nbytes;
+    }
+    nbytes += rn;
+  }
+  return nbytes;
 }
 
 int flushbuf(FILE *stream)
@@ -140,4 +159,15 @@ void toout(FILE *stream)
     stream->shcnt = 0;
   }
   stream->flags |= D_WRITE;
+}
+
+void unlinks(FILE *stream)
+{
+  if (stream->prev)
+    stream->prev->next = stream->next;
+  else
+    stdio_head = stream->next;
+
+  if (stream->next)
+    stream->next->prev = stream->prev;
 }

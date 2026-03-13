@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* TODO: optimize this function with a chunked buffer if malloc fails. */
 int vfprintf(FILE *restrict stream, const char *restrict format, va_list vlist)
 {
   va_list ap_copy;
@@ -38,7 +37,11 @@ int vfprintf(FILE *restrict stream, const char *restrict format, va_list vlist)
   vsnprintf(buff, n + 1, format, ap_copy);
   va_end(ap_copy);
 
-  int wn = fwrite(buff, 1, n, stream);
+  if (fwrite(buff, 1, n, stream) != (size_t)n) {
+    free(buff);
+    return -1;
+  }
+
   free(buff);
-  return wn;
+  return n;
 }

@@ -24,50 +24,54 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t count,
   if (!ptr || !size || !count || !stream || stream->error || stream->eof)
     return 0;
 
+  if (count > SIZE_MAX / size) {
+    stream->error = 1;
+    return 0;
+  }
+
   toout(stream);
 
   if (!stream->buf && allocbuf(stream) == EOF)
     return 0;
 
   size_t nbytes = size * count;
-  size_t total = 0;
+  size_t nwrite = 0;
 
-  /* fast path, write to buffer if possible */
+  /* fwrite is designed as fast path write to buffer and slow path write to
+     file descriptor. */
+
   if (nbytes <= stream->bufsz && stream->bufmode != _IONBF) {
     /* line buffered, flush when '\n' */
     if (stream->bufmode == _IOLBF) {
-      while (total < nbytes) {
-        int r = fputc(((unsigned char *)ptr)[total], stream);
+      while (nwrite < nbytes) {
+        int r = fputc(((unsigned char *)ptr)[nwrite], stream);
         if (r == EOF)
-          return total / size;
-        total++;
+          return nwrite / size;
+        nwrite++;
       }
     }
     /* full buffered, flush when buffer is full */
     else {
-      while (total < nbytes) {
+      while (nwrite < nbytes) {
         if (OBUF_FULL(stream) && flushbuf(stream) == EOF)
-          return total / size;
-        size_t n = MIN((size_t)(stream->wend - stream->wpos), nbytes - total);
-        memcpy(stream->wpos, (unsigned char *)ptr + total, n);
+          return nwrite / size;
+        size_t n = MIN((size_t)(stream->wend - stream->wpos), nbytes - nwrite);
+        memcpy(stream->wpos, (unsigned char *)ptr + nwrite, n);
         stream->wpos += n;
-        total += n;
+        nwrite += n;
       }
     }
-  }
-  /* slow path, write directly to file descriptor */
-  else {
+  } else {
     if (flushbuf(stream) == EOF)
       return 0;
-    /* write the rest from system call */
     ssize_t n = writeall(stream->fd, (unsigned char *)ptr, nbytes);
     if (n == -1) {
       stream->error = 1;
-      return total / size;
+      return nwrite / size;
     }
-    total += n;
+    nwrite += n;
     stream->offset += n;
   }
 
-  return total / size;
+  return nwrite / size;
 }

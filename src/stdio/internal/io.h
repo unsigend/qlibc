@@ -18,6 +18,9 @@
 #ifndef _IO_H_
 #define _IO_H_ 1
 
+/* Standard I/O internal implementation. For now the IO use a simple buffer
+   model which is 8192 bytes. No lock protection and thread safety is supported
+   yet. */
 #include <fcntl.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -31,8 +34,8 @@
 #define S_MYBUF 0x04  /* qlibc buffer */
 #define S_STATIC 0x08 /* FILE is static */
 
-#define IBUF_FULL(s) ((s)->rpos == (s)->rend) /* input buffer is full */
-#define IBUF_EMPTY(s) ((s)->rpos == (s)->buf) /* input buffer is empty */
+#define IBUF_EXHAUSTED(s)                                                      \
+  ((s)->rpos == (s)->rend) /* input buffer is exhausted */
 #define IBUF_DROP(s)                                                           \
   ((s)->rpos = (s)->rend = (s)->buf)            /* drop input buffer           \
                                                  */
@@ -65,6 +68,10 @@ extern int flushbuf(FILE *stream);
    written on success, -1 on failure. */
 extern int writeall(int fd, const unsigned char *buf, ssize_t n);
 
+/* Read all the data from the file descriptor. Return the number of bytes
+   read on success, 0 on EOF, -1 on failure. */
+extern int readall(int fd, unsigned char *buf, ssize_t n);
+
 /* Reset the buffer pointers to initial state. */
 extern void resetbufp(FILE *stream, unsigned char *buf, size_t sz);
 
@@ -73,5 +80,8 @@ extern void resetbufp(FILE *stream, unsigned char *buf, size_t sz);
    succeed. */
 extern int toin(FILE *stream);
 extern void toout(FILE *stream);
+
+/* Unlink a stream from the global stream list. */
+extern void unlinks(FILE *stream);
 
 #endif

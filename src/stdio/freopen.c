@@ -29,14 +29,11 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   if (!filename || !mode || !stream)
     return NULL;
 
-  /* flush the buffered write data */
   if (fflush(stream) == EOF)
-    return NULL;
-
-  if (close(stream->fd) == -1) {
     stream->error = 1;
-    return NULL;
-  }
+
+  if (close(stream->fd) == -1)
+    stream->error = 1;
 
   if (stream->flags & S_MYBUF && stream->buf)
     free(stream->buf);
@@ -54,14 +51,14 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
     oflags = O_WRONLY | O_CREAT | O_APPEND;
     break;
   default:
-    return NULL;
+    goto error;
   }
 
   if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
     oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
   if ((fd = open(filename, oflags, PERM)) == -1)
-    return NULL;
+    goto error;
 
   FILE *prev = stream->prev;
   FILE *next = stream->next;
@@ -74,4 +71,12 @@ FILE *freopen(const char *restrict filename, const char *restrict mode,
   stream->next = next;
 
   return stream;
+
+error:
+  unlinks(stream);
+  if (stream->flags & S_STATIC)
+    memset(stream, 0, sizeof(FILE));
+  else
+    free(stream);
+  return NULL;
 }

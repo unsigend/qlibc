@@ -15,29 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "internal/io.h"
+#include <syscall.h>
 
-#define FLUSHBUF(s) (flushbuf(stream) == EOF)
-
-int fputc(int ch, FILE *stream)
-{
-  if (!stream || stream->error || stream->eof)
-    return EOF;
-
-  toout(stream);
-
-  if (!stream->buf && allocbuf(stream) == EOF)
-    return EOF;
-  if (OBUF_FULL(stream) && FLUSHBUF(stream))
-    return EOF;
-
-  *stream->wpos++ = (unsigned char)ch;
-
-  if (stream->bufmode == _IONBF && FLUSHBUF(stream))
-    return EOF;
-
-  if ((stream->bufmode == _IOLBF && ch == '\n') && FLUSHBUF(stream))
-    return EOF;
-
-  return ch;
-}
+int rmdir(const char *pathname) { return __syscall(SYS_rmdir, (long)pathname); }

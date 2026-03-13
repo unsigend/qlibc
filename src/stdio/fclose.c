@@ -26,22 +26,14 @@ int fclose(FILE *stream)
     return EOF;
 
   int fd;
+  int error = 0;
   fd = stream->fd;
 
-  /* flush the buffered write data */
   if (fflush(stream) == EOF)
-    return EOF;
+    error = 1;
 
-  /* remove the stream from global stream list */
-  if (stream->prev)
-    stream->prev->next = stream->next;
-  else
-    stdio_head = stream->next;
+  unlinks(stream);
 
-  if (stream->next)
-    stream->next->prev = stream->prev;
-
-  /* free the buffer if not managed by user */
   if (stream->flags & S_MYBUF && stream->buf) {
     free(stream->buf);
     stream->buf = NULL;
@@ -52,16 +44,13 @@ int fclose(FILE *stream)
     stream->shbuf = NULL;
   }
 
-  /* close the file descriptor */
-  if (close(fd) == -1) {
-    stream->error = 1;
-    return EOF;
-  }
+  if (close(fd) == -1)
+    error = 1;
 
   if (!(stream->flags & S_STATIC))
     free(stream);
   else
     memset(stream, 0, sizeof(FILE));
 
-  return 0;
+  return error ? EOF : 0;
 }

@@ -15,6 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <errno.h>
 #include <unistd.h>
 
-int remove(const char *pathname) { return unlink(pathname); }
+int remove(const char *pathname)
+{
+  if (!unlink(pathname))
+    return 0;
+  if (errno == EISDIR)
+    return rmdir(pathname);
+  return -1; /* ENOENT or ENOTDIR */
+}
