@@ -19,11 +19,11 @@
 
 char *strdup(const char *src)
 {
-  size_t len = strlen(src);
-  char *dest = malloc(len + 1);
-  if (dest == NULL)
-    return NULL;
+    size_t len = strlen(src);
+    char *dest = malloc(len + 1);
+    if (dest == NULL)
+        return NULL;
 
-  memcpy(dest, src, len + 1);
-  return dest;
+    memcpy(dest, src, len + 1);
+    return dest;
 }

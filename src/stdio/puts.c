@@ -19,7 +19,7 @@
 
 int puts(const char *str)
 {
-  if (!str || fputs(str, stdout) == EOF)
-    return EOF;
-  return fputc('\n', stdout) == '\n' ? 0 : EOF;
+    if (!str || fputs(str, stdout) == EOF)
+        return EOF;
+    return fputc('\n', stdout) == '\n' ? 0 : EOF;
 }

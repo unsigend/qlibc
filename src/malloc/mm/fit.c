@@ -20,35 +20,35 @@
 /* First fit, reserved usage only.*/
 __hidden void *__firstfit(size_t sz, size_t buckidx)
 {
-  free_block_t *freeblk = __heap.buckets[buckidx];
-  while (freeblk) {
-    if (freeblk->header.sz >= sz) {
-      __removeblk(freeblk, buckidx);
-      void *p = __sliceblk(freeblk, sz);
-      return p;
+    free_block_t *freeblk = __heap.buckets[buckidx];
+    while (freeblk) {
+        if (freeblk->header.sz >= sz) {
+            __removeblk(freeblk, buckidx);
+            void *p = __sliceblk(freeblk, sz);
+            return p;
+        }
+        freeblk = freeblk->next;
     }
-    freeblk = freeblk->next;
-  }
-  return NULL;
+    return NULL;
 }
 
 /* Best fit. */
 __hidden void *__bestfit(size_t sz, size_t buckidx)
 {
-  free_block_t *freeblk = __heap.buckets[buckidx];
-  free_block_t *bestfreeblk = NULL;
-  while (freeblk) {
-    if (freeblk->header.sz >= sz) {
-      if (!bestfreeblk || freeblk->header.sz < bestfreeblk->header.sz) {
-        bestfreeblk = freeblk;
-      }
+    free_block_t *freeblk = __heap.buckets[buckidx];
+    free_block_t *bestfreeblk = NULL;
+    while (freeblk) {
+        if (freeblk->header.sz >= sz) {
+            if (!bestfreeblk || freeblk->header.sz < bestfreeblk->header.sz) {
+                bestfreeblk = freeblk;
+            }
+        }
+        freeblk = freeblk->next;
     }
-    freeblk = freeblk->next;
-  }
-  if (bestfreeblk) {
-    __removeblk(bestfreeblk, buckidx);
-    void *p = __sliceblk(bestfreeblk, sz);
-    return p;
-  }
-  return NULL;
+    if (bestfreeblk) {
+        __removeblk(bestfreeblk, buckidx);
+        void *p = __sliceblk(bestfreeblk, sz);
+        return p;
+    }
+    return NULL;
 }

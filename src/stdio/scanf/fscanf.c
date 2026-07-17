@@ -20,9 +20,9 @@
 
 int fscanf(FILE *restrict stream, const char *restrict format, ...)
 {
-  va_list ap;
-  va_start(ap, format);
-  int ret = vfscanf(stream, format, ap);
-  va_end(ap);
-  return ret;
+    va_list ap;
+    va_start(ap, format);
+    int ret = vfscanf(stream, format, ap);
+    va_end(ap);
+    return ret;
 }

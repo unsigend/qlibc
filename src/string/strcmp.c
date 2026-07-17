@@ -17,7 +17,7 @@
 
 int strcmp(const char *lhs, const char *rhs)
 {
-  while (*lhs && *lhs == *rhs)
-    ++lhs, ++rhs;
-  return (int)((unsigned char)*lhs - (unsigned char)*rhs);
+    while (*lhs && *lhs == *rhs)
+        ++lhs, ++rhs;
+    return (int)((unsigned char)*lhs - (unsigned char)*rhs);
 }

@@ -20,5 +20,5 @@
 
 int vscanf(const char *restrict format, va_list vlist)
 {
-  return vfscanf(stdin, format, vlist);
+    return vfscanf(stdin, format, vlist);
 }

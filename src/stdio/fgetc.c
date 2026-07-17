@@ -19,22 +19,22 @@
 
 int fgetc(FILE *stream)
 {
-  if (!stream || stream->error || stream->eof)
-    return EOF;
+    if (!stream || stream->error || stream->eof)
+        return EOF;
 
-  if (__toin(stream) == EOF) {
-    stream->error = 1;
-    return EOF;
-  }
+    if (__toin(stream) == EOF) {
+        stream->error = 1;
+        return EOF;
+    }
 
-  if (stream->shcnt > 0)
-    return stream->shbuf[--stream->shcnt];
-  if (IBUF_EXHAUSTED(stream)) {
-    if (!stream->buf && __allocbuf(stream) == EOF)
-      return EOF;
-    if (__refill(stream) == EOF)
-      return EOF;
-  }
+    if (stream->shcnt > 0)
+        return stream->shbuf[--stream->shcnt];
+    if (IBUF_EXHAUSTED(stream)) {
+        if (!stream->buf && __allocbuf(stream) == EOF)
+            return EOF;
+        if (__refill(stream) == EOF)
+            return EOF;
+    }
 
-  return *stream->rpos++;
+    return *stream->rpos++;
 }

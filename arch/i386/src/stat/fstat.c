@@ -22,11 +22,11 @@
 
 int fstat(int fd, struct stat *restrict buf)
 {
-  struct __stat64 st64buf;
-  int ret = __syscall2(__NR_fstat64, (long)fd, (long)&st64buf);
-  if (ret < 0) {
-    return ret;
-  }
-  _stat64_to_stat(&st64buf, buf);
-  return 0;
+    struct __stat64 st64buf;
+    int ret = __syscall2(__NR_fstat64, (long)fd, (long)&st64buf);
+    if (ret < 0) {
+        return ret;
+    }
+    _stat64_to_stat(&st64buf, buf);
+    return 0;
 }

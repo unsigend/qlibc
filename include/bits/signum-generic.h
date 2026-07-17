@@ -18,9 +18,9 @@
 #ifndef _BITS_SIGNUM_GENERIC_H
 #define _BITS_SIGNUM_GENERIC_H_ 1
 
-#define SIG_ERR ((sighandler_t) - 1) /* Error return. */
-#define SIG_DFL ((sighandler_t)0)    /* Default action. */
-#define SIG_IGN ((sighandler_t)1)    /* Ignore signal. */
+#define SIG_ERR ((sighandler_t)-1) /* Error return. */
+#define SIG_DFL ((sighandler_t)0)  /* Default action. */
+#define SIG_IGN ((sighandler_t)1)  /* Ignore signal. */
 
 /* ISO C99 signals.  */
 #define SIGINT 2   /* Interactive attention signal.  */

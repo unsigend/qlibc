@@ -22,7 +22,6 @@
 
 __BEGIN_DECLS
 
-/* ASCII character classification functions */
 extern int isalnum(int c);
 extern int isalpha(int c);
 extern int isdigit(int c);
@@ -35,8 +34,6 @@ extern int isgraph(int c);
 extern int isprint(int c);
 extern int islower(int c);
 extern int isupper(int c);
-
-/* ASCII character conversion functions */
 extern int tolower(int c);
 extern int toupper(int c);
 

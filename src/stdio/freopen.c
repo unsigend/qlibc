@@ -24,59 +24,59 @@
 FILE *freopen(const char *restrict filename, const char *restrict mode,
               FILE *restrict stream)
 {
-  int fd, oflags;
+    int fd, oflags;
 
-  if (!filename || !mode || !stream)
-    return NULL;
+    if (!filename || !mode || !stream)
+        return NULL;
 
-  if (fflush(stream) == EOF)
-    stream->error = 1;
+    if (fflush(stream) == EOF)
+        stream->error = 1;
 
-  if (close(stream->fd) == -1)
-    stream->error = 1;
+    if (close(stream->fd) == -1)
+        stream->error = 1;
 
-  if (stream->flags & S_MYBUF && stream->buf)
-    free(stream->buf);
-  if (stream->shbuf)
-    free(stream->shbuf);
+    if (stream->flags & S_MYBUF && stream->buf)
+        free(stream->buf);
+    if (stream->shbuf)
+        free(stream->shbuf);
 
-  switch (mode[0]) {
-  case 'r':
-    oflags = O_RDONLY;
-    break;
-  case 'w':
-    oflags = O_WRONLY | O_CREAT | O_TRUNC;
-    break;
-  case 'a':
-    oflags = O_WRONLY | O_CREAT | O_APPEND;
-    break;
-  default:
-    goto error;
-  }
+    switch (mode[0]) {
+    case 'r':
+        oflags = O_RDONLY;
+        break;
+    case 'w':
+        oflags = O_WRONLY | O_CREAT | O_TRUNC;
+        break;
+    case 'a':
+        oflags = O_WRONLY | O_CREAT | O_APPEND;
+        break;
+    default:
+        goto error;
+    }
 
-  if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
-    oflags = (oflags & ~O_ACCMODE) | O_RDWR;
+    if (mode[1] == '+' || (mode[1] && mode[2] == '+'))
+        oflags = (oflags & ~O_ACCMODE) | O_RDWR;
 
-  if ((fd = open(filename, oflags, PERM)) == -1)
-    goto error;
+    if ((fd = open(filename, oflags, PERM)) == -1)
+        goto error;
 
-  FILE *prev = stream->prev;
-  FILE *next = stream->next;
-  memset(stream, 0, sizeof(FILE));
+    FILE *prev = stream->prev;
+    FILE *next = stream->next;
+    memset(stream, 0, sizeof(FILE));
 
-  stream->fd = fd;
-  stream->mode = oflags;
-  stream->bufmode = isatty(fd) ? _IOLBF : _IOFBF;
-  stream->prev = prev;
-  stream->next = next;
+    stream->fd = fd;
+    stream->mode = oflags;
+    stream->bufmode = isatty(fd) ? _IOLBF : _IOFBF;
+    stream->prev = prev;
+    stream->next = next;
 
-  return stream;
+    return stream;
 
 error:
-  __unlinks(stream);
-  if (stream->flags & S_STATIC)
-    memset(stream, 0, sizeof(FILE));
-  else
-    free(stream);
-  return NULL;
+    __unlinks(stream);
+    if (stream->flags & S_STATIC)
+        memset(stream, 0, sizeof(FILE));
+    else
+        free(stream);
+    return NULL;
 }

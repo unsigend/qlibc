@@ -25,8 +25,8 @@
 
 /* Returned by imaxdiv */
 typedef struct {
-  intmax_t quot;
-  intmax_t rem;
+    intmax_t quot;
+    intmax_t rem;
 } imaxdiv_t;
 
 __BEGIN_DECLS

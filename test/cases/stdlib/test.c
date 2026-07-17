@@ -22,27 +22,27 @@
 
 UTEST_TEST_SUITE(stdlib)
 {
-  // ASCII to integer conversions
-  UTEST_RUN_TEST_CASE(atoi);
-  UTEST_RUN_TEST_CASE(atol);
-  UTEST_RUN_TEST_CASE(atoll);
+    // ASCII to integer conversions
+    UTEST_RUN_TEST_CASE(atoi);
+    UTEST_RUN_TEST_CASE(atol);
+    UTEST_RUN_TEST_CASE(atoll);
 
-  UTEST_RUN_TEST_CASE(abs);
-  UTEST_RUN_TEST_CASE(div);
+    UTEST_RUN_TEST_CASE(abs);
+    UTEST_RUN_TEST_CASE(div);
 
-  // algorithm
-  UTEST_RUN_TEST_CASE(bsearch);
+    // algorithm
+    UTEST_RUN_TEST_CASE(bsearch);
 
-  // string to integer conversions
-  UTEST_RUN_TEST_CASE(strtol);
-  UTEST_RUN_TEST_CASE(strtoll);
-  UTEST_RUN_TEST_CASE(strtoul);
-  UTEST_RUN_TEST_CASE(strtoull);
+    // string to integer conversions
+    UTEST_RUN_TEST_CASE(strtol);
+    UTEST_RUN_TEST_CASE(strtoll);
+    UTEST_RUN_TEST_CASE(strtoul);
+    UTEST_RUN_TEST_CASE(strtoull);
 
-  // environment variables
-  UTEST_RUN_TEST_CASE(getenv);
-  UTEST_RUN_TEST_CASE(putenv);
-  UTEST_RUN_TEST_CASE(setenv);
-  UTEST_RUN_TEST_CASE(unsetenv);
-  UTEST_RUN_TEST_CASE(clearenv);
+    // environment variables
+    UTEST_RUN_TEST_CASE(getenv);
+    UTEST_RUN_TEST_CASE(putenv);
+    UTEST_RUN_TEST_CASE(setenv);
+    UTEST_RUN_TEST_CASE(unsetenv);
+    UTEST_RUN_TEST_CASE(clearenv);
 }

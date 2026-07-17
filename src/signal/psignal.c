@@ -20,7 +20,7 @@
 
 void psignal(int sig, const char *msg)
 {
-  if (msg && *msg)
-    fprintf(stderr, "%s: ", msg);
-  fprintf(stderr, "%s\n", strsignal(sig));
+    if (msg && *msg)
+        fprintf(stderr, "%s: ", msg);
+    fprintf(stderr, "%s\n", strsignal(sig));
 }

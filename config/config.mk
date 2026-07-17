@@ -21,7 +21,7 @@
 TOOLCHAIN_PREFIX 	:= 	
 
 # Config for GCC
-GCC 				:= 			gcc-13
+GCC 				:= 			gcc
 
 # Config for architecture
 # Supported architectures: i386, x86_64

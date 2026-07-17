@@ -20,5 +20,6 @@
 
 pid_t waitpid(pid_t pid, int *status, int options)
 {
-  return __syscall(SYS_wait4, (long)pid, (long)status, (long)options, (long)0);
+    return __syscall(SYS_wait4, (long)pid, (long)status, (long)options,
+                     (long)0);
 }

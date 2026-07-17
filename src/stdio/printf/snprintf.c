@@ -21,9 +21,9 @@
 int snprintf(char *restrict buffer, size_t bufsz, const char *restrict format,
              ...)
 {
-  va_list ap;
-  va_start(ap, format);
-  int ret = vsnprintf(buffer, bufsz, format, ap);
-  va_end(ap);
-  return ret;
+    va_list ap;
+    va_start(ap, format);
+    int ret = vsnprintf(buffer, bufsz, format, ap);
+    va_end(ap);
+    return ret;
 }

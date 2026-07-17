@@ -20,19 +20,20 @@
 
 static int readc(void *ctx)
 {
-  FILE *file = (FILE *)ctx;
-  return getc(file);
+    FILE *file = (FILE *)ctx;
+    return getc(file);
 }
 
 static int unreadc(int ch, void *ctx)
 {
-  FILE *file = (FILE *)ctx;
-  int ret = ungetc(ch, file);
-  return ret;
+    FILE *file = (FILE *)ctx;
+    int ret = ungetc(ch, file);
+    return ret;
 }
 
 int vfscanf(FILE *restrict stream, const char *restrict format, va_list vlist)
 {
-  struct reader r = {.readc = readc, .unreadc = unreadc, .ctx = (void *)stream};
-  return scanf_core(&r, format, vlist);
+    struct reader r = {
+        .readc = readc, .unreadc = unreadc, .ctx = (void *)stream};
+    return scanf_core(&r, format, vlist);
 }

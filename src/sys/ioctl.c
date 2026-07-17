@@ -21,10 +21,10 @@
 
 int ioctl(int fd, int request, ...)
 {
-  va_list args;
-  va_start(args, request);
-  void *ap = va_arg(args, void *);
-  va_end(args);
+    va_list args;
+    va_start(args, request);
+    void *ap = va_arg(args, void *);
+    va_end(args);
 
-  return __syscall(SYS_ioctl, fd, request, (long)ap);
+    return __syscall(SYS_ioctl, fd, request, (long)ap);
 }

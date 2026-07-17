@@ -19,11 +19,11 @@
 
 char *strcat(char *restrict dest, const char *restrict src)
 {
-  char *wp = dest;
-  while (*dest)
-    ++dest;
-  while (*src)
-    *dest++ = *src++;
-  *dest = '\0';
-  return wp;
+    char *wp = dest;
+    while (*dest)
+        ++dest;
+    while (*src)
+        *dest++ = *src++;
+    *dest = '\0';
+    return wp;
 }

@@ -21,5 +21,5 @@
 
 int vsprintf(char *restrict buffer, const char *restrict format, va_list vlist)
 {
-  return vsnprintf(buffer, INT_MAX, format, vlist);
+    return vsnprintf(buffer, INT_MAX, format, vlist);
 }

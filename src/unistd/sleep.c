@@ -19,8 +19,8 @@
 
 unsigned int sleep(unsigned int seconds)
 {
-  struct timespec tv = {.tv_nsec = 0, .tv_sec = seconds};
-  if (nanosleep(&tv, &tv))
-    return tv.tv_sec;
-  return 0;
+    struct timespec tv = {.tv_nsec = 0, .tv_sec = seconds};
+    if (nanosleep(&tv, &tv))
+        return tv.tv_sec;
+    return 0;
 }

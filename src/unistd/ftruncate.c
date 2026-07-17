@@ -20,5 +20,5 @@
 
 int ftruncate(int fd, off_t length)
 {
-  return __syscall(SYS_ftruncate, (long)fd, (long)length);
+    return __syscall(SYS_ftruncate, (long)fd, (long)length);
 }

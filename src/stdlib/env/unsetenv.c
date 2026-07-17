@@ -22,28 +22,28 @@
 
 int unsetenv(const char *name)
 {
-  if (!name || !name[0])
-    return -1;
-  if (!environ)
-    return 0;
-
-  int inplace = 0;
-  char **newenviron = NULL;
-  size_t namelen = strlen(name);
-
-  for (size_t i = 0; environ[i]; i++) {
-    if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=') {
-      newenviron = env_remove(environ, i, &inplace);
-      if (!newenviron)
+    if (!name || !name[0])
         return -1;
-      break;
-    }
-  }
+    if (!environ)
+        return 0;
 
-  if (!newenviron || inplace)
+    int inplace = 0;
+    char **newenviron = NULL;
+    size_t namelen = strlen(name);
+
+    for (size_t i = 0; environ[i]; i++) {
+        if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=') {
+            newenviron = env_remove(environ, i, &inplace);
+            if (!newenviron)
+                return -1;
+            break;
+        }
+    }
+
+    if (!newenviron || inplace)
+        return 0;
+    if (__heap_environ)
+        free(__heap_environ);
+    environ = __heap_environ = newenviron;
     return 0;
-  if (__heap_environ)
-    free(__heap_environ);
-  environ = __heap_environ = newenviron;
-  return 0;
 }

@@ -21,57 +21,58 @@
 size_t fwrite(const void *restrict ptr, size_t size, size_t count,
               FILE *restrict stream)
 {
-  if (!ptr || !size || !count || !stream || stream->error || stream->eof)
-    return 0;
+    if (!ptr || !size || !count || !stream || stream->error || stream->eof)
+        return 0;
 
-  if (count > SIZE_MAX / size) {
-    stream->error = 1;
-    return 0;
-  }
-
-  __toout(stream);
-
-  if (!stream->buf && __allocbuf(stream) == EOF)
-    return 0;
-
-  size_t nbytes = size * count;
-  size_t nwrite = 0;
-
-  /* fwrite is designed as fast path write to buffer and slow path write to
-     file descriptor. */
-
-  if (nbytes <= stream->bufsz && stream->bufmode != _IONBF) {
-    /* line buffered, flush when '\n' */
-    if (stream->bufmode == _IOLBF) {
-      while (nwrite < nbytes) {
-        int r = fputc(((unsigned char *)ptr)[nwrite], stream);
-        if (r == EOF)
-          return nwrite / size;
-        nwrite++;
-      }
+    if (count > SIZE_MAX / size) {
+        stream->error = 1;
+        return 0;
     }
-    /* full buffered, flush when buffer is full */
-    else {
-      while (nwrite < nbytes) {
-        if (OBUF_FULL(stream) && __flushbuf(stream) == EOF)
-          return nwrite / size;
-        size_t n = MIN((size_t)(stream->wend - stream->wpos), nbytes - nwrite);
-        memcpy(stream->wpos, (unsigned char *)ptr + nwrite, n);
-        stream->wpos += n;
+
+    __toout(stream);
+
+    if (!stream->buf && __allocbuf(stream) == EOF)
+        return 0;
+
+    size_t nbytes = size * count;
+    size_t nwrite = 0;
+
+    /* fwrite is designed as fast path write to buffer and slow path write to
+       file descriptor. */
+
+    if (nbytes <= stream->bufsz && stream->bufmode != _IONBF) {
+        /* line buffered, flush when '\n' */
+        if (stream->bufmode == _IOLBF) {
+            while (nwrite < nbytes) {
+                int r = fputc(((unsigned char *)ptr)[nwrite], stream);
+                if (r == EOF)
+                    return nwrite / size;
+                nwrite++;
+            }
+        }
+        /* full buffered, flush when buffer is full */
+        else {
+            while (nwrite < nbytes) {
+                if (OBUF_FULL(stream) && __flushbuf(stream) == EOF)
+                    return nwrite / size;
+                size_t n =
+                    MIN((size_t)(stream->wend - stream->wpos), nbytes - nwrite);
+                memcpy(stream->wpos, (unsigned char *)ptr + nwrite, n);
+                stream->wpos += n;
+                nwrite += n;
+            }
+        }
+    } else {
+        if (__flushbuf(stream) == EOF)
+            return 0;
+        ssize_t n = __writeall(stream->fd, (unsigned char *)ptr, nbytes);
+        if (n == -1) {
+            stream->error = 1;
+            return nwrite / size;
+        }
         nwrite += n;
-      }
+        stream->offset += n;
     }
-  } else {
-    if (__flushbuf(stream) == EOF)
-      return 0;
-    ssize_t n = __writeall(stream->fd, (unsigned char *)ptr, nbytes);
-    if (n == -1) {
-      stream->error = 1;
-      return nwrite / size;
-    }
-    nwrite += n;
-    stream->offset += n;
-  }
 
-  return nwrite / size;
+    return nwrite / size;
 }

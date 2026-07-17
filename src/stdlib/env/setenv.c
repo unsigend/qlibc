@@ -22,53 +22,54 @@
 
 int setenv(const char *name, const char *value, int overwrite)
 {
-  if (!name || !value)
-    return -1;
+    if (!name || !value)
+        return -1;
 
-  size_t namelen = strlen(name);
-  size_t valuelen = strlen(value);
-  if (!namelen)
-    return -1;
+    size_t namelen = strlen(name);
+    size_t valuelen = strlen(value);
+    if (!namelen)
+        return -1;
 
-  /* Required size for name=value pair: namelen + '=' + valuelen + '\0' */
-  if (environ) {
-    for (size_t i = 0; environ[i]; i++) {
-      if (!strncmp(environ[i], name, namelen) && environ[i][namelen] == '=') {
-        if (!overwrite)
-          return 0;
-        environ[i] = malloc(namelen + valuelen + 2);
-        if (!environ[i]) {
-          errno = ENOMEM;
-          return -1;
+    /* Required size for name=value pair: namelen + '=' + valuelen + '\0' */
+    if (environ) {
+        for (size_t i = 0; environ[i]; i++) {
+            if (!strncmp(environ[i], name, namelen) &&
+                environ[i][namelen] == '=') {
+                if (!overwrite)
+                    return 0;
+                environ[i] = malloc(namelen + valuelen + 2);
+                if (!environ[i]) {
+                    errno = ENOMEM;
+                    return -1;
+                }
+                memcpy(environ[i], name, namelen);
+                environ[i][namelen] = '=';
+                memcpy(environ[i] + namelen + 1, value, valuelen);
+                environ[i][namelen + valuelen + 1] = '\0';
+                return 0;
+            }
         }
-        memcpy(environ[i], name, namelen);
-        environ[i][namelen] = '=';
-        memcpy(environ[i] + namelen + 1, value, valuelen);
-        environ[i][namelen + valuelen + 1] = '\0';
-        return 0;
-      }
     }
-  }
 
-  char *newstr = (char *)malloc(namelen + valuelen + 2);
-  if (!newstr) {
-    errno = ENOMEM;
-    return -1;
-  }
+    char *newstr = (char *)malloc(namelen + valuelen + 2);
+    if (!newstr) {
+        errno = ENOMEM;
+        return -1;
+    }
 
-  memcpy(newstr, name, namelen);
-  newstr[namelen] = '=';
-  memcpy(newstr + namelen + 1, value, valuelen);
-  newstr[namelen + valuelen + 1] = '\0';
+    memcpy(newstr, name, namelen);
+    newstr[namelen] = '=';
+    memcpy(newstr + namelen + 1, value, valuelen);
+    newstr[namelen + valuelen + 1] = '\0';
 
-  char **newenviron = env_expand(environ, newstr);
-  if (!newenviron) {
-    free(newstr);
-    return -1; /* errno is set by env_expand */
-  }
+    char **newenviron = env_expand(environ, newstr);
+    if (!newenviron) {
+        free(newstr);
+        return -1; /* errno is set by env_expand */
+    }
 
-  if (__heap_environ)
-    free(__heap_environ);
-  environ = __heap_environ = newenviron;
-  return 0;
+    if (__heap_environ)
+        free(__heap_environ);
+    environ = __heap_environ = newenviron;
+    return 0;
 }

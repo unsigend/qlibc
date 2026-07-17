@@ -57,9 +57,9 @@ static char unknownbuf[BUFSZ];
 
 char *strsignal(int sig)
 {
-  if (sig < 0 || sig >= 32 || !sigdescs[sig]) {
-    snprintf(unknownbuf, BUFSZ, "Unknown signal %d", sig);
-    return (char *)unknownbuf;
-  }
-  return (char *)sigdescs[sig];
+    if (sig < 0 || sig >= 32 || !sigdescs[sig]) {
+        snprintf(unknownbuf, BUFSZ, "Unknown signal %d", sig);
+        return (char *)unknownbuf;
+    }
+    return (char *)sigdescs[sig];
 }

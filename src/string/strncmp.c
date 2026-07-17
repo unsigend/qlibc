@@ -19,13 +19,13 @@
 
 int strncmp(const char *lhs, const char *rhs, size_t count)
 {
-  while (count--) {
-    if (*lhs != *rhs)
-      return (int)((unsigned char)*lhs - (unsigned char)*rhs);
-    if (*lhs == '\0')
-      return 0;
-    ++lhs;
-    ++rhs;
-  }
-  return 0;
+    while (count--) {
+        if (*lhs != *rhs)
+            return (int)((unsigned char)*lhs - (unsigned char)*rhs);
+        if (*lhs == '\0')
+            return 0;
+        ++lhs;
+        ++rhs;
+    }
+    return 0;
 }

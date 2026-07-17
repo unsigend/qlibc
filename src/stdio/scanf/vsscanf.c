@@ -20,31 +20,31 @@
 #include <stdio.h>
 
 struct ctx {
-  const char *cur;
+    const char *cur;
 };
 
 static int readc(void *ctx)
 {
-  struct ctx *c = (struct ctx *)ctx;
-  if (*c->cur == '\0')
-    return EOF;
-  return *c->cur++;
+    struct ctx *c = (struct ctx *)ctx;
+    if (*c->cur == '\0')
+        return EOF;
+    return *c->cur++;
 }
 
 static int unreadc(int ch, void *ctx)
 {
-  struct ctx *c = (struct ctx *)ctx;
-  if (ch != EOF)
-    c->cur--;
-  return *c->cur;
+    struct ctx *c = (struct ctx *)ctx;
+    if (ch != EOF)
+        c->cur--;
+    return *c->cur;
 }
 
 int vsscanf(const char *restrict buffer, const char *restrict format,
             va_list vlist)
 {
-  if (!buffer || !format || (*format && *buffer == '\0'))
-    return EOF;
-  struct ctx c = {.cur = buffer};
-  struct reader r = {.readc = readc, .unreadc = unreadc, .ctx = &c};
-  return scanf_core(&r, format, vlist);
+    if (!buffer || !format || (*format && *buffer == '\0'))
+        return EOF;
+    struct ctx c = {.cur = buffer};
+    struct reader r = {.readc = readc, .unreadc = unreadc, .ctx = &c};
+    return scanf_core(&r, format, vlist);
 }

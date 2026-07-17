@@ -19,9 +19,9 @@
 
 void *memset(void *dest, int ch, size_t count)
 {
-  unsigned char *wp = (unsigned char *)dest;
-  for (size_t i = 0; i < count; i++)
-    wp[i] = (unsigned char)ch;
+    unsigned char *wp = (unsigned char *)dest;
+    for (size_t i = 0; i < count; i++)
+        wp[i] = (unsigned char)ch;
 
-  return dest;
+    return dest;
 }

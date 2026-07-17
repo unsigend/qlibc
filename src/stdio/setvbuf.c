@@ -21,19 +21,19 @@
 
 int setvbuf(FILE *restrict stream, char *restrict buffer, int mode, size_t size)
 {
-  if (!stream || !VMODE(mode) || stream->buf)
-    return EOF;
+    if (!stream || !VMODE(mode) || stream->buf)
+        return EOF;
 
-  if (buffer) {
-    stream->buf = (unsigned char *)buffer;
-    stream->bufmode = mode;
-    stream->bufsz = size;
+    if (buffer) {
+        stream->buf = (unsigned char *)buffer;
+        stream->bufmode = mode;
+        stream->bufsz = size;
 
-    __resetbufp(stream, stream->buf, size);
-  } else {
-    stream->bufmode = mode;
-    if (__allocbuf(stream) == EOF)
-      return EOF;
-  }
-  return 0;
+        __resetbufp(stream, stream->buf, size);
+    } else {
+        stream->bufmode = mode;
+        if (__allocbuf(stream) == EOF)
+            return EOF;
+    }
+    return 0;
 }

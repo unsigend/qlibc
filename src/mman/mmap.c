@@ -25,24 +25,25 @@
 
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 {
-  long ret = 0;
-  if (offset & OFF_MASK) {
-    errno = EINVAL;
-    return MAP_FAILED;
-  }
-  if (length >= PTRDIFF_MAX) {
-    errno = ENOMEM;
-    return MAP_FAILED;
-  }
+    long ret = 0;
+    if (offset & OFF_MASK) {
+        errno = EINVAL;
+        return MAP_FAILED;
+    }
+    if (length >= PTRDIFF_MAX) {
+        errno = ENOMEM;
+        return MAP_FAILED;
+    }
 
 #ifdef SYS_mmap2
-  ret = __syscall6_raw(SYS_mmap2, (uintptr_t)addr, length, prot, flags, fd,
-                       offset >> PAGEBITS);
+    ret = __syscall6_raw(SYS_mmap2, (uintptr_t)addr, length, prot, flags, fd,
+                         offset >> PAGEBITS);
 #else
-  ret = __syscall6_raw(SYS_mmap, (uintptr_t)addr, length, prot, flags, fd,
-                       offset);
+    ret = __syscall6_raw(SYS_mmap, (uintptr_t)addr, length, prot, flags, fd,
+                         offset);
 #endif
-  if (ret == -EPERM && !addr && (flags & MAP_ANONYMOUS) && !(flags & MAP_FIXED))
-    ret = -ENOMEM;
-  return (void *)__syscall_ret(ret);
+    if (ret == -EPERM && !addr && (flags & MAP_ANONYMOUS) &&
+        !(flags & MAP_FIXED))
+        ret = -ENOMEM;
+    return (void *)__syscall_ret(ret);
 }

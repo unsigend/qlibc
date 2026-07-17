@@ -27,19 +27,19 @@ extern void *__brk(void *addr);
 
 void *sbrk(intptr_t increment)
 {
-  static void *__addr;
-  if (!__addr)
-    __addr = __brk(0);
+    static void *__addr;
+    if (!__addr)
+        __addr = __brk(0);
 
-  void *oldaddr = __addr;
-  if (increment) {
-    void *retaddr = __brk((unsigned char *)__addr + increment);
-    if ((increment > 0 && retaddr < __addr) ||
-        (increment < 0 && retaddr >= __addr)) {
-      errno = ENOMEM;
-      return (void *)-1;
+    void *oldaddr = __addr;
+    if (increment) {
+        void *retaddr = __brk((unsigned char *)__addr + increment);
+        if ((increment > 0 && retaddr < __addr) ||
+            (increment < 0 && retaddr >= __addr)) {
+            errno = ENOMEM;
+            return (void *)-1;
+        }
+        __addr = retaddr;
     }
-    __addr = retaddr;
-  }
-  return oldaddr;
+    return oldaddr;
 }

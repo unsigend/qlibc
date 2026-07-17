@@ -29,25 +29,25 @@
 
 UTEST_TEST_SUITE(string)
 {
-  UTEST_RUN_TEST_CASE(memchr);
-  UTEST_RUN_TEST_CASE(memcmp);
-  UTEST_RUN_TEST_CASE(memcpy);
-  UTEST_RUN_TEST_CASE(memmove);
-  UTEST_RUN_TEST_CASE(memset);
-  UTEST_RUN_TEST_CASE(strcpy);
-  UTEST_RUN_TEST_CASE(strncpy);
-  UTEST_RUN_TEST_CASE(strcat);
-  UTEST_RUN_TEST_CASE(strncat);
-  UTEST_RUN_TEST_CASE(strxfrm);
-  UTEST_RUN_TEST_CASE(strlen);
-  UTEST_RUN_TEST_CASE(strcmp);
-  UTEST_RUN_TEST_CASE(strncmp);
-  UTEST_RUN_TEST_CASE(strcoll);
-  UTEST_RUN_TEST_CASE(strchr);
-  UTEST_RUN_TEST_CASE(strrchr);
-  UTEST_RUN_TEST_CASE(strspn);
-  UTEST_RUN_TEST_CASE(strcspn);
-  UTEST_RUN_TEST_CASE(strpbrk);
-  UTEST_RUN_TEST_CASE(strstr);
-  UTEST_RUN_TEST_CASE(strtok);
+    UTEST_RUN_TEST_CASE(memchr);
+    UTEST_RUN_TEST_CASE(memcmp);
+    UTEST_RUN_TEST_CASE(memcpy);
+    UTEST_RUN_TEST_CASE(memmove);
+    UTEST_RUN_TEST_CASE(memset);
+    UTEST_RUN_TEST_CASE(strcpy);
+    UTEST_RUN_TEST_CASE(strncpy);
+    UTEST_RUN_TEST_CASE(strcat);
+    UTEST_RUN_TEST_CASE(strncat);
+    UTEST_RUN_TEST_CASE(strxfrm);
+    UTEST_RUN_TEST_CASE(strlen);
+    UTEST_RUN_TEST_CASE(strcmp);
+    UTEST_RUN_TEST_CASE(strncmp);
+    UTEST_RUN_TEST_CASE(strcoll);
+    UTEST_RUN_TEST_CASE(strchr);
+    UTEST_RUN_TEST_CASE(strrchr);
+    UTEST_RUN_TEST_CASE(strspn);
+    UTEST_RUN_TEST_CASE(strcspn);
+    UTEST_RUN_TEST_CASE(strpbrk);
+    UTEST_RUN_TEST_CASE(strstr);
+    UTEST_RUN_TEST_CASE(strtok);
 }

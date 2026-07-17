@@ -19,7 +19,7 @@
 
 int fsetpos(FILE *restrict stream, const fpos_t *restrict pos)
 {
-  if (!stream || !pos)
-    return -1;
-  return fseek(stream, pos->pos, SEEK_SET);
+    if (!stream || !pos)
+        return -1;
+    return fseek(stream, pos->pos, SEEK_SET);
 }

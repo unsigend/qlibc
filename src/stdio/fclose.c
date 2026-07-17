@@ -22,35 +22,35 @@
 
 int fclose(FILE *stream)
 {
-  if (!stream)
-    return EOF;
+    if (!stream)
+        return EOF;
 
-  int fd;
-  int error = 0;
-  fd = stream->fd;
+    int fd;
+    int error = 0;
+    fd = stream->fd;
 
-  if (fflush(stream) == EOF)
-    error = 1;
+    if (fflush(stream) == EOF)
+        error = 1;
 
-  __unlinks(stream);
+    __unlinks(stream);
 
-  if (stream->flags & S_MYBUF && stream->buf) {
-    free(stream->buf);
-    stream->buf = NULL;
-  }
+    if (stream->flags & S_MYBUF && stream->buf) {
+        free(stream->buf);
+        stream->buf = NULL;
+    }
 
-  if (stream->shbuf) {
-    free(stream->shbuf);
-    stream->shbuf = NULL;
-  }
+    if (stream->shbuf) {
+        free(stream->shbuf);
+        stream->shbuf = NULL;
+    }
 
-  if (close(fd) == -1)
-    error = 1;
+    if (close(fd) == -1)
+        error = 1;
 
-  if (!(stream->flags & S_STATIC))
-    free(stream);
-  else
-    memset(stream, 0, sizeof(FILE));
+    if (!(stream->flags & S_STATIC))
+        free(stream);
+    else
+        memset(stream, 0, sizeof(FILE));
 
-  return error ? EOF : 0;
+    return error ? EOF : 0;
 }

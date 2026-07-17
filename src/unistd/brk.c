@@ -21,12 +21,12 @@ extern void *__brk(void *addr);
 
 int brk(void *addr)
 {
-  void *newaddr = __brk(addr);
-  /* if the newaddr > addr, it means the heap is expanded successfully, the
-     kernel may aligned the heap to page size */
-  if (newaddr < addr) {
-    errno = ENOMEM;
-    return -1;
-  }
-  return 0;
+    void *newaddr = __brk(addr);
+    /* if the newaddr > addr, it means the heap is expanded successfully, the
+       kernel may aligned the heap to page size */
+    if (newaddr < addr) {
+        errno = ENOMEM;
+        return -1;
+    }
+    return 0;
 }

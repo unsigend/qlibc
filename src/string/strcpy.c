@@ -18,6 +18,6 @@
 
 char *strcpy(char *restrict dest, const char *restrict src)
 {
-  memcpy(dest, src, strlen(src) + 1);
-  return dest;
+    memcpy(dest, src, strlen(src) + 1);
+    return dest;
 }

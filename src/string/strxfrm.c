@@ -20,11 +20,11 @@
 /* Only copy the string, don't support locale transformation yet. */
 size_t strxfrm(char *restrict dest, const char *restrict src, size_t count)
 {
-  size_t n = 0;
-  while (*src && n < count) {
-    *((unsigned char *)dest++) = *((unsigned char *)src++);
-    ++n;
-  }
-  *((unsigned char *)dest) = '\0';
-  return n;
+    size_t n = 0;
+    while (*src && n < count) {
+        *((unsigned char *)dest++) = *((unsigned char *)src++);
+        ++n;
+    }
+    *((unsigned char *)dest) = '\0';
+    return n;
 }

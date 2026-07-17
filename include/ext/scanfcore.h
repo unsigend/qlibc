@@ -28,9 +28,9 @@
    scanf core, scanf will call readc and unreadc to read and unread
    characters. */
 struct reader {
-  int (*readc)(void *ctx);          /* read a character */
-  int (*unreadc)(int c, void *ctx); /* unread a character */
-  void *ctx;                        /* opaque context pointer*/
+    int (*readc)(void *ctx);          /* read a character */
+    int (*unreadc)(int c, void *ctx); /* unread a character */
+    void *ctx;                        /* opaque context pointer*/
 };
 
 __BEGIN_DECLS

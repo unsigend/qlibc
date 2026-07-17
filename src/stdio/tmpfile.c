@@ -25,16 +25,16 @@
 #define PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 FILE *tmpfile(void)
 {
-  int fd = open("/tmp", O_TMPFILE | O_RDWR, PERM);
-  if (fd == -1)
-    return NULL;
+    int fd = open("/tmp", O_TMPFILE | O_RDWR, PERM);
+    if (fd == -1)
+        return NULL;
 
-  FILE *stream = malloc(sizeof(FILE));
-  if (!stream) {
-    close(fd);
-    return NULL;
-  }
+    FILE *stream = malloc(sizeof(FILE));
+    if (!stream) {
+        close(fd);
+        return NULL;
+    }
 
-  __inits(stream, fd, O_RDWR, _IOFBF);
-  return stream;
+    __inits(stream, fd, O_RDWR, _IOFBF);
+    return stream;
 }

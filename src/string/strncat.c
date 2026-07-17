@@ -19,13 +19,13 @@
 
 char *strncat(char *restrict dest, const char *restrict src, size_t count)
 {
-  size_t wlen = strlen(dest);
-  size_t rlen = strlen(src);
-  if (rlen < count)
-    memcpy(dest + wlen, src, rlen + 1);
-  else {
-    memcpy(dest + wlen, src, count);
-    dest[wlen + count] = '\0';
-  }
-  return dest;
+    size_t wlen = strlen(dest);
+    size_t rlen = strlen(src);
+    if (rlen < count)
+        memcpy(dest + wlen, src, rlen + 1);
+    else {
+        memcpy(dest + wlen, src, count);
+        dest[wlen + count] = '\0';
+    }
+    return dest;
 }

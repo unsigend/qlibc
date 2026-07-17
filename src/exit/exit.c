@@ -29,15 +29,15 @@ noreturn void exit(int status)
 void exit(int status)
 {
 #endif
-  if (!__exit_func_count)
-    goto done;
-  LOCK();
-  for (size_t i = __exit_func_count; i > 0;) {
-    __exit_funcs[--i]();
-  }
-  UNLOCK();
+    if (!__exit_func_count)
+        goto done;
+    LOCK();
+    for (size_t i = __exit_func_count; i > 0;) {
+        __exit_funcs[--i]();
+    }
+    UNLOCK();
 done:
-  /* Flush all stdio streams. */
-  fflush(NULL);
-  _exit(status);
+    /* Flush all stdio streams. */
+    fflush(NULL);
+    _exit(status);
 }

@@ -22,11 +22,11 @@
 
 int stat(const char *restrict path, struct stat *restrict buf)
 {
-  struct __stat64 st64buf;
-  int ret = __syscall2(__NR_stat64, (long)path, (long)&st64buf);
-  if (ret < 0) {
-    return ret;
-  }
-  _stat64_to_stat(&st64buf, buf);
-  return 0;
+    struct __stat64 st64buf;
+    int ret = __syscall2(__NR_stat64, (long)path, (long)&st64buf);
+    if (ret < 0) {
+        return ret;
+    }
+    _stat64_to_stat(&st64buf, buf);
+    return 0;
 }

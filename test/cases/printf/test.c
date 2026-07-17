@@ -14,13 +14,13 @@
 
 UTEST_TEST_SUITE(printf)
 {
-  UTEST_RUN_TEST_CASE(out);
-  UTEST_RUN_TEST_CASE(out_c);
-  UTEST_RUN_TEST_CASE(out_s);
-  UTEST_RUN_TEST_CASE(out_di);
-  UTEST_RUN_TEST_CASE(out_o);
-  UTEST_RUN_TEST_CASE(out_x);
-  UTEST_RUN_TEST_CASE(out_u);
-  UTEST_RUN_TEST_CASE(out_p);
-  UTEST_RUN_TEST_CASE(out_integration);
+    UTEST_RUN_TEST_CASE(out);
+    UTEST_RUN_TEST_CASE(out_c);
+    UTEST_RUN_TEST_CASE(out_s);
+    UTEST_RUN_TEST_CASE(out_di);
+    UTEST_RUN_TEST_CASE(out_o);
+    UTEST_RUN_TEST_CASE(out_x);
+    UTEST_RUN_TEST_CASE(out_u);
+    UTEST_RUN_TEST_CASE(out_p);
+    UTEST_RUN_TEST_CASE(out_integration);
 }

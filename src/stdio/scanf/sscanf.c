@@ -19,9 +19,9 @@
 
 int sscanf(const char *restrict buffer, const char *restrict format, ...)
 {
-  va_list ap;
-  va_start(ap, format);
-  int ret = vsscanf(buffer, format, ap);
-  va_end(ap);
-  return ret;
+    va_list ap;
+    va_start(ap, format);
+    int ret = vsscanf(buffer, format, ap);
+    va_end(ap);
+    return ret;
 }

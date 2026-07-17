@@ -26,6 +26,6 @@ noreturn void abort(void)
 void abort(void)
 {
 #endif
-  raise(SIGABRT);
-  _exit(127);
+    raise(SIGABRT);
+    _exit(127);
 }

@@ -21,12 +21,12 @@
 
 int fcntl(int fd, int cmd, ...)
 {
-  va_list ap;
-  unsigned long arg;
+    va_list ap;
+    unsigned long arg;
 
-  va_start(ap, cmd);
-  arg = va_arg(ap, unsigned long);
-  va_end(ap);
+    va_start(ap, cmd);
+    arg = va_arg(ap, unsigned long);
+    va_end(ap);
 
-  return __syscall(SYS_fcntl, (long)fd, (long)cmd, arg);
+    return __syscall(SYS_fcntl, (long)fd, (long)cmd, arg);
 }

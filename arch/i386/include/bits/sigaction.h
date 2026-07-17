@@ -23,20 +23,20 @@
 #define SA_NOCLDSTOP 1 /* Don't send SIGCHLD when children stop.  */
 #define SA_NOCLDWAIT 2 /* Don't create zombie on child death.  */
 #define SA_SIGINFO                                                             \
-  4 /* Invoke signal-catching function with three arguments instead of one.    \
-     */
+    4 /* Invoke signal-catching function with three arguments instead of one.  \
+       */
 #define SA_RESETHAND 0x80000000 /* Reset to SIG_DFL when entry to handler. */
 #define SA_RESTART 0x10000000   /* Restart system calls on signal return. */
 #define SA_NODEFER                                                             \
-  0x40000000 /* Don't automatically block the signal when it's handler is      \
-                being executed. */
+    0x40000000 /* Don't automatically block the signal when it's handler is    \
+                  being executed. */
 
 /* Structure describing the action to be taken when a signal arrives. */
 struct sigaction {
-  void (*sa_handler)(int);   /* Address of handler */
-  __sigset_t sa_mask;        /* Signals blocked during handler invocation */
-  int sa_flags;              /* Flags controlling handler invocation */
-  void (*sa_restorer)(void); /* Restore handler. (Not for application use.)*/
+    void (*sa_handler)(int);   /* Address of handler */
+    __sigset_t sa_mask;        /* Signals blocked during handler invocation */
+    int sa_flags;              /* Flags controlling handler invocation */
+    void (*sa_restorer)(void); /* Restore handler. (Not for application use.)*/
 };
 
 /* Values for the HOW argument to `sigprocmask'.  */

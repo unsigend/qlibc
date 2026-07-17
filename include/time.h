@@ -24,8 +24,8 @@ typedef __time_t time_t;
 typedef __clock_t clock_t;
 
 struct timespec {
-  time_t tv_sec; /* seconds */
-  long tv_nsec;  /* nanoseconds */
+    time_t tv_sec; /* seconds */
+    long tv_nsec;  /* nanoseconds */
 };
 
 __BEGIN_DECLS

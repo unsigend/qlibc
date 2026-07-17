@@ -23,20 +23,20 @@
 
 /* Returned by div */
 typedef struct {
-  int quot;
-  int rem;
+    int quot;
+    int rem;
 } div_t;
 
 /* Returned by ldiv */
 typedef struct {
-  long quot;
-  long rem;
+    long quot;
+    long rem;
 } ldiv_t;
 
 /* Returned by lldiv */
 typedef struct {
-  long long quot;
-  long long rem;
+    long long quot;
+    long long rem;
 } lldiv_t;
 
 __BEGIN_DECLS

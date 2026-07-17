@@ -28,18 +28,18 @@ FILE *stderr = NULL;
 
 void __qlibc_stdio_init(void)
 {
-  if (isatty(STDIN_FILENO))
-    stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
-  else
-    stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOFBF);
-  if (isatty(STDOUT_FILENO))
-    stdout = __inits(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
-  else
-    stdout = __inits(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOFBF);
+    if (isatty(STDIN_FILENO))
+        stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOLBF);
+    else
+        stdin = __inits(&__stdin_stream, STDIN_FILENO, O_RDONLY, _IOFBF);
+    if (isatty(STDOUT_FILENO))
+        stdout = __inits(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOLBF);
+    else
+        stdout = __inits(&__stdout_stream, STDOUT_FILENO, O_WRONLY, _IOFBF);
 
-  /* Based on ANSI/ISO C standard, stderr is always unbuffered */
-  stderr = __inits(&__stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
-  stdin->flags |= S_STATIC;
-  stdout->flags |= S_STATIC;
-  stderr->flags |= S_STATIC;
+    /* Based on ANSI/ISO C standard, stderr is always unbuffered */
+    stderr = __inits(&__stderr_stream, STDERR_FILENO, O_WRONLY, _IONBF);
+    stdin->flags |= S_STATIC;
+    stdout->flags |= S_STATIC;
+    stderr->flags |= S_STATIC;
 }

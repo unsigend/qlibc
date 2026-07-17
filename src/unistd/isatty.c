@@ -21,6 +21,6 @@
 
 int isatty(int fd)
 {
-  struct termios ts;
-  return ioctl(fd, TCGETS, &ts) == 0;
+    struct termios ts;
+    return ioctl(fd, TCGETS, &ts) == 0;
 }

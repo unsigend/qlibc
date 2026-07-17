@@ -18,6 +18,7 @@
 #include <feature.h>
 
 #undef assert
+
 /* If NDEBUG is defined, assert is a no-op. Otherwise, if expr is false, print
    a message and abort. */
 
@@ -25,7 +26,7 @@
 #define assert(expr) ((void)0)
 #else
 #define assert(expr)                                                           \
-  (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
+    (void)((expr) || (_assert_fail(#expr, __func__, __FILE__, __LINE__), 0))
 #endif
 
 __BEGIN_DECLS

@@ -5,638 +5,638 @@
 
 UTEST_TEST_CASE(strtoul)
 {
-  char *endptr;
-  unsigned long result;
+    char *endptr;
+    unsigned long result;
 
-  {
-    char str[] = "0";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
-
-  {
-    char str[] = "123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "+123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "  123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 5);
-  }
-
-  {
-    char str[] = "\t123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "\n123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "\r123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "\v123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "\f123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "123abc";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "123 456";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "abc";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "  ";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "  abc";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "+";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "-";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "+abc";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    char str[] = "-abc";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str);
-  }
-
-  {
-    errno = 0;
-    result = strtoul("123", NULL, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-  }
-
-  {
-    char str[] = "-1";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_TRUE(result == ULONG_MAX);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
-
-  {
-    char str[] = "-0";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
-
-  {
-    char str[] = "0";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
-
-  {
-    char str[] = "0123";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 83);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "0x123";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 291);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 5);
-  }
-
-  {
-    char str[] = "0X123";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 291);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 5);
-  }
-
-  {
-    char str[] = "123";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "0123";
-    errno = 0;
-    result = strtoul(str, &endptr, 8);
-    EXPECT_EQUAL_UINT(result, 83);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[] = "123";
-    errno = 0;
-    result = strtoul(str, &endptr, 8);
-    EXPECT_EQUAL_UINT(result, 83);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "0x123";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 291);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 5);
-  }
-
-  {
-    char str[] = "0X123";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 291);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 5);
-  }
-
-  {
-    char str[] = "123";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 291);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "aBc";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 2748);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
-
-  {
-    char str[] = "z";
-    errno = 0;
-    result = strtoul(str, &endptr, 36);
-    EXPECT_EQUAL_UINT(result, 35);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
-
-  {
-    char str[] = "Z";
-    errno = 0;
-    result = strtoul(str, &endptr, 36);
-    EXPECT_EQUAL_UINT(result, 35);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
-
-  {
-    char str[] = "10";
-    errno = 0;
-    result = strtoul(str, &endptr, 2);
-    EXPECT_EQUAL_UINT(result, 2);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
-
-  {
-    char str[] = "1010";
-    errno = 0;
-    result = strtoul(str, &endptr, 2);
-    EXPECT_EQUAL_UINT(result, 10);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
-
-  {
-    char str[64];
-    unsigned long max_val = ULONG_MAX;
-    int len = 0;
-    unsigned long val = max_val;
-    while (val > 0) {
-      str[len++] = '0' + (val % 10);
-      val /= 10;
+    {
+        char str[] = "0";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
     }
-    for (int i = 0; i < len / 2; i++) {
-      char tmp = str[i];
-      str[i] = str[len - 1 - i];
-      str[len - 1 - i] = tmp;
+
+    {
+        char str[] = "123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
     }
-    str[len] = '\0';
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_TRUE(result == ULONG_MAX);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + len);
-  }
 
-  {
-    char str[] = "999999999999999999999";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, ULONG_MAX);
-    EXPECT_TRUE(errno == ERANGE);
-    EXPECT_TRUE(endptr == str + 21);
-  }
+    {
+        char str[] = "+123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "000";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
+    {
+        char str[] = "  123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 5);
+    }
 
-  {
-    char str[] = "000123";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 123);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 6);
-  }
+    {
+        char str[] = "\t123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "-0";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
+    {
+        char str[] = "\n123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "+0";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
+    {
+        char str[] = "\r123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "0x";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "\v123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "0x";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "\f123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "0X";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "123abc";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
 
-  {
-    char str[] = "0xG";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "123 456";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
 
-  {
-    char str[] = "08";
-    errno = 0;
-    result = strtoul(str, &endptr, 8);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "08";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "abc";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "0x8";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 8);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
+    {
+        char str[] = "  ";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "4294967295";
-    errno = 0;
-    result = strtoul(str, &endptr, 10);
-    EXPECT_EQUAL_UINT(result, 4294967295);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 10);
-  }
+    {
+        char str[] = "  abc";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "FFFFFFFF";
-    errno = 0;
-    result = strtoul(str, &endptr, 16);
-    EXPECT_EQUAL_UINT(result, 0xFFFFFFFF);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 8);
-  }
+    {
+        char str[] = "+";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "102";
-    errno = 0;
-    result = strtoul(str, &endptr, 3);
-    EXPECT_EQUAL_UINT(result, 11);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
+    {
+        char str[] = "-";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "123";
-    errno = 0;
-    result = strtoul(str, &endptr, 4);
-    EXPECT_EQUAL_UINT(result, 27);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
+    {
+        char str[] = "+abc";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "1234";
-    errno = 0;
-    result = strtoul(str, &endptr, 5);
-    EXPECT_EQUAL_UINT(result, 194);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
+    {
+        char str[] = "-abc";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str);
+    }
 
-  {
-    char str[] = "12345";
-    errno = 0;
-    result = strtoul(str, &endptr, 6);
-    EXPECT_EQUAL_UINT(result, 1865);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 5);
-  }
+    {
+        errno = 0;
+        result = strtoul("123", NULL, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+    }
 
-  {
-    char str[] = "123456";
-    errno = 0;
-    result = strtoul(str, &endptr, 7);
-    EXPECT_EQUAL_UINT(result, 22875);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 6);
-  }
+    {
+        char str[] = "-1";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_TRUE(result == ULONG_MAX);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
 
-  {
-    char str[] = "1234567";
-    errno = 0;
-    result = strtoul(str, &endptr, 9);
-    EXPECT_EQUAL_UINT(result, 672604);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 7);
-  }
+    {
+        char str[] = "-0";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
 
-  {
-    char str[] = "A";
-    errno = 0;
-    result = strtoul(str, &endptr, 11);
-    EXPECT_EQUAL_UINT(result, 10);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "0";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
 
-  {
-    char str[] = "a";
-    errno = 0;
-    result = strtoul(str, &endptr, 11);
-    EXPECT_EQUAL_UINT(result, 10);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "0123";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 83);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "1A";
-    errno = 0;
-    result = strtoul(str, &endptr, 11);
-    EXPECT_EQUAL_UINT(result, 21);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
+    {
+        char str[] = "0x123";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 291);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 5);
+    }
 
-  {
-    char str[] = "Y";
-    errno = 0;
-    result = strtoul(str, &endptr, 35);
-    EXPECT_EQUAL_UINT(result, 34);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "0X123";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 291);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 5);
+    }
 
-  {
-    char str[] = "10";
-    errno = 0;
-    result = strtoul(str, &endptr, 35);
-    EXPECT_EQUAL_UINT(result, 35);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
+    {
+        char str[] = "123";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
 
-  {
-    char str[] = "0xABCD";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 43981);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 6);
-  }
+    {
+        char str[] = "0123";
+        errno = 0;
+        result = strtoul(str, &endptr, 8);
+        EXPECT_EQUAL_UINT(result, 83);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
 
-  {
-    char str[] = "0Xabcd";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 43981);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 6);
-  }
+    {
+        char str[] = "123";
+        errno = 0;
+        result = strtoul(str, &endptr, 8);
+        EXPECT_EQUAL_UINT(result, 83);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
 
-  {
-    char str[] = "0777";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 511);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 4);
-  }
+    {
+        char str[] = "0x123";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 291);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 5);
+    }
 
-  {
-    char str[] = "0";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 1);
-  }
+    {
+        char str[] = "0X123";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 291);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 5);
+    }
 
-  {
-    char str[] = "00";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 2);
-  }
+    {
+        char str[] = "123";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 291);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
 
-  {
-    char str[] = "0x0";
-    errno = 0;
-    result = strtoul(str, &endptr, 0);
-    EXPECT_EQUAL_UINT(result, 0);
-    EXPECT_TRUE(errno == 0);
-    EXPECT_TRUE(endptr == str + 3);
-  }
+    {
+        char str[] = "aBc";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 2748);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
+
+    {
+        char str[] = "z";
+        errno = 0;
+        result = strtoul(str, &endptr, 36);
+        EXPECT_EQUAL_UINT(result, 35);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "Z";
+        errno = 0;
+        result = strtoul(str, &endptr, 36);
+        EXPECT_EQUAL_UINT(result, 35);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "10";
+        errno = 0;
+        result = strtoul(str, &endptr, 2);
+        EXPECT_EQUAL_UINT(result, 2);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
+
+    {
+        char str[] = "1010";
+        errno = 0;
+        result = strtoul(str, &endptr, 2);
+        EXPECT_EQUAL_UINT(result, 10);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
+
+    {
+        char str[64];
+        unsigned long max_val = ULONG_MAX;
+        int len = 0;
+        unsigned long val = max_val;
+        while (val > 0) {
+            str[len++] = '0' + (val % 10);
+            val /= 10;
+        }
+        for (int i = 0; i < len / 2; i++) {
+            char tmp = str[i];
+            str[i] = str[len - 1 - i];
+            str[len - 1 - i] = tmp;
+        }
+        str[len] = '\0';
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_TRUE(result == ULONG_MAX);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + len);
+    }
+
+    {
+        char str[] = "999999999999999999999";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, ULONG_MAX);
+        EXPECT_TRUE(errno == ERANGE);
+        EXPECT_TRUE(endptr == str + 21);
+    }
+
+    {
+        char str[] = "000";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
+
+    {
+        char str[] = "000123";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 123);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 6);
+    }
+
+    {
+        char str[] = "-0";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
+
+    {
+        char str[] = "+0";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
+
+    {
+        char str[] = "0x";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "0x";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "0X";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "0xG";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "08";
+        errno = 0;
+        result = strtoul(str, &endptr, 8);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "08";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "0x8";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 8);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
+
+    {
+        char str[] = "4294967295";
+        errno = 0;
+        result = strtoul(str, &endptr, 10);
+        EXPECT_EQUAL_UINT(result, 4294967295);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 10);
+    }
+
+    {
+        char str[] = "FFFFFFFF";
+        errno = 0;
+        result = strtoul(str, &endptr, 16);
+        EXPECT_EQUAL_UINT(result, 0xFFFFFFFF);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 8);
+    }
+
+    {
+        char str[] = "102";
+        errno = 0;
+        result = strtoul(str, &endptr, 3);
+        EXPECT_EQUAL_UINT(result, 11);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
+
+    {
+        char str[] = "123";
+        errno = 0;
+        result = strtoul(str, &endptr, 4);
+        EXPECT_EQUAL_UINT(result, 27);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
+
+    {
+        char str[] = "1234";
+        errno = 0;
+        result = strtoul(str, &endptr, 5);
+        EXPECT_EQUAL_UINT(result, 194);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
+
+    {
+        char str[] = "12345";
+        errno = 0;
+        result = strtoul(str, &endptr, 6);
+        EXPECT_EQUAL_UINT(result, 1865);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 5);
+    }
+
+    {
+        char str[] = "123456";
+        errno = 0;
+        result = strtoul(str, &endptr, 7);
+        EXPECT_EQUAL_UINT(result, 22875);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 6);
+    }
+
+    {
+        char str[] = "1234567";
+        errno = 0;
+        result = strtoul(str, &endptr, 9);
+        EXPECT_EQUAL_UINT(result, 672604);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 7);
+    }
+
+    {
+        char str[] = "A";
+        errno = 0;
+        result = strtoul(str, &endptr, 11);
+        EXPECT_EQUAL_UINT(result, 10);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "a";
+        errno = 0;
+        result = strtoul(str, &endptr, 11);
+        EXPECT_EQUAL_UINT(result, 10);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "1A";
+        errno = 0;
+        result = strtoul(str, &endptr, 11);
+        EXPECT_EQUAL_UINT(result, 21);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
+
+    {
+        char str[] = "Y";
+        errno = 0;
+        result = strtoul(str, &endptr, 35);
+        EXPECT_EQUAL_UINT(result, 34);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "10";
+        errno = 0;
+        result = strtoul(str, &endptr, 35);
+        EXPECT_EQUAL_UINT(result, 35);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
+
+    {
+        char str[] = "0xABCD";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 43981);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 6);
+    }
+
+    {
+        char str[] = "0Xabcd";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 43981);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 6);
+    }
+
+    {
+        char str[] = "0777";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 511);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 4);
+    }
+
+    {
+        char str[] = "0";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 1);
+    }
+
+    {
+        char str[] = "00";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 2);
+    }
+
+    {
+        char str[] = "0x0";
+        errno = 0;
+        result = strtoul(str, &endptr, 0);
+        EXPECT_EQUAL_UINT(result, 0);
+        EXPECT_TRUE(errno == 0);
+        EXPECT_TRUE(endptr == str + 3);
+    }
 }

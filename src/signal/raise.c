@@ -22,8 +22,8 @@ int raise(int sig)
 {
 #if __SUPPORT_THREADS
 #include <pthread.h>
-  return pthread_kill(pthread_self(), sig);
+    return pthread_kill(pthread_self(), sig);
 #else
-  return kill(getpid(), sig);
+    return kill(getpid(), sig);
 #endif
 }

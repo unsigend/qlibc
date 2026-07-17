@@ -18,14 +18,14 @@
 
 char *strpbrk(const char *str, const char *charset)
 {
-  if (*str == '\0' || *charset == '\0')
-    return NULL;
-  unsigned char map[256] = {0};
-  while (*charset)
-    map[(unsigned char)*charset++] = 1;
+    if (*str == '\0' || *charset == '\0')
+        return NULL;
+    unsigned char map[256] = {0};
+    while (*charset)
+        map[(unsigned char)*charset++] = 1;
 
-  for (; *str; str++)
-    if (map[(unsigned char)*str])
-      return (char *)str;
-  return NULL;
+    for (; *str; str++)
+        if (map[(unsigned char)*str])
+            return (char *)str;
+    return NULL;
 }

@@ -18,26 +18,26 @@
 
 char *strtok(char *restrict str, const char *restrict delim)
 {
-  static char *saved = NULL;
-  if (str == NULL) {
-    if (saved == NULL)
-      return NULL;
-    str = saved;
-  }
-  if (*str == '\0')
-    return NULL;
+    static char *saved = NULL;
+    if (str == NULL) {
+        if (saved == NULL)
+            return NULL;
+        str = saved;
+    }
+    if (*str == '\0')
+        return NULL;
 
-  str += strspn(str, delim);
-  if (*str == '\0')
-    return NULL;
+    str += strspn(str, delim);
+    if (*str == '\0')
+        return NULL;
 
-  char *token = str;
-  str += strcspn(str, delim);
-  if (*str == '\0') {
-    saved = NULL;
+    char *token = str;
+    str += strcspn(str, delim);
+    if (*str == '\0') {
+        saved = NULL;
+        return token;
+    }
+    *str = '\0';
+    saved = str + 1;
     return token;
-  }
-  *str = '\0';
-  saved = str + 1;
-  return token;
 }

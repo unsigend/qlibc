@@ -25,21 +25,21 @@
  * The stat structure for x64 architecture is based on GNU glibc.
  */
 struct stat {
-  __dev_t st_dev;           /* ID of device containing file */
-  __ino_t st_ino;           /* inode number */
-  __nlink_t st_nlink;       /* number of hard links */
-  __mode_t st_mode;         /* file type and mode */
-  __uid_t st_uid;           /* user ID of owner */
-  __gid_t st_gid;           /* group ID of owner */
-  unsigned int __padding;   /* padding */
-  __dev_t st_rdev;          /* device ID (if special file) */
-  __off_t st_size;          /* total size, in bytes */
-  __blksize_t st_blksize;   /* block size for filesystem I/O */
-  __blkcnt_t st_blocks;     /* number of 512B blocks allocated */
-  struct timespec st_atime; /* time of last access */
-  struct timespec st_mtime; /* time of last modification */
-  struct timespec st_ctime; /* time of last status change */
-  long __unused[3];         /* backwards compatibility */
+    __dev_t st_dev;           /* ID of device containing file */
+    __ino_t st_ino;           /* inode number */
+    __nlink_t st_nlink;       /* number of hard links */
+    __mode_t st_mode;         /* file type and mode */
+    __uid_t st_uid;           /* user ID of owner */
+    __gid_t st_gid;           /* group ID of owner */
+    unsigned int __padding;   /* padding */
+    __dev_t st_rdev;          /* device ID (if special file) */
+    __off_t st_size;          /* total size, in bytes */
+    __blksize_t st_blksize;   /* block size for filesystem I/O */
+    __blkcnt_t st_blocks;     /* number of 512B blocks allocated */
+    struct timespec st_atime; /* time of last access */
+    struct timespec st_mtime; /* time of last modification */
+    struct timespec st_ctime; /* time of last status change */
+    long __unused[3];         /* backwards compatibility */
 };
 
 #define st_atime st_atime.tv_sec

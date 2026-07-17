@@ -19,8 +19,8 @@
 
 int feof(FILE *stream)
 {
-  if (!stream)
-    return 0;
+    if (!stream)
+        return 0;
 
-  return stream->eof;
+    return stream->eof;
 }

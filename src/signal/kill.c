@@ -20,5 +20,5 @@
 
 int kill(pid_t pid, int sig)
 {
-  return __syscall(SYS_kill, (long)pid, (long)sig);
+    return __syscall(SYS_kill, (long)pid, (long)sig);
 }

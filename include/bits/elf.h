@@ -55,37 +55,37 @@ typedef Elf64_Half Elf64_Versym;
 #define EI_NIDENT (16)
 
 typedef struct {
-  unsigned char e_ident[EI_NIDENT]; /* Magic number and other info */
-  Elf32_Half e_type;                /* Object file type */
-  Elf32_Half e_machine;             /* Architecture */
-  Elf32_Word e_version;             /* Object file version */
-  Elf32_Addr e_entry;               /* Entry point virtual address */
-  Elf32_Off e_phoff;                /* Program header table file offset */
-  Elf32_Off e_shoff;                /* Section header table file offset */
-  Elf32_Word e_flags;               /* Processor-specific flags */
-  Elf32_Half e_ehsize;              /* ELF header size in bytes */
-  Elf32_Half e_phentsize;           /* Program header table entry size */
-  Elf32_Half e_phnum;               /* Program header table entry count */
-  Elf32_Half e_shentsize;           /* Section header table entry size */
-  Elf32_Half e_shnum;               /* Section header table entry count */
-  Elf32_Half e_shstrndx;            /* Section header string table index */
+    unsigned char e_ident[EI_NIDENT]; /* Magic number and other info */
+    Elf32_Half e_type;                /* Object file type */
+    Elf32_Half e_machine;             /* Architecture */
+    Elf32_Word e_version;             /* Object file version */
+    Elf32_Addr e_entry;               /* Entry point virtual address */
+    Elf32_Off e_phoff;                /* Program header table file offset */
+    Elf32_Off e_shoff;                /* Section header table file offset */
+    Elf32_Word e_flags;               /* Processor-specific flags */
+    Elf32_Half e_ehsize;              /* ELF header size in bytes */
+    Elf32_Half e_phentsize;           /* Program header table entry size */
+    Elf32_Half e_phnum;               /* Program header table entry count */
+    Elf32_Half e_shentsize;           /* Section header table entry size */
+    Elf32_Half e_shnum;               /* Section header table entry count */
+    Elf32_Half e_shstrndx;            /* Section header string table index */
 } Elf32_Ehdr;
 
 typedef struct {
-  unsigned char e_ident[EI_NIDENT]; /* Magic number and other info */
-  Elf64_Half e_type;                /* Object file type */
-  Elf64_Half e_machine;             /* Architecture */
-  Elf64_Word e_version;             /* Object file version */
-  Elf64_Addr e_entry;               /* Entry point virtual address */
-  Elf64_Off e_phoff;                /* Program header table file offset */
-  Elf64_Off e_shoff;                /* Section header table file offset */
-  Elf64_Word e_flags;               /* Processor-specific flags */
-  Elf64_Half e_ehsize;              /* ELF header size in bytes */
-  Elf64_Half e_phentsize;           /* Program header table entry size */
-  Elf64_Half e_phnum;               /* Program header table entry count */
-  Elf64_Half e_shentsize;           /* Section header table entry size */
-  Elf64_Half e_shnum;               /* Section header table entry count */
-  Elf64_Half e_shstrndx;            /* Section header string table index */
+    unsigned char e_ident[EI_NIDENT]; /* Magic number and other info */
+    Elf64_Half e_type;                /* Object file type */
+    Elf64_Half e_machine;             /* Architecture */
+    Elf64_Word e_version;             /* Object file version */
+    Elf64_Addr e_entry;               /* Entry point virtual address */
+    Elf64_Off e_phoff;                /* Program header table file offset */
+    Elf64_Off e_shoff;                /* Section header table file offset */
+    Elf64_Word e_flags;               /* Processor-specific flags */
+    Elf64_Half e_ehsize;              /* ELF header size in bytes */
+    Elf64_Half e_phentsize;           /* Program header table entry size */
+    Elf64_Half e_phnum;               /* Program header table entry count */
+    Elf64_Half e_shentsize;           /* Section header table entry size */
+    Elf64_Half e_shnum;               /* Section header table entry count */
+    Elf64_Half e_shstrndx;            /* Section header string table index */
 } Elf64_Ehdr;
 
 #define SHN_UNDEF 0          /* Undefined section */
@@ -364,29 +364,29 @@ typedef struct {
 #define EV_NUM 2
 
 typedef struct {
-  Elf32_Word sh_name;      /* Section name (string table index) */
-  Elf32_Word sh_type;      /* Section type */
-  Elf32_Word sh_flags;     /* Section flags */
-  Elf32_Addr sh_addr;      /* Section virtual addr at execution */
-  Elf32_Off sh_offset;     /* Section file offset */
-  Elf32_Word sh_size;      /* Section size in bytes */
-  Elf32_Word sh_link;      /* Link to another section */
-  Elf32_Word sh_info;      /* Additional section information */
-  Elf32_Word sh_addralign; /* Section alignment */
-  Elf32_Word sh_entsize;   /* Entry size if section holds table */
+    Elf32_Word sh_name;      /* Section name (string table index) */
+    Elf32_Word sh_type;      /* Section type */
+    Elf32_Word sh_flags;     /* Section flags */
+    Elf32_Addr sh_addr;      /* Section virtual addr at execution */
+    Elf32_Off sh_offset;     /* Section file offset */
+    Elf32_Word sh_size;      /* Section size in bytes */
+    Elf32_Word sh_link;      /* Link to another section */
+    Elf32_Word sh_info;      /* Additional section information */
+    Elf32_Word sh_addralign; /* Section alignment */
+    Elf32_Word sh_entsize;   /* Entry size if section holds table */
 } Elf32_Shdr;
 
 typedef struct {
-  Elf64_Word sh_name;       /* Section name (string table index) */
-  Elf64_Word sh_type;       /* Section type */
-  Elf64_Xword sh_flags;     /* Section flags */
-  Elf64_Addr sh_addr;       /* Section virtual addr at execution */
-  Elf64_Off sh_offset;      /* Section file offset */
-  Elf64_Xword sh_size;      /* Section size in bytes */
-  Elf64_Word sh_link;       /* Link to another section */
-  Elf64_Word sh_info;       /* Additional section information */
-  Elf64_Xword sh_addralign; /* Section alignment */
-  Elf64_Xword sh_entsize;   /* Entry size if section holds table */
+    Elf64_Word sh_name;       /* Section name (string table index) */
+    Elf64_Word sh_type;       /* Section type */
+    Elf64_Xword sh_flags;     /* Section flags */
+    Elf64_Addr sh_addr;       /* Section virtual addr at execution */
+    Elf64_Off sh_offset;      /* Section file offset */
+    Elf64_Xword sh_size;      /* Section size in bytes */
+    Elf64_Word sh_link;       /* Link to another section */
+    Elf64_Word sh_info;       /* Additional section information */
+    Elf64_Xword sh_addralign; /* Section alignment */
+    Elf64_Xword sh_entsize;   /* Entry size if section holds table */
 } Elf64_Shdr;
 
 /* Macros for sh_type field */
@@ -445,31 +445,31 @@ typedef struct {
 #define SHF_GNU_RETAIN (1 << 21)      /* Not to be GCed by linker */
 #define SHF_ORDERED (1 << 30) /* Special ordering requirement (Solaris) */
 #define SHF_EXCLUDE                                                            \
-  (1U << 31) /* Section is excluded unless referenced or allocated (Solaris)   \
-              */
+    (1U << 31) /* Section is excluded unless referenced or allocated (Solaris) \
+                */
 
 typedef struct {
-  Elf32_Word st_name;     /* Symbol name (string table index) */
-  Elf32_Addr st_value;    /* Symbol value */
-  Elf32_Word st_size;     /* Symbol size */
-  unsigned char st_info;  /* Symbol type and binding */
-  unsigned char st_other; /* Symbol visibility */
-  Elf32_Section st_shndx; /* Section index */
+    Elf32_Word st_name;     /* Symbol name (string table index) */
+    Elf32_Addr st_value;    /* Symbol value */
+    Elf32_Word st_size;     /* Symbol size */
+    unsigned char st_info;  /* Symbol type and binding */
+    unsigned char st_other; /* Symbol visibility */
+    Elf32_Section st_shndx; /* Section index */
 } Elf32_Sym;
 
 typedef struct {
-  Elf64_Word st_name;     /* Symbol name (string table index) */
-  unsigned char st_info;  /* Symbol type and binding */
-  unsigned char st_other; /* Symbol visibility */
-  Elf64_Section st_shndx; /* Section index */
-  Elf64_Addr st_value;    /* Symbol value */
-  Elf64_Xword st_size;    /* Symbol size */
+    Elf64_Word st_name;     /* Symbol name (string table index) */
+    unsigned char st_info;  /* Symbol type and binding */
+    unsigned char st_other; /* Symbol visibility */
+    Elf64_Section st_shndx; /* Section index */
+    Elf64_Addr st_value;    /* Symbol value */
+    Elf64_Xword st_size;    /* Symbol size */
 } Elf64_Sym;
 
 /* Macros for st_info field */
 #define ELF32_ST_BIND(val) (((unsigned char)(val)) >> 4)
-#define ELF32_ST_TYPE(val) ((val) & 0xf)
-#define ELF32_ST_INFO(bind, type) (((bind) << 4) + ((type) & 0xf))
+#define ELF32_ST_TYPE(val) ((val)&0xf)
+#define ELF32_ST_INFO(bind, type) (((bind) << 4) + ((type)&0xf))
 #define ELF64_ST_BIND(val) ELF32_ST_BIND(val)
 #define ELF64_ST_TYPE(val) ELF32_ST_TYPE(val)
 #define ELF64_ST_INFO(bind, type) ELF32_ST_INFO((bind), (type))
@@ -501,13 +501,13 @@ typedef struct {
 #define STT_HIPROC 15    /* End of processor-specific */
 
 typedef struct {
-  Elf32_Addr r_offset; /* Address */
-  Elf32_Word r_info;   /* Relocation type and symbol index */
+    Elf32_Addr r_offset; /* Address */
+    Elf32_Word r_info;   /* Relocation type and symbol index */
 } Elf32_Rel;
 
 typedef struct {
-  Elf64_Addr r_offset; /* Address */
-  Elf64_Xword r_info;  /* Relocation type and symbol index */
+    Elf64_Addr r_offset; /* Address */
+    Elf64_Xword r_info;  /* Relocation type and symbol index */
 } Elf64_Rel;
 
 /* RELR relocation table entry */
@@ -516,10 +516,10 @@ typedef Elf64_Xword Elf64_Relr;
 
 /* Macros for r_info field */
 #define ELF32_R_SYM(val) ((val) >> 8)
-#define ELF32_R_TYPE(val) ((val) & 0xff)
-#define ELF32_R_INFO(sym, type) (((sym) << 8) + ((type) & 0xff))
+#define ELF32_R_TYPE(val) ((val)&0xff)
+#define ELF32_R_INFO(sym, type) (((sym) << 8) + ((type)&0xff))
 #define ELF64_R_SYM(i) ((i) >> 32)
-#define ELF64_R_TYPE(i) ((i) & 0xffffffff)
+#define ELF64_R_TYPE(i) ((i)&0xffffffff)
 #define ELF64_R_INFO(sym, type) ((((Elf64_Xword)(sym)) << 32) + (type))
 
 #endif

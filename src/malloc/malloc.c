@@ -45,12 +45,12 @@ const size_t __slots[BUCKET_COUNT] = {
 /* Initialize the malloc package. */
 static int initm(void)
 {
-  /* Initialize the free buckets */
-  memset(__heap.buckets, 0, sizeof(__heap.buckets));
-  __heap.start = (unsigned char *)__brk(0);
-  __heap.end = __heap.start;
-  __heap.init = true;
-  return 0;
+    /* Initialize the free buckets */
+    memset(__heap.buckets, 0, sizeof(__heap.buckets));
+    __heap.start = (unsigned char *)__brk(0);
+    __heap.end = __heap.start;
+    __heap.init = true;
+    return 0;
 }
 
 /* Refills the free buckets with the new memory. The sz is the size of the
@@ -59,14 +59,14 @@ static int initm(void)
 
 static inline int refill(size_t sz)
 {
-  void *p = sbrk((intptr_t)sz);
-  if (p == (void *)-1)
-    return -1;
-  free_block_t *freeblk = (free_block_t *)p;
-  __writemeta((block_t *)freeblk, sz, false, false);
-  __insertblk(freeblk, __getbucketidx(sz));
-  __heap.end = (unsigned char *)p + sz;
-  return 0;
+    void *p = sbrk((intptr_t)sz);
+    if (p == (void *)-1)
+        return -1;
+    free_block_t *freeblk = (free_block_t *)p;
+    __writemeta((block_t *)freeblk, sz, false, false);
+    __insertblk(freeblk, __getbucketidx(sz));
+    __heap.end = (unsigned char *)p + sz;
+    return 0;
 }
 
 /* Allocate memory, the malloc implementation based on fast path and slow path,
@@ -76,40 +76,40 @@ static inline int refill(size_t sz)
 
 void *malloc(size_t size)
 {
-  if (size >= MMAP_THRESHOLD) {
-    /* Align the size + header with page size */
-    size_t mmapsz = ALIGN_PAGE(size + sizeof(header_t));
-    void *p = mmap(NULL, mmapsz, PROT_READ | PROT_WRITE,
-                   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-    if (p == MAP_FAILED) {
-      errno = ENOMEM;
-      return NULL;
+    if (size >= MMAP_THRESHOLD) {
+        /* Align the size + header with page size */
+        size_t mmapsz = ALIGN_PAGE(size + sizeof(header_t));
+        void *p = mmap(NULL, mmapsz, PROT_READ | PROT_WRITE,
+                       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (p == MAP_FAILED) {
+            errno = ENOMEM;
+            return NULL;
+        }
+        __writemeta((block_t *)p, mmapsz, true, true);
+        return (void *)((unsigned char *)p + sizeof(header_t));
     }
-    __writemeta((block_t *)p, mmapsz, true, true);
-    return (void *)((unsigned char *)p + sizeof(header_t));
-  }
-  if (!__heap.init) {
-    if (initm() == -1) {
-      errno = ENOMEM;
-      return NULL;
+    if (!__heap.init) {
+        if (initm() == -1) {
+            errno = ENOMEM;
+            return NULL;
+        }
     }
-  }
-  if (!size)
-    return NULL;
-  size_t blksz = CALC_BLOCKSZ(size);
-  size_t buckidx = __getbucketidx(blksz);
-  while (buckidx < BUCKET_COUNT) {
-    void *p = __bestfit(blksz, buckidx);
-    if (p)
-      return p;
-    ++buckidx;
-  }
+    if (!size)
+        return NULL;
+    size_t blksz = CALC_BLOCKSZ(size);
+    size_t buckidx = __getbucketidx(blksz);
+    while (buckidx < BUCKET_COUNT) {
+        void *p = __bestfit(blksz, buckidx);
+        if (p)
+            return p;
+        ++buckidx;
+    }
 
-  /* No free block is found, request more memory */
-  size_t refillsz = MAX(blksz, PAGE_SIZE);
-  if (refill(refillsz) == -1) {
-    errno = ENOMEM;
-    return NULL;
-  }
-  return __bestfit(blksz, __getbucketidx(refillsz));
+    /* No free block is found, request more memory */
+    size_t refillsz = MAX(blksz, PAGE_SIZE);
+    if (refill(refillsz) == -1) {
+        errno = ENOMEM;
+        return NULL;
+    }
+    return __bestfit(blksz, __getbucketidx(refillsz));
 }

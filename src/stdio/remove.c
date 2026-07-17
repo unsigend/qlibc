@@ -20,9 +20,9 @@
 
 int remove(const char *pathname)
 {
-  if (!unlink(pathname))
-    return 0;
-  if (errno == EISDIR)
-    return rmdir(pathname);
-  return -1; /* ENOENT or ENOTDIR */
+    if (!unlink(pathname))
+        return 0;
+    if (errno == EISDIR)
+        return rmdir(pathname);
+    return -1; /* ENOENT or ENOTDIR */
 }

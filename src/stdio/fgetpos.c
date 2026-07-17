@@ -19,13 +19,13 @@
 
 int fgetpos(FILE *restrict stream, fpos_t *restrict pos)
 {
-  if (!stream || !pos)
-    return -1;
+    if (!stream || !pos)
+        return -1;
 
-  long off = ftell(stream);
-  if (off == -1)
-    return -1;
+    long off = ftell(stream);
+    if (off == -1)
+        return -1;
 
-  pos->pos = off;
-  return 0;
+    pos->pos = off;
+    return 0;
 }

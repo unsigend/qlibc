@@ -20,14 +20,14 @@
 
 long long strtoll(const char *restrict str, char **restrict str_end, int base)
 {
-  int neg = 0;
-  errno = 0;
-  unsigned long long r = strtox(str, str_end, base, (ULL)LLONG_MAX + 1, &neg);
-  if (errno == ERANGE) {
-    if (neg)
-      return LLONG_MIN;
-    else
-      return LLONG_MAX;
-  }
-  return neg ? (LL)(-r) : (LL)r;
+    int neg = 0;
+    errno = 0;
+    unsigned long long r = strtox(str, str_end, base, (ULL)LLONG_MAX + 1, &neg);
+    if (errno == ERANGE) {
+        if (neg)
+            return LLONG_MIN;
+        else
+            return LLONG_MAX;
+    }
+    return neg ? (LL)(-r) : (LL)r;
 }

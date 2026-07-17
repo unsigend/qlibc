@@ -21,9 +21,9 @@
 
 int sprintf(char *restrict buffer, const char *restrict format, ...)
 {
-  va_list ap;
-  va_start(ap, format);
-  int ret = vsnprintf(buffer, INT_MAX, format, ap);
-  va_end(ap);
-  return ret;
+    va_list ap;
+    va_start(ap, format);
+    int ret = vsnprintf(buffer, INT_MAX, format, ap);
+    va_end(ap);
+    return ret;
 }

@@ -19,9 +19,9 @@
 
 void clearerr(FILE *stream)
 {
-  if (!stream)
-    return;
+    if (!stream)
+        return;
 
-  stream->eof = 0;
-  stream->error = 0;
+    stream->eof = 0;
+    stream->error = 0;
 }

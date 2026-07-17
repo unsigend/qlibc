@@ -32,28 +32,28 @@ char **__environ;
 
 static void __do_global_ctors(void)
 {
-  for (void (**f)() = __init_array_start; f < __init_array_end; f++) {
-    (*f)();
-  }
+    for (void (**f)() = __init_array_start; f < __init_array_end; f++) {
+        (*f)();
+    }
 }
 
 static void __do_global_dtors(void)
 {
-  for (void (**f)() = __fini_array_end; f > __fini_array_start;) {
-    (*--f)();
-  }
+    for (void (**f)() = __fini_array_end; f > __fini_array_start;) {
+        (*--f)();
+    }
 }
 
 void __qlibc_start_main(int argc, char *argv[], char *envp[])
 {
-  environ = __environ = envp;
+    environ = __environ = envp;
 
-  /* Initialize the stdio */
-  __qlibc_stdio_init();
+    /* Initialize the stdio */
+    __qlibc_stdio_init();
 
-  __do_global_ctors();
+    __do_global_ctors();
 
-  /* Register the global destructors to be called at exit */
-  atexit(__do_global_dtors);
-  exit(main(argc, argv, envp));
+    /* Register the global destructors to be called at exit */
+    atexit(__do_global_dtors);
+    exit(main(argc, argv, envp));
 }

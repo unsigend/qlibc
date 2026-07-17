@@ -20,17 +20,17 @@
 
 long syscall(long number, ...)
 {
-  va_list args;
-  va_start(args, number);
+    va_list args;
+    va_start(args, number);
 
-  long arg1 = va_arg(args, long);
-  long arg2 = va_arg(args, long);
-  long arg3 = va_arg(args, long);
-  long arg4 = va_arg(args, long);
-  long arg5 = va_arg(args, long);
-  long arg6 = va_arg(args, long);
+    long arg1 = va_arg(args, long);
+    long arg2 = va_arg(args, long);
+    long arg3 = va_arg(args, long);
+    long arg4 = va_arg(args, long);
+    long arg5 = va_arg(args, long);
+    long arg6 = va_arg(args, long);
 
-  va_end(args);
+    va_end(args);
 
-  return __syscall6(number, arg1, arg2, arg3, arg4, arg5, arg6);
+    return __syscall6(number, arg1, arg2, arg3, arg4, arg5, arg6);
 }

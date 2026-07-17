@@ -36,9 +36,9 @@
 #define S_STATIC 0x08 /* FILE is static */
 
 #define IBUF_EXHAUSTED(s)                                                      \
-  ((s)->rpos == (s)->rend) /* input buffer is exhausted */
+    ((s)->rpos == (s)->rend) /* input buffer is exhausted */
 #define IBUF_DROP(s)                                                           \
-  ((s)->rpos = (s)->rend = (s)->buf)            /* drop input buffer           \
+    ((s)->rpos = (s)->rend = (s)->buf)          /* drop input buffer           \
                                                  */
 #define OBUF_FULL(s) ((s)->wpos == (s)->wend)   /* output buffer is full */
 #define OBUF_EMPTY(s) ((s)->wpos == (s)->wbase) /* output buffer is empty */

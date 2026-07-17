@@ -21,8 +21,8 @@
 
 void _assert_fail(const char *msg, const char *func, const char *file, int line)
 {
-  fprintf(stderr, "Assertion failed: %s, function %s, file %s, line %d\n", msg,
-          func, file, line);
-  fflush(NULL);
-  abort();
+    fprintf(stderr, "Assertion failed: %s, function %s, file %s, line %d\n",
+            msg, func, file, line);
+    fflush(NULL);
+    abort();
 }

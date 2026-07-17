@@ -25,5 +25,5 @@ noreturn void _Exit(int status)
 void _Exit(int status)
 {
 #endif
-  _exit(status);
+    _exit(status);
 }

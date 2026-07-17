@@ -20,5 +20,5 @@
 
 off_t lseek(int fd, off_t offset, int whence)
 {
-  return __syscall(SYS_lseek, (long)fd, (long)offset, (long)whence);
+    return __syscall(SYS_lseek, (long)fd, (long)offset, (long)whence);
 }

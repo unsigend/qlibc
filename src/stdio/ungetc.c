@@ -20,25 +20,25 @@
 
 int ungetc(int ch, FILE *stream)
 {
-  if (!stream || ch == EOF || stream->error)
-    return EOF;
+    if (!stream || ch == EOF || stream->error)
+        return EOF;
 
-  if (!stream->shbuf) {
-    stream->shbuf = malloc(UNGET);
     if (!stream->shbuf) {
-      stream->error = 1;
-      return EOF;
+        stream->shbuf = malloc(UNGET);
+        if (!stream->shbuf) {
+            stream->error = 1;
+            return EOF;
+        }
+        stream->shlim = UNGET;
+        stream->shcnt = 0;
     }
-    stream->shlim = UNGET;
-    stream->shcnt = 0;
-  }
 
-  if (stream->shcnt >= stream->shlim) {
-    stream->error = 1;
-    return EOF;
-  }
+    if (stream->shcnt >= stream->shlim) {
+        stream->error = 1;
+        return EOF;
+    }
 
-  stream->shbuf[stream->shcnt++] = (unsigned char)ch;
-  stream->eof = 0;
-  return ch;
+    stream->shbuf[stream->shcnt++] = (unsigned char)ch;
+    stream->eof = 0;
+    return ch;
 }

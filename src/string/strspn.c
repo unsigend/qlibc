@@ -19,12 +19,12 @@
 
 size_t strspn(const char *str, const char *charset)
 {
-  unsigned char map[256] = {0};
-  size_t n = 0;
-  for (; *charset; ++charset)
-    map[(unsigned char)*charset] = 1;
+    unsigned char map[256] = {0};
+    size_t n = 0;
+    for (; *charset; ++charset)
+        map[(unsigned char)*charset] = 1;
 
-  while (map[*((unsigned char *)str++)])
-    ++n;
-  return n;
+    while (map[*((unsigned char *)str++)])
+        ++n;
+    return n;
 }

@@ -19,7 +19,7 @@
 
 _Noreturn void _exit(int status)
 {
-  __syscall(SYS_exit_group, (long)status);
-  __builtin_unreachable();
-  __syscall(SYS_exit, (long)status);
+    __syscall(SYS_exit_group, (long)status);
+    __builtin_unreachable();
+    __syscall(SYS_exit, (long)status);
 }

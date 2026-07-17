@@ -31,13 +31,13 @@
 
 #define ALIGNMENT alignof(max_align_t) /* alignment size */
 #define ALIGN(size)                                                            \
-  (((size) + (ALIGNMENT - 1)) &                                                \
-   ~(ALIGNMENT - 1))    /* rounds up to the nearest multiple of ALIGNMENT */
+    (((size) + (ALIGNMENT - 1)) &                                              \
+     ~(ALIGNMENT - 1))  /* rounds up to the nearest multiple of ALIGNMENT */
 #define BUCKET_COUNT 64 /* bucket count */
 #define PAGE_SIZE 4096  /* page size */
 #define ALIGN_PAGE(size)                                                       \
-  (((size) + (PAGE_SIZE - 1)) &                                                \
-   ~(PAGE_SIZE - 1)) /* rounds up to the nearest multiple of PAGE_SIZE */
+    (((size) + (PAGE_SIZE - 1)) &                                              \
+     ~(PAGE_SIZE - 1)) /* rounds up to the nearest multiple of PAGE_SIZE */
 #define MMAP_THRESHOLD (4096 * 128) /* threshold size to use mmap: 128 KiB */
 
 /* Meta data type: used for both header and footer, here 32 bits is chosen to
@@ -58,32 +58,32 @@ typedef uint32_t nmeta_t;
    C standard.*/
 
 typedef struct meta {
-  nmeta_t alloc : 1;  /* allocation status */
-  nmeta_t ismmap : 1; /* whether the block is allocated by mmap */
-  nmeta_t unused : 1; /* unused bits */
-  nmeta_t sz : 29;    /* size of the whole block */
+    nmeta_t alloc : 1;  /* allocation status */
+    nmeta_t ismmap : 1; /* whether the block is allocated by mmap */
+    nmeta_t unused : 1; /* unused bits */
+    nmeta_t sz : 29;    /* size of the whole block */
 } __attribute__((aligned(ALIGNMENT))) meta_t;
 
 typedef meta_t header_t;
 typedef meta_t footer_t;
 
 typedef struct block {
-  header_t header;         /* header of the block */
-  unsigned char payload[]; /* payload of the block */
+    header_t header;         /* header of the block */
+    unsigned char payload[]; /* payload of the block */
 } block_t;
 
 typedef struct free_block {
-  header_t header;         /* header of the free block */
-  struct free_block *next; /* next free block */
-  struct free_block *prev; /* previous free block */
-  unsigned char payload[]; /* payload of the block */
+    header_t header;         /* header of the free block */
+    struct free_block *next; /* next free block */
+    struct free_block *prev; /* previous free block */
+    unsigned char payload[]; /* payload of the block */
 } free_block_t;
 
 typedef struct heap {
-  free_block_t *buckets[BUCKET_COUNT]; /* free buckets */
-  unsigned char *start;                /* start of the heap */
-  unsigned char *end;                  /* end of the heap */
-  bool init;                           /* whether the heap is initialized */
+    free_block_t *buckets[BUCKET_COUNT]; /* free buckets */
+    unsigned char *start;                /* start of the heap */
+    unsigned char *end;                  /* end of the heap */
+    bool init;                           /* whether the heap is initialized */
 } heap_t;
 
 __hidden extern heap_t __heap; /* Global heap instance */
@@ -91,20 +91,20 @@ __hidden extern const size_t
     __slots[BUCKET_COUNT]; /* Bucket size lookup table */
 
 #define MINIMUM_BLOCKSZ                                                        \
-  (sizeof(header_t) + sizeof(footer_t) +                                       \
-   2 * sizeof(uintptr_t)) /* Minimum threshold of the block size */
+    (sizeof(header_t) + sizeof(footer_t) +                                     \
+     2 * sizeof(uintptr_t)) /* Minimum threshold of the block size */
 #define GET_HEADER(blk)                                                        \
-  (header_t *)((char *)blk) /* Get header of the block                         \
-                             */
+    (header_t *)((char *)blk) /* Get header of the block                       \
+                               */
 #define GET_FOOTER(blk)                                                        \
-  (footer_t *)((char *)blk + (blk)->header.sz -                                \
-               sizeof(footer_t)) /* Returns the footer of the block */
+    (footer_t *)((char *)blk + (blk)->header.sz -                              \
+                 sizeof(footer_t)) /* Returns the footer of the block */
 #define IS_MMAP(blk) ((blk)->header.ismmap) /* Block is allocated by mmap */
 #define IS_ALLOC(blk) ((blk)->header.alloc) /* Block is allocated */
 #define CALC_BLOCKSZ(sz)                                                       \
-  MAX(ALIGN(sz + sizeof(header_t) + sizeof(footer_t)),                         \
-      ALIGN(MINIMUM_BLOCKSZ)) /* Calculates the required size of the block     \
-                                 with meta data after alignment */
+    MAX(ALIGN(sz + sizeof(header_t) + sizeof(footer_t)),                       \
+        ALIGN(MINIMUM_BLOCKSZ)) /* Calculates the required size of the block   \
+                                   with meta data after alignment */
 
 /* Fit algorithms: finds the proper free block based on the fit strategy. Large
    enough to fit the request size, remove from the buckets, slice if necessary,

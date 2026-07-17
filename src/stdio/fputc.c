@@ -21,23 +21,23 @@
 
 int fputc(int ch, FILE *stream)
 {
-  if (!stream || stream->error || stream->eof)
-    return EOF;
+    if (!stream || stream->error || stream->eof)
+        return EOF;
 
-  __toout(stream);
+    __toout(stream);
 
-  if (!stream->buf && __allocbuf(stream) == EOF)
-    return EOF;
-  if (OBUF_FULL(stream) && FLUSHBUF(stream))
-    return EOF;
+    if (!stream->buf && __allocbuf(stream) == EOF)
+        return EOF;
+    if (OBUF_FULL(stream) && FLUSHBUF(stream))
+        return EOF;
 
-  *stream->wpos++ = (unsigned char)ch;
+    *stream->wpos++ = (unsigned char)ch;
 
-  if (stream->bufmode == _IONBF && FLUSHBUF(stream))
-    return EOF;
+    if (stream->bufmode == _IONBF && FLUSHBUF(stream))
+        return EOF;
 
-  if ((stream->bufmode == _IOLBF && ch == '\n') && FLUSHBUF(stream))
-    return EOF;
+    if ((stream->bufmode == _IOLBF && ch == '\n') && FLUSHBUF(stream))
+        return EOF;
 
-  return ch;
+    return ch;
 }

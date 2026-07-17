@@ -19,5 +19,5 @@
 
 int dup3(int fd, int fd2, int flags)
 {
-  return __syscall(SYS_dup3, (long)fd, (long)fd2, (long)flags);
+    return __syscall(SYS_dup3, (long)fd, (long)fd2, (long)flags);
 }

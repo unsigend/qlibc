@@ -25,5 +25,5 @@
 
 void *__brk(void *addr)
 {
-  return (void *)__syscall1_raw(SYS_brk, (uintptr_t)addr);
+    return (void *)__syscall1_raw(SYS_brk, (uintptr_t)addr);
 }

@@ -21,7 +21,7 @@
 unsigned long long strtoull(const char *restrict str, char **restrict str_end,
                             int base)
 {
-  int neg = 0;
-  unsigned long long r = strtox(str, str_end, base, ULLONG_MAX, &neg);
-  return neg ? -r : r;
+    int neg = 0;
+    unsigned long long r = strtox(str, str_end, base, ULLONG_MAX, &neg);
+    return neg ? -r : r;
 }

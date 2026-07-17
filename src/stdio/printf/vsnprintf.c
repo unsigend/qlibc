@@ -22,5 +22,5 @@
 int vsnprintf(char *restrict buffer, size_t bufsz, const char *restrict format,
               va_list vlist)
 {
-  return printf_core(buffer, bufsz, format, vlist);
+    return printf_core(buffer, bufsz, format, vlist);
 }

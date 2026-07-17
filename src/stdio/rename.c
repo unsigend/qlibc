@@ -20,5 +20,5 @@
 
 int rename(const char *oldpath, const char *newpath)
 {
-  return syscall(SYS_rename, (long)oldpath, (long)newpath);
+    return syscall(SYS_rename, (long)oldpath, (long)newpath);
 }

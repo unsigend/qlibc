@@ -39,30 +39,30 @@
 
 /* file IO structure */
 typedef struct _FILE_IO {
-  int fd;                /* file descriptor */
-  int flags;             /* file flags */
-  int mode;              /* file mode */
-  size_t bufsz;          /* buffer size */
-  int bufmode;           /* buffer mode */
-  unsigned char *buf;    /* buffer */
-  unsigned char *rpos;   /* read position */
-  unsigned char *rend;   /* read end */
-  unsigned char *wpos;   /* write position */
-  unsigned char *wbase;  /* write base */
-  unsigned char *wend;   /* write end */
-  int error;             /* error indicator */
-  int eof;               /* EOF indicator */
-  off_t offset;          /* file offset */
-  struct _FILE_IO *next; /* next file */
-  struct _FILE_IO *prev; /* previous file */
-  unsigned char *shbuf;  /* pushback buffer */
-  size_t shlim;          /* pushback buffer limit */
-  size_t shcnt;          /* pushback buffer count */
+    int fd;                /* file descriptor */
+    int flags;             /* file flags */
+    int mode;              /* file mode */
+    size_t bufsz;          /* buffer size */
+    int bufmode;           /* buffer mode */
+    unsigned char *buf;    /* buffer */
+    unsigned char *rpos;   /* read position */
+    unsigned char *rend;   /* read end */
+    unsigned char *wpos;   /* write position */
+    unsigned char *wbase;  /* write base */
+    unsigned char *wend;   /* write end */
+    int error;             /* error indicator */
+    int eof;               /* EOF indicator */
+    off_t offset;          /* file offset */
+    struct _FILE_IO *next; /* next file */
+    struct _FILE_IO *prev; /* previous file */
+    unsigned char *shbuf;  /* pushback buffer */
+    size_t shlim;          /* pushback buffer limit */
+    size_t shcnt;          /* pushback buffer count */
 } FILE;
 
 /* file position structure */
 typedef struct _FPOS_T {
-  off_t pos; /* file position */
+    off_t pos; /* file position */
 } fpos_t;
 
 /* standard file streams */

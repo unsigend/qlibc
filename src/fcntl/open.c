@@ -22,11 +22,11 @@
 
 int open(const char *pathname, int flags, ...)
 {
-  va_list args;
-  va_start(args, flags);
+    va_list args;
+    va_start(args, flags);
 
-  mode_t mode = va_arg(args, mode_t);
-  va_end(args);
+    mode_t mode = va_arg(args, mode_t);
+    va_end(args);
 
-  return __syscall(SYS_open, (long)pathname, flags | O_LARGEFILE, (long)mode);
+    return __syscall(SYS_open, (long)pathname, flags | O_LARGEFILE, (long)mode);
 }
