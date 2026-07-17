@@ -35,7 +35,6 @@ struct reader {
 
 __BEGIN_DECLS
 
-/* Formatted core input function */
 extern int scanf_core(struct reader *reader, const char *restrict fmt,
                       va_list vlist);
 

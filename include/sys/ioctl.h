@@ -23,9 +23,6 @@
 
 __BEGIN_DECLS
 
-/* Manipulates the underlying device parameters of special files, this function
-   is used for no-standard I/O operations. The implementation is
-   architecture-dependent. */
 extern int ioctl(int fd, int request, ...);
 
 __END_DECLS

@@ -100,15 +100,15 @@ static void outs(struct ctx *ctx, struct fsm_t *fsm, const unsigned char *str,
 #define PRECISION 0x08  /* precision flag */
 
 #define IS_PAD_ZERO(flag)                                                      \
-    ((flag)&PAD_ZERO) /* check if padding zero flag is set */
+    ((flag) & PAD_ZERO) /* check if padding zero flag is set */
 #define IS_LEFT_ALIGN(flag)                                                    \
-    ((flag)&LEFT_ALIGN) /* check if left align flag is set */
+    ((flag) & LEFT_ALIGN) /* check if left align flag is set */
 #define HAS_PREFIX(flag)                                                       \
-    ((flag)&PREFIX) /* check if prefix flag is set                             \
-                     */
+    ((flag) & PREFIX) /* check if prefix flag is set                           \
+                       */
 #define HAS_PRECISION(flag)                                                    \
-    ((flag)&PRECISION) /* check if precision flag is set                       \
-                        */
+    ((flag) & PRECISION) /* check if precision flag is set                     \
+                          */
 /* Reset the finite state machine */
 #define FSM_RESET(fsm)                                                         \
     do {                                                                       \
@@ -337,11 +337,11 @@ static void pop_arg(union arg *arg, int type, va_list *ap)
     }
 }
 
-int printf_core(char *restrict buff, size_t bufsz, const char *restrict fmt,
+int printf_core(char *restrict buf, size_t bufsz, const char *restrict fmt,
                 va_list vlist)
 {
     struct ctx ctx = {
-        .buff = (unsigned char *)buff,
+        .buff = (unsigned char *)buf,
         .pos = 0,
         .total = 0,
     };
@@ -523,7 +523,7 @@ int printf_core(char *restrict buff, size_t bufsz, const char *restrict fmt,
         fmt++;
     }
 
-    if (buff && bufsz)
+    if (buf && bufsz)
         ctx.buff[MIN(ctx.pos, ctx.bufsz)] = '\0';
 
     va_end(ap);

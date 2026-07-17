@@ -30,9 +30,6 @@ struct timespec {
 
 __BEGIN_DECLS
 
-/* Suspends the execution of the calling thread for the time specified in
-   req. If the sleep is interrupted by a signal, the remaining time is stored
-   in rem. */
 extern int nanosleep(const struct timespec *req, struct timespec *rem);
 
 __END_DECLS

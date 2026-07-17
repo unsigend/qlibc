@@ -15,10 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ELF_H_
-#define _ELF_H_ 1
-
 #include <bits/elf.h>
-#include <feature.h>
-
-#endif

@@ -21,19 +21,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/* Returned by div */
 typedef struct {
     int quot;
     int rem;
 } div_t;
 
-/* Returned by ldiv */
 typedef struct {
     long quot;
     long rem;
 } ldiv_t;
 
-/* Returned by lldiv */
 typedef struct {
     long long quot;
     long long rem;
@@ -41,13 +38,10 @@ typedef struct {
 
 __BEGIN_DECLS
 
-/* Convert a ASCII to an integer */
 extern int atoi(const char *str);
 extern long atol(const char *str);
 extern long long atoll(const char *str);
 
-/* Convert a string to an integer with a specified base, and move forward the
-   pointer str_end to the last converted character */
 extern long strtol(const char *restrict str, char **restrict str_end, int base);
 extern long long strtoll(const char *restrict str, char **restrict str_end,
                          int base);
@@ -57,87 +51,52 @@ extern unsigned long long strtoull(const char *restrict str,
                                    char **restrict str_end, int base);
 
 #if __USE_ISO_C11
-/* Causes abnormal program termination without cleaning up */
 extern void abort(void);
-
-/* Program termination with status code, exit terminates the program with
-   cleanup, _Exit terminates the program without cleanup */
 extern void exit(int status);
 extern void _Exit(int status);
 #else
 #include <stdnoreturn.h>
-/* Causes abnormal program termination without cleaning up */
 extern noreturn void abort(void);
-
-/* Program termination with status code, exit terminates the program with
-   cleanup, _Exit terminates the program without cleanup */
 extern noreturn void exit(int status);
 extern noreturn void _Exit(int status);
 #endif
 
-/* Registers a function to be called at program exit. */
 extern int atexit(void (*func)(void));
 
-/* Allocate SIZE bytes of uninitialized memory, the allocated memory is
-  always aligned with the max_align_t. */
 extern void *malloc(size_t size);
-/* Free memory allocated by malloc, recalloc and calloc */
 extern void free(void *ptr);
-/* Allocate memory for an array of NUM elements, each of which is SIZE
-   bytes, the memory is always initialized to 0 */
 extern void *calloc(size_t num, size_t size);
-/* Reallocate memory and invalidate the old memory */
 extern void *realloc(void *ptr, size_t new_size);
 
 #if __USE_ISO_C11
-/* Allocate memory with a specific ALIGNMENT bytes */
 extern void *aligned_alloc(size_t alignment, size_t size);
 #endif
 
-/* Search the array for an element that matches the key, the underlying
-   search algorithm is implementation-defined. */
 extern void *bsearch(const void *key, const void *ptr, size_t count,
                      size_t size, int (*comp)(const void *, const void *));
-/* Sort the array, the underlying sort algorithm is
- * implementation-defined.*/
 extern void qsort(void *ptr, size_t count, size_t size,
                   int (*comp)(const void *, const void *));
 
-/* Compute the absolute value of an integer N */
 extern int abs(int n);
 extern long labs(long n);
 extern long long llabs(long long n);
 
-/* Compute the division of two integers */
 extern div_t div(int x, int y);
 extern ldiv_t ldiv(long x, long y);
 extern lldiv_t lldiv(long long x, long long y);
 
-/* Returns the value of the environment variable specified by name. */
 extern char *getenv(const char *name);
-
-/* Adds or changes the value of environment variables. The argument string is
-   of the form name=value. */
 extern int putenv(char *string);
 
 #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) ||                      \
     defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE) ||  \
     defined(_QLIBC_SOURCE)
-/* Sets the value of the environment variable specified by name to value.
-   If name does exist in the environment, then its value is changed to
-   value if overwrite is nonzero. */
 extern int setenv(const char *name, const char *value, int overwrite);
-
-/* Removes the environment variable specified by name. If name does not
-   exist in the environment, then the function succeeds, and the
-   environment is unchanged. */
 extern int unsetenv(const char *name);
 
 #endif
 
 #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE) || defined(_QLIBC_SOURCE)
-/* Clears the environment of all name-value pairs and sets the value of the
-   external variable environ to NULL. */
 extern void clearenv(void);
 #endif
 

@@ -22,13 +22,13 @@
 #include <stddef.h>
 #include <sys/types.h>
 
-#define SEEK_SET 0 /* set file position to offset */
-#define SEEK_CUR 1 /* set file position to current position + offset */
-#define SEEK_END 2 /* set file position to end of file + offset */
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
 
-#define _IOFBF 0 /* fully buffered */
-#define _IOLBF 1 /* line buffered */
-#define _IONBF 2 /* no buffering */
+#define _IOFBF 0
+#define _IOLBF 1
+#define _IONBF 2
 
 #define EOF (-1)          /* end of file */
 #define BUFSIZ 8192       /* buffer size */
@@ -37,7 +37,6 @@
 #define TMP_MAX 10000     /* maximum number of temporary files */
 #define L_tmpnam 20       /* length of temporary file name */
 
-/* file IO structure */
 typedef struct _FILE_IO {
     int fd;                /* file descriptor */
     int flags;             /* file flags */
@@ -60,17 +59,14 @@ typedef struct _FILE_IO {
     size_t shcnt;          /* pushback buffer count */
 } FILE;
 
-/* file position structure */
 typedef struct _FPOS_T {
     off_t pos; /* file position */
 } fpos_t;
 
-/* standard file streams */
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
 
-/* file access */
 extern FILE *fopen(const char *restrict filename, const char *restrict mode);
 extern FILE *freopen(const char *restrict filename, const char *restrict mode,
                      FILE *restrict stream);
@@ -80,13 +76,11 @@ extern void setbuf(FILE *restrict stream, char *restrict buffer);
 extern int setvbuf(FILE *restrict stream, char *restrict buffer, int mode,
                    size_t size);
 
-/* direct I/O */
 extern size_t fread(void *restrict buffer, size_t size, size_t count,
                     FILE *restrict stream);
 extern size_t fwrite(const void *restrict buffer, size_t size, size_t count,
                      FILE *restrict stream);
 
-/* unformatted I/O */
 extern int fgetc(FILE *stream);
 extern int getc(FILE *stream);
 extern char *fgets(char *restrict str, int count, FILE *restrict stream);
@@ -98,72 +92,40 @@ extern int putchar(int ch);
 extern int puts(const char *str);
 extern int ungetc(int ch, FILE *stream);
 
-/* formatted I/O */
-
-/* Read formatted data from stdin */
 extern int scanf(const char *restrict format, ...);
-
-/* Read formatted data from a file stream */
 extern int fscanf(FILE *restrict stream, const char *restrict format, ...);
-
-/* Read formatted data from a buffer */
 extern int sscanf(const char *restrict buffer, const char *restrict format,
                   ...);
-
-/* Read formatted data from stdin using a variable argument list */
 extern int vscanf(const char *restrict format, va_list vlist);
-
-/* Read formatted data from a file stream using a variable argument list */
 extern int vfscanf(FILE *restrict stream, const char *restrict format,
                    va_list vlist);
-
-/* Read formatted data from a buffer using a variable argument list */
 extern int vsscanf(const char *restrict buffer, const char *restrict format,
                    va_list vlist);
 
-/* Print formatted data to stdout */
 extern int printf(const char *restrict format, ...);
-
-/* Print formatted data to a file stream */
 extern int fprintf(FILE *restrict stream, const char *restrict format, ...);
-
-/* Format and store data in a buffer */
 extern int sprintf(char *restrict buffer, const char *restrict format, ...);
-
-/* Format and store data in a buffer with a maximum length */
 extern int snprintf(char *restrict buffer, size_t bufsz,
                     const char *restrict format, ...);
-
-/* Print formatted data to stdout using a variable argument list */
 extern int vprintf(const char *restrict format, va_list vlist);
-
-/* Print formatted data to a file stream using a variable argument list */
 extern int vfprintf(FILE *restrict stream, const char *restrict format,
                     va_list vlist);
-
-/* Format and store data in a buffer using a variable argument list */
 extern int vsprintf(char *restrict buffer, const char *restrict format,
                     va_list vlist);
-
-/* Format and store data in a buffer with a maximum length using a variable
-   argument list */
 extern int vsnprintf(char *restrict buffer, size_t bufsz,
                      const char *restrict format, va_list vlist);
 
-/* file positioning */
 extern long ftell(FILE *stream);
 extern int fgetpos(FILE *restrict stream, fpos_t *restrict pos);
 extern int fseek(FILE *stream, long offset, int origin);
 extern int fsetpos(FILE *stream, const fpos_t *pos);
 extern void rewind(FILE *stream);
 
-/* error handling */
 extern void clearerr(FILE *stream);
 extern int feof(FILE *stream);
 extern int ferror(FILE *stream);
 extern void perror(const char *s);
 
-/* file operations */
 extern int remove(const char *pathname);
 extern int rename(const char *oldpath, const char *newpath);
 extern FILE *tmpfile(void);

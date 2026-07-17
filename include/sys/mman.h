@@ -24,16 +24,9 @@
 
 __BEGIN_DECLS
 
-/* Map a new mapping in the virtual address space of the calling process. The
-   starting address for the new mapping is specified in addr. The length
-   argument specifies the length of the mapping */
 extern void *mmap(void *addr, size_t length, int prot, int flags, int fd,
                   off_t offset);
-
-/* Unmap a mapping from the virtual address space of the calling process. */
 extern int munmap(void *addr, size_t length);
-
-/* Remap a mapping in the virtual address space of the calling process. */
 extern void *mremap(void *old_addr, size_t old_len, size_t new_len, int flags,
                     ...);
 

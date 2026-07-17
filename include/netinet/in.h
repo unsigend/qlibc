@@ -23,19 +23,18 @@
 typedef uint16_t in_port_t;
 typedef uint32_t in_addr_t;
 
-/* IPv4 address */
-struct in_addr {
+struct in_addr { /* IPv4 address */
     in_addr_t s_addr;
 };
 
-/* IPv6 address */
-struct in6_addr {
+struct in6_addr { /* IPv6 address */
     union {
         uint8_t __s6_addr[16];
         uint16_t __s6_addr16[8];
         uint32_t __s6_addr32[4];
     } __in6_union;
 };
+
 #define s6_addr __in6_union.__s6_addr
 #define s6_addr16 __in6_union.__s6_addr16
 #define s6_addr32 __in6_union.__s6_addr32

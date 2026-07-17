@@ -24,13 +24,7 @@
 
 __BEGIN_DECLS
 
-/* Waits for a child process to exit or stop. If pid > 0, wait for the child
-   with the given process ID. If pid == -1, wait for any child. If the process
-   has no child, return -1 and set errno to ECHILD.*/
 extern pid_t waitpid(pid_t pid, int *status, int options);
-
-/* Waits for any child process to exit or stop. If the process has no child,
-   return -1 and set errno to ECHILD. Equivalent to waitpid(-1, status, 0).*/
 extern pid_t wait(int *status);
 
 __END_DECLS

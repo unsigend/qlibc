@@ -27,15 +27,8 @@
 
 __BEGIN_DECLS
 
-/* Opens the file specified by pathname with the specified flags and mode. */
 extern int open(const char *pathname, int flags, ...);
-
-/* Creates a new file with the specified name and permissions. This function is
-   equivalent to open(pathname, O_CREAT | O_WRONLY | O_TRUNC, mode). And is a
-   POSIX extension.*/
 extern int creat(const char *pathname, mode_t mode);
-
-/* Controls the file descriptor fd. */
 extern int fcntl(int fd, int cmd, ...);
 
 __END_DECLS

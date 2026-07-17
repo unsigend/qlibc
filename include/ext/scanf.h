@@ -27,11 +27,8 @@
 
 __BEGIN_DECLS
 
-/* Read formatted data from a buffer */
 extern int sscanf(const char *restrict buffer, const char *restrict format,
                   ...);
-
-/* Read formatted data from a buffer using a variable argument list */
 extern int vsscanf(const char *restrict buffer, const char *restrict format,
                    va_list vlist);
 

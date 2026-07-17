@@ -41,17 +41,13 @@ struct mallinfo {
 #endif
 
 __BEGIN_DECLS
-/* Allocate size bytes of uninitialized memory */
+
 extern void *malloc(size_t size);
-/* Free memory allocated by malloc */
 extern void free(void *ptr);
-/* Allocate memory for an array of num elements, each of which is size bytes */
 extern void *calloc(size_t num, size_t size);
-/* Reallocate memory and invalidate the old memory */
 extern void *realloc(void *ptr, size_t new_size);
 
 #if __USE_ISO_C11
-/* Allocate memory with a specific alignment */
 extern void *aligned_alloc(size_t alignment, size_t size);
 #endif
 

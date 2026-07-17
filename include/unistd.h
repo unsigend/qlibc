@@ -22,84 +22,42 @@
 #include <stdint.h>
 #include <sys/types.h>
 
-#define STDIN_FILENO 0  /* Standard input file descriptor */
-#define STDOUT_FILENO 1 /* Standard output file descriptor */
-#define STDERR_FILENO 2 /* Standard error file descriptor */
+#define STDIN_FILENO 0
+#define STDOUT_FILENO 1
+#define STDERR_FILENO 2
 
-#define SEEK_SET 0 /* Set file position to offset */
-#define SEEK_CUR 1 /* Set file position to current position + offset */
-#define SEEK_END 2 /* Set file position to end of file + offset */
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
 
 __BEGIN_DECLS
 
-/* Closes the file referred to by the file descriptor fd. */
 extern int close(int fd);
-
-/* Sets the file position of the file referred to by the file descriptor fd to
-   the specified offset. */
 extern off_t lseek(int fd, off_t offset, int whence);
-
-/* Returns the current file position of the file referred to by the file
-   descriptor fd. This function is not part of POSIX standard. */
 extern off_t tell(int fd);
-
-/* Reads data from the file referred to by the file descriptor fd into the
-   buffer buf. */
 extern ssize_t read(int fd, void *buf, size_t count);
-
-/* Writes data to the file referred to by the file descriptor fd at the
-   specified offset. */
 extern ssize_t write(int fd, const void *buf, size_t count);
-
-/* Creates a new file descriptor that is a copy of the file descriptor fd. */
 extern int dup(int fd);
 extern int dup2(int fd, int fd2);
 extern int dup3(int fd, int fd2, int flags);
 
-/* Reads data from the file referred to by the file descriptor fd at the
-   specified offset. The file position is not changed. */
 extern ssize_t pread(int fd, void *buf, size_t count, off_t offset);
-
-/* Writes data to the file referred to by the file descriptor fd at the
-   specified offset. The file position is not changed. */
 extern ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
 
-/* Truncates the file referred to by the pathname to the specified length. */
 extern int truncate(const char *path, off_t length);
-
-/* Truncates the file referred to by the file descriptor fd to the specified
-   length. */
 extern int ftruncate(int fd, off_t length);
 
-/* Makes a system call with the given number and arguments. */
 extern long syscall(long number, ...);
-
-/* Flushes all modified data of the file referred to by the file descriptor fd
-   to the disk device. */
 extern int fsync(int fd);
-
-/* Flushes all modified data of the file referred to by the file descriptor fd
-   to the disk device, but does not synchronize the filesystem metadata. */
 extern int fdatasync(int fd);
-
-/* Synchronizes all pending modifications to filesystem metadata and cached
-   file data to be written to the underlying filesystems. */
 extern int sync(void);
 
-/* Checks if the file descriptor is associated with a terminal. */
 extern int isatty(int fd);
-
-/* Deletes the name and file information associated with pathname from the file
-   system. */
 extern int unlink(const char *pathname);
 
-/* Deletes the directory specified by pathname from the file system. */
 extern int rmdir(const char *pathname);
-
-/* Sets the end of the data segment to the value specified by addr, when
-   that value is reasonable, the system has enough memory, and the process
-   does not exceed its maximum data size */
 extern int brk(void *addr);
+extern void *sbrk(intptr_t increment);
 
 #ifdef _QLIBC_SOURCE
 /* This function is not part of POSIX standard, just used for internal use of
@@ -107,48 +65,16 @@ extern int brk(void *addr);
 extern void *__brk(void *addr);
 #endif
 
-/* Increments the program's data space by increment bytes. Calling sbrk()
-   with an increment of 0 can be used to find the current location of the
-   program break.*/
-extern void *sbrk(intptr_t increment);
-
-/* Returns the process ID of the calling process.*/
 extern pid_t getpid(void);
-/* Returns the process ID of the parent of the calling process.*/
 extern pid_t getppid(void);
-
-/* Returns the process group ID of the calling process.*/
 extern pid_t getpgrp(void);
-/* Sets the process group ID of the process specified by pid to pgid. if pid=0,
-   then sets to current process's process group ID, if pgid=0 then use pid as
-   pgid. */
 extern int setpgid(pid_t pid, pid_t pgid);
-
-/* Creates a new process by duplicating the calling process. The new process is
-   referred to as the child process. The calling process is referred to as the
-   parent process. */
 extern pid_t fork(void);
-
-/* Suspends the execution of the calling process for the specified number of
-   seconds or until a signal arrives. Returns the number of seconds left to
-   sleep. */
 extern unsigned int sleep(unsigned int seconds);
-
-/* Suspends the execution of the calling process until a signal arrives.
-   Returns -1 and sets errno to EINTR if the call is interrupted by a signal.*/
 extern int pause(void);
-
-/* Sets an alarm timer that will generate a SIGALRM signal after the specified
-   number of seconds. Returns the number of seconds left to the previous alarm
-   if any. */
 extern unsigned int alarm(unsigned int seconds);
-
-/* Executes the file specified by filename. The file must be a regular file
-   and executable. The argv array is the argument vector for the new program.
-   The envp array is the environment for the new program. */
 extern int execve(const char *filename, const char *argv[], const char *envp[]);
 
-/* Exits the current process with the specified status. */
 #if __USE_ISO_C11
 #include <stdnoreturn.h>
 extern noreturn void _exit(int status);

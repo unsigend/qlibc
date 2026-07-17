@@ -28,7 +28,7 @@
 __BEGIN_DECLS
 
 /* Formatted core output function */
-extern int printf_core(char *restrict buff, size_t bufsz,
+extern int printf_core(char *restrict buf, size_t bufsz,
                        const char *restrict fmt, va_list vlist);
 
 __END_DECLS

@@ -27,19 +27,11 @@
 
 __BEGIN_DECLS
 
-/* Format and store data in a buffer */
 extern int sprintf(char *restrict buffer, const char *restrict format, ...);
-
-/* Format and store data in a buffer with a maximum length */
 extern int snprintf(char *restrict buffer, size_t bufsz,
                     const char *restrict format, ...);
-
-/* Format and store data in a buffer using a variable argument list */
 extern int vsprintf(char *restrict buffer, const char *restrict format,
                     va_list vlist);
-
-/* Format and store data in a buffer with a maximum length using a variable
-   argument list */
 extern int vsnprintf(char *restrict buffer, size_t bufsz,
                      const char *restrict format, va_list vlist);
 

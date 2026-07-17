@@ -28,14 +28,8 @@
 
 __BEGIN_DECLS
 
-/* Get the metadata of the file */
 extern int stat(const char *restrict path, struct stat *restrict buf);
-
-/* Get the metadata of the file associated with the file descriptor */
 extern int fstat(int fd, struct stat *restrict buf);
-
-/* Get the metadata of the file, but if the file is a symbolic link, the
-   metadata of the link is returned */
 extern int lstat(const char *restrict path, struct stat *restrict buf);
 
 __END_DECLS

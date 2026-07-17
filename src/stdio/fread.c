@@ -44,7 +44,7 @@ size_t fread(void *restrict ptr, size_t size, size_t count,
     }
 
     /* fread is designed as slow path read from buffer and slow path read from
-       system call*/
+       system call */
     if (nbytes <= stream->bufsz) {
         while (nread < nbytes && stream->shcnt > 0) {
             *(unsigned char *)ptr = fgetc(stream);

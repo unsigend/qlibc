@@ -23,26 +23,22 @@
 #if __USE_ISO_C99
 #include <stdint.h>
 
-/* Returned by imaxdiv */
 typedef struct {
     intmax_t quot;
     intmax_t rem;
 } imaxdiv_t;
 
 __BEGIN_DECLS
-/* Compute the absolute value of an intmax_t integer */
+
 extern intmax_t imaxabs(intmax_t n);
-
-/* Compute the division of two intmax_t integers */
 extern imaxdiv_t imaxdiv(intmax_t x, intmax_t y);
-
-/* Convert a string to an integer */
 extern intmax_t strtoimax(const char *restrict str, char **restrict str_end,
                           int base);
 extern uintmax_t strtoumax(const char *restrict str, char **restrict str_end,
                            int base);
 
 __END_DECLS
+
 #endif
 
 #endif

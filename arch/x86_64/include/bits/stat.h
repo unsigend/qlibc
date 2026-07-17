@@ -21,9 +21,7 @@
 #include <bits/types.h>
 #include <time.h>
 
-/*
- * The stat structure for x64 architecture is based on GNU glibc.
- */
+/* The stat structure for x64 architecture is based on GNU glibc. */
 struct stat {
     __dev_t st_dev;           /* ID of device containing file */
     __ino_t st_ino;           /* inode number */
