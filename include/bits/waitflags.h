@@ -25,23 +25,23 @@
 #define __W_CONTINUED 0xffff /* Continued child */
 #define __WCOREFLAG 0x80     /* Core dump flag */
 #define __WTERMSIG(status)                                                     \
-    ((status)&0x7f) /* Get the signal number that killed the process */
+    ((status) & 0x7f) /* Get the signal number that killed the process */
 
 #define WIFEXITED(status)                                                      \
     (__WTERMSIG(status) == 0) /* If the process exited normally */
 #define WEXITSTATUS(status)                                                    \
-    (((status)&0xff00) >> 8) /* Get the exit status of the process */
+    (((status) & 0xff00) >> 8) /* Get the exit status of the process */
 
 #define WIFSIGNALED(status)                                                    \
-    (((signed char)(((status)&0x7f) + 1) >> 1) >                               \
+    (((signed char)(((status) & 0x7f) + 1) >> 1) >                             \
      0) /* If the process was terminated by a signal */
 #define WTERMSIG(status)                                                       \
     __WTERMSIG(status) /* Get the signal number that killed the process */
 #define WCOREDUMP(status)                                                      \
-    ((status)&__WCOREFLAG) /* If the process dumped core */
+    ((status) & __WCOREFLAG) /* If the process dumped core */
 
 #define WIFSTOPPED(status)                                                     \
-    (((status)&0xff) == 0x7f) /* If the process was stopped */
+    (((status) & 0xff) == 0x7f) /* If the process was stopped */
 #define WSTOPSIG(status)                                                       \
     WEXITSTATUS(status) /* Get the signal number that stopped the process */
 

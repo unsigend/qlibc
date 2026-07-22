@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include <string.h>
 
 char *strncpy(char *restrict dest, const char *restrict src, size_t count)

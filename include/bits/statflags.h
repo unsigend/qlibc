@@ -49,19 +49,19 @@
 #define S_IFSOCK 0140000 /* Socket */
 
 #define S_ISDIR(mode)                                                          \
-    (((mode)&S_IFMT) == S_IFDIR) /* Check if the file is a directory */
+    (((mode) & S_IFMT) == S_IFDIR) /* Check if the file is a directory */
 #define S_ISCHR(mode)                                                          \
-    (((mode)&S_IFMT) == S_IFCHR) /* Check if the file is a character device    \
-                                  */
+    (((mode) & S_IFMT) == S_IFCHR) /* Check if the file is a character device  \
+                                    */
 #define S_ISBLK(mode)                                                          \
-    (((mode)&S_IFMT) == S_IFBLK) /* Check if the file is a block device */
+    (((mode) & S_IFMT) == S_IFBLK) /* Check if the file is a block device */
 #define S_ISREG(mode)                                                          \
-    (((mode)&S_IFMT) == S_IFREG) /* Check if the file is a regular file */
+    (((mode) & S_IFMT) == S_IFREG) /* Check if the file is a regular file */
 #define S_ISFIFO(mode)                                                         \
-    (((mode)&S_IFMT) == S_IFIFO) /* Check if the file is a FIFO */
+    (((mode) & S_IFMT) == S_IFIFO) /* Check if the file is a FIFO */
 #define S_ISLNK(mode)                                                          \
-    (((mode)&S_IFMT) == S_IFLNK) /* Check if the file is a symbolic link */
+    (((mode) & S_IFMT) == S_IFLNK) /* Check if the file is a symbolic link */
 #define S_ISSOCK(mode)                                                         \
-    (((mode)&S_IFMT) == S_IFSOCK) /* Check if the file is a socket */
+    (((mode) & S_IFMT) == S_IFSOCK) /* Check if the file is a socket */
 
 #endif
