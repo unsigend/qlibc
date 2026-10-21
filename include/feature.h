@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,63 +18,21 @@
 #ifndef _QLIBC_FEATURE_H_
 #define _QLIBC_FEATURE_H_
 
-/* Version macros */
-#define QLIBC_VERSION_MAJOR 0
-#define QLIBC_VERSION_MINOR 1
-#define QLIBC_VERSION_PATCH 0
+#define __ISO_C23 202311L
+#define __ISO_C17 201710L
+#define __ISO_C11 201112L
+#define __ISO_C99 199901L
+#define __ISO_C94 199409L
+#define __ISO_C89 0
 
-/* ISO C Standard macros */
-#define ISO_C_STANDARD_C99 199901L
-#define ISO_C_STANDARD_C11 201112L
-#define ISO_C_STANDARD_C17 201710L
-#define ISO_C_STANDARD_C23 202311L
-
-#if defined(__STDC_VERSION__)
-#if __STDC_VERSION__ >= ISO_C_STANDARD_C99
-#define __USE_ISO_C99 1
-#else
-#define __USE_ISO_C99 0
-#endif
-#if __STDC_VERSION__ >= ISO_C_STANDARD_C11
-#define __USE_ISO_C11 1
-#else
-#define __USE_ISO_C11 0
-#endif
-#if __STDC_VERSION__ >= ISO_C_STANDARD_C17
-#define __USE_ISO_C17 1
-#else
-#define __USE_ISO_C17 0
-#endif
-#if __STDC_VERSION__ >= ISO_C_STANDARD_C23
-#define __USE_ISO_C23 1
-#else
-#define __USE_ISO_C23 0
-#endif
-#else
-#error "qlibc: ISO C Standard is not defined"
+#ifndef __STDC_VERSION__
+#define __STDC_VERSION__ __ISO_C89
 #endif
 
-/* Feature support macros, these macros are used to enable or disable features.
-   If the feature is not supported in current qlibc version, the macro will be
-   ignored. */
-#define __SUPPORT_MB 0      /* Multi-byte string support */
-#define __SUPPORT_FPT 0     /* Floating-point support */
-#define __SUPPORT_THREADS 0 /* Multi-thread support */
-
-#if defined(_GNU_SOURCE)
-#define _QLIBC_SOURCE 1
+#ifndef __GNUC__
+#error "qlibc: missing GNU C compiler"
 #endif
 
-/* C++ specific macros */
-#ifdef __cplusplus
-#define __BEGIN_DECLS extern "C" {
-#define __END_DECLS }
-#else
-#define __BEGIN_DECLS
-#define __END_DECLS
-#endif
+#define __WORD_SIZE __SIZEOF_LONG__
 
-#define __hidden __attribute__((visibility("hidden")))
-#define __packed __attribute__((packed))
-
-#endif
+#endif /* _QLIBC_FEATURE_H_ */

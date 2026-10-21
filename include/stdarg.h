@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,25 +15,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _STDARG_H_
-#define _STDARG_H_ 1
+#ifndef _QLIBC_STDARG_H_
+#define _QLIBC_STDARG_H_
 
-/* GNU C compatible macros */
-#if defined(__GNUC__) || defined(_GNU_SOURCE)
-typedef __builtin_va_list __gnuc_va_list;
+#include <feature.h>
+
+typedef __builtin_va_list va_list;
+
+#define va_arg(ap, type) __builtin_va_arg(ap, type)
+#define va_end(ap) __builtin_va_end(ap)
+#define va_start(ap, last) __builtin_va_start(ap, last)
+
+#if __STDC_VERSION__ >= __ISO_C99
+#define va_copy(dest, src) __builtin_va_copy(dest, src)
 #endif
 
-/* QLIBC specific macros */
-typedef __builtin_va_list __qlibc_va_list;
-typedef __qlibc_va_list va_list;
-
-/* Variable argument macros, the implementation is based on the GNU GCC
-   built-in support. The va_start, va_end, va_arg, va_copy macros are defined
-   as the GNU GCC built-in macros. */
-
-#define va_start(v, l) __builtin_va_start(v, l)
-#define va_end(v) __builtin_va_end(v)
-#define va_arg(v, l) __builtin_va_arg(v, l)
-#define va_copy(d, s) __builtin_va_copy(d, s)
-
+#if __STDC_VERSION__ >= __ISO_C23
+#define __STDC_VERSION_STDARG_H__ 202311L
 #endif
+
+#endif /* _QLIBC_STDARG_H_ */

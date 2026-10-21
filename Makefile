@@ -1,5 +1,5 @@
 # qlibc - A light-weight and portable C standard library
-# Copyright (C) 2025 Qiu Yixiang
+# Copyright (C) 2025-2027 Yixiang Qiu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,15 +24,11 @@ BUILDDIR := build
 DEPDIR   := $(BUILDDIR)/dep
 OBJDIR   := $(BUILDDIR)/obj
 SRCDIR   := src
+TESTDIR  := test
 
-SRCS      := $(shell find $(SRCDIR) -name "*.c")
-SRCS_ARCH := $(shell find $(ARCHDIR)/$(ARCH)/src -name "*.c")
-SRCS_CRT  := $(shell find $(ARCHDIR)/$(ARCH)/crt -name "*.S")
-
-OBJS      := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.c.o,$(SRCS))
-OBJS_ARCH := $(patsubst $(ARCHDIR)/$(ARCH)/src/%.c,$(OBJDIR)/$(ARCH)/%.c.o,$(SRCS_ARCH))
-OBJS_CRT  := $(patsubst $(ARCHDIR)/$(ARCH)/crt/%.S,$(OBJDIR)/$(ARCH)/crt/%.S.o,$(SRCS_CRT))
-DEPS      := $(patsubst $(OBJDIR)/%.o,$(DEPDIR)/%.d,$(OBJS) $(OBJS_ARCH))
+SRCS := $(shell find $(SRCDIR) -name "*.c")
+OBJS := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.c.o,$(SRCS))
+DEPS := $(patsubst $(OBJDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
 
 -include $(DEPS)
 
@@ -41,38 +37,27 @@ $(OBJDIR)/%.c.o: $(SRCDIR)/%.c
 	@$(CC) $(CFLAGS) -MMD -MP -MF $(DEPDIR)/$*.c.d -MT $@ -c $< -o $@
 	@echo "  CC    $<"
 
-$(OBJDIR)/$(ARCH)/%.c.o: $(ARCHDIR)/$(ARCH)/src/%.c
-	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$(ARCH)/$*.c.d)
-	@$(CC) $(CFLAGS) -MMD -MP -MF $(DEPDIR)/$(ARCH)/$*.c.d -MT $@ -c $< -o $@
-	@echo "  CC    $<"
-
-$(OBJDIR)/$(ARCH)/crt/%.S.o: $(ARCHDIR)/$(ARCH)/crt/%.S
-	@mkdir -p $(dir $@)
-	@$(AS) $(CFLAGS) -c $< -o $@
-	@echo "  AS    $<"
-
-.PHONY: all lib crt clean info flag clang format line version gen-config help
+.PHONY: all lib test clean info flag clang format line version gen-config help
 .DEFAULT_GOAL := help
 
-all: lib crt
+all: lib
 
-lib: $(OBJS) $(OBJS_ARCH)
+lib: $(OBJS)
 	@mkdir -p $(LIBDIR)
 ifeq ($(BUILD_METHOD),static)
-	@$(AR) $(ARFLAGS) $(LIB) $(OBJS) $(OBJS_ARCH)
+	@$(AR) $(ARFLAGS) $(LIB) $(OBJS)
 	@echo "  AR    $(LIB)"
 else
-	@$(CC) $(LDFLAGS) -shared $(OBJS) $(OBJS_ARCH) -o $(LIB)
+	@$(CC) $(LDFLAGS) -shared $(OBJS) -o $(LIB)
 	@echo "  LD    $(LIB)"
 endif
 
-crt: $(OBJS_CRT)
-	@mkdir -p $(LIBDIR)
-	@cp $(OBJS_CRT) $(LIBDIR)/
-	@echo "  CRT   $(LIBDIR)"
+test: gen-config
+	@$(MAKE) -C $(TESTDIR) test
 
 clean:
 	@rm -rf $(BUILDDIR) $(LIBDIR)
+	@$(MAKE) -C $(TESTDIR) clean
 
 info:
 	@echo "qlibc v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)"
@@ -83,6 +68,7 @@ info:
 	@echo "  cc            $(CC)"
 	@echo "  ar            $(AR)"
 	@echo "  debug         $(if $(filter 1,$(DEBUG)),on,off)"
+	@echo "  host libc     $(if $(filter 1,$(USE_HOST_LIBC)),on,off)"
 
 flag:
 	@echo "CFLAGS:  $(CFLAGS)"
@@ -91,7 +77,7 @@ flag:
 
 clang:
 	@$(MAKE) clean
-	@bear -- $(MAKE) all
+	@bear -- $(MAKE) test
 
 format:
 	@find $(SRCDIR) $(INCDIR) $(ARCHDIR) \
@@ -110,13 +96,18 @@ gen-config:
 
 help:
 	@echo "qlibc - A light-weight and portable C standard library v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)"
-	@echo "Copyright (C) 2025 Qiu Yixiang"
+	@echo "Copyright (C) 2025-2027 Yixiang Qiu"
 	@echo ""
 	@echo "USAGE:"
-	@echo "\tmake all                 - build the library and CRT objects"
-	@echo "\tmake lib                 - build the library"
-	@echo "\tmake crt                 - build the CRT objects"
 	@echo ""
+	@echo "build:"
+	@echo "\tmake all                 - build the library"
+	@echo "\tmake lib                 - build the library"
+	@echo ""
+	@echo "test:"
+	@echo "\tmake test                - build and run tests"
+	@echo ""
+	@echo "other:"
 	@echo "\tmake clean               - clean the build directory"
 	@echo "\tmake help                - show this help message"
 	@echo "\tmake info                - show the build configuration"

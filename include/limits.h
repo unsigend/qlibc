@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,40 +14,55 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef _LIMITS_H_
-#define _LIMITS_H_ 1
 
-#include <bits/limits.h>
+#ifndef _QLIBC_LIMITS_H_
+#define _QLIBC_LIMITS_H_
+
 #include <feature.h>
 
-#define CHAR_BIT 8
-
-#define CHAR_MIN (-128)
-#define CHAR_MAX 127
-
-#define SCHAR_MIN (CHAR_MIN)
-#define SCHAR_MAX (CHAR_MAX)
-
-#define SHRT_MAX (0x7fff)
-#define SHRT_MIN (-1 - SHRT_MAX)
-
-#define INT_MAX (0x7fffffff)
-#define INT_MIN (-1 - INT_MAX)
-
-#define LONG_MIN (_LONG_MIN_)
-#define LONG_MAX (_LONG_MAX_)
-
-#define LLONG_MAX (0x7fffffffffffffff)
-#define LLONG_MIN (-1 - LLONG_MAX)
-
-#define UCHAR_MAX (0xff)
-#define USHRT_MAX (0xffff)
-#define UINT_MAX (0xffffffff)
-#define ULONG_MAX (_ULONG_MAX_)
-#define ULLONG_MAX (0xffffffffffffffff)
-
-#if __SUPPORT_MB
-#define MB_LEN_MAX 4
+#if __STDC_VERSION__ >= __ISO_C23
+#define __STDC_VERSION_LIMITS_H__ 202311L
+#ifdef __BITINT_MAXWIDTH__
+#define BITINT_MAXWIDTH __BITINT_MAXWIDTH__
+#endif
+#define BOOL_MAX 1
+#define BOOL_WIDTH __BOOL_WIDTH__
+#define CHAR_WIDTH __CHAR_BIT__
+#define INT_WIDTH __INT_WIDTH__
+#define LLONG_WIDTH __LLONG_WIDTH__
+#define LONG_WIDTH __LONG_WIDTH__
+#define SCHAR_WIDTH __CHAR_BIT__
+#define SHRT_WIDTH __SHRT_WIDTH__
+#define UCHAR_WIDTH __CHAR_BIT__
+#define UINT_WIDTH __INT_WIDTH__
+#define ULLONG_WIDTH __LLONG_WIDTH__
+#define ULONG_WIDTH __LONG_WIDTH__
+#define USHRT_WIDTH __SHRT_WIDTH__
 #endif
 
+#define CHAR_BIT __CHAR_BIT__
+#ifdef __CHAR_UNSIGNED__
+#define CHAR_MAX (__SCHAR_MAX__ * 2 + 1)
+#define CHAR_MIN 0
+#else
+#define CHAR_MAX __SCHAR_MAX__
+#define CHAR_MIN (-__SCHAR_MAX__ - 1)
 #endif
+#define INT_MAX __INT_MAX__
+#define INT_MIN (-__INT_MAX__ - 1)
+#define LLONG_MAX __LONG_LONG_MAX__
+#define LLONG_MIN (-__LONG_LONG_MAX__ - 1)
+#define LONG_MAX __LONG_MAX__
+#define LONG_MIN (-__LONG_MAX__ - 1)
+#define MB_LEN_MAX 1
+#define SCHAR_MAX __SCHAR_MAX__
+#define SCHAR_MIN (-__SCHAR_MAX__ - 1)
+#define SHRT_MAX __SHRT_MAX__
+#define SHRT_MIN (-__SHRT_MAX__ - 1)
+#define UCHAR_MAX (__SCHAR_MAX__ * 2 + 1)
+#define UINT_MAX (__INT_MAX__ * 2U + 1U)
+#define ULLONG_MAX (__LONG_LONG_MAX__ * 2ULL + 1ULL)
+#define ULONG_MAX (__LONG_MAX__ * 2UL + 1UL)
+#define USHRT_MAX (__SHRT_MAX__ * 2 + 1)
+
+#endif /* _QLIBC_LIMITS_H_ */

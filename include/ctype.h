@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,28 +15,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _CTYPE_H_
-#define _CTYPE_H_ 1
+#ifndef _QLIBC_CTYPE_H_
+#define _QLIBC_CTYPE_H_
 
-#include <feature.h>
+int isalnum(int c);
+int isalpha(int c);
+int isblank(int c);
+int iscntrl(int c);
+int isdigit(int c);
+int isgraph(int c);
+int islower(int c);
+int isprint(int c);
+int ispunct(int c);
+int isspace(int c);
+int isupper(int c);
+int isxdigit(int c);
+int tolower(int c);
+int toupper(int c);
 
-__BEGIN_DECLS
-
-extern int isalnum(int c);
-extern int isalpha(int c);
-extern int isdigit(int c);
-extern int isxdigit(int c);
-extern int isblank(int c);
-extern int iscntrl(int c);
-extern int isspace(int c);
-extern int ispunct(int c);
-extern int isgraph(int c);
-extern int isprint(int c);
-extern int islower(int c);
-extern int isupper(int c);
-extern int tolower(int c);
-extern int toupper(int c);
-
-__END_DECLS
-
-#endif
+#endif /* _QLIBC_CTYPE_H_ */

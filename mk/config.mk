@@ -1,5 +1,5 @@
 # qlibc - A light-weight and portable C standard library
-# Copyright (C) 2025 Qiu Yixiang
+# Copyright (C) 2025-2027 Yixiang Qiu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,11 +15,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ARCH = x86_64
-CC = gcc-15
+CC = gcc
 LIBNAME = qlibc
 STD_C = c11
 BUILD_METHOD = static
+USE_HOST_LIBC = 0
 DEBUG = 1
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
-VERSION_PATCH = 0
+VERSION_PATCH = 1

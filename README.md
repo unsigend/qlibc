@@ -10,19 +10,7 @@ Current Release Version: **0.1.0**.
 
 **Prerequisites:** GCC (or cross-compiler), GNU Make.
 
-**Configuration:** Edit `config.cfg`, then run `make gen-config`. Keys that start with `CONFIG_` are written to `include/config.h` every key is written to `mk/config.mk` with the prefix stripped.
-
-    ARCH                     x86_64 | i386 (makefile only)
-    CC                       Compiler (AS and LD follow CC)
-    LIBNAME                  Library name (makefile only)
-    STD_C                    C standard (makefile only)
-    BUILD_METHOD             static | shared (makefile only)
-    CONFIG_DEBUG             1 = debug, 0 = release
-    CONFIG_VERSION_MAJOR     Library version
-    CONFIG_VERSION_MINOR
-    CONFIG_VERSION_PATCH
-
-More details: [config.cfg](https://github.com/unsigend/qlibc/blob/main/config.cfg)
+**Configuration:** Edit [config.cfg](config.cfg), then run `make gen-config`. Keys with a `CONFIG_` prefix go into `include/config.h`; all keys go into `mk/config.mk` with the prefix stripped.
 
 **Commands:**
 
@@ -96,7 +84,7 @@ More details: [config.cfg](https://github.com/unsigend/qlibc/blob/main/config.cf
 
 ## Architectures
 
-Supported targets: **x86_64** and **i386**. Set `ARCH` and `CC` in `config.cfg`; `AS` and `LD` follow `CC`. 
+Supported targets: **x86_64** and **i386**. 
 
 ## License
 

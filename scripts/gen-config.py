@@ -11,7 +11,7 @@ CONFIG_H = os.path.join(ROOT, "include", "config.h")
 
 MK_HEADER = """\
 # qlibc - A light-weight and portable C standard library
-# Copyright (C) 2025 Qiu Yixiang
+# Copyright (C) 2025-2027 Yixiang Qiu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ MK_HEADER = """\
 
 H_HEADER = """\
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

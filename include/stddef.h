@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,29 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _STDDEF_H_
-#define _STDDEF_H_ 1
+#ifndef _QLIBC_STDDEF_H_
+#define _QLIBC_STDDEF_H_
 
-#ifdef NULL
-#undef NULL
+#include <feature.h>
+
+typedef __PTRDIFF_TYPE__ ptrdiff_t;
+typedef __SIZE_TYPE__ size_t;
+typedef __WCHAR_TYPE__ wchar_t;
+
+#if __STDC_VERSION__ >= __ISO_C11
+typedef struct {
+    long long __ll __attribute__((__aligned__(__BIGGEST_ALIGNMENT__)));
+    long double __ld __attribute__((__aligned__(__BIGGEST_ALIGNMENT__)));
+} max_align_t;
 #endif
 
-#ifndef __cplusplus
+#if __STDC_VERSION__ >= __ISO_C23
+#define __STDC_VERSION_STDDEF_H__ 202311L
+typedef __typeof__(nullptr) nullptr_t;
+#define unreachable() __builtin_unreachable()
+#endif
+
 #define NULL ((void *)0)
-#else
-#define NULL nullptr
-#endif
+#define offsetof(type, member) __builtin_offsetof(type, member)
 
-#include <bits/stddef.h>
-
-#if defined(__GNUC__)
-#define offsetof(TYPE, MEMBER) __builtin_offsetof(TYPE, MEMBER)
-#else
-#define offsetof(TYPE, MEMBER) ((size_t)&((TYPE *)0)->MEMBER)
-#endif
-
-#if __SUPPORT_MB == 0 && defined(__linux__)
-typedef int wchar_t;
-#endif
-
-#endif
+#endif /* _QLIBC_STDDEF_H_ */

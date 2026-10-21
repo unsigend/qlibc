@@ -1,5 +1,5 @@
 # qlibc - A light-weight and portable C standard library
-# Copyright (C) 2025 Qiu Yixiang
+# Copyright (C) 2025-2027 Yixiang Qiu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,8 +45,15 @@ else
     CFLAGS_OPT := -O2
 endif
 
+# freestanding
 CFLAGS_FREESTANDING := -ffreestanding -fno-builtin -nostdinc
-CFLAGS_WARN := -Wall -Wextra -Werror -Wno-unused-parameter -Wno-implicit-fallthrough
+
+# warning
+CFLAGS_WARN := -Wall -Wextra -Werror
+CFLAGS_WARN += -Wstrict-prototypes
+CFLAGS_WARN += -Wmissing-prototypes
+
+# include
 CFLAGS_INC  := -I $(INCDIR) -I $(ARCHDIR)/$(ARCH)/include
 
 CFLAGS  := -std=$(STD_C) $(CFLAGS_WARN) $(CFLAGS_FREESTANDING) \

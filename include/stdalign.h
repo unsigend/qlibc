@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _STDALIGN_H_
-#define _STDALIGN_H_ 1
+#ifndef _QLIBC_STDALIGN_H_
+#define _QLIBC_STDALIGN_H_
 
-/* Macros for alignment */
+#include <feature.h>
 
+#if __STDC_VERSION__ < __ISO_C23
 #define alignas _Alignas
 #define alignof _Alignof
 
 #define __alignas_is_defined 1
 #define __alignof_is_defined 1
-
 #endif
+
+#endif /* _QLIBC_STDALIGN_H_ */

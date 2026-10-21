@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,6 @@
 #define CONFIG_DEBUG 1
 #define CONFIG_VERSION_MAJOR 0
 #define CONFIG_VERSION_MINOR 1
-#define CONFIG_VERSION_PATCH 0
+#define CONFIG_VERSION_PATCH 1
 
 #endif /* _QLIBC_CONFIG_H_ */

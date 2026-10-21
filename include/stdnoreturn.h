@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef _STDNORETURN_H_
-#define _STDNORETURN_H_ 1
+
+#ifndef _QLIBC_STDNORETURN_H_
+#define _QLIBC_STDNORETURN_H_
 
 #include <feature.h>
 
-#if __USE_ISO_C11
+#if __STDC_VERSION__ < __ISO_C23
 #define noreturn _Noreturn
+#define __noreturn_is_defined 1
 #endif
 
-#endif
+#endif /* _QLIBC_STDNORETURN_H_ */

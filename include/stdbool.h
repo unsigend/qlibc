@@ -1,5 +1,5 @@
 /* qlibc - A light-weight and portable C standard library
- * Copyright (C) 2025 Qiu Yixiang
+ * Copyright (C) 2025-2027 Yixiang Qiu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,17 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _STDBOOL_H_
-#define _STDBOOL_H_ 1
+#ifndef _QLIBC_STDBOOL_H_
+#define _QLIBC_STDBOOL_H_
 
-#ifndef __cplusplus
+#include <feature.h>
 
+#if __STDC_VERSION__ < __ISO_C23
 #define bool _Bool
 #define true 1
 #define false 0
-
 #endif
 
 #define __bool_true_false_are_defined 1
 
-#endif
+#endif /* _QLIBC_STDBOOL_H_ */
