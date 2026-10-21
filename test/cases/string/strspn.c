@@ -1,0 +1,81 @@
+#include <string.h>
+#include <utest.h>
+
+UTEST_CASE(strspn)
+{
+    EXPECT_EQ_UINT(strspn("", ""), 0);
+    EXPECT_EQ_UINT(strspn("", "abc"), 0);
+    EXPECT_EQ_UINT(strspn("abc", ""), 0);
+    EXPECT_EQ_UINT(strspn("abc", "abc"), 3);
+    EXPECT_EQ_UINT(strspn("abcba", "abc"), 5);
+    EXPECT_EQ_UINT(strspn("abcba", "ab"), 2);
+    EXPECT_EQ_UINT(strspn("abc", "qx"), 0);
+    EXPECT_EQ_UINT(strspn("abc", "a"), 1);
+    EXPECT_EQ_UINT(strspn("abc", "b"), 0);
+    EXPECT_EQ_UINT(strspn("abc", "c"), 0);
+    EXPECT_EQ_UINT(strspn("abc", "ab"), 2);
+    EXPECT_EQ_UINT(strspn("abc", "ac"), 1);
+    EXPECT_EQ_UINT(strspn("abc", "bc"), 0);
+    EXPECT_EQ_UINT(strspn("abc", "cba"), 3);
+    EXPECT_EQ_UINT(strspn("hello", "helo"), 5);
+    EXPECT_EQ_UINT(strspn("hello", "hel"), 4);
+    EXPECT_EQ_UINT(strspn("hello", "h"), 1);
+    EXPECT_EQ_UINT(strspn("hello", "e"), 0);
+    EXPECT_EQ_UINT(strspn("hello", "lo"), 0);
+    EXPECT_EQ_UINT(strspn("12345", "54321"), 5);
+    EXPECT_EQ_UINT(strspn("12345", "1234"), 4);
+    EXPECT_EQ_UINT(strspn("12345", "5"), 0);
+    EXPECT_EQ_UINT(strspn("abc123", "abc"), 3);
+    EXPECT_EQ_UINT(strspn("abc123", "123"), 0);
+    EXPECT_EQ_UINT(strspn("123abc", "123"), 3);
+    EXPECT_EQ_UINT(strspn("123abc", "abc"), 0);
+    EXPECT_EQ_UINT(strspn("aaa", "a"), 3);
+    EXPECT_EQ_UINT(strspn("aaa", "aa"), 3);
+    EXPECT_EQ_UINT(strspn("aaa", "b"), 0);
+    EXPECT_EQ_UINT(strspn("aabbcc", "a"), 2);
+    EXPECT_EQ_UINT(strspn("aabbcc", "ab"), 4);
+    EXPECT_EQ_UINT(strspn("aabbcc", "abc"), 6);
+    EXPECT_EQ_UINT(strspn("aabbcc", "c"), 0);
+    EXPECT_EQ_UINT(strspn("   hello", " "), 3);
+    EXPECT_EQ_UINT(strspn("   hello", " h"), 4);
+    EXPECT_EQ_UINT(strspn("   hello", "helo"), 0);
+    EXPECT_EQ_UINT(strspn("\t\n\vhello", "\t\n\v "), 3);
+    EXPECT_EQ_UINT(strspn("   \t\n  ", " \t\n"), 7);
+    EXPECT_EQ_UINT(strspn("   \t\n  ", " "), 3);
+    EXPECT_EQ_UINT(strspn("   \t\n  ", "\t"), 0);
+    EXPECT_EQ_UINT(strspn("test", "tes"), 4);
+    EXPECT_EQ_UINT(strspn("test", "est"), 4);
+    EXPECT_EQ_UINT(strspn("test", "t"), 1);
+    EXPECT_EQ_UINT(strspn("test", "ts"), 1);
+    EXPECT_EQ_UINT(strspn("test", "te"), 2);
+    EXPECT_EQ_UINT(strspn("test", "et"), 2);
+    EXPECT_EQ_UINT(strspn("test", "es"), 0);
+    EXPECT_EQ_UINT(strspn("prefixsuffix", "prefix"), 6);
+    EXPECT_EQ_UINT(strspn("prefixsuffix", "fix"), 0);
+    EXPECT_EQ_UINT(strspn("ABC", "ABC"), 3);
+    EXPECT_EQ_UINT(strspn("ABC", "AB"), 2);
+    EXPECT_EQ_UINT(strspn("ABC", "BC"), 0);
+    EXPECT_EQ_UINT(strspn("ABCabc", "ABC"), 3);
+    EXPECT_EQ_UINT(strspn("ABCabc", "abc"), 0);
+    EXPECT_EQ_UINT(strspn("ABCabc", "AaBbCc"), 6);
+    EXPECT_EQ_UINT(strspn("abcdefghijklmnopqrstuvwxyz", "abcdefghijklmnopqrstuvwxyz"),
+                   26);
+    EXPECT_EQ_UINT(strspn("abcdefghijklmnopqrstuvwxyz", "abc"), 3);
+    EXPECT_EQ_UINT(strspn("abcdefghijklmnopqrstuvwxyz", "xyz"), 0);
+    EXPECT_EQ_UINT(strspn("abcdef", "fedcba"), 6);
+    EXPECT_EQ_UINT(strspn("mississippi", "mis"), 8);
+    EXPECT_EQ_UINT(strspn("mississippi", "mip"), 2);
+    EXPECT_EQ_UINT(strspn("programming", "prog"), 5);
+    EXPECT_EQ_UINT(strspn("programming", "gram"), 0);
+    EXPECT_EQ_UINT(strspn("111222333", "123"), 9);
+    EXPECT_EQ_UINT(strspn("111222333", "12"), 6);
+    EXPECT_EQ_UINT(strspn("111222333", "3"), 0);
+    EXPECT_EQ_UINT(strspn("a1b2c3", "abc"), 1);
+    EXPECT_EQ_UINT(strspn("a1b2c3", "123"), 0);
+    EXPECT_EQ_UINT(strspn("!!!", "!@"), 3);
+    EXPECT_EQ_UINT(strspn("!!!", "@"), 0);
+    EXPECT_EQ_UINT(strspn("---", "-_"), 3);
+    EXPECT_EQ_UINT(strspn("a\203b", "a\203"), 2);
+    EXPECT_EQ_UINT(strspn("a\203b", "a"), 1);
+    EXPECT_EQ_UINT(strspn("\203abc", "abc"), 0);
+}

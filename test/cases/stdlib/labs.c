@@ -1,0 +1,22 @@
+#include <limits.h>
+#include <stdlib.h>
+#include <utest.h>
+
+UTEST_CASE(labs)
+{
+    EXPECT_EQ_INT(labs(0L), 0L);
+    EXPECT_EQ_INT(labs(1L), 1L);
+    EXPECT_EQ_INT(labs(-1L), 1L);
+    EXPECT_EQ_INT(labs(123L), 123L);
+    EXPECT_EQ_INT(labs(-123L), 123L);
+    EXPECT_EQ_INT(labs(LONG_MAX), LONG_MAX);
+    EXPECT_EQ_INT(labs(-LONG_MAX), LONG_MAX);
+    EXPECT_EQ_INT(labs(42L), 42L);
+    EXPECT_EQ_INT(labs(-42L), 42L);
+    EXPECT_EQ_INT(labs(2000000000L), 2000000000L);
+    EXPECT_EQ_INT(labs(-2000000000L), 2000000000L);
+#if LONG_MAX > 0x7fffffffL
+    EXPECT_EQ_INT(labs(9000000000000000000L), 9000000000000000000L);
+    EXPECT_EQ_INT(labs(-9000000000000000000L), 9000000000000000000L);
+#endif
+}

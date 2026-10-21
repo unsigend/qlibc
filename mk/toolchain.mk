@@ -54,7 +54,8 @@ CFLAGS_WARN += -Wstrict-prototypes
 CFLAGS_WARN += -Wmissing-prototypes
 
 # include
-CFLAGS_INC  := -I $(INCDIR) -I $(ARCHDIR)/$(ARCH)/include
+CFLAGS_INC  := -I $(INCDIR) -I $(ARCHDIR)/$(ARCH) \
+               -I $(ARCHDIR)/generic
 
 CFLAGS  := -std=$(STD_C) $(CFLAGS_WARN) $(CFLAGS_FREESTANDING) \
            $(CFLAGS_OPT) $(CFLAGS_ARCH) $(CFLAGS_INC)

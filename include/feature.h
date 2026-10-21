@@ -35,4 +35,12 @@
 
 #define __WORD_SIZE __SIZEOF_LONG__
 
+#ifndef __printf
+#define __printf(string, checks) __attribute__((format(printf, string, checks)))
+#endif
+
+#ifndef __scanf
+#define __scanf(string, checks) __attribute__((format(scanf, string, checks)))
+#endif
+
 #endif /* _QLIBC_FEATURE_H_ */
