@@ -49,10 +49,8 @@ unsigned long long strtox(const char *restrict str, char **restrict str_end,
         ++p;
 
     switch (*p) {
-    case '-':
-        *neg = 1;
-    case '+':
-        ++p;
+    case '-': *neg = 1;
+    case '+': ++p;
     }
 
     if (AUTO_BASE(base)) {

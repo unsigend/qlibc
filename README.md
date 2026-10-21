@@ -10,30 +10,35 @@ Current Release Version: **0.1.0**.
 
 **Prerequisites:** GCC (or cross-compiler), GNU Make.
 
-**Configuration:** Edit `config/config.mk` or set:
+**Configuration:** Edit `config.cfg`, then run `make gen-config`. Keys that start with `CONFIG_` are written to `include/config.h` every key is written to `mk/config.mk` with the prefix stripped.
 
-    ARCH              x86_64 | i386
-    BUILD_METHOD      static | shared
-    TOOLCHAIN_PREFIX  Cross-compiler prefix, or empty
-    DEBUG             1 = debug, 0 = release
-    USING_GNU         1 = glibc dry run test, 0 = qlibc
+    ARCH                     x86_64 | i386 (makefile only)
+    CC                       Compiler (AS and LD follow CC)
+    LIBNAME                  Library name (makefile only)
+    STD_C                    C standard (makefile only)
+    BUILD_METHOD             static | shared (makefile only)
+    CONFIG_DEBUG             1 = debug, 0 = release
+    CONFIG_VERSION_MAJOR     Library version
+    CONFIG_VERSION_MINOR
+    CONFIG_VERSION_PATCH
 
-More details: [config/config.mk](https://github.com/unsigend/qlibc/blob/main/config/config.mk)
+More details: [config.cfg](https://github.com/unsigend/qlibc/blob/main/config.cfg)
 
+**Commands:**
 
-**Commands** :
+    make all             Build library and CRT objects
+    make lib             Build library only
+    make crt             Build CRT only
 
-    make all           Build library and CRT objects
-    make lib           Build library only
-    make crt           Build CRT only
-    make test          Build and run tests
-    make test-<module> Run tests for one module
-    make info          Show build configuration
-    make clean         Remove build and lib output
-    make help          List targets
-    make format        Format .c and .h with clang-format
-    make clang         Generate compile_commands.json
-    make flag          Show compile flags
+    make clean           Remove build and lib output
+    make help            List targets
+    make info            Show build configuration
+    make flag            Show compile flags
+    make format          Format .c and .h with clang-format
+    make clang           Generate compile_commands.json
+    make line            Count source lines (arch, include, src)
+    make version         Show library version
+    make gen-config      Generate mk/config.mk and include/config.h
 
 
 ## Headers
@@ -91,7 +96,7 @@ More details: [config/config.mk](https://github.com/unsigend/qlibc/blob/main/con
 
 ## Architectures
 
-Supported targets: **x86_64** and **i386**. Set `ARCH` in `config/config.mk`; use a `TOOLCHAIN_PREFIX` when cross-compiling in a freestanding environment.
+Supported targets: **x86_64** and **i386**. Set `ARCH` and `CC` in `config.cfg`; `AS` and `LD` follow `CC`. 
 
 ## License
 

@@ -106,27 +106,13 @@ static void storenum(void *dest, int length, unsigned long long val)
     if (!dest)
         return;
     switch (length) {
-    case LEN_H:
-        *(short *)dest = (short)val;
-        break;
-    case LEN_HH:
-        *(char *)dest = (char)val;
-        break;
-    case LEN_L:
-        *(long *)dest = (long)val;
-        break;
-    case LEN_LL:
-        *(long long *)dest = (long long)val;
-        break;
-    case LEN_Z:
-        *(size_t *)dest = (size_t)val;
-        break;
-    case LEN_PTR:
-        *(uintptr_t *)dest = (uintptr_t)val;
-        break;
-    default:
-        *(int *)dest = (int)val;
-        break;
+    case LEN_H: *(short *)dest = (short)val; break;
+    case LEN_HH: *(char *)dest = (char)val; break;
+    case LEN_L: *(long *)dest = (long)val; break;
+    case LEN_LL: *(long long *)dest = (long long)val; break;
+    case LEN_Z: *(size_t *)dest = (size_t)val; break;
+    case LEN_PTR: *(uintptr_t *)dest = (uintptr_t)val; break;
+    default: *(int *)dest = (int)val; break;
     }
 }
 
@@ -257,9 +243,7 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
         switch (fsm.state) {
         case STATE_NORMAL:
             switch (*fmt) {
-            case '%':
-                FSM_SWITCH(&fsm, STATE_FORMAT);
-                break;
+            case '%': FSM_SWITCH(&fsm, STATE_FORMAT); break;
             default:
                 /* skip whitespace */
                 if (isspace(*fmt)) {
@@ -292,9 +276,7 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
             }
-            case '*':
-                fsm.suppress = 1;
-                break;
+            case '*': fsm.suppress = 1; break;
             /* width */
             case '1':
             case '2':
@@ -325,9 +307,7 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
                 } else
                     fsm.length = LEN_L;
                 break;
-            case 'z':
-                fsm.length = LEN_Z;
-                break;
+            case 'z': fsm.length = LEN_Z; break;
             /* specifiers */
             case SPEC_C: {
                 char *c = NULL;
@@ -353,17 +333,12 @@ int scanf_core(struct reader *reader, const char *restrict fmt, va_list vlist)
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
             }
-            case SPEC_I:
-                PROCNUM(reader, fsm.width, 0, 1, fsm.length, &fail);
-            case SPEC_D:
-                PROCNUM(reader, fsm.width, 10, 1, fsm.length, &fail);
-            case SPEC_O:
-                PROCNUM(reader, fsm.width, 8, 0, fsm.length, &fail);
+            case SPEC_I: PROCNUM(reader, fsm.width, 0, 1, fsm.length, &fail);
+            case SPEC_D: PROCNUM(reader, fsm.width, 10, 1, fsm.length, &fail);
+            case SPEC_O: PROCNUM(reader, fsm.width, 8, 0, fsm.length, &fail);
             case SPEC_X:
-            case SPEC_XX:
-                PROCNUM(reader, fsm.width, 16, 0, fsm.length, &fail);
-            case SPEC_U:
-                PROCNUM(reader, fsm.width, 10, 0, fsm.length, &fail);
+            case SPEC_XX: PROCNUM(reader, fsm.width, 16, 0, fsm.length, &fail);
+            case SPEC_U: PROCNUM(reader, fsm.width, 10, 0, fsm.length, &fail);
             case SPEC_P: {
                 void *p = NULL;
                 POP(&p, &ap);

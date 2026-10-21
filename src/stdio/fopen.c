@@ -31,17 +31,10 @@ FILE *fopen(const char *restrict filename, const char *restrict mode)
         return NULL;
 
     switch (mode[0]) {
-    case 'r':
-        oflags = O_RDONLY;
-        break;
-    case 'w':
-        oflags = O_WRONLY | O_CREAT | O_TRUNC;
-        break;
-    case 'a':
-        oflags = O_WRONLY | O_CREAT | O_APPEND;
-        break;
-    default:
-        return NULL;
+    case 'r': oflags = O_RDONLY; break;
+    case 'w': oflags = O_WRONLY | O_CREAT | O_TRUNC; break;
+    case 'a': oflags = O_WRONLY | O_CREAT | O_APPEND; break;
+    default: return NULL;
     }
 
     if (mode[1] == '+' || (mode[1] && mode[2] == '+'))

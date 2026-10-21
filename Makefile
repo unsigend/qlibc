@@ -13,264 +13,117 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 
-# Main Makefile for qlibc
-# qlibc is a lightweight C library for embedded systems and kernel
+MKDIR     := mk
+SCRIPTDIR := scripts
 
-# variables for paths
-CUR_DIR         :=          .
-SRC_PATH 		:= 			$(CUR_DIR)/src
-ARCH_PATH       :=          $(CUR_DIR)/arch
-INCLUDE_PATH 	:= 			$(CUR_DIR)/include
-TEST_PATH 		:= 			$(CUR_DIR)/test
-CONFIG_PATH 	:= 			$(CUR_DIR)/config
-BUILD_PATH 		:= 			$(CUR_DIR)/build
-OBJ_PATH 		:= 			$(BUILD_PATH)/obj
-DEP_PATH 		:= 			$(BUILD_PATH)/dep
-LIB_PATH 		:= 			$(CUR_DIR)/lib
+include $(MKDIR)/config.mk
+include $(MKDIR)/toolchain.mk
 
-# include config
-include $(CONFIG_PATH)/config.mk
+BUILDDIR := build
+DEPDIR   := $(BUILDDIR)/dep
+OBJDIR   := $(BUILDDIR)/obj
+SRCDIR   := src
 
-# variables for source files
-SRCS            :=          $(shell find $(SRC_PATH) -name "*.c")
-SRCS_ARCH       :=          $(shell find $(ARCH_PATH)/$(ARCH)/src -name "*.c")
-CRT_SRCS        :=          $(shell find $(ARCH_PATH)/$(ARCH)/crt -name "*.S")
+SRCS      := $(shell find $(SRCDIR) -name "*.c")
+SRCS_ARCH := $(shell find $(ARCHDIR)/$(ARCH)/src -name "*.c")
+SRCS_CRT  := $(shell find $(ARCHDIR)/$(ARCH)/crt -name "*.S")
 
-# variables for object files
-OBJS            :=          $(patsubst $(SRC_PATH)/%.c, $(OBJ_PATH)/%.o, $(SRCS))
-OBJS_ARCH       :=          $(patsubst $(ARCH_PATH)/$(ARCH)/src/%.c,$(OBJ_PATH)/$(ARCH)/%.o, $(SRCS_ARCH))
-OBJS_CRT        :=          $(patsubst $(ARCH_PATH)/$(ARCH)/crt/%.S, $(OBJ_PATH)/$(ARCH)/crt/%.o, $(CRT_SRCS))
+OBJS      := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.c.o,$(SRCS))
+OBJS_ARCH := $(patsubst $(ARCHDIR)/$(ARCH)/src/%.c,$(OBJDIR)/$(ARCH)/%.c.o,$(SRCS_ARCH))
+OBJS_CRT  := $(patsubst $(ARCHDIR)/$(ARCH)/crt/%.S,$(OBJDIR)/$(ARCH)/crt/%.S.o,$(SRCS_CRT))
+DEPS      := $(patsubst $(OBJDIR)/%.o,$(DEPDIR)/%.d,$(OBJS) $(OBJS_ARCH))
 
-# variables for dependency files
-DEPS            :=          $(patsubst $(SRC_PATH)/%.c, $(DEP_PATH)/%.d, $(SRCS))
-DEPS_ARCH       :=          $(patsubst $(ARCH_PATH)/$(ARCH)/src/%.c,$(DEP_PATH)/$(ARCH)/%.d, $(SRCS_ARCH))
+-include $(DEPS)
 
-# host OS 
-HOST_OS         :=          $(shell uname -s)
-# host architecture
-HOST_ARCH       :=          $(shell uname -m)
+$(OBJDIR)/%.c.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$*.c.d)
+	@$(CC) $(CFLAGS) -MMD -MP -MF $(DEPDIR)/$*.c.d -MT $@ -c $< -o $@
+	@echo "  CC    $<"
 
+$(OBJDIR)/$(ARCH)/%.c.o: $(ARCHDIR)/$(ARCH)/src/%.c
+	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$(ARCH)/$*.c.d)
+	@$(CC) $(CFLAGS) -MMD -MP -MF $(DEPDIR)/$(ARCH)/$*.c.d -MT $@ -c $< -o $@
+	@echo "  CC    $<"
 
-# variables for tools
-LD 			    := 			$(GCC)
-AR 			    := 			$(TOOLCHAIN_PREFIX)ar
-
-# variables for GNU C Compiler flags
-CC_FLAGS 		:= 		    -std=$(QLIBC_C_STANDARD)
-
-# variables for GNU C Freestanding flags
-CC_FREESTANDING	:= 		    -ffreestanding
-CC_FREESTANDING +=          -fno-builtin
-
-# variables for GNU C Architecture flags
-CC_ARCHITECTURE	:=
-ifeq ($(ARCH), i386)
-CC_ARCHITECTURE += -m32
-endif
-
-# variables for GNU C Warning flags
-CC_WARNINGS 	:= 		    -Wall -Wextra -Werror
-CC_WARNINGS 	+= 		    -Wno-unused-parameter
-CC_WARNINGS     +=          -Wno-implicit-fallthrough
-
-CC_OPTIMIZE     :=
-
-# variables for GNU C Debugger flags
-CC_DEBUGGER 	:= 
-
-# variables for GNU C Optimize flags
-CC_OPTIMIZE     :=
-
-# variables for GNU C Debugger flags
-ifeq ($(DEBUG), 1)
-CC_DEBUGGER  	+= 		    -g
-CC_OPTIMIZE    	+=          -O0
-else
-CC_OPTIMIZE    	+=          -O2
-endif
-
-# variables for GNU C Include flags
-CC_INCLUDES     :=
-CC_INCLUDES     +=          -nostdinc
-CC_INCLUDES 	+= 		    -I $(INCLUDE_PATH)
-CC_INCLUDES     +=          -I $(ARCH_PATH)/$(ARCH)/include
-
-# variables for GNU C Flags
-CC_FLAGS        +=          $(CC_WARNINGS)
-CC_FLAGS        +=          $(CC_FREESTANDING)
-CC_FLAGS        +=          $(CC_OPTIMIZE)
-CC_FLAGS        +=          $(CC_DEBUGGER)
-CC_FLAGS        +=          $(CC_INCLUDES)
-CC_FLAGS        +=          $(CC_ARCHITECTURE)
-
-# variables for GNU C Dependency flags
-CC_DEPS_FLAGS   :=          -MMD -MP -MF
-
-# variables for GNU C Linker flags
-LD_FLAGS 		:= 		    -std=$(QLIBC_C_STANDARD)
-# the linker should not link any standard library
-LD_FLAGS        +=          -nostdlib
-LD_FLAGS        +=          -nolibc
-
-
-# variables for GNU C Archive flags
-AR_FLAGS 		:= 		    -rcs
-
-# variables for qlibc library
-ifeq ($(BUILD_METHOD), static)
-QLIBC_LIB_POSTFIX		:= 		.a
-else
-ifeq ($(HOST_OS), Darwin)
-QLIBC_LIB_POSTFIX		:= 		.dylib
-else
-QLIBC_LIB_POSTFIX		:= 		.so
-endif
-endif
-
-# CRT .S
-$(OBJ_PATH)/$(ARCH)/crt/%.o: $(ARCH_PATH)/$(ARCH)/crt/%.S
+$(OBJDIR)/$(ARCH)/crt/%.S.o: $(ARCHDIR)/$(ARCH)/crt/%.S
 	@mkdir -p $(dir $@)
-	@$(GCC) $(CC_FLAGS) -c $< -o $@
-	@echo " + AS\t$@"
+	@$(AS) $(CFLAGS) -c $< -o $@
+	@echo "  AS    $<"
 
-# SRC .c
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	@mkdir -p $(dir $@)
-	@$(GCC) $(CC_FLAGS) $(CC_DEPS_FLAGS) $(DEP_PATH)/$(notdir $(@F:.o=.d)) -c $< -o $@
-	@echo " + CC\t$@"
-
-# ARCH .c
-$(OBJ_PATH)/$(ARCH)/%.o: $(ARCH_PATH)/$(ARCH)/src/%.c
-	@mkdir -p $(dir $@)
-	@$(GCC) $(CC_FLAGS) $(CC_DEPS_FLAGS) $(DEP_PATH)/$(notdir $(@F:.o=.d)) -c $< -o $@
-	@echo " + CC\t$@"
-
-# include dependency files
--include $(DEP_PATH)/*.d
-
-# default goal
+.PHONY: all lib crt clean info flag clang format line version gen-config help
 .DEFAULT_GOAL := help
-.PHONY: all clean create_build_dir info help test welcome lib clang crt
 
-# build CRT only
-crt: create_build_dir $(OBJS_CRT)
-	@cp $(OBJ_PATH)/$(ARCH)/crt/*.o $(LIB_PATH)
+all: lib crt
 
-# target for creating build directory
-create_build_dir:
-	@mkdir -p $(BUILD_PATH)
-	@mkdir -p $(OBJ_PATH)
-	@mkdir -p $(DEP_PATH)
-	@mkdir -p $(LIB_PATH)
-	
-# target for cleaning build directory
+lib: $(OBJS) $(OBJS_ARCH)
+	@mkdir -p $(LIBDIR)
+ifeq ($(BUILD_METHOD),static)
+	@$(AR) $(ARFLAGS) $(LIB) $(OBJS) $(OBJS_ARCH)
+	@echo "  AR    $(LIB)"
+else
+	@$(CC) $(LDFLAGS) -shared $(OBJS) $(OBJS_ARCH) -o $(LIB)
+	@echo "  LD    $(LIB)"
+endif
+
+crt: $(OBJS_CRT)
+	@mkdir -p $(LIBDIR)
+	@cp $(OBJS_CRT) $(LIBDIR)/
+	@echo "  CRT   $(LIBDIR)"
+
 clean:
-	@rm -rf $(BUILD_PATH)
-	@rm -rf $(LIB_PATH)
-	@$(MAKE) -C $(TEST_PATH) clean
+	@rm -rf $(BUILDDIR) $(LIBDIR)
+
+info:
+	@echo "qlibc v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)"
+	@echo "  arch          $(ARCH)"
+	@echo "  host          $(HOST_OS)/$(HOST_ARCH)"
+	@echo "  method        $(BUILD_METHOD)"
+	@echo "  std           $(STD_C)"
+	@echo "  cc            $(CC)"
+	@echo "  ar            $(AR)"
+	@echo "  debug         $(if $(filter 1,$(DEBUG)),on,off)"
 
 flag:
-	@echo "CC_FLAGS: $(CC_FLAGS)\n"
-	@echo "LD_FLAGS: $(LD_FLAGS)"
-	@echo "AR_FLAGS: $(AR_FLAGS)"
-	@$(MAKE) -C $(TEST_PATH) flag
+	@echo "CFLAGS:  $(CFLAGS)"
+	@echo "LDFLAGS: $(LDFLAGS)"
+	@echo "ARFLAGS: $(ARFLAGS)"
 
-# all target
-all: welcome lib crt
-
-# welcome target
-welcome:
-	@echo "Building qlibc for $(ARCH):"
-
-# info target
-info:
-	@echo "Makefile Build Configuration for qlibc $(QLIBC_VERSION)"
-	@echo " - Build Architecture : $(ARCH)"
-	@echo " - Host OS            : $(HOST_OS)"
-	@echo " - Host ARCH          : $(HOST_ARCH)"
-	@echo " - Library path       : $(LIB_PATH)"
-	@echo " - Build Method       : $(BUILD_METHOD)"
-	@echo " - C Standard         : $(QLIBC_C_STANDARD)"
-ifeq ($(USING_GNU), 1)
-	@echo " - Testing Library    : glibc"
-else
-	@echo " - Testing Library    : qlibc"
-endif
-ifeq ($(TOOLCHAIN_PREFIX),)
-	@echo " - Toolchain prefix   : NONE"
-else
-	@echo " - Toolchain prefix   : $(TOOLCHAIN_PREFIX)"
-endif
-ifeq ($(DEBUG), 1)
-	@echo " - Debug mode         : ON"
-else
-	@echo " - Debug mode         : OFF"
-endif
-	@echo ""
-
-# help target
-help:
-	@echo "Makefile Build System for qlibc $(QLIBC_VERSION)"
-	@echo "USAGE:"
-	@echo "\tmake lib           - Build the qlibc library"
-	@echo "\tmake crt           - Build the CRT objects"
-	@echo "\tmake all           - Build the qlibc library and CRT objects"
-	@echo "\tmake info          - Show the build configuration"
-	@echo "\tmake clean         - Clean the build directory"
-	@echo "\tmake help          - Show this help message"
-	@echo "\tmake test          - Run all the test cases"
-	@echo "\tmake test-[module] - Run the test cases for a specific module"
-	@echo "\tmake clang         - Run the clang command to generate compile_commands.json"
-	@echo "\tmake format        - Format the .c and .h files"
-	@echo "\tmake flag          - Show the build flags"
-	@echo ""
-
-# clang target
 clang:
-	@bear -- make test -j4
+	@$(MAKE) clean
+	@bear -- $(MAKE) all
 
-# lib target
-LIB_DEPS := $(OBJS) $(OBJS_ARCH)
-lib: create_build_dir $(LIB_DEPS)
-ifeq ($(BUILD_METHOD), static)
-	@$(AR) $(AR_FLAGS) $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX) $(LIB_DEPS)
-	@echo " + AR\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
-else
-	@$(GCC) $(LD_FLAGS) -shared $(LIB_DEPS) -o $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)
-	@echo " + LD\t$(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
-endif
-	@echo "Build qlibc library $(LIB_PATH)/lib$(QLIBC_NAME)$(QLIBC_LIB_POSTFIX)"
-	@echo ""
-
-# test target
-TEST_DEP := welcome
-ifeq ($(USING_GNU), 0)
-TEST_DEP += lib crt
-endif
-
-# execute test command in sub-make
-test: $(TEST_DEP)
-	@$(MAKE) -C $(TEST_PATH)
-
-# test target for specific module
-test-%: $(TEST_DEP)
-	@$(MAKE) -C $(TEST_PATH) test-$*
-
-# format .c and .h files
 format:
-	@find $(TEST_PATH)/cases $(SRC_PATH) $(INCLUDE_PATH) $(ARCH_PATH) \
+	@find $(SRCDIR) $(INCDIR) $(ARCHDIR) \
 		\( -name "*.c" -o -name "*.h" \) -exec clang-format -i {} +
-	@echo "Format done."
+	@echo "  FORMAT   done"
 
-# export the variables to the sub-make
-export QLIBC_NAME
-export QLIBC_C_STANDARD
-export QLIBC_VERSION
-export ARCH
-export BUILD_METHOD
-export USING_GNU
-export GCC
-export DEBUG
+line:
+	@$(PYTHON) $(SCRIPTDIR)/linecount.py
 
+version:
+	@echo "qlibc v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) arch=$(ARCH)"
+
+gen-config:
+	@$(PYTHON) $(SCRIPTDIR)/gen-config.py
+	@echo "  GEN   config.cfg"
+
+help:
+	@echo "qlibc - A light-weight and portable C standard library v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)"
+	@echo "Copyright (C) 2025 Qiu Yixiang"
+	@echo ""
+	@echo "USAGE:"
+	@echo "\tmake all                 - build the library and CRT objects"
+	@echo "\tmake lib                 - build the library"
+	@echo "\tmake crt                 - build the CRT objects"
+	@echo ""
+	@echo "\tmake clean               - clean the build directory"
+	@echo "\tmake help                - show this help message"
+	@echo "\tmake info                - show the build configuration"
+	@echo "\tmake flag                - show compile and link flags"
+	@echo "\tmake clang               - generate compile_commands.json"
+	@echo "\tmake format              - format .c and .h files"
+	@echo "\tmake line                - count source lines by module"
+	@echo "\tmake version             - show the version of the library"
+	@echo "\tmake gen-config          - generate mk/config.mk and include/config.h"
+	@echo ""

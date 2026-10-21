@@ -249,18 +249,12 @@ static void outs(struct ctx *ctx, struct fsm_t *fsm, const unsigned char *str,
 static int signed_arg_type(int len)
 {
     switch (len) {
-    case LEN_HH:
-        return ARG_CHAR;
-    case LEN_H:
-        return ARG_SHORT;
-    case LEN_L:
-        return ARG_LONG;
-    case LEN_LL:
-        return ARG_LLONG;
-    case LEN_Z:
-        return ARG_SSIZE_T;
-    default:
-        return ARG_INT;
+    case LEN_HH: return ARG_CHAR;
+    case LEN_H: return ARG_SHORT;
+    case LEN_L: return ARG_LONG;
+    case LEN_LL: return ARG_LLONG;
+    case LEN_Z: return ARG_SSIZE_T;
+    default: return ARG_INT;
     }
 }
 
@@ -268,18 +262,12 @@ static int signed_arg_type(int len)
 static int unsigned_arg_type(int len)
 {
     switch (len) {
-    case LEN_HH:
-        return ARG_UCHAR;
-    case LEN_H:
-        return ARG_USHORT;
-    case LEN_L:
-        return ARG_ULONG;
-    case LEN_LL:
-        return ARG_ULLONG;
-    case LEN_Z:
-        return ARG_SIZE_T;
-    default:
-        return ARG_UINT;
+    case LEN_HH: return ARG_UCHAR;
+    case LEN_H: return ARG_USHORT;
+    case LEN_L: return ARG_ULONG;
+    case LEN_LL: return ARG_ULLONG;
+    case LEN_Z: return ARG_SIZE_T;
+    default: return ARG_UINT;
     }
 }
 
@@ -289,51 +277,21 @@ static int unsigned_arg_type(int len)
 static void pop_arg(union arg *arg, int type, va_list *ap)
 {
     switch (type) {
-    case ARG_PTR:
-        arg->p = va_arg(*ap, void *);
-        break;
-    case ARG_SHORT:
-        arg->i = va_arg(*ap, int);
-        break;
-    case ARG_USHORT:
-        arg->i = va_arg(*ap, unsigned int);
-        break;
-    case ARG_CHAR:
-        arg->i = va_arg(*ap, int);
-        break;
-    case ARG_UCHAR:
-        arg->i = va_arg(*ap, unsigned int);
-        break;
-    case ARG_INT:
-        arg->i = va_arg(*ap, int);
-        break;
-    case ARG_UINT:
-        arg->i = va_arg(*ap, unsigned int);
-        break;
-    case ARG_LONG:
-        arg->i = va_arg(*ap, long);
-        break;
-    case ARG_ULONG:
-        arg->i = va_arg(*ap, unsigned long);
-        break;
-    case ARG_LLONG:
-        arg->i = va_arg(*ap, long long);
-        break;
-    case ARG_ULLONG:
-        arg->i = va_arg(*ap, unsigned long long);
-        break;
-    case ARG_IMAX:
-        arg->i = va_arg(*ap, intmax_t);
-        break;
-    case ARG_UMAX:
-        arg->i = va_arg(*ap, uintmax_t);
-        break;
-    case ARG_SIZE_T:
-        arg->i = va_arg(*ap, size_t);
-        break;
-    case ARG_SSIZE_T:
-        arg->i = va_arg(*ap, ssize_t);
-        break;
+    case ARG_PTR: arg->p = va_arg(*ap, void *); break;
+    case ARG_SHORT: arg->i = va_arg(*ap, int); break;
+    case ARG_USHORT: arg->i = va_arg(*ap, unsigned int); break;
+    case ARG_CHAR: arg->i = va_arg(*ap, int); break;
+    case ARG_UCHAR: arg->i = va_arg(*ap, unsigned int); break;
+    case ARG_INT: arg->i = va_arg(*ap, int); break;
+    case ARG_UINT: arg->i = va_arg(*ap, unsigned int); break;
+    case ARG_LONG: arg->i = va_arg(*ap, long); break;
+    case ARG_ULONG: arg->i = va_arg(*ap, unsigned long); break;
+    case ARG_LLONG: arg->i = va_arg(*ap, long long); break;
+    case ARG_ULLONG: arg->i = va_arg(*ap, unsigned long long); break;
+    case ARG_IMAX: arg->i = va_arg(*ap, intmax_t); break;
+    case ARG_UMAX: arg->i = va_arg(*ap, uintmax_t); break;
+    case ARG_SIZE_T: arg->i = va_arg(*ap, size_t); break;
+    case ARG_SSIZE_T: arg->i = va_arg(*ap, ssize_t); break;
     }
 }
 
@@ -450,15 +408,9 @@ int printf_core(char *restrict buf, size_t bufsz, const char *restrict fmt,
                 FSM_SWITCH(&fsm, STATE_NORMAL);
                 break;
             /* flags */
-            case '-':
-                FSM_SET_FLAG(&fsm, LEFT_ALIGN);
-                break;
-            case '0':
-                FSM_SET_FLAG(&fsm, PAD_ZERO);
-                break;
-            case '#':
-                FSM_SET_FLAG(&fsm, PREFIX);
-                break;
+            case '-': FSM_SET_FLAG(&fsm, LEFT_ALIGN); break;
+            case '0': FSM_SET_FLAG(&fsm, PAD_ZERO); break;
+            case '#': FSM_SET_FLAG(&fsm, PREFIX); break;
             /* length modifiers */
             case 'h':
                 if (*(fmt + 1) == 'h') {
@@ -474,9 +426,7 @@ int printf_core(char *restrict buf, size_t bufsz, const char *restrict fmt,
                 } else
                     fsm.length = LEN_L;
                 break;
-            case 'z':
-                fsm.length = LEN_Z;
-                break;
+            case 'z': fsm.length = LEN_Z; break;
             /* width or precision */
             case '1':
             case '2':

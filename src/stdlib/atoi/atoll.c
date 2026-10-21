@@ -26,10 +26,8 @@ long long atoll(const char *str)
         ++str;
 
     switch (*str) {
-    case '-':
-        neg = 1;
-    case '+':
-        ++str;
+    case '-': neg = 1;
+    case '+': ++str;
     }
 
     while (isdigit(*str))
