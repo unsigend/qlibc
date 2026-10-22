@@ -1,33 +1,27 @@
 # qlibc
 
-## Introduction
-A minimal, freestanding C library for embedded systems and kernel use. Implements a subset of ISO C and POSIX with no host libc dependency. 
+A minimal freestanding C library for Linux and qunix. Subset of ISO C and POSIX no host libc.
 
-
-Current Release Version: **0.1.0**.
+Current release: **0.2.0**.
 
 ## Building
 
-**Prerequisites:** GCC (or cross-compiler), GNU Make.
+GCC (or a cross-compiler) and GNU Make. Edit [config.cfg](config.cfg), then `make gen-config`. `CONFIG_*` keys go to `include/config.h` all keys go to `mk/config.mk` with the prefix stripped.
 
-**Configuration:** Edit [config.cfg](config.cfg), then run `make gen-config`. Keys with a `CONFIG_` prefix go into `include/config.h`; all keys go into `mk/config.mk` with the prefix stripped.
+    make all             library and CRT
+    make lib             library only
+    make crt             CRT objects
+    make test            build and run tests
 
-**Commands:**
-
-    make all             Build library and CRT objects
-    make lib             Build library only
-    make crt             Build CRT only
-
-    make clean           Remove build and lib output
-    make help            List targets
-    make info            Show build configuration
-    make flag            Show compile flags
-    make format          Format .c and .h with clang-format
-    make clang           Generate compile_commands.json
-    make line            Count source lines (arch, include, src)
-    make version         Show library version
-    make gen-config      Generate mk/config.mk and include/config.h
-
+    make clean           remove build and lib output
+    make help            list targets
+    make info            show build configuration
+    make flag            show compile flags
+    make format          format .c and .h with clang-format
+    make clang           generate compile_commands.json
+    make line            count source lines (arch, include, src)
+    make version         show library version
+    make gen-config      generate mk/config.mk and include/config.h
 
 ## Headers
 
@@ -35,56 +29,85 @@ Current Release Version: **0.1.0**.
 
 | Header | Description |
 |--------|-------------|
-| [assert.h](https://github.com/unsigend/qlibc/blob/main/include/assert.h) | Assertion macro |
-| [ctype.h](https://github.com/unsigend/qlibc/blob/main/include/ctype.h) | Character classification |
-| [errno.h](https://github.com/unsigend/qlibc/blob/main/include/errno.h) | Error codes |
-| [fcntl.h](https://github.com/unsigend/qlibc/blob/main/include/fcntl.h) | File control options |
-| [inttypes.h](https://github.com/unsigend/qlibc/blob/main/include/inttypes.h) | Format specifiers for stdint |
-| [limits.h](https://github.com/unsigend/qlibc/blob/main/include/limits.h) | Integer limits |
-| [signal.h](https://github.com/unsigend/qlibc/blob/main/include/signal.h) | Signal handling |
-| [stdalign.h](https://github.com/unsigend/qlibc/blob/main/include/stdalign.h) | alignas / alignof |
-| [stdarg.h](https://github.com/unsigend/qlibc/blob/main/include/stdarg.h) | Variable arguments |
-| [stdbool.h](https://github.com/unsigend/qlibc/blob/main/include/stdbool.h) | bool macro |
-| [stddef.h](https://github.com/unsigend/qlibc/blob/main/include/stddef.h) | ptrdiff_t, size_t, NULL |
-| [stdint.h](https://github.com/unsigend/qlibc/blob/main/include/stdint.h) | Fixed-width integers |
-| [stdio.h](https://github.com/unsigend/qlibc/blob/main/include/stdio.h) | Stream I/O |
-| [stdlib.h](https://github.com/unsigend/qlibc/blob/main/include/stdlib.h) | General utilities |
-| [stdnoreturn.h](https://github.com/unsigend/qlibc/blob/main/include/stdnoreturn.h) | noreturn macro |
-| [string.h](https://github.com/unsigend/qlibc/blob/main/include/string.h) | String and memory |
-| [time.h](https://github.com/unsigend/qlibc/blob/main/include/time.h) | Time/date |
-| [unistd.h](https://github.com/unsigend/qlibc/blob/main/include/unistd.h) | POSIX API |
-| [elf.h](https://github.com/unsigend/qlibc/blob/main/include/elf.h) | ELF structures |
-| [syscall.h](https://github.com/unsigend/qlibc/blob/main/include/syscall.h) | Syscall numbers |
-| [termios.h](https://github.com/unsigend/qlibc/blob/main/include/termios.h) | Terminal I/O |
-| [feature.h](https://github.com/unsigend/qlibc/blob/main/include/feature.h) | Feature macros |
+| [assert.h](include/assert.h) | Assertions |
+| [ctype.h](include/ctype.h) | Character classification |
+| [errno.h](include/errno.h) | `errno` |
+| [inttypes.h](include/inttypes.h) | `intmax_t` conversions |
+| [limits.h](include/limits.h) | Integer limits |
+| [stdalign.h](include/stdalign.h) | `alignas` / `alignof` |
+| [stdarg.h](include/stdarg.h) | Variable arguments |
+| [stdbool.h](include/stdbool.h) | `bool` |
+| [stddef.h](include/stddef.h) | `size_t`, `NULL` |
+| [stdint.h](include/stdint.h) | Fixed-width integers |
+| [stdio.h](include/stdio.h) | Stream I/O |
+| [stdlib.h](include/stdlib.h) | Utilities, malloc, env |
+| [stdnoreturn.h](include/stdnoreturn.h) | `noreturn` |
+| [string.h](include/string.h) | String and memory |
+| [time.h](include/time.h) | Clocks and `nanosleep` |
 
-
-### POSIX system
+### POSIX
 
 | Header | Description |
 |--------|-------------|
-| [sys/ioctl.h](https://github.com/unsigend/qlibc/blob/main/include/sys/ioctl.h) | ioctl constants |
-| [sys/mman.h](https://github.com/unsigend/qlibc/blob/main/include/sys/mman.h) | mmap, munmap |
-| [sys/stat.h](https://github.com/unsigend/qlibc/blob/main/include/sys/stat.h) | stat, fstat |
-| [sys/syscall.h](https://github.com/unsigend/qlibc/blob/main/include/sys/syscall.h) | Syscall wrappers |
-| [sys/types.h](https://github.com/unsigend/qlibc/blob/main/include/sys/types.h) | POSIX system types |
-| [sys/uio.h](https://github.com/unsigend/qlibc/blob/main/include/sys/uio.h) | Scatter-gather I/O |
-| [sys/wait.h](https://github.com/unsigend/qlibc/blob/main/include/sys/wait.h) | wait, waitpid |
+| [fcntl.h](include/fcntl.h) | `open`, `fcntl` |
+| [sched.h](include/sched.h) | `sched_yield` |
+| [signal.h](include/signal.h) | Signals |
+| [unistd.h](include/unistd.h) | POSIX process and file APIs |
+| [sys/ioctl.h](include/sys/ioctl.h) | `ioctl` |
+| [sys/mman.h](include/sys/mman.h) | `mmap`, `mprotect`, `msync` |
+| [sys/mount.h](include/sys/mount.h) | `mount`, `umount` |
+| [sys/reboot.h](include/sys/reboot.h) | `reboot` |
+| [sys/stat.h](include/sys/stat.h) | `stat`, `mkdir`, `chmod` |
+| [sys/syscall.h](include/sys/syscall.h) | `SYS_*` aliases |
+| [sys/types.h](include/sys/types.h) | POSIX types |
+| [sys/uio.h](include/sys/uio.h) | `readv` / `writev` |
+| [sys/wait.h](include/sys/wait.h) | `wait`, `waitpid` |
 
-### Extensions (Non-Standard)
+### Other
 
 | Header | Description |
 |--------|-------------|
-| [ext/itoa.h](https://github.com/unsigend/qlibc/blob/main/include/ext/itoa.h) | Integer-to-string |
-| [ext/malloc.h](https://github.com/unsigend/qlibc/blob/main/include/ext/malloc.h) | Malloc extension API |
-| [ext/printf.h](https://github.com/unsigend/qlibc/blob/main/include/ext/printf.h) | printf core |
-| [ext/printfcore.h](https://github.com/unsigend/qlibc/blob/main/include/ext/printfcore.h) | printf core |
-| [ext/scanf.h](https://github.com/unsigend/qlibc/blob/main/include/ext/scanf.h) | scanf core |
-| [ext/scanfcore.h](https://github.com/unsigend/qlibc/blob/main/include/ext/scanfcore.h) | scanf core |
+| [elf.h](include/elf.h) | ELF types |
+| [feature.h](include/feature.h) | Language-version macros |
+| [syscall.h](include/syscall.h) | Syscall numbers |
+
+### Extensions
+
+| Header | Description |
+|--------|-------------|
+| [ext/atoi.h](include/ext/atoi.h) | `atoi` family |
+| [ext/env.h](include/ext/env.h) | `setenv` family |
+| [ext/itoa.h](include/ext/itoa.h) | Integer to string |
+| [ext/malloc.h](include/ext/malloc.h) | Allocator |
+| [ext/printf.h](include/ext/printf.h) | printf internals |
+| [ext/scanf.h](include/ext/scanf.h) | scanf internals |
+| [ext/strtol.h](include/ext/strtol.h) | `strto*` family |
 
 ## Architectures
 
-Supported targets: **x86_64**, **i386**, and **aarch64**. 
+**x86_64**, **i386**, and **aarch64**.
+
+## Planning
+
+### ANSI/ISO C
+
+Will be added: `rand` / `srand` / `RAND_MAX`; calendar time (`time`, `struct tm`, `gmtime` / `localtime` / `mktime`, `asctime` / `ctime`, `strftime`); `setjmp` / `longjmp`.
+
+### POSIX threads
+
+`<pthread.h>`: create, join, detach, exit, self; mutex, condvar, rwlock, barrier; TLS keys.
+
+### Allocator
+
+Per-CPU cache and arena allocator, using thread/CPU identity from pthreads.
+
+### Thread-safe stdio
+
+Rebuild stdio around per-stream locks (`flockfile` / `funlockfile`) and a file-list lock. 
+
+### Re-entrant interfaces
+
+Add caller-owned / `_r` and bounds-checked `_s` variants (`strtok_r`, `gmtime_r`, `strerror_r`, and similar) once locking and TLS exist.
 
 ## License
 

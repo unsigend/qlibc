@@ -34,6 +34,10 @@
 #define MAP_ANON MAP_ANONYMOUS
 #define MAP_FAILED ((void *)-1)
 
+#define MS_ASYNC 1      /* async write */
+#define MS_INVALIDATE 2 /* invalidate caches */
+#define MS_SYNC 4       /* sync write */
+
 #define MREMAP_MAYMOVE 1 /* mapping may move */
 #define MREMAP_FIXED 2   /* new address is fixed */
 
@@ -44,6 +48,8 @@ extern "C" {
 extern void *mmap(void *addr, size_t len, int prot, int flags, int fd,
                   off_t offset);
 extern int munmap(void *addr, size_t len);
+extern int mprotect(void *addr, size_t len, int prot);
+extern int msync(void *addr, size_t len, int flags);
 extern void *mremap(void *old_addr, size_t old_len, size_t new_len, int flags,
                     ...);
 

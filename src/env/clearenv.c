@@ -15,10 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#if !defined(_GNU_SOURCE) && !defined(_BSD_SOURCE)
-int clearenv(void);
-#endif
-
 #include "env.h"
 
 #include <stdlib.h>

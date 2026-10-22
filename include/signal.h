@@ -99,6 +99,8 @@ extern int sigaction(int signum, const struct sigaction *__restrict act,
                      struct sigaction *__restrict oldact);
 extern int sigprocmask(int how, const sigset_t *__restrict set,
                        sigset_t *__restrict oldset);
+extern int sigsuspend(const sigset_t *mask);
+extern int tgkill(int tgid, int tid, int sig);
 extern int sigpending(sigset_t *set);
 extern int sigemptyset(sigset_t *set);
 extern int sigfillset(sigset_t *set);

@@ -40,6 +40,7 @@ extern "C" {
 #endif
 
 extern int open(const char *path, int flags, ...);
+extern int openat(int fd, const char *path, int flags, ...);
 extern int creat(const char *path, mode_t mode);
 extern int fcntl(int fd, int cmd, ...);
 

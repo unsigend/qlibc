@@ -87,17 +87,10 @@ extern ldiv_t ldiv(long x, long y);
 extern lldiv_t lldiv(long long x, long long y);
 
 extern char *getenv(const char *name);
-
-#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) ||                      \
-    defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
 extern int putenv(char *string);
 extern int setenv(const char *name, const char *value, int overwrite);
 extern int unsetenv(const char *name);
-#endif
-
-#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
 extern int clearenv(void);
-#endif
 
 #ifdef __cplusplus
 }

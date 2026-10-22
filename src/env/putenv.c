@@ -15,11 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#if !defined(_POSIX_SOURCE) && !defined(_POSIX_C_SOURCE) &&                    \
-    !defined(_XOPEN_SOURCE) && !defined(_GNU_SOURCE) && !defined(_BSD_SOURCE)
-int putenv(char *string);
-#endif
-
 #include "env.h"
 
 #include <stdlib.h>

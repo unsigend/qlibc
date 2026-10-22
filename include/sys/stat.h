@@ -63,6 +63,17 @@ extern "C" {
 extern int stat(const char *__restrict path, struct stat *__restrict buf);
 extern int fstat(int fd, struct stat *__restrict buf);
 extern int lstat(const char *__restrict path, struct stat *__restrict buf);
+extern int fstatat(int fd, const char *__restrict path,
+                   struct stat *__restrict buf, int flag);
+extern int chmod(const char *path, mode_t mode);
+extern int fchmod(int fd, mode_t mode);
+extern int fchmodat(int fd, const char *path, mode_t mode, int flag);
+extern mode_t umask(mode_t mode);
+extern int mkdir(const char *path, mode_t mode);
+extern int mkdirat(int fd, const char *path, mode_t mode);
+extern int mknod(const char *path, mode_t mode, dev_t dev);
+extern int mknodat(int fd, const char *path, mode_t mode, dev_t dev);
+extern int mkfifo(const char *path, mode_t mode);
 
 #ifdef __cplusplus
 }
