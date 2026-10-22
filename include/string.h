@@ -20,11 +20,6 @@
 
 #include <feature.h>
 
-/* TODO: remove this guard */
-#ifdef NULL
-#undef NULL
-#endif
-
 typedef __SIZE_TYPE__ size_t;
 #define NULL ((void *)0)
 

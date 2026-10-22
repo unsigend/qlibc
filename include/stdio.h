@@ -62,13 +62,13 @@ extern FILE *freopen(const char *__restrict filename,
                      const char *__restrict mode, FILE *__restrict stream);
 extern int fclose(FILE *stream);
 extern int fflush(FILE *stream);
-extern void setbuf(FILE *__restrict stream, char *__restrict buffer);
-extern int setvbuf(FILE *__restrict stream, char *__restrict buffer, int mode,
+extern void setbuf(FILE *__restrict stream, char *__restrict buf);
+extern int setvbuf(FILE *__restrict stream, char *__restrict buf, int mode,
                    size_t size);
 
-extern size_t fread(void *__restrict buffer, size_t size, size_t count,
+extern size_t fread(void *__restrict buf, size_t size, size_t count,
                     FILE *__restrict stream);
-extern size_t fwrite(const void *__restrict buffer, size_t size, size_t count,
+extern size_t fwrite(const void *__restrict buf, size_t size, size_t count,
                      FILE *__restrict stream);
 
 extern int fgetc(FILE *stream);
@@ -82,28 +82,27 @@ extern int putchar(int ch);
 extern int puts(const char *str);
 extern int ungetc(int ch, FILE *stream);
 
-extern int scanf(const char *__restrict format, ...);
-extern int fscanf(FILE *__restrict stream, const char *__restrict format, ...);
-extern int sscanf(const char *__restrict buffer, const char *__restrict format,
-                  ...);
-extern int vscanf(const char *__restrict format, va_list vlist);
-extern int vfscanf(FILE *__restrict stream, const char *__restrict format,
+extern int scanf(const char *__restrict fmt, ...);
+extern int fscanf(FILE *__restrict stream, const char *__restrict fmt, ...);
+extern int sscanf(const char *__restrict buf, const char *__restrict fmt, ...);
+extern int vscanf(const char *__restrict fmt, va_list vlist);
+extern int vfscanf(FILE *__restrict stream, const char *__restrict fmt,
                    va_list vlist);
-extern int vsscanf(const char *__restrict buffer, const char *__restrict format,
+extern int vsscanf(const char *__restrict buf, const char *__restrict fmt,
                    va_list vlist);
 
-extern int printf(const char *__restrict format, ...);
-extern int fprintf(FILE *__restrict stream, const char *__restrict format, ...);
-extern int sprintf(char *__restrict buffer, const char *__restrict format, ...);
-extern int snprintf(char *__restrict buffer, size_t bufsz,
-                    const char *__restrict format, ...);
-extern int vprintf(const char *__restrict format, va_list vlist);
-extern int vfprintf(FILE *__restrict stream, const char *__restrict format,
+extern int printf(const char *__restrict fmt, ...);
+extern int fprintf(FILE *__restrict stream, const char *__restrict fmt, ...);
+extern int sprintf(char *__restrict buf, const char *__restrict fmt, ...);
+extern int snprintf(char *__restrict buf, size_t bufsz,
+                    const char *__restrict fmt, ...);
+extern int vprintf(const char *__restrict fmt, va_list vlist);
+extern int vfprintf(FILE *__restrict stream, const char *__restrict fmt,
                     va_list vlist);
-extern int vsprintf(char *__restrict buffer, const char *__restrict format,
+extern int vsprintf(char *__restrict buf, const char *__restrict fmt,
                     va_list vlist);
-extern int vsnprintf(char *__restrict buffer, size_t bufsz,
-                     const char *__restrict format, va_list vlist);
+extern int vsnprintf(char *__restrict buf, size_t bufsz,
+                     const char *__restrict fmt, va_list vlist);
 
 extern long ftell(FILE *stream);
 extern int fgetpos(FILE *__restrict stream, fpos_t *__restrict pos);

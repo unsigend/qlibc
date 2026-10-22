@@ -1,0 +1,40 @@
+/* qlibc - A light-weight and portable C standard library
+ * Copyright (C) 2025-2027 Yixiang Qiu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "../internal/core.h"
+
+#include <stdio.h>
+
+static int readc(void *ctx)
+{
+    FILE *file = (FILE *)ctx;
+    return getc(file);
+}
+
+static int unreadc(int ch, void *ctx)
+{
+    FILE *file = (FILE *)ctx;
+    int ret = ungetc(ch, file);
+    return ret;
+}
+
+int vfscanf(FILE *restrict stream, const char *restrict fmt, va_list vlist)
+{
+    struct reader r = {
+        .readc = readc, .unreadc = unreadc, .ctx = (void *)stream};
+    return scanf_core(&r, fmt, vlist);
+}
