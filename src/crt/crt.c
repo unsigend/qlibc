@@ -1,0 +1,56 @@
+/* qlibc - A light-weight and portable C standard library
+ * Copyright (C) 2025-2027 Yixiang Qiu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "../env/env.h"
+
+#include <stdlib.h>
+
+extern int main(int argc, char *argv[], char *envp[]);
+extern void __qlibc_stdio_init(void);
+extern void (*__init_array_start[])(void);
+extern void (*__init_array_end[])(void);
+extern void (*__fini_array_start[])(void);
+extern void (*__fini_array_end[])(void);
+
+char **environ;
+
+void __qlibc_start_main(int argc, char *argv[], char *envp[]);
+
+static void __do_global_ctors(void)
+{
+    void (**f)(void);
+
+    for (f = __init_array_start; f < __init_array_end; f++)
+        (*f)();
+}
+
+static void __do_global_dtors(void)
+{
+    void (**f)(void);
+
+    for (f = __fini_array_end; f > __fini_array_start;)
+        (*--f)();
+}
+
+void __qlibc_start_main(int argc, char *argv[], char *envp[])
+{
+    environ = envp;
+    __qlibc_stdio_init();
+    __do_global_ctors();
+    atexit(__do_global_dtors);
+    exit(main(argc, argv, envp));
+}

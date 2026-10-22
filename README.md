@@ -84,7 +84,7 @@ Current Release Version: **0.1.0**.
 
 ## Architectures
 
-Supported targets: **x86_64** and **i386**. 
+Supported targets: **x86_64**, **i386**, and **aarch64**. 
 
 ## License
 

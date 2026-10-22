@@ -15,12 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <_syscall.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <syscall.h>
-#include <unistd.h>
+#include <syscall_arch.h>
 
 int rename(const char *oldpath, const char *newpath)
 {
-    return syscall2(SYS_rename, (long)oldpath, (long)newpath);
+#ifdef SYS_rename
+    return __syscall(SYS_rename, (long)oldpath, (long)newpath);
+#else
+    return __syscall(SYS_renameat, (long)AT_FDCWD, (long)oldpath,
+                     (long)AT_FDCWD, (long)newpath);
+#endif
 }

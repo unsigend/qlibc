@@ -27,30 +27,13 @@
 #define O_RDWR 2    /* read and write */
 #define O_ACCMODE 3 /* access mode mask */
 
-#define O_CREAT 0100                        /* create if missing */
-#define O_EXCL 0200                         /* fail if exists with O_CREAT */
-#define O_NOCTTY 0400                       /* do not assign controlling tty */
-#define O_TRUNC 01000                       /* truncate to 0 */
-#define O_APPEND 02000                      /* append on write */
-#define O_NONBLOCK 04000                    /* do not block */
-#define O_DSYNC 010000                      /* sync data */
-#define O_ASYNC 020000                      /* SIGIO on I/O */
-#define O_DIRECT 040000                     /* direct I/O */
-#define O_DIRECTORY 0200000                 /* must be a directory */
-#define O_NOFOLLOW 0400000                  /* do not follow symlinks */
-#define O_NOATIME 01000000                  /* do not update atime */
-#define O_CLOEXEC 02000000                  /* close on exec */
-#define O_SYNC 04010000                     /* sync data and metadata */
-#define O_PATH 010000000                    /* path-only fd */
-#define O_TMPFILE (020000000 | O_DIRECTORY) /* unnamed temporary file */
+#define F_DUPFD_CLOEXEC 1030 /* dup and set FD_CLOEXEC */
+#define FD_CLOEXEC 1         /* close-on-exec */
 
-#define F_DUPFD 0 /* duplicate fd */
-#define F_GETFD 1 /* get fd flags */
-#define F_SETFD 2 /* set fd flags */
-#define F_GETFL 3 /* get status flags */
-#define F_SETFL 4 /* set status flags */
-
-#define FD_CLOEXEC 1 /* close-on-exec fd flag */
+#define AT_FDCWD (-100)           /* openat cwd */
+#define AT_SYMLINK_NOFOLLOW 0x100 /* do not follow symlink */
+#define AT_REMOVEDIR 0x200        /* unlinkat directory */
+#define AT_SYMLINK_FOLLOW 0x400   /* follow symlink */
 
 #ifdef __cplusplus
 extern "C" {

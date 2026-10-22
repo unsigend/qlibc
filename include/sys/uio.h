@@ -33,6 +33,10 @@ extern "C" {
 
 extern ssize_t readv(int fd, const struct iovec *iov, int iovcnt);
 extern ssize_t writev(int fd, const struct iovec *iov, int iovcnt);
+extern ssize_t preadv(int fd, const struct iovec *iov, int iovcnt,
+                      off_t offset);
+extern ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt,
+                       off_t offset);
 
 #ifdef __cplusplus
 }

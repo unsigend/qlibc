@@ -106,16 +106,16 @@ static inline long syscall6_raw(uint32_t num, uint32_t arg1, uint32_t arg2,
     return ret;
 }
 
-#define syscall0(nr) syscall_ret(syscall0_raw(nr))
-#define syscall1(nr, arg1) syscall_ret(syscall1_raw(nr, arg1))
-#define syscall2(nr, arg1, arg2) syscall_ret(syscall2_raw(nr, arg1, arg2))
-#define syscall3(nr, arg1, arg2, arg3)                                         \
+#define __syscall0(nr) syscall_ret(syscall0_raw(nr))
+#define __syscall1(nr, arg1) syscall_ret(syscall1_raw(nr, arg1))
+#define __syscall2(nr, arg1, arg2) syscall_ret(syscall2_raw(nr, arg1, arg2))
+#define __syscall3(nr, arg1, arg2, arg3)                                       \
     syscall_ret(syscall3_raw(nr, arg1, arg2, arg3))
-#define syscall4(nr, arg1, arg2, arg3, arg4)                                   \
+#define __syscall4(nr, arg1, arg2, arg3, arg4)                                 \
     syscall_ret(syscall4_raw(nr, arg1, arg2, arg3, arg4))
-#define syscall5(nr, arg1, arg2, arg3, arg4, arg5)                             \
+#define __syscall5(nr, arg1, arg2, arg3, arg4, arg5)                           \
     syscall_ret(syscall5_raw(nr, arg1, arg2, arg3, arg4, arg5))
-#define syscall6(nr, arg1, arg2, arg3, arg4, arg5, arg6)                       \
+#define __syscall6(nr, arg1, arg2, arg3, arg4, arg5, arg6)                     \
     syscall_ret(syscall6_raw(nr, arg1, arg2, arg3, arg4, arg5, arg6))
 
 #endif /* _QLIBC_I386__SYSCALL_H_ */

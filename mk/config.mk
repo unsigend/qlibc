@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-ARCH = x86_64
-CC = gcc
+ARCH = aarch64
+CC = gcc-15
 LIBNAME = qlibc
 STD_C = c11
 BUILD_METHOD = static
-USE_HOST_LIBC = 1
+USE_HOST_LIBC = 0
 DEBUG = 1
 VERSION_MAJOR = 0
 VERSION_MINOR = 1

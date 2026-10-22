@@ -22,8 +22,7 @@
 
 #define AUTO_BASE(base) (!(base))
 #define BASE_HEX(str)                                                          \
-    (((str)[1] == 'x' || (str)[1] == 'X') &&                                   \
-     isxdigit((unsigned char)(str)[2]))
+    (((str)[1] == 'x' || (str)[1] == 'X') && isxdigit((unsigned char)(str)[2]))
 #define CHARTODIGIT(c) (isalpha((c)) ? (c) - 'a' + 10 : (c) - '0')
 #define VALID_DIGIT(c, base) (CHARTODIGIT(c) < base)
 

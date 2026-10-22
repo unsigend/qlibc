@@ -74,9 +74,9 @@ extern void *calloc(size_t num, size_t size);
 extern void *realloc(void *ptr, size_t new_size);
 
 extern void *bsearch(const void *key, const void *ptr, size_t n, size_t size,
-                     int (*comp)(const void *, const void *));
+                     int (*cmp)(const void *, const void *));
 extern void qsort(void *ptr, size_t n, size_t size,
-                  int (*comp)(const void *, const void *));
+                  int (*cmp)(const void *, const void *));
 
 extern int abs(int n);
 extern long labs(long n);

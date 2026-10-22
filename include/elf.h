@@ -391,20 +391,20 @@ typedef struct {
     Elf64_Word n_type;   /* Note type */
 } Elf64_Nhdr;
 
-#define NT_PRSTATUS 1          /* Process status */
-#define NT_PRFPREG 2           /* Floating-point registers */
-#define NT_FPREGSET 2          /* Alias */
-#define NT_PRPSINFO 3          /* Process info */
-#define NT_AUXV 6              /* Auxiliary vector */
-#define NT_SIGINFO 0x53494749  /* Signal info */
-#define NT_FILE 0x46494c45     /* Mapped files */
-#define NT_386_TLS 0x200       /* i386 TLS */
-#define NT_X86_XSTATE 0x202    /* x86 XSAVE state */
-#define NT_ARM_VFP 0x400       /* ARM VFP/NEON */
-#define NT_ARM_TLS 0x401       /* ARM TLS */
-#define NT_GNU_ABI_TAG 1       /* GNU ABI tag */
-#define NT_GNU_HWCAP 2         /* GNU hwcap */
-#define NT_GNU_BUILD_ID 3      /* GNU build id */
+#define NT_PRSTATUS 1            /* Process status */
+#define NT_PRFPREG 2             /* Floating-point registers */
+#define NT_FPREGSET 2            /* Alias */
+#define NT_PRPSINFO 3            /* Process info */
+#define NT_AUXV 6                /* Auxiliary vector */
+#define NT_SIGINFO 0x53494749    /* Signal info */
+#define NT_FILE 0x46494c45       /* Mapped files */
+#define NT_386_TLS 0x200         /* i386 TLS */
+#define NT_X86_XSTATE 0x202      /* x86 XSAVE state */
+#define NT_ARM_VFP 0x400         /* ARM VFP/NEON */
+#define NT_ARM_TLS 0x401         /* ARM TLS */
+#define NT_GNU_ABI_TAG 1         /* GNU ABI tag */
+#define NT_GNU_HWCAP 2           /* GNU hwcap */
+#define NT_GNU_BUILD_ID 3        /* GNU build id */
 #define NT_GNU_PROPERTY_TYPE_0 5 /* GNU property */
 
 typedef struct {
@@ -497,32 +497,32 @@ typedef struct {
     } a_un;
 } Elf64_auxv_t;
 
-#define AT_NULL 0            /* End of vector */
-#define AT_IGNORE 1          /* Ignore entry */
-#define AT_EXECFD 2          /* Program file descriptor */
-#define AT_PHDR 3            /* Program headers address */
-#define AT_PHENT 4           /* Program header entry size */
-#define AT_PHNUM 5           /* Program header count */
-#define AT_PAGESZ 6          /* System page size */
-#define AT_BASE 7            /* Interpreter base */
-#define AT_FLAGS 8           /* Flags */
-#define AT_ENTRY 9           /* Entry point */
-#define AT_NOTELF 10         /* Program is not ELF */
-#define AT_UID 11            /* Real uid */
-#define AT_EUID 12           /* Effective uid */
-#define AT_GID 13            /* Real gid */
-#define AT_EGID 14           /* Effective gid */
-#define AT_PLATFORM 15       /* Platform string */
-#define AT_HWCAP 16          /* Arch hw capabilities */
-#define AT_CLKTCK 17         /* times() frequency */
-#define AT_SECURE 23         /* Secure mode */
-#define AT_BASE_PLATFORM 24  /* Real platform string */
-#define AT_RANDOM 25         /* 16 random bytes */
-#define AT_HWCAP2 26         /* More hw capabilities */
-#define AT_EXECFN 31         /* Program pathname */
-#define AT_SYSINFO 32        /* vDSO syscall page */
-#define AT_SYSINFO_EHDR 33   /* vDSO ELF header */
-#define AT_MINSIGSTKSZ 51    /* Minimum signal stack */
+#define AT_NULL 0           /* End of vector */
+#define AT_IGNORE 1         /* Ignore entry */
+#define AT_EXECFD 2         /* Program file descriptor */
+#define AT_PHDR 3           /* Program headers address */
+#define AT_PHENT 4          /* Program header entry size */
+#define AT_PHNUM 5          /* Program header count */
+#define AT_PAGESZ 6         /* System page size */
+#define AT_BASE 7           /* Interpreter base */
+#define AT_FLAGS 8          /* Flags */
+#define AT_ENTRY 9          /* Entry point */
+#define AT_NOTELF 10        /* Program is not ELF */
+#define AT_UID 11           /* Real uid */
+#define AT_EUID 12          /* Effective uid */
+#define AT_GID 13           /* Real gid */
+#define AT_EGID 14          /* Effective gid */
+#define AT_PLATFORM 15      /* Platform string */
+#define AT_HWCAP 16         /* Arch hw capabilities */
+#define AT_CLKTCK 17        /* times() frequency */
+#define AT_SECURE 23        /* Secure mode */
+#define AT_BASE_PLATFORM 24 /* Real platform string */
+#define AT_RANDOM 25        /* 16 random bytes */
+#define AT_HWCAP2 26        /* More hw capabilities */
+#define AT_EXECFN 31        /* Program pathname */
+#define AT_SYSINFO 32       /* vDSO syscall page */
+#define AT_SYSINFO_EHDR 33  /* vDSO ELF header */
+#define AT_MINSIGSTKSZ 51   /* Minimum signal stack */
 
 #ifdef __cplusplus
 }

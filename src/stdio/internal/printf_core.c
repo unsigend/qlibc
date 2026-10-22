@@ -50,7 +50,7 @@ struct ctx {
     unsigned char *buf; /* destination buffer */
     size_t bufsz;       /* destination buffer size */
     size_t pos;         /* current write position in buf */
-    int total;           /* total bytes written */
+    int total;          /* total bytes written */
 };
 
 #define BUFF_IS_FULL(ctx) (((ctx)->pos >= (ctx)->bufsz)) /* buffer is full */

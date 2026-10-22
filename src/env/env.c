@@ -54,7 +54,7 @@ char **env_remove(char **oldenvp, size_t index, int *inplace)
         return NULL;
 
     /* If the removed index is the last one, optimize the operation to inplace
-       remove. */
+     * remove. */
     if (index == envcount - 1) {
         oldenvp[index] = NULL;
         *inplace = 1;
@@ -62,7 +62,7 @@ char **env_remove(char **oldenvp, size_t index, int *inplace)
     }
 
     /* If the removed index is not the last one, copy the remaining environment
-       variables to the new array. */
+     * variables to the new array. */
     newenviron = (char **)malloc(sizeof(char *) * (envcount));
     if (!newenviron) {
         errno = ENOMEM;

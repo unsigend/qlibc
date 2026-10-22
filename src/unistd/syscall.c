@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <_syscall.h>
 #include <stdarg.h>
+#include <syscall_arch.h>
 #include <unistd.h>
 
 long syscall(long number, ...)
@@ -33,5 +33,5 @@ long syscall(long number, ...)
     a6 = va_arg(ap, long);
     va_end(ap);
 
-    return syscall6(number, a1, a2, a3, a4, a5, a6);
+    return __syscall(number, a1, a2, a3, a4, a5, a6);
 }

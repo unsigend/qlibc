@@ -1,0 +1,37 @@
+/* qlibc - A light-weight and portable C standard library
+ * Copyright (C) 2025-2027 Yixiang Qiu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <fcntl.h>
+#include <stdarg.h>
+#include <syscall.h>
+#include <syscall_arch.h>
+
+int fcntl(int fd, int cmd, ...)
+{
+    va_list ap;
+    unsigned long arg;
+
+    va_start(ap, cmd);
+    arg = va_arg(ap, unsigned long);
+    va_end(ap);
+
+#ifdef SYS_fcntl64
+    return __syscall(SYS_fcntl64, (long)fd, (long)cmd, (long)arg);
+#else
+    return __syscall(SYS_fcntl, (long)fd, (long)cmd, (long)arg);
+#endif
+}

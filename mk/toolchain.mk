@@ -28,9 +28,9 @@ INCDIR  := $(ROOTDIR)/include
 ARCHDIR := $(ROOTDIR)/arch
 LIBDIR  := $(ROOTDIR)/lib
 
-ifeq ($(ARCH),$(filter $(ARCH),i386 x86_64))
+ifeq ($(ARCH),$(filter $(ARCH),i386 x86_64 aarch64))
 else
-    $(error unsupported ARCH '$(ARCH)' — valid: i386, x86_64)
+    $(error unsupported ARCH '$(ARCH)' — valid: i386, x86_64, aarch64)
 endif
 
 ifeq ($(ARCH),i386)
@@ -52,10 +52,10 @@ CFLAGS_FREESTANDING := -ffreestanding -fno-builtin -nostdinc
 CFLAGS_WARN := -Wall -Wextra -Werror
 CFLAGS_WARN += -Wstrict-prototypes
 CFLAGS_WARN += -Wmissing-prototypes
+CFLAGS_WARN += -Wno-implicit-fallthrough
 
 # include
-CFLAGS_INC  := -I $(INCDIR) -I $(ARCHDIR)/$(ARCH) \
-               -I $(ARCHDIR)/generic
+CFLAGS_INC := -I $(ARCHDIR)/$(ARCH) -I $(INCDIR) -I $(ARCHDIR)/generic
 
 CFLAGS  := -std=$(STD_C) $(CFLAGS_WARN) $(CFLAGS_FREESTANDING) \
            $(CFLAGS_OPT) $(CFLAGS_ARCH) $(CFLAGS_INC)

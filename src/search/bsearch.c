@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 void *bsearch(const void *key, const void *ptr, size_t n, size_t size,
-              int (*comp)(const void *, const void *))
+              int (*cmp)(const void *, const void *))
 {
     const char *base = (const char *)ptr;
     size_t lo = 0;
@@ -28,7 +28,7 @@ void *bsearch(const void *key, const void *ptr, size_t n, size_t size,
     while (lo < hi) {
         size_t mid = lo + (hi - lo) / 2;
         const char *p = base + mid * size;
-        int c = comp(key, p);
+        int c = cmp(key, p);
 
         if (c == 0)
             return (void *)p;

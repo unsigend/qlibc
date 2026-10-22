@@ -25,32 +25,46 @@ DEPDIR   := $(BUILDDIR)/dep
 OBJDIR   := $(BUILDDIR)/obj
 SRCDIR   := src
 TESTDIR  := test
+ARCHSRC  := arch/$(ARCH) arch/generic
 
-SRCS := $(shell find $(SRCDIR) -name "*.c")
-OBJS := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.c.o,$(SRCS))
-DEPS := $(patsubst $(OBJDIR)/%.o,$(DEPDIR)/%.d,$(OBJS))
+C_SRCS := $(sort $(shell find $(SRCDIR) $(ARCHSRC) -name '*.c' 2>/dev/null))
+S_SRCS := $(sort $(shell find $(ARCHSRC) -name '*.S' 2>/dev/null))
+
+C_OBJS := $(C_SRCS:%=$(OBJDIR)/%.o)
+S_OBJS := $(S_SRCS:%=$(OBJDIR)/%.o)
+DEPS   := $(C_SRCS:%.c=$(DEPDIR)/%.d)
 
 -include $(DEPS)
 
-$(OBJDIR)/%.c.o: $(SRCDIR)/%.c
-	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$*.c.d)
-	@$(CC) $(CFLAGS) -MMD -MP -MF $(DEPDIR)/$*.c.d -MT $@ -c $< -o $@
+$(OBJDIR)/%.c.o: %.c
+	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$*.d)
+	@$(CC) $(CFLAGS) -MMD -MP -MF $(DEPDIR)/$*.d -MT $@ -c $< -o $@
 	@echo "  CC    $<"
 
-.PHONY: all lib test clean info flag clang format line version gen-config help
+$(OBJDIR)/%.S.o: %.S
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "  AS    $<"
+
+.PHONY: all lib crt test clean info flag clang format line version gen-config help
 .DEFAULT_GOAL := help
 
-all: lib
+all: lib crt
 
-lib: $(OBJS)
+lib: $(C_OBJS)
 	@mkdir -p $(LIBDIR)
 ifeq ($(BUILD_METHOD),static)
-	@$(AR) $(ARFLAGS) $(LIB) $(OBJS)
+	@$(AR) $(ARFLAGS) $(LIB) $(C_OBJS)
 	@echo "  AR    $(LIB)"
 else
-	@$(CC) $(LDFLAGS) -shared $(OBJS) -o $(LIB)
+	@$(CC) $(LDFLAGS) -shared $(C_OBJS) -o $(LIB)
 	@echo "  LD    $(LIB)"
 endif
+
+crt: $(S_OBJS)
+	@mkdir -p $(LIBDIR)
+	@cp $(S_OBJS) $(LIBDIR)/
+	@$(foreach s,$(S_SRCS),echo "  CRT   $(s)";)
 
 test: gen-config
 	@$(MAKE) -C $(TESTDIR) test
@@ -103,6 +117,7 @@ help:
 	@echo "build:"
 	@echo "\tmake all                 - build the library"
 	@echo "\tmake lib                 - build the library"
+	@echo "\tmake crt                 - build crt1.o"
 	@echo ""
 	@echo "test:"
 	@echo "\tmake test                - build and run tests"

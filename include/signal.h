@@ -74,6 +74,7 @@ typedef __sigset_t sigset_t;
 #define SA_RESTART 0x10000000   /* restart syscalls */
 #define SA_NODEFER 0x40000000   /* do not block this signal */
 #define SA_RESETHAND 0x80000000 /* reset to SIG_DFL */
+#define SA_RESTORER 0x04000000  /* sa_restorer is valid */
 
 #define SIG_BLOCK 0   /* block extra signals */
 #define SIG_UNBLOCK 1 /* unblock signals */
@@ -106,14 +107,11 @@ extern int sigdelset(sigset_t *set, int signum);
 extern int sigismember(const sigset_t *set, int signum);
 extern char *strsignal(int sig);
 extern void psignal(int sig, const char *msg);
-
-#if defined(_GNU_SOURCE) || defined(_QLIBC_SOURCE)
 extern int sigandset(sigset_t *dest, const sigset_t *left,
                      const sigset_t *right);
 extern int sigorset(sigset_t *dest, const sigset_t *left,
                     const sigset_t *right);
 extern int sigisemptyset(const sigset_t *set);
-#endif
 
 #ifdef __cplusplus
 }
